@@ -6,8 +6,8 @@
   "scripts": {
     "prebuild": "node generateBuildInfo.js",
     "prestart": "node generateBuildInfo.js",
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "start" : "env-cmd -f .env.local vite",
+    "build" : "tsc && env-cmd -f .env.prod vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "build:production": "yarn prebuild && env-cmd -f .env.prod vite build"
