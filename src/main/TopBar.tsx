@@ -4,17 +4,16 @@ import {
     AppstoreOutlined,
     AudioOutlined,
     ClockCircleOutlined,
-    ContainerOutlined,
     FieldTimeOutlined,
     FileImageOutlined,
     FileOutlined,
-    FileTextOutlined,
+    FileSearchOutlined,
     FileUnknownOutlined,
     FormOutlined,
     ImportOutlined,
     InfoCircleOutlined,
     LogoutOutlined,
-    PictureOutlined,
+    SearchOutlined,
     SettingFilled,
     SnippetsOutlined,
     SwapOutlined,
@@ -35,29 +34,24 @@ function TopBar() {
 
     const mainMenuItems: MenuProps["items"] = [
         {
-            label: "Content Management",
-            key: "pageManagement",
+            label: "Tag management",
+            key: "tagManagement",
             icon: <SnippetsOutlined/>,
             children: [
                 {
-                    label: (<Link to={"/layouts"}>Layout</Link>),
-                    key: "layout",
+                    label: (<Link to={"/tags/list"}>Tag editing</Link>),
+                    key: "tagList",
                     icon: <FormOutlined/>
                 },
                 {
-                    label: (<Link to={"/components"}>Component</Link>),
-                    key: "component",
-                    icon: <AppstoreOutlined/>
+                    label: (<Link to={"/tags/create"}>New tag</Link>),
+                    key: "tagCreate",
+                    icon: <FormOutlined/>
                 },
                 {
-                    label: (<Link to={"/forms"}>Form</Link>),
-                    key: "form",
-                    icon: <ContainerOutlined/>
-                },
-                {
-                    label: (<Link to={"/pages"}>Page</Link>),
-                    key: "page",
-                    icon: <FileTextOutlined/>
+                    label: (<Link to={"/tags/search"}>Page</Link>),
+                    key: "tagSearch",
+                    icon: <SearchOutlined/>
                 }
             ]
         },
@@ -67,34 +61,34 @@ function TopBar() {
             icon: <FileOutlined/>,
             children: [
                 {
-                    label: (<Link to={"/audios"}>Audio</Link>),
-                    key: "audio",
+                    label: (<Link to={"/files/audios"}>Audio</Link>),
+                    key: "audioFiles",
                     icon: <AudioOutlined/>
                 },
                 {
-                    label: (<Link to={"/documents"}>Document</Link>),
-                    key: "document",
+                    label: (<Link to={"/files/documents"}>Document</Link>),
+                    key: "documentFiles",
                     icon: <FileUnknownOutlined/>
                 },
                 {
-                    label: (<Link to={"/images"}>Image</Link>),
-                    key: "image",
+                    label: (<Link to={"/files/images"}>Image</Link>),
+                    key: "imageFiles",
                     icon: <FileImageOutlined/>
                 },
                 {
-                    label: (<Link to={"/videos"}>Video</Link>),
-                    key: "video",
+                    label: (<Link to={"/files/videos"}>Video</Link>),
+                    key: "videoFiles",
                     icon: <VideoCameraOutlined/>
                 },
                 {
-                    label: (<Link to={"/galleries"}>Gallery</Link>),
-                    key: "gallery",
-                    icon: <PictureOutlined/>
+                    label: (<Link to={"/files/import"}>Add files</Link>),
+                    key: "importFiles",
+                    icon: <ImportOutlined/>
                 },
                 {
-                    label: (<Link to={"/import"}>File import</Link>),
-                    key: "import",
-                    icon: <ImportOutlined/>
+                    label: (<Link to={"/files/search"}>Search files</Link>),
+                    key: "searchFiles",
+                    icon: <FileSearchOutlined/>
                 },
             ],
         },
@@ -104,17 +98,17 @@ function TopBar() {
             icon: <ClockCircleOutlined/>,
             children: [
                 {
-                    label: (<Link to={"/schedule/system"}>System schedules</Link>),
+                    label: (<Link to={"/schedules/system"}>System schedules</Link>),
                     key: "systemSchedules",
                     icon: <AppstoreOutlined/>
                 },
                 {
-                    label: (<Link to={"/schedule/file-imports"}>File imports</Link>),
+                    label: (<Link to={"/schedules/file-imports"}>File imports</Link>),
                     key: "fileImports",
                     icon: <UploadOutlined/>
                 },
                 {
-                    label: (<Link to={"/schedule/publishing"}>Publishing</Link>),
+                    label: (<Link to={"/schedules/publishing"}>Publishing</Link>),
                     key: "publishing",
                     icon: <FieldTimeOutlined/>
                 },
@@ -126,12 +120,12 @@ function TopBar() {
             icon: <UserOutlined/>,
             children: [
                 {
-                    label: (<Link to={"/users"}>Users</Link>),
+                    label: (<Link to={"/management/users"}>Users</Link>),
                     key: "users",
                     icon: <UserAddOutlined/>
                 },
                 {
-                    label: (<Link to={"/units"}>Units</Link>),
+                    label: (<Link to={"/management/units"}>Units</Link>),
                     key: "units",
                     icon: <UsergroupAddOutlined/>
                 },
@@ -146,17 +140,17 @@ function TopBar() {
             icon: <InfoCircleOutlined/>,
             children: [
                 {
-                    label: "Account",
+                    label: (<Link to={"/user/account"}>Account</Link>),
                     key: "account",
                     icon: <SettingFilled/>
                 },
                 {
-                    label: "Change Password",
+                    label: (<Link to={"/user/password"}>Change password</Link>),
                     key: "changePassword",
                     icon: <SwapOutlined/>
                 },
                 {
-                    label: (<Link to={"/logout"}>Log out</Link>),
+                    label: (<Link to={"/user/logout"}>Log out</Link>),
                     key: "logout",
                     icon: <LogoutOutlined/>
                 }
@@ -189,4 +183,4 @@ function TopBar() {
     );
 }
 
-export { TopBar };
+export {TopBar};
