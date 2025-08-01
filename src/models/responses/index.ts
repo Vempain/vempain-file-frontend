@@ -1,4 +1,12 @@
+export type {ArchiveFileResponse} from "./ArchiveFileResponse";
+export type {AudioFileResponse} from "./AudioFileResponse";
+export type {DocumentFileResponse} from "./DocumentFileResponse";
+export type {FontFileResponse} from "./FontFileResponse";
+export type {IconFileResponse} from "./IconFileResponse";
+export type {ImageFileResponse} from "./ImageFileResponse";
 export type {FileResponse} from "./FileResponse";
 export type {PathCompletionResponse} from "./PathCompletionResponse";
 export type {ScanResponse} from "./ScanResponse";
 export type {TagResponse} from "./TagResponse";
+export type {VectorFileResponse} from "./VectorFileResponse";
+export type {VideoFileResponse} from "./VideoFileResponse";
