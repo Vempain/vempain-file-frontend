@@ -1,7 +1,7 @@
 import {Alert, Button, Space} from "antd";
 import {useNavigate} from "react-router-dom";
 
-function AudioFiles() {
+export function AudioFiles() {
     const navigate = useNavigate();
 
     return (
@@ -20,5 +20,3 @@ function AudioFiles() {
             </Space>
     );
 }
-
-export {AudioFiles};

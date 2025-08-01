@@ -1,7 +1,7 @@
 import {Alert, Button, Space} from "antd";
 import {useNavigate} from "react-router-dom";
 
-function SystemSchedules() {
+export function SystemSchedules() {
     const navigate = useNavigate();
 
     return (
@@ -20,5 +20,3 @@ function SystemSchedules() {
             </Space>
     );
 }
-
-export {SystemSchedules};

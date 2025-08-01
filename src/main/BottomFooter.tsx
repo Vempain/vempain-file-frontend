@@ -2,7 +2,7 @@ import {Footer} from "antd/es/layout/layout";
 import type {BuildInfo} from "../models";
 import BuildInfoData from "../buildInfo.json";
 
-function BottomFooter() {
+export function BottomFooter() {
     const buildInfo: BuildInfo = BuildInfoData;
 
     return (
@@ -14,5 +14,3 @@ function BottomFooter() {
                     }}/>
     );
 }
-
-export {BottomFooter};

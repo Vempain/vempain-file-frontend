@@ -1,7 +1,7 @@
 import {Alert, Button, Space} from "antd";
 import {useNavigate} from "react-router-dom";
 
-function VideoFiles() {
+export function VideoFiles() {
     const navigate = useNavigate();
 
     return (
@@ -20,5 +20,3 @@ function VideoFiles() {
             </Space>
     );
 }
-
-export {VideoFiles};

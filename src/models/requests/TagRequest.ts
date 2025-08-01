@@ -1,9 +1,10 @@
 // models/Requests.ts
 export interface TagRequest {
-    tagName: string;
-    tagNameDe: string;
-    tagNameEn: string;
-    tagNameEs: string;
-    tagNameFi: string;
-    tagNameSv: string;
+    id: number;
+    tag_name: string;
+    tag_name_de: string;
+    tag_name_en: string;
+    tag_name_es: string;
+    tag_name_fi: string;
+    tag_name_sv: string;
 }

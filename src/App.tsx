@@ -13,47 +13,55 @@ import {Account, ChangePassword} from "./components/user";
 
 const {Content} = Layout;
 
-function App() {
+export default function App() {
     const {darkAlgorithm} = theme;
+    const darkThemeTokens = {
+        colorBgBase: "#050505",
+        colorBgLayout: "#121212",
+        colorTextBase: "#E0E0E0",
+        colorTextSecondary: "#B0B0B0",
+        colorPrimary: "#50B0ff",
+        colorLink: "#888888",
+        colorMenuItemHoverBg: "#333333",
+        colorMenuBackground: "#121212",
+        colorMenuItemText: "#E0E0E0",
+        colorMenuItemActiveBg: "#444444",
+    };
 
     return (
-            <ConfigProvider theme={{algorithm: darkAlgorithm}}>
+            <ConfigProvider theme={{algorithm: darkAlgorithm, token: darkThemeTokens}}>
                 <Layout className={"layout"}>
                     <TopBar/>
-                    <Content style={{padding: "0 50px"}}>
-                        <div className={"site-layout-content"}>
-                            <Routes>
-                                <Route path={"*"} element={<Navigate to={"/"}/>}/>
-                                <Route path={"/"} element={<Home/>}/>
-                                <Route path={"/login"} element={<Login/>}/>
-                                <Route path={"/logout"} element={<Logout/>}/>
-                                <Route path="/" element={<Home/>}/>
-                                <Route path="/tags/list" element={<TagList/>}/>
-                                <Route path="/tags/create" element={<TagCreate/>}/>
-                                <Route path="/tags/search" element={<TagSearch/>}/>
-                                <Route path="/files/audios" element={<AudioFiles/>}/>
-                                <Route path="/files/documents" element={<DocumentFiles/>}/>
-                                <Route path="/files/images" element={<ImageFiles/>}/>
-                                <Route path="/files/videos" element={<VideoFiles/>}/>
-                                <Route path="/files/import" element={<ImportFiles/>}/>
-                                <Route path="/files/search" element={<SearchFiles/>}/>
-                                <Route path="/schedules/system" element={<SystemSchedules/>}/>
-                                <Route path="/schedules/file-imports" element={<FileImports/>}/>
-                                <Route path="/schedules/publishing" element={<Publishing/>}/>
-                                <Route path="/management/users" element={<Users/>}/>
-                                <Route path="/management/units" element={<Units/>}/>
-                                <Route path="/management/permissions" element={<FilePermissions/>}/>
-                                <Route path="/user/account" element={<Account/>}/>
-                                <Route path="/user/password" element={<ChangePassword/>}/>
-                                <Route path="/user/logout" element={<Logout/>}/>
-                                <Route path="/login" element={<Login/>}/>
-                                <Route path="/logout" element={<Logout/>}/> </Routes>
-                        </div>
+                    <Content style={{marginTop: "60px"}}>
+                        <Routes>
+                            <Route path={"*"} element={<Navigate to={"/"}/>}/>
+                            <Route path={"/"} element={<Home/>}/>
+                            <Route path={"/login"} element={<Login/>}/>
+                            <Route path={"/logout"} element={<Logout/>}/>
+                            <Route path="/" element={<Home/>}/>
+                            <Route path="/tags/list" element={<TagList/>}/>
+                            <Route path="/tags/create" element={<TagCreate/>}/>
+                            <Route path="/tags/search" element={<TagSearch/>}/>
+                            <Route path="/files/audios" element={<AudioFiles/>}/>
+                            <Route path="/files/documents" element={<DocumentFiles/>}/>
+                            <Route path="/files/images" element={<ImageFiles/>}/>
+                            <Route path="/files/videos" element={<VideoFiles/>}/>
+                            <Route path="/files/import" element={<ImportFiles/>}/>
+                            <Route path="/files/search" element={<SearchFiles/>}/>
+                            <Route path="/schedules/system" element={<SystemSchedules/>}/>
+                            <Route path="/schedules/file-imports" element={<FileImports/>}/>
+                            <Route path="/schedules/publishing" element={<Publishing/>}/>
+                            <Route path="/management/users" element={<Users/>}/>
+                            <Route path="/management/units" element={<Units/>}/>
+                            <Route path="/management/permissions" element={<FilePermissions/>}/>
+                            <Route path="/user/account" element={<Account/>}/>
+                            <Route path="/user/password" element={<ChangePassword/>}/>
+                            <Route path="/user/logout" element={<Logout/>}/>
+                            <Route path="/login" element={<Login/>}/>
+                            <Route path="/logout" element={<Logout/>}/> </Routes>
                         <BottomFooter/>
                     </Content>
                 </Layout>
             </ConfigProvider>
     );
 }
-
-export default App
