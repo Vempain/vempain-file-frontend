@@ -6,7 +6,7 @@ class FileScannerAPI extends AbstractAPI<ScanRequest, ScanResponse> {
     public async scanDirectory(scanRequest: ScanRequest): Promise<ScanResponse> {
         this.setAuthorizationHeader();
         this.axiosInstance.defaults.headers.put['Content-Type'] = 'application/json;charset=utf-8';
-        const response = await this.axiosInstance.post<ScanResponse>("/scan-directory", scanRequest);
+        const response = await this.axiosInstance.post<ScanResponse>("", scanRequest);
         return response.data;
     }
 }
