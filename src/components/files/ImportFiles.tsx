@@ -5,60 +5,17 @@ import type {FileResponse, ScanResponse} from "../../models/responses";
 import type {PathCompletionRequest, ScanRequest} from "../../models/requests";
 import {fileScannerAPI, pathCompletionAPI} from "../../services";
 import type {ColumnsType} from "antd/es/table";
+import {PathCompletionEnum} from "../../models";
 
 export function ImportFiles() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [completionsLoading, setCompletionsLoading] = useState(false);
     const [result, setResult] = useState<ScanResponse | null>(null);
-    const [options, setOptions] = useState<{ value: string }[]>([]);
+    const [originalPathOptions, setOriginalPathOptions] = useState<{ value: string }[]>([]);
+    const [exportedPathOptions, setExportedPathOptions] = useState<{ value: string }[]>([]);
     const [form] = Form.useForm();
 
-    useEffect(() => {
-        // Load initial path suggestions when component mounts
-        fetchPathCompletions("/");
-    }, []);
-
-    const fetchPathCompletions = async (path: string) => {
-        setCompletionsLoading(true);
-        try {
-            const request: PathCompletionRequest = {path: path || "/"};
-            const response = await pathCompletionAPI.completePath(request);
-            setOptions(response.completions.map(path => ({value: path})));
-        } catch (err) {
-            console.error("Failed to fetch path completions:", err);
-            setOptions([]);
-        } finally {
-            setCompletionsLoading(false);
-        }
-    };
-
-    const handleSearch = (value: string) => {
-        console.log("Handling search for path:", value);
-        fetchPathCompletions(value);
-    };
-
-    const handleSelect = (value: string) => {
-        console.log("Setting field value to:", value);
-        form.setFieldValue("directory_name", value);
-        fetchPathCompletions(value);
-    };
-
-    function onFinish(values: ScanRequest) {
-        setLoading(true);
-        setResult(null);
-
-        fileScannerAPI.scanDirectory(values)
-                .then((response: ScanResponse) => {
-                    setResult(response);
-                })
-                .catch((err: Error) => {
-                    console.error("Failed to start scan: " + err.message);
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-    }
 
     // File response columns for the table
     const fileColumns: ColumnsType<FileResponse> = [
@@ -145,6 +102,99 @@ export function ImportFiles() {
         },
     ];
 
+    useEffect(() => {
+        // Load initial path suggestions when component mounts
+        setLoading(true);
+
+        Promise.all([
+            fetchPathCompletions(PathCompletionEnum.ORIGINAL, "/"),
+            fetchPathCompletions(PathCompletionEnum.EXPORTED, "/")])
+                .then(() => {
+                    console.log("Initial path completions loaded");
+                })
+                .catch((err) => {
+                    console.error("Failed to load initial path completions:", err);
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+    }, []);
+
+    async function fetchPathCompletions(directoryType: PathCompletionEnum, path: string) {
+        setCompletionsLoading(true);
+
+        const request: PathCompletionRequest = {
+            path: path || "/",
+            type: directoryType
+        };
+        pathCompletionAPI.completePath(request)
+                .then((response) => {
+
+                    switch (directoryType) {
+                        case PathCompletionEnum.ORIGINAL:
+                            setOriginalPathOptions(response.completions.map(path => ({value: path})));
+                            break;
+                        case PathCompletionEnum.EXPORTED:
+                            setExportedPathOptions(response.completions.map(path => ({value: path})));
+                            break;
+                        default:
+                            console.error("Unknown directory type:", directoryType);
+                            setOriginalPathOptions([]);
+                            setExportedPathOptions([]);
+                    }
+                })
+                .catch((err) => {
+                    console.error("Failed to fetch path completions:", err);
+                    setExportedPathOptions([]);
+                })
+                .finally(() => {
+                    setCompletionsLoading(false);
+                });
+    }
+
+    function handleSearch(directoryType: PathCompletionEnum, value: string) {
+        console.log("Handling search for type " + directoryType + " path:", value);
+        fetchPathCompletions(directoryType, value);
+    }
+
+    function handleSelect(directoryType: PathCompletionEnum, value: string) {
+        console.log("Setting field value to:", value);
+        form.setFieldValue("directory_name", value);
+        fetchPathCompletions(directoryType, value);
+    }
+
+    function handleSearchOriginal(value: string) {
+        handleSearch(PathCompletionEnum.ORIGINAL, value);
+    }
+
+    function handleSearchExported(value: string) {
+        handleSearch(PathCompletionEnum.EXPORTED, value);
+    }
+
+    function handleSelectOriginal(value: string) {
+        handleSelect(PathCompletionEnum.ORIGINAL, value);
+    }
+
+    function handleSelectExported(value: string) {
+        handleSelect(PathCompletionEnum.EXPORTED, value);
+    }
+
+    function onFinish(values: ScanRequest) {
+        setLoading(true);
+        setResult(null);
+
+        fileScannerAPI.scanDirectory(values)
+                .then((response: ScanResponse) => {
+                    setResult(response);
+                })
+                .catch((err: Error) => {
+                    console.error("Failed to start scan: " + err.message);
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+    }
+
     return (
             <Space direction="vertical" style={{width: "100%", margin: 30}} align="center" size="large">
                 <Spin spinning={loading}>
@@ -156,14 +206,28 @@ export function ImportFiles() {
                             initialValues={{directory_name: "/"}}
                     >
                         <Form.Item
-                                label="Directory Path"
-                                name="directory_name"
-                                rules={[{required: true, message: "Please input the directory path!"}]}
+                                label="Original Path"
+                                name="original_directory_name"
+                                rules={[{required: true, message: "Please input the original path!"}]}
                         >
                             <AutoComplete
-                                    options={options}
-                                    onSearch={handleSearch}
-                                    onSelect={handleSelect}
+                                    options={originalPathOptions}
+                                    onSearch={handleSearchOriginal}
+                                    onSelect={handleSelectOriginal}
+                                    placeholder="e.g. /data/files"
+                                    notFoundContent={completionsLoading ? <Spin size="small"/> : "No suggestions"}
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                                label="Export Path"
+                                name="export_directory_name"
+                                rules={[{required: true, message: "Please input the export path!"}]}
+                        >
+                            <AutoComplete
+                                    options={exportedPathOptions}
+                                    onSearch={handleSearchExported}
+                                    onSelect={handleSelectExported}
                                     placeholder="e.g. /data/files"
                                     notFoundContent={completionsLoading ? <Spin size="small"/> : "No suggestions"}
                             />

@@ -1,3 +1,4 @@
 export interface ScanRequest {
-    directory_name: string;
+    original_directory: string;
+    exported_directory: string;
 }

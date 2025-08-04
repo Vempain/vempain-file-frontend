@@ -2,6 +2,7 @@ import type {AbstractResponse} from "../../../../vempain-frontend-auth/src/model
 
 export interface FileResponse extends AbstractResponse {
     filename: string;
+    file_path: string;
     external_file_id: string;
     mimetype: string;
     filesize: number;

@@ -1,12 +1,10 @@
-import {Alert, Button, message, Popconfirm, Space, Table} from "antd";
-import {useNavigate} from "react-router-dom";
+import {Button, message, Popconfirm, Space, Table} from "antd";
 import {useEffect, useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
 import {imageFileAPI} from "../../services";
 import type {ImageFileResponse} from "../../models/responses";
 
 export function ImageFiles() {
-    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [imageFiles, setImageFiles] = useState<ImageFileResponse[]>([]);
 
@@ -45,6 +43,12 @@ export function ImageFiles() {
             dataIndex: 'filename',
             key: 'filename',
             sorter: (a: ImageFileResponse, b: ImageFileResponse) => a.filename.localeCompare(b.filename),
+        },
+        {
+            title: 'File path',
+            dataIndex: 'file_path',
+            key: 'file_path',
+            sorter: (a: ImageFileResponse, b: ImageFileResponse) => a.file_path.localeCompare(b.file_path),
         },
         {
             title: 'File Size',
@@ -107,18 +111,6 @@ export function ImageFiles() {
 
     return (
             <Space direction="vertical" style={{width: "100%", margin: 30}} size="large">
-                <Alert
-                        type="info"
-                        message="Image Files"
-                        description="This page displays all image files in the system."
-                        showIcon
-                        action={
-                            <Button type="primary" onClick={() => navigate("/")}>
-                                Return to front page
-                            </Button>
-                        }
-                />
-
                 <Table
                         columns={columns}
                         dataSource={imageFiles.map(file => ({...file, key: file.id}))}
