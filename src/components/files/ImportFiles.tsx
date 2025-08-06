@@ -1,21 +1,18 @@
 import {AutoComplete, Button, Form, Space, Spin, Table} from "antd";
-import {useNavigate} from "react-router-dom";
 import {type Key, useEffect, useState} from "react";
-import type {FileResponse, ScanResponse} from "../../models/responses";
+import type {FileResponse, ScanResponses} from "../../models/responses";
 import type {PathCompletionRequest, ScanRequest} from "../../models/requests";
 import {fileScannerAPI, pathCompletionAPI} from "../../services";
 import type {ColumnsType} from "antd/es/table";
 import {PathCompletionEnum} from "../../models";
 
 export function ImportFiles() {
-    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [completionsLoading, setCompletionsLoading] = useState(false);
-    const [result, setResult] = useState<ScanResponse | null>(null);
+    const [result, setResult] = useState<ScanResponses | null>(null);
     const [originalPathOptions, setOriginalPathOptions] = useState<{ value: string }[]>([]);
     const [exportedPathOptions, setExportedPathOptions] = useState<{ value: string }[]>([]);
     const [form] = Form.useForm();
-
 
     // File response columns for the table
     const fileColumns: ColumnsType<FileResponse> = [
@@ -184,7 +181,7 @@ export function ImportFiles() {
         setResult(null);
 
         fileScannerAPI.scanDirectory(values)
-                .then((response: ScanResponse) => {
+                .then((response: ScanResponses) => {
                     setResult(response);
                 })
                 .catch((err: Error) => {
@@ -260,15 +257,13 @@ export function ImportFiles() {
                             <Button type="primary" htmlType="submit">
                                 Start Scan
                             </Button>
-                            <Button style={{marginLeft: 8}} onClick={() => navigate("/")}>
-                                Return to front page
-                            </Button>
                         </Form.Item>
                     </Form>
                 </Spin>
                 {result != null && (
                         <div style={{width: "100%"}}>
-                            {result.failed_files?.length > 0 && (
+                            <h2>Scan Result for original files</h2>
+                            {result.scan_original_response && result.scan_original_response.failed_files?.length > 0 && (
                                     <>
                                         <h3>Failed to scan the following files</h3>
                                         <Table
@@ -279,7 +274,7 @@ export function ImportFiles() {
                                                         key: 'file',
                                                     }
                                                 ]}
-                                                dataSource={result.failed_files}
+                                                dataSource={result.scan_original_response.failed_files}
                                                 scroll={{x: 'max-content'}}
                                                 pagination={{
                                                     pageSize: 10,
@@ -290,11 +285,48 @@ export function ImportFiles() {
                                     </>
                             )}
 
-                            {result.successful_files?.length > 0 && (
+                            {result.scan_original_response && result.scan_original_response.successful_files?.length > 0 && (
                                     <>
                                         <h3>Successful Files</h3>
                                         <Table
-                                                dataSource={result.successful_files}
+                                                dataSource={result.scan_original_response.successful_files}
+                                                columns={fileColumns}
+                                                pagination={{
+                                                    pageSize: 10,
+                                                    showSizeChanger: true,
+                                                    pageSizeOptions: ['10', '20', '50'],
+                                                }}
+                                        />
+                                    </>
+                            )}
+                            <h2>Scan Result for original files</h2>
+                            {result.scan_export_response && result.scan_export_response.failed_files?.length > 0 && (
+                                    <>
+                                        <h3>Failed to scan the following files</h3>
+                                        <Table
+                                                columns={[
+                                                    {
+                                                        title: 'Filename',
+                                                        dataIndex: 'file',
+                                                        key: 'file',
+                                                    }
+                                                ]}
+                                                dataSource={result.scan_export_response.failed_files}
+                                                scroll={{x: 'max-content'}}
+                                                pagination={{
+                                                    pageSize: 10,
+                                                    showSizeChanger: true,
+                                                    pageSizeOptions: ['10', '20', '50'],
+                                                }}
+                                        />
+                                    </>
+                            )}
+
+                            {result.scan_export_response && result.scan_export_response.successful_files?.length > 0 && (
+                                    <>
+                                        <h3>Successful Files</h3>
+                                        <Table
+                                                dataSource={result.scan_export_response.successful_files}
                                                 columns={fileColumns}
                                                 pagination={{
                                                     pageSize: 10,

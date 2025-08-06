@@ -2,7 +2,7 @@
 
 import type {FileResponse} from "./FileResponse.ts";
 
-export interface ScanResponse {
+export interface OriginalScanResponse {
     success: boolean;
     error_message: string | null;
     scanned_files_count: number;
