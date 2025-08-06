@@ -207,8 +207,20 @@ export function ImportFiles() {
                     >
                         <Form.Item
                                 label="Original Path"
-                                name="original_directory_name"
-                                rules={[{required: true, message: "Please input the original path!"}]}
+                                name="original_directory"
+                                rules={[
+                                    {
+                                        validator: async (_, value) => {
+                                            const exportDir = form.getFieldValue("export_directory");
+                                            if (!value && !exportDir) {
+                                                return Promise.reject(
+                                                        new Error("At least one of Original Path or Export Path must be filled!")
+                                                );
+                                            }
+                                            return Promise.resolve();
+                                        }
+                                    }
+                                ]}
                         >
                             <AutoComplete
                                     options={originalPathOptions}
@@ -221,8 +233,20 @@ export function ImportFiles() {
 
                         <Form.Item
                                 label="Export Path"
-                                name="export_directory_name"
-                                rules={[{required: true, message: "Please input the export path!"}]}
+                                name="export_directory"
+                                rules={[
+                                    {
+                                        validator: async (_, value) => {
+                                            const origDir = form.getFieldValue("original_directory");
+                                            if (!value && !origDir) {
+                                                return Promise.reject(
+                                                        new Error("At least one of Original Path or Export Path must be filled!")
+                                                );
+                                            }
+                                            return Promise.resolve();
+                                        }
+                                    }
+                                ]}
                         >
                             <AutoComplete
                                     options={exportedPathOptions}

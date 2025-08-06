@@ -1,6 +1,7 @@
 export type {ArchiveFileResponse} from "./ArchiveFileResponse";
 export type {AudioFileResponse} from "./AudioFileResponse";
 export type {DocumentFileResponse} from "./DocumentFileResponse";
+export type {ExportFileResponse} from "./ExportFileResponse";
 export type {FontFileResponse} from "./FontFileResponse";
 export type {IconFileResponse} from "./IconFileResponse";
 export type {ImageFileResponse} from "./ImageFileResponse";
