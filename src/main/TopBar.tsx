@@ -2,6 +2,7 @@ import {Button, Drawer, Grid, Layout, Menu, type MenuProps, Tooltip} from "antd"
 import {useState} from "react";
 import {
     AppstoreOutlined,
+    ArrowsAltOutlined,
     AudioOutlined,
     ClockCircleOutlined,
     FieldTimeOutlined,
@@ -9,6 +10,7 @@ import {
     FileOutlined,
     FileSearchOutlined,
     FileUnknownOutlined,
+    FileZipOutlined,
     FormOutlined,
     ImportOutlined,
     InfoCircleOutlined,
@@ -69,6 +71,11 @@ export function TopBar() {
                         icon: <FileOutlined/>,
                         children: [
                             {
+                                label: (<NavLink to={"/files/archives"}>Archive</NavLink>),
+                                key: "archiveFiles",
+                                icon: <FileZipOutlined/>
+                            },
+                            {
                                 label: (<NavLink to={"/files/audios"}>Audio</NavLink>),
                                 key: "audioFiles",
                                 icon: <AudioOutlined/>
@@ -82,6 +89,11 @@ export function TopBar() {
                                 label: (<NavLink to={"/files/images"}>Image</NavLink>),
                                 key: "imageFiles",
                                 icon: <FileImageOutlined/>
+                            },
+                            {
+                                label: (<NavLink to={"/files/vectors"}>Vector</NavLink>),
+                                key: "vectorFiles",
+                                icon: <ArrowsAltOutlined/>
                             },
                             {
                                 label: (<NavLink to={"/files/videos"}>Video</NavLink>),

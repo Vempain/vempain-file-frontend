@@ -1,43 +1,43 @@
 import {Button, message, Popconfirm, Space, Table} from "antd";
 import {useEffect, useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
-import {videoFileAPI} from "../../services";
-import type {VideoFileResponse} from "../../models/responses";
+import {vectorFileAPI} from "../../services";
+import type {VectorFileResponse} from "../../models/responses";
 import type {ColumnsType} from "antd/es/table";
 
-export function VideoFiles() {
+export function VectorFiles() {
     const [loading, setLoading] = useState(true);
-    const [videoFiles, setVideoFiles] = useState<VideoFileResponse[]>([]);
+    const [vectorFiles, setVectorFiles] = useState<VectorFileResponse[]>([]);
 
-    const fetchVideoFiles = async () => {
+    const fetchVectorFiles = async () => {
         setLoading(true);
         try {
-            const response = await videoFileAPI.findAll();
-            setVideoFiles(response);
+            const response = await vectorFileAPI.findAll();
+            setVectorFiles(response);
         } catch (err) {
-            console.error("Failed to fetch video files:", err);
-            message.error("Failed to load video files");
+            console.error("Failed to fetch vector files:", err);
+            message.error("Failed to load vector files");
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchVideoFiles();
+        fetchVectorFiles();
     }, []);
 
     const handleDelete = async (id: number) => {
         try {
-            await videoFileAPI.delete(id);
-            message.success("Video file deleted successfully");
-            fetchVideoFiles();
+            await vectorFileAPI.delete(id);
+            message.success("Vector file deleted successfully");
+            fetchVectorFiles();
         } catch (err) {
-            console.error("Failed to delete video file:", err);
-            message.error("Failed to delete video file");
+            console.error("Failed to delete vector file:", err);
+            message.error("Failed to delete vector file");
         }
     };
 
-    const columns: ColumnsType<VideoFileResponse> = [
+    const columns: ColumnsType<VectorFileResponse> = [
         {
             title: 'Filename',
             dataIndex: 'filename',
@@ -75,20 +75,9 @@ export function VideoFiles() {
             sorter: (a, b) => a.height - b.height,
         },
         {
-            title: 'Frame Rate',
-            dataIndex: 'frame_rate',
-            key: 'frame_rate',
-        },
-        {
-            title: 'Duration',
-            dataIndex: 'duration',
-            key: 'duration',
-            render: (duration: number) => `${duration}s`,
-        },
-        {
-            title: 'Codec',
-            dataIndex: 'codec',
-            key: 'codec',
+            title: 'Layers Count',
+            dataIndex: 'layers_count',
+            key: 'layers_count',
         },
         {
             title: 'Created',
@@ -100,10 +89,10 @@ export function VideoFiles() {
         {
             title: 'Actions',
             key: 'actions',
-            render: (_: undefined, record: VideoFileResponse) => (
+            render: (_: undefined, record: VectorFileResponse) => (
                     <Popconfirm
-                            title="Delete this video file"
-                            description="Are you sure you want to delete this video file?"
+                            title="Delete this vector file"
+                            description="Are you sure you want to delete this vector file?"
                             onConfirm={() => handleDelete(record.id)}
                             okText="Yes"
                             cancelText="No"
@@ -118,7 +107,7 @@ export function VideoFiles() {
             <Space direction="vertical" style={{width: "100%", margin: 30}} size="large">
                 <Table
                         columns={columns}
-                        dataSource={videoFiles.map(file => ({...file, key: file.id}))}
+                        dataSource={vectorFiles.map(file => ({...file, key: file.id}))}
                         loading={loading}
                         pagination={{
                             pageSize: 10,
@@ -126,7 +115,7 @@ export function VideoFiles() {
                             pageSizeOptions: ['10', '20', '50'],
                         }}
                         scroll={{x: 'max-content'}}
-                        key="video-files-table"
+                        key="vector-files-table"
                         rowKey="external_file_id"
                 />
             </Space>

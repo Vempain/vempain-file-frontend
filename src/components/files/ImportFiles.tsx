@@ -1,6 +1,6 @@
 import {AutoComplete, Button, Form, Space, Spin, Table} from "antd";
 import {type Key, useEffect, useState} from "react";
-import type {FileResponse, ScanResponses} from "../../models/responses";
+import type {ExportFileResponse, FileResponse, ScanResponses} from "../../models/responses";
 import type {PathCompletionRequest, ScanRequest} from "../../models/requests";
 import {fileScannerAPI, pathCompletionAPI} from "../../services";
 import type {ColumnsType} from "antd/es/table";
@@ -96,6 +96,62 @@ export function ImportFiles() {
                 {text: 'No', value: false},
             ],
             onFilter: (value: boolean | Key, record: FileResponse) => record.locked === value,
+        },
+    ];
+
+    // Exported file response columns for the export files table
+    const exportFileColumns: ColumnsType<ExportFileResponse> = [
+        {
+            title: 'ID',
+            dataIndex: 'id',
+            key: 'id',
+        },
+        {
+            title: 'File ID',
+            dataIndex: 'file_id',
+            key: 'file_id',
+        },
+        {
+            title: 'Filename',
+            dataIndex: 'filename',
+            key: 'filename',
+            sorter: (a: ExportFileResponse, b: ExportFileResponse) => a.filename.localeCompare(b.filename),
+        },
+        {
+            title: 'File Path',
+            dataIndex: 'file_path',
+            key: 'file_path',
+        },
+        {
+            title: 'MIME Type',
+            dataIndex: 'mimetype',
+            key: 'mimetype',
+            sorter: (a: ExportFileResponse, b: ExportFileResponse) => a.mimetype.localeCompare(b.mimetype),
+        },
+        {
+            title: 'File Size',
+            dataIndex: 'filesize',
+            key: 'filesize',
+            sorter: (a: ExportFileResponse, b: ExportFileResponse) => a.filesize - b.filesize,
+            render: (size: number) => `${(size / 1024).toFixed(2)} KB`,
+        },
+        {
+            title: 'SHA256 Sum',
+            dataIndex: 'sha256sum',
+            key: 'sha256sum',
+        },
+        {
+            title: 'Original Document ID',
+            dataIndex: 'original_document_id',
+            key: 'original_document_id',
+        },
+        {
+            title: 'Created',
+            dataIndex: 'created',
+            key: 'created',
+            sorter: (a: ExportFileResponse, b: ExportFileResponse) =>
+                    new Date(a.created).getTime() - new Date(b.created).getTime(),
+            render: (date: string) => new Date(date).toLocaleString(),
         },
     ];
 
@@ -262,10 +318,10 @@ export function ImportFiles() {
                 </Spin>
                 {result != null && (
                         <div style={{width: "100%"}}>
-                            <h2>Scan Result for original files</h2>
+                            <h2 key={"original-header"}>Scan Result for original files</h2>
                             {result.scan_original_response && result.scan_original_response.failed_files?.length > 0 && (
                                     <>
-                                        <h3>Failed to scan the following files</h3>
+                                        <h3 key={"original-header-fail"}>Failed to scan the following files</h3>
                                         <Table
                                                 columns={[
                                                     {
@@ -281,13 +337,14 @@ export function ImportFiles() {
                                                     showSizeChanger: true,
                                                     pageSizeOptions: ['10', '20', '50'],
                                                 }}
+                                                key={"original-failed-files-table"}
                                         />
                                     </>
                             )}
 
                             {result.scan_original_response && result.scan_original_response.successful_files?.length > 0 && (
                                     <>
-                                        <h3>Successful Files</h3>
+                                        <h3 key={"original-header-success"}>Successful Files</h3>
                                         <Table
                                                 dataSource={result.scan_original_response.successful_files}
                                                 columns={fileColumns}
@@ -296,13 +353,14 @@ export function ImportFiles() {
                                                     showSizeChanger: true,
                                                     pageSizeOptions: ['10', '20', '50'],
                                                 }}
+                                                key={"original-successful-files-table"}
                                         />
                                     </>
                             )}
-                            <h2>Scan Result for original files</h2>
+                            <h2 key={"export-header"}>Scan Result for exported files</h2>
                             {result.scan_export_response && result.scan_export_response.failed_files?.length > 0 && (
                                     <>
-                                        <h3>Failed to scan the following files</h3>
+                                        <h3 key={"export-header-fail"}>Failed to scan the following files</h3>
                                         <Table
                                                 columns={[
                                                     {
@@ -318,21 +376,23 @@ export function ImportFiles() {
                                                     showSizeChanger: true,
                                                     pageSizeOptions: ['10', '20', '50'],
                                                 }}
+                                                key={"export-failed-files-table"}
                                         />
                                     </>
                             )}
 
                             {result.scan_export_response && result.scan_export_response.successful_files?.length > 0 && (
                                     <>
-                                        <h3>Successful Files</h3>
+                                        <h3 key={"export-header-success"}>Successful Files</h3>
                                         <Table
                                                 dataSource={result.scan_export_response.successful_files}
-                                                columns={fileColumns}
+                                                columns={exportFileColumns}
                                                 pagination={{
                                                     pageSize: 10,
                                                     showSizeChanger: true,
                                                     pageSizeOptions: ['10', '20', '50'],
                                                 }}
+                                                key={"export-successful-files-table"}
                                         />
                                     </>
                             )}

@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
 import {imageFileAPI} from "../../services";
 import type {ImageFileResponse} from "../../models/responses";
+import type {ColumnsType} from "antd/es/table";
 
 export function ImageFiles() {
     const [loading, setLoading] = useState(true);
@@ -37,7 +38,7 @@ export function ImageFiles() {
         }
     };
 
-    const columns = [
+    const columns: ColumnsType<ImageFileResponse> = [
         {
             title: 'Filename',
             dataIndex: 'filename',
@@ -121,6 +122,8 @@ export function ImageFiles() {
                             pageSizeOptions: ['10', '20', '50'],
                         }}
                         scroll={{x: 'max-content'}}
+                        key="image-files-table"
+                        rowKey="external_file_id"
                 />
             </Space>
     );

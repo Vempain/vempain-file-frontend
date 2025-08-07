@@ -1,5 +1,6 @@
 export {archiveFileAPI} from './ArchiveFileAPI';
 export {audioFileAPI} from './AudioFileAPI';
+export {documentFileAPI} from './DocumentFileAPI';
 export {fileScannerAPI} from './FileScannerAPI';
 export {fontFileAPI} from './FontFileAPI';
 export {iconFileAPI} from './IconFileAPI';

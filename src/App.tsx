@@ -10,6 +10,8 @@ import {AudioFiles, DocumentFiles, ImageFiles, ImportFiles, SearchFiles, VideoFi
 import {FileImports, Publishing, SystemSchedules} from "./components/schedules";
 import {FilePermissions, Units, Users} from "./components/management";
 import {Account, ChangePassword} from "./components/user";
+import {ArchiveFiles} from "./components/files/ArchiveFiles.tsx";
+import {VectorFiles} from "./components/files/VectorFiles.tsx";
 
 const {Content} = Layout;
 
@@ -42,9 +44,11 @@ export default function App() {
                             <Route path="/tags/list" element={<TagList/>}/>
                             <Route path="/tags/create" element={<TagCreate/>}/>
                             <Route path="/tags/search" element={<TagSearch/>}/>
+                            <Route path="/files/archives" element={<ArchiveFiles/>}/>
                             <Route path="/files/audios" element={<AudioFiles/>}/>
                             <Route path="/files/documents" element={<DocumentFiles/>}/>
                             <Route path="/files/images" element={<ImageFiles/>}/>
+                            <Route path="/files/vectors" element={<VectorFiles/>}/>
                             <Route path="/files/videos" element={<VideoFiles/>}/>
                             <Route path="/files/import" element={<ImportFiles/>}/>
                             <Route path="/files/search" element={<SearchFiles/>}/>
