@@ -1,4 +1,4 @@
-import type {AbstractResponse} from "../../../../vempain-frontend-auth/src/models/Responses";
+import type {AbstractResponse} from "@vempain/vempain-auth-frontend";
 
 export interface FileResponse extends AbstractResponse {
     filename: string;

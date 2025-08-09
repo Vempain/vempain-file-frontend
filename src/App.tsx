@@ -2,7 +2,6 @@ import './App.css'
 import {ConfigProvider, Layout, theme} from "antd";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {TopBar} from "./main/TopBar.tsx";
-import {Login, Logout} from "../../vempain-frontend-auth/src/main";
 import {Home} from "./main/Home.tsx";
 import {BottomFooter} from "./main/BottomFooter.tsx";
 import {TagCreate, TagList, TagSearch} from "./components/tags";
@@ -12,6 +11,7 @@ import {FilePermissions, Units, Users} from "./components/management";
 import {Account, ChangePassword} from "./components/user";
 import {ArchiveFiles} from "./components/files/ArchiveFiles.tsx";
 import {VectorFiles} from "./components/files/VectorFiles.tsx";
+import {Login, Logout} from "@vempain/vempain-auth-frontend";
 
 const {Content} = Layout;
 

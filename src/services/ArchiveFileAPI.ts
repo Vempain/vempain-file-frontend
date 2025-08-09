@@ -1,5 +1,5 @@
-import {AbstractAPI} from "../../../vempain-frontend-auth/src/services/AbstractAPI.ts";
 import type {ArchiveFileResponse} from "../models/responses";
+import {AbstractAPI} from "@vempain/vempain-auth-frontend";
 
 class ArchiveFileAPI extends AbstractAPI<ArchiveFileResponse, ArchiveFileResponse> {
 }

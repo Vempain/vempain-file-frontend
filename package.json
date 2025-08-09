@@ -1,8 +1,12 @@
 {
-  "name" : "vempain-file-frontend",
-  "private" : true,
-  "version" : "0.1.0",
+  "name" : "@vempain/vempain-file-frontend",
   "type" : "module",
+  "version" : "0.9.0",
+  "description" : "Vempain File frontend",
+  "author" : "Paul-Erik Törrönen",
+  "homepage" : "https://vempain.poltsi.fi",
+  "license" : "GPL-2.0",
+  "packageManager" : "yarn@4.9.2",
   "scripts" : {
     "prebuild" : "node generateBuildInfo.js",
     "prestart" : "node generateBuildInfo.js",
@@ -19,13 +23,13 @@
     "@ant-design/v5-patch-for-react-19" : "^1.0.3",
     "@testing-library/jest-dom" : "^6.6.3",
     "@types/jest" : "^29.5.14",
+    "@vempain/vempain-auth-frontend" : "^0.9.3",
     "antd" : "^5.26.6",
     "axios" : "^1.7.9",
     "dayjs" : "^1.11.13",
     "env-cmd" : "^10.1.0",
     "react" : "^19.1.0",
-    "react-dom" : "^19.1.0",
-    "vempain-shared-auth" : "portal:/home/poltsi/Work/Vempain/vempain-frontend-auth"
+    "react-dom" : "^19.1.0"
   },
   "devDependencies" : {
     "@eslint/js" : "^9.30.1",
@@ -59,5 +63,8 @@
       "\\.(css|less)$" : "<rootDir>/__mocks__/styleMock.js"
     }
   },
-  "packageManager" : "yarn@4.9.2"
+  "repository" : {
+    "type" : "git",
+    "url" : "git+https://github.com/Vempain/vempain-auth-frontend.git"
+  }
 }
