@@ -1,7 +1,6 @@
 # Ignore Gradle build output directory
 .idea/
 
-yarn.lock
 package-lock.json
 node_modules
 build
@@ -10,5 +9,6 @@ dist
 
 .env.local
 .env.stage
+.npmrc
 
 src/buildInfo.json

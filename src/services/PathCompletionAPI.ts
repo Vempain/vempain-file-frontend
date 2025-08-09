@@ -1,6 +1,6 @@
 import type {PathCompletionRequest} from "../models/requests";
 import type {PathCompletionResponse} from "../models/responses";
-import {AbstractAPI} from "../../../vempain-frontend-auth/src/services/AbstractAPI";
+import {AbstractAPI} from "@vempain/vempain-auth-frontend";
 
 export class PathCompletionAPI extends AbstractAPI<PathCompletionRequest, PathCompletionResponse> {
     public async completePath(request: PathCompletionRequest): Promise<PathCompletionResponse> {

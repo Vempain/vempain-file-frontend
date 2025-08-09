@@ -1,6 +1,6 @@
 import type {ScanRequest} from "../models/requests";
 import type {ScanResponses} from "../models/responses";
-import {AbstractAPI} from "../../../vempain-frontend-auth/src/services/AbstractAPI.ts";
+import {AbstractAPI} from "@vempain/vempain-auth-frontend";
 
 class FileScannerAPI extends AbstractAPI<ScanRequest, ScanResponses> {
     public async scanDirectory(scanRequest: ScanRequest): Promise<ScanResponses> {
