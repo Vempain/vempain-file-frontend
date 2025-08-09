@@ -23,6 +23,8 @@ jobs:
           yarn install
           yarn build
           yarn test --passWithNoTests --watchAll=false
+        env:
+          TAG_CREATION_TOKEN: ${{ secrets.TAG_CREATION_TOKEN }}
 
       - name: Coverage
         run: |
