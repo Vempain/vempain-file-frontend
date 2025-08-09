@@ -9,6 +9,5 @@ dist
 
 .env.local
 .env.stage
-.npmrc
 
 src/buildInfo.json
