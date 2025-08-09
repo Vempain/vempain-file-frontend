@@ -16,7 +16,7 @@ jobs:
       - name: Set up NodeJS
         uses: actions/setup-node@v4.4.0
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Test
         run: |
@@ -40,7 +40,7 @@ jobs:
       - name: Set up NodeJS
         uses: actions/setup-node@v4.4.0
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Get main and base version
         id: basemain

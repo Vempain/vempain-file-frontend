@@ -11,7 +11,7 @@
     "prebuild" : "node generateBuildInfo.js",
     "prestart" : "node generateBuildInfo.js",
     "start" : "env-cmd -f .env.local vite",
-    "build" : "tsc && env-cmd -f .env.prod vite build",
+    "build" : "yarn prebuild && tsc && env-cmd -f .env.prod vite build",
     "test" : "jest",
     "test:watch" : "jest --watch",
     "test:coverage" : "jest --coverage .",
