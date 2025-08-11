@@ -2266,7 +2266,7 @@ __metadata:
     "@types/react-dom": "npm:^19.1.6"
     "@vempain/vempain-auth-frontend": "npm:^0.9.3"
     "@vitejs/plugin-react-swc": "npm:^4.0.0"
-    antd: "npm:^5.26.6"
+    antd: "npm:^5.27.0"
     axios: "npm:^1.7.9"
     dayjs: "npm:^1.11.13"
     env-cmd: "npm:^10.1.0"
@@ -2388,7 +2388,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"antd@npm:^5.26.6":
+"antd@npm:^5.26.6, antd@npm:^5.27.0":
   version: 5.27.0
   resolution: "antd@npm:5.27.0"
   dependencies:
