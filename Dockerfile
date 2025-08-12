@@ -2,7 +2,7 @@
 FROM nginx:alpine
 
 # Create custom nginx config to serve static files and proxy API requests
-RUN cat > /etc/nginx/conf.d/default.conf <<EOL
+RUN cat > /etc/nginx/conf.d/default.conf <<'EOL'
 server {
     listen 8080;
 
@@ -13,11 +13,8 @@ server {
     }
 
     location /api/ {
-        proxy_pass http://vempain-file-backend:8080;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass http://vempain-file-backend:8080/api/;
+        proxy_redirect http://vempain-file-backend:8080/api/ http://localhost:8080;
     }
 }
 EOL
