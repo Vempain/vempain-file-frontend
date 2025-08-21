@@ -12,6 +12,7 @@ import {Account, ChangePassword} from "./components/user";
 import {ArchiveFiles} from "./components/files/ArchiveFiles.tsx";
 import {VectorFiles} from "./components/files/VectorFiles.tsx";
 import {Login, Logout} from "@vempain/vempain-auth-frontend";
+import {PublishFileGroup} from "./components/files/PublishFileGroup.tsx";
 
 const {Content} = Layout;
 
@@ -34,7 +35,7 @@ export default function App() {
             <ConfigProvider theme={{algorithm: darkAlgorithm, token: darkThemeTokens}}>
                 <Layout className={"layout"}>
                     <TopBar/>
-                    <Content style={{marginTop: "60px"}}>
+                    <Content style={{marginTop: "65px"}}>
                         <Routes>
                             <Route path={"*"} element={<Navigate to={"/"}/>}/>
                             <Route path={"/"} element={<Home/>}/>
@@ -52,6 +53,7 @@ export default function App() {
                             <Route path="/files/videos" element={<VideoFiles/>}/>
                             <Route path="/files/import" element={<ImportFiles/>}/>
                             <Route path="/files/search" element={<SearchFiles/>}/>
+                            <Route path="/publish/file-group" element={<PublishFileGroup/>}/>
                             <Route path="/schedules/system" element={<SystemSchedules/>}/>
                             <Route path="/schedules/file-imports" element={<FileImports/>}/>
                             <Route path="/schedules/publishing" element={<Publishing/>}/>
