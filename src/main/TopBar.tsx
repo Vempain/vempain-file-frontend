@@ -113,6 +113,18 @@ export function TopBar() {
                         ],
                     },
                     {
+                        label: "Publishing",
+                        key: "publishing",
+                        icon: <ClockCircleOutlined/>,
+                        children: [
+                            {
+                                label: (<NavLink to={"/publish/file-group"}>File group</NavLink>),
+                                key: "systemSchedules",
+                                icon: <AppstoreOutlined/>
+                            }
+                        ],
+                    },
+                    {
                         label: "Schedule Management",
                         key: "scheduleManagement",
                         icon: <ClockCircleOutlined/>,
@@ -193,6 +205,7 @@ export function TopBar() {
 
     return (
             <Header
+                    className="topbar-header"
                     style={{
                         position: "fixed",
                         top: 0,
@@ -206,30 +219,20 @@ export function TopBar() {
                         backgroundColor: "#191919",
                         maxWidth: "100%"
                     }}
+                    key={"topBarHeader"}
             >
-                {/* Logo + (desktop) menu */}
-                <div
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            flex: 1,
-                            overflow: "hidden"
-                        }}
-                >
-                    <Tooltip title={"Vempain File"}>
-                        <div style={{width: 156, height: 64, marginRight: 20}}>
+                <div style={{display: "flex", alignItems: "center", flex: 1, overflow: "hidden"}}>
+                    <Tooltip title={"Vempain Admin"}>
+                        <div style={{width: 60, height: 60, marginRight: 20}}>
                             <NavLink to={"/"}>
-                                <img
-                                        src="/logo192.png"
-                                        alt="Home"
-                                        style={{height: "50px", objectFit: "contain"}}/>
+                                <img src="/logo192.png" alt="Home" style={{height: "55px", objectFit: "contain"}}/>
                             </NavLink>
                         </div>
                     </Tooltip>
 
-                    {/* show horizontal Menu only on ≥ md */}
                     {screens.md && (
                             <Menu
+                                    className="topbar-menu"
                                     onClick={onClick}
                                     selectedKeys={[current]}
                                     mode="horizontal"
@@ -239,7 +242,6 @@ export function TopBar() {
                     )}
                 </div>
 
-                {/* Hamburger button – hidden on desktop */}
                 {!screens.md && (
                         <>
                             <Button
@@ -267,4 +269,5 @@ export function TopBar() {
                 )}
             </Header>
     );
+
 }

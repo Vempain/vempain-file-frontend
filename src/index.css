@@ -25,3 +25,21 @@ code {
     border-radius: 10px;
     color: white;
 }
+
+.topbar-header {
+    height: 60px;
+    line-height: 60px; /* helps align content vertically */
+}
+
+/* Ensure horizontal menu matches 60px and remove any bottom border */
+.topbar-header .ant-menu-horizontal {
+    height: 60px;
+    line-height: 60px;
+    border-bottom: none;
+}
+
+/* Make individual items align to the 60px bar */
+.topbar-header .ant-menu-horizontal > .ant-menu-item,
+.topbar-header .ant-menu-horizontal > .ant-menu-submenu {
+    line-height: 60px;
+}
