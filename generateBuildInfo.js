@@ -21,6 +21,7 @@ function getLatestTag() {
     try {
         return execSync('git describe --tags --abbrev=0 2>/dev/null').toString().trim();
     } catch (error) {
+        console.error('Error retrieving the latest tag:', error);
         return null;
     }
 }
@@ -36,6 +37,7 @@ function getCurrentVersionString(currentVersion, latestTag) {
         }
     }
 
+    console.warn(`No matching tag found for current version ${currentVersion}. Returning default version.`);
     return `${currentMajor}.${currentMinor}.0`;
 }
 
