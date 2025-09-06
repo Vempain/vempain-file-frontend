@@ -65,6 +65,49 @@ export function ImportFiles() {
             sorter: (a: FileResponse, b: FileResponse) => a.file_type.localeCompare(b.file_type),
         },
         {
+            title: 'Rights Holder',
+            dataIndex: 'rights_holder',
+            key: 'rights_holder',
+            sorter: (a: FileResponse, b: FileResponse) => a.rights_holder.localeCompare(b.rights_holder),
+        },
+
+        {
+            title: 'Rights Terms',
+            dataIndex: 'rights_terms',
+            key: 'rights_terms',
+            sorter: (a: FileResponse, b: FileResponse) => a.rights_terms.localeCompare(b.rights_terms),
+        },
+        {
+            title: 'Rights URL',
+            dataIndex: 'rights_url',
+            key: 'rights_url',
+            sorter: (a: FileResponse, b: FileResponse) => a.rights_url.localeCompare(b.rights_url),
+        },
+        {
+            title: 'Creator Name',
+            dataIndex: 'creator_name',
+            key: 'creator_name',
+            sorter: (a: FileResponse, b: FileResponse) => a.creator_name.localeCompare(b.creator_name),
+        },
+        {
+            title: 'Creator Country',
+            dataIndex: 'creator_country',
+            key: 'creator_country',
+            sorter: (a: FileResponse, b: FileResponse) => a.creator_country.localeCompare(b.creator_country),
+        },
+        {
+            title: 'Creator Email',
+            dataIndex: 'creator_email',
+            key: 'creator_email',
+            sorter: (a: FileResponse, b: FileResponse) => a.creator_email.localeCompare(b.creator_email),
+        },
+        {
+            title: 'Creator URL',
+            dataIndex: 'creator_url',
+            key: 'creator_url',
+            sorter: (a: FileResponse, b: FileResponse) => a.creator_url.localeCompare(b.creator_url),
+        },
+        {
             title: 'Tags',
             dataIndex: 'tags',
             key: 'tags',

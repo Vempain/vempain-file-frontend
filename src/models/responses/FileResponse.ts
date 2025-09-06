@@ -13,5 +13,12 @@ export interface FileResponse extends AbstractResponse {
     description: string;
     file_type: string;
     metadata_raw: string;
+    rights_holder: string;
+    rights_terms: string;
+    rights_url: string;
+    creator_name: string;
+    creator_country: string;
+    creator_email: string;
+    creator_url: string;
     tags: string[];
 }

@@ -4,15 +4,29 @@ import {Navigate, Route, Routes} from "react-router-dom";
 import {TopBar} from "./main/TopBar.tsx";
 import {Home} from "./main/Home.tsx";
 import {BottomFooter} from "./main/BottomFooter.tsx";
-import {TagCreate, TagList, TagSearch} from "./components/tags";
-import {AudioFiles, DocumentFiles, ImageFiles, ImportFiles, SearchFiles, VideoFiles} from "./components/files";
-import {FileImports, Publishing, SystemSchedules} from "./components/schedules";
-import {FilePermissions, Units, Users} from "./components/management";
-import {Account, ChangePassword} from "./components/user";
-import {ArchiveFiles} from "./components/files/ArchiveFiles.tsx";
-import {VectorFiles} from "./components/files/VectorFiles.tsx";
+import {
+    Account,
+    ArchiveFiles,
+    AudioFiles,
+    ChangePassword,
+    DocumentFiles,
+    FileImports,
+    FilePermissions,
+    ImageFiles,
+    ImportFiles,
+    PublishFileGroup,
+    Publishing,
+    SearchFiles,
+    SystemSchedules,
+    TagCreate,
+    TagList,
+    TagSearch,
+    Units,
+    Users,
+    VectorFiles,
+    VideoFiles
+} from "./components";
 import {Login, Logout} from "@vempain/vempain-auth-frontend";
-import {PublishFileGroup} from "./components/files/PublishFileGroup.tsx";
 
 const {Content} = Layout;
 

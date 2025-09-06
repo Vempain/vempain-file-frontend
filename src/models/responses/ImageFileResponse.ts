@@ -5,4 +5,5 @@ export interface ImageFileResponse extends FileResponse {
     height: number;
     color_depth: number;
     dpi: number;
+    group_label: string;
 }

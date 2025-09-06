@@ -50,17 +50,17 @@ export function TopBar() {
                     children: [
                         {
                             label: (<NavLink to={"/tags/list"}>Tags</NavLink>),
-                            key: "tagList",
+                            key: "tag-tagList",
                             icon: <FormOutlined/>
                         },
                         {
                             label: (<NavLink to={"/tags/create"}>New tag</NavLink>),
-                            key: "tagCreate",
+                            key: "tag-tagCreate",
                             icon: <FormOutlined/>
                         },
                         {
                             label: (<NavLink to={"/tags/search"}>Page</NavLink>),
-                            key: "tagSearch",
+                            key: "tag-tagSearch",
                             icon: <SearchOutlined/>
                         }
                     ]
@@ -72,54 +72,54 @@ export function TopBar() {
                         children: [
                             {
                                 label: (<NavLink to={"/files/archives"}>Archive</NavLink>),
-                                key: "archiveFiles",
+                                key: "file-archiveFiles",
                                 icon: <FileZipOutlined/>
                             },
                             {
                                 label: (<NavLink to={"/files/audios"}>Audio</NavLink>),
-                                key: "audioFiles",
+                                key: "file-audioFiles",
                                 icon: <AudioOutlined/>
                             },
                             {
                                 label: (<NavLink to={"/files/documents"}>Document</NavLink>),
-                                key: "documentFiles",
+                                key: "file-documentFiles",
                                 icon: <FileUnknownOutlined/>
                             },
                             {
                                 label: (<NavLink to={"/files/images"}>Image</NavLink>),
-                                key: "imageFiles",
+                                key: "file-imageFiles",
                                 icon: <FileImageOutlined/>
                             },
                             {
                                 label: (<NavLink to={"/files/vectors"}>Vector</NavLink>),
-                                key: "vectorFiles",
+                                key: "file-vectorFiles",
                                 icon: <ArrowsAltOutlined/>
                             },
                             {
                                 label: (<NavLink to={"/files/videos"}>Video</NavLink>),
-                                key: "videoFiles",
+                                key: "file-videoFiles",
                                 icon: <VideoCameraOutlined/>
                             },
                             {
                                 label: (<NavLink to={"/files/import"}>Import files</NavLink>),
-                                key: "importFiles",
+                                key: "file-importFiles",
                                 icon: <ImportOutlined/>
                             },
                             {
                                 label: (<NavLink to={"/files/search"}>Search files</NavLink>),
-                                key: "searchFiles",
+                                key: "file-searchFiles",
                                 icon: <FileSearchOutlined/>
                             },
                         ],
                     },
                     {
                         label: "Publishing",
-                        key: "publishing",
+                        key: "publishingManagement",
                         icon: <ClockCircleOutlined/>,
                         children: [
                             {
                                 label: (<NavLink to={"/publish/file-group"}>File group</NavLink>),
-                                key: "systemSchedules",
+                                key: "publishing-publishFileGroup",
                                 icon: <AppstoreOutlined/>
                             }
                         ],
@@ -131,17 +131,17 @@ export function TopBar() {
                         children: [
                             {
                                 label: (<NavLink to={"/schedules/system"}>System schedules</NavLink>),
-                                key: "systemSchedules",
+                                key: "schedule-systemSchedules",
                                 icon: <AppstoreOutlined/>
                             },
                             {
                                 label: (<NavLink to={"/schedules/file-imports"}>File imports</NavLink>),
-                                key: "fileImports",
+                                key: "schedule-fileImports",
                                 icon: <UploadOutlined/>
                             },
                             {
                                 label: (<NavLink to={"/schedules/publishing"}>Publishing</NavLink>),
-                                key: "publishing",
+                                key: "schedule-publishing",
                                 icon: <FieldTimeOutlined/>
                             },
                         ],
@@ -153,12 +153,12 @@ export function TopBar() {
                         children: [
                             {
                                 label: (<NavLink to={"/management/users"}>Users</NavLink>),
-                                key: "users",
+                                key: "user-users",
                                 icon: <UserAddOutlined/>
                             },
                             {
                                 label: (<NavLink to={"/management/units"}>Units</NavLink>),
-                                key: "units",
+                                key: "user-units",
                                 icon: <UsergroupAddOutlined/>
                             },
                         ],
@@ -170,17 +170,17 @@ export function TopBar() {
                         children: [
                             {
                                 label: (<NavLink to={"/user/account"}>Account</NavLink>),
-                                key: "account",
+                                key: "profile-account",
                                 icon: <SettingFilled/>
                             },
                             {
                                 label: (<NavLink to={"/user/password"}>Change password</NavLink>),
-                                key: "changePassword",
+                                key: "profile-changePassword",
                                 icon: <SwapOutlined/>
                             },
                             {
                                 label: (<NavLink to={"/user/logout"}>Log out</NavLink>),
-                                key: "logout",
+                                key: "profile-logout",
                                 icon: <LogoutOutlined/>
                             }
                         ]
@@ -222,7 +222,7 @@ export function TopBar() {
                     key={"topBarHeader"}
             >
                 <div style={{display: "flex", alignItems: "center", flex: 1, overflow: "hidden"}}>
-                    <Tooltip title={"Vempain Admin"}>
+                    <Tooltip title={"Vempain File"}>
                         <div style={{width: 60, height: 60, marginRight: 20}}>
                             <NavLink to={"/"}>
                                 <img src="/logo192.png" alt="Home" style={{height: "55px", objectFit: "contain"}}/>

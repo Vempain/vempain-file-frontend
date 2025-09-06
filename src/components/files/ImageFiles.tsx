@@ -86,6 +86,11 @@ export function ImageFiles() {
             key: 'color_depth',
         },
         {
+            title: 'Group label',
+            dataIndex: 'group_label',
+            key: 'group_label',
+        },
+        {
             title: 'Created',
             dataIndex: 'created',
             key: 'created',

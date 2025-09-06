@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Button, message, Select, Space, Typography} from "antd";
+import {Button, message, Select, Space, Spin, Typography} from "antd";
 import {fileGroupAPI, publishAPI} from "../../services";
 import type {FileGroupResponse, PublishFileGroupResponse} from "../../models/responses";
 import type {PublishFileGroupRequest} from "../../models/requests";
@@ -33,28 +33,32 @@ export function PublishFileGroup() {
     };
 
     return (
-            <Space direction="vertical" style={{width: "100%", margin: 30}} size="large">
-                <Typography.Title level={4}>Publish File Group</Typography.Title>
-                <Select
-                        style={{width: 400}}
-                        placeholder="Select file group"
-                        loading={loading}
-                        value={selectedGroupId ?? undefined}
-                        onChange={setSelectedGroupId}
-                        options={fileGroups.map(group => ({
-                            label: group.path,
-                            value: group.id
-                        }))}
-                        allowClear
-                />
-                <Button
-                        type="primary"
-                        onClick={handlePublish}
-                        disabled={!selectedGroupId}
-                        loading={loading}
-                >
-                    Publish
-                </Button>
-            </Space>
+            <div className={"darkDiv"}>
+                <Spin spinning={loading}>
+                    <Space direction="vertical" style={{width: "100%", margin: 30}} size="large">
+                        <Typography.Title level={4}>Publish File Group</Typography.Title>
+                        <Select
+                                style={{width: 400}}
+                                placeholder="Select file group"
+                                loading={loading}
+                                value={selectedGroupId ?? undefined}
+                                onChange={setSelectedGroupId}
+                                options={fileGroups.map(group => ({
+                                    label: group.path + " " + group.group_name,
+                                    value: group.id
+                                }))}
+                                allowClear
+                        />
+                        <Button
+                                type="primary"
+                                onClick={handlePublish}
+                                disabled={!selectedGroupId}
+                                loading={loading}
+                        >
+                            Publish
+                        </Button>
+                    </Space>
+                </Spin>
+            </div>
     );
 }
