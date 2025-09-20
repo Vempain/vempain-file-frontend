@@ -1,8 +1,10 @@
 export {ArchiveFiles} from "./ArchiveFiles";
 export {AudioFiles} from "./AudioFiles";
 export {DocumentFiles} from "./DocumentFiles";
+export {FileDetails} from "./FileDetails";
 export {ImageFiles} from "./ImageFiles";
 export {ImportFiles} from "./ImportFiles";
 export {SearchFiles} from "./SearchFiles";
 export {VectorFiles} from "./VectorFiles";
 export {VideoFiles} from "./VideoFiles";
+export {formatSizeKB, filenameColumn, createdColumn, modifiedColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";

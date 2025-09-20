@@ -1,26 +1,32 @@
-import {Button, message, Popconfirm, Space, Table} from "antd";
+import {Button, message, Modal, Popconfirm, Space, Table} from "antd";
 import {useEffect, useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
 import {archiveFileAPI} from "../../services";
 import type {ArchiveFileResponse} from "../../models/responses";
 import type {ColumnsType} from "antd/es/table";
+import {FileDetails} from "./FileDetails";
+import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
 
 export function ArchiveFiles() {
     const [loading, setLoading] = useState(true);
     const [archiveFiles, setArchiveFiles] = useState<ArchiveFileResponse[]>([]);
+    const [detailsOpen, setDetailsOpen] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<ArchiveFileResponse | null>(null);
 
-    const fetchArchiveFiles = async () => {
+    function fetchArchiveFiles() {
         setLoading(true);
-        try {
-            const response = await archiveFileAPI.findAll();
-            setArchiveFiles(response);
-        } catch (err) {
-            console.error("Failed to fetch archive files:", err);
-            message.error("Failed to load archive files");
-        } finally {
-            setLoading(false);
-        }
-    };
+        archiveFileAPI.findAll()
+                .then(response => {
+                    setArchiveFiles(response);
+                })
+                .catch(err => {
+                    console.error("Failed to fetch archive files:", err);
+                    message.error("Failed to load archive files");
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+    }
 
     useEffect(() => {
         fetchArchiveFiles();
@@ -38,30 +44,13 @@ export function ArchiveFiles() {
     };
 
     const columns: ColumnsType<ArchiveFileResponse> = [
-        {
-            title: 'Filename',
-            dataIndex: 'filename',
-            key: 'filename',
-            sorter: (a, b) => a.filename.localeCompare(b.filename),
-        },
-        {
-            title: 'File path',
-            dataIndex: 'file_path',
-            key: 'file_path',
-            sorter: (a, b) => a.file_path.localeCompare(b.file_path),
-        },
-        {
-            title: 'File Size',
-            dataIndex: 'filesize',
-            key: 'filesize',
-            sorter: (a, b) => a.filesize - b.filesize,
-            render: (size: number) => `${(size / 1024).toFixed(2)} KB`,
-        },
-        {
-            title: 'MIME Type',
-            dataIndex: 'mimetype',
-            key: 'mimetype',
-        },
+        filenameColumn<ArchiveFileResponse>((record) => {
+            setSelectedFile(record);
+            setDetailsOpen(true);
+        }),
+        filePathColumn<ArchiveFileResponse>(),
+        fileSizeColumn<ArchiveFileResponse>(),
+        mimetypeColumn<ArchiveFileResponse>(),
         {
             title: 'Compression Method',
             dataIndex: 'compression_method',
@@ -84,13 +73,7 @@ export function ArchiveFiles() {
             key: 'is_encrypted',
             render: (val: boolean) => val ? "Yes" : "No",
         },
-        {
-            title: 'Created',
-            dataIndex: 'created',
-            key: 'created',
-            render: (date: string) => new Date(date).toLocaleString(),
-            sorter: (a, b) => new Date(a.created).getTime() - new Date(b.created).getTime(),
-        },
+        createdColumn<ArchiveFileResponse>(),
         {
             title: 'Actions',
             key: 'actions',
@@ -123,6 +106,18 @@ export function ArchiveFiles() {
                         key="archive-files-table"
                         rowKey="external_file_id"
                 />
+                <Modal
+                        open={detailsOpen}
+                        onCancel={() => setDetailsOpen(false)}
+                        afterClose={() => setSelectedFile(null)}
+                        footer={null}
+                        destroyOnHidden
+                        maskClosable
+                        title={selectedFile?.filename || "File details"}
+                        width={720}
+                >
+                    <FileDetails file={selectedFile || undefined}/>
+                </Modal>
             </Space>
     );
 }

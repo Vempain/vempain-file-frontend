@@ -1,13 +1,17 @@
-import {Button, message, Popconfirm, Space, Table} from "antd";
+import {Button, message, Modal, Popconfirm, Space, Table} from "antd";
 import {useEffect, useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
 import {videoFileAPI} from "../../services";
 import type {VideoFileResponse} from "../../models/responses";
 import type {ColumnsType} from "antd/es/table";
+import {FileDetails} from "./FileDetails";
+import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
 
 export function VideoFiles() {
     const [loading, setLoading] = useState(true);
     const [videoFiles, setVideoFiles] = useState<VideoFileResponse[]>([]);
+    const [detailsOpen, setDetailsOpen] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<VideoFileResponse | null>(null);
 
     const fetchVideoFiles = async () => {
         setLoading(true);
@@ -38,30 +42,13 @@ export function VideoFiles() {
     };
 
     const columns: ColumnsType<VideoFileResponse> = [
-        {
-            title: 'Filename',
-            dataIndex: 'filename',
-            key: 'filename',
-            sorter: (a, b) => a.filename.localeCompare(b.filename),
-        },
-        {
-            title: 'File path',
-            dataIndex: 'file_path',
-            key: 'file_path',
-            sorter: (a, b) => a.file_path.localeCompare(b.file_path),
-        },
-        {
-            title: 'File Size',
-            dataIndex: 'filesize',
-            key: 'filesize',
-            sorter: (a, b) => a.filesize - b.filesize,
-            render: (size: number) => `${(size / 1024).toFixed(2)} KB`,
-        },
-        {
-            title: 'MIME Type',
-            dataIndex: 'mimetype',
-            key: 'mimetype',
-        },
+        filenameColumn<VideoFileResponse>((record) => {
+            setSelectedFile(record);
+            setDetailsOpen(true);
+        }),
+        filePathColumn<VideoFileResponse>(),
+        fileSizeColumn<VideoFileResponse>(),
+        mimetypeColumn<VideoFileResponse>(),
         {
             title: 'Width',
             dataIndex: 'width',
@@ -90,13 +77,7 @@ export function VideoFiles() {
             dataIndex: 'codec',
             key: 'codec',
         },
-        {
-            title: 'Created',
-            dataIndex: 'created',
-            key: 'created',
-            render: (date: string) => new Date(date).toLocaleString(),
-            sorter: (a, b) => new Date(a.created).getTime() - new Date(b.created).getTime(),
-        },
+        createdColumn<VideoFileResponse>(),
         {
             title: 'Actions',
             key: 'actions',
@@ -129,6 +110,18 @@ export function VideoFiles() {
                         key="video-files-table"
                         rowKey="external_file_id"
                 />
+                <Modal
+                        open={detailsOpen}
+                        onCancel={() => setDetailsOpen(false)}
+                        afterClose={() => setSelectedFile(null)}
+                        footer={null}
+                        destroyOnHidden
+                        maskClosable
+                        title={selectedFile?.filename || "File details"}
+                        width={720}
+                >
+                    <FileDetails file={selectedFile || undefined}/>
+                </Modal>
             </Space>
     );
 }
