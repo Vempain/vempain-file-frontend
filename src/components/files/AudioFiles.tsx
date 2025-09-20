@@ -118,7 +118,7 @@ export function AudioFiles() {
                         title={selectedFile?.filename || "File details"}
                         width={720}
                 >
-                    <FileDetails file={selectedFile || undefined}/>
+                    {selectedFile != null && <FileDetails file={selectedFile}/>}
                 </Modal>
             </Space>
     );
