@@ -1,13 +1,17 @@
-import {Button, message, Popconfirm, Space, Table} from "antd";
+import {Button, message, Modal, Popconfirm, Space, Table} from "antd";
 import {useEffect, useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
 import {documentFileAPI} from "../../services";
 import type {DocumentFileResponse} from "../../models/responses";
 import type {ColumnsType} from "antd/es/table";
+import {FileDetails} from "./FileDetails";
+import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
 
 export function DocumentFiles() {
     const [loading, setLoading] = useState(true);
     const [documentFiles, setDocumentFiles] = useState<DocumentFileResponse[]>([]);
+    const [detailsOpen, setDetailsOpen] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<DocumentFileResponse | null>(null);
 
     const fetchDocumentFiles = async () => {
         setLoading(true);
@@ -38,30 +42,13 @@ export function DocumentFiles() {
     };
 
     const columns: ColumnsType<DocumentFileResponse> = [
-        {
-            title: 'Filename',
-            dataIndex: 'filename',
-            key: 'filename',
-            sorter: (a, b) => a.filename.localeCompare(b.filename),
-        },
-        {
-            title: 'File path',
-            dataIndex: 'file_path',
-            key: 'file_path',
-            sorter: (a, b) => a.file_path.localeCompare(b.file_path),
-        },
-        {
-            title: 'File Size',
-            dataIndex: 'filesize',
-            key: 'filesize',
-            sorter: (a, b) => a.filesize - b.filesize,
-            render: (size: number) => `${(size / 1024).toFixed(2)} KB`,
-        },
-        {
-            title: 'MIME Type',
-            dataIndex: 'mimetype',
-            key: 'mimetype',
-        },
+        filenameColumn<DocumentFileResponse>((record) => {
+            setSelectedFile(record);
+            setDetailsOpen(true);
+        }),
+        filePathColumn<DocumentFileResponse>(),
+        fileSizeColumn<DocumentFileResponse>(),
+        mimetypeColumn<DocumentFileResponse>(),
         {
             title: 'Page Count',
             dataIndex: 'page_count',
@@ -72,13 +59,7 @@ export function DocumentFiles() {
             dataIndex: 'format',
             key: 'format',
         },
-        {
-            title: 'Created',
-            dataIndex: 'created',
-            key: 'created',
-            render: (date: string) => new Date(date).toLocaleString(),
-            sorter: (a, b) => new Date(a.created).getTime() - new Date(b.created).getTime(),
-        },
+        createdColumn<DocumentFileResponse>(),
         {
             title: 'Actions',
             key: 'actions',
@@ -111,6 +92,18 @@ export function DocumentFiles() {
                         key="document-files-table"
                         rowKey="external_file_id"
                 />
+                <Modal
+                        open={detailsOpen}
+                        onCancel={() => setDetailsOpen(false)}
+                        afterClose={() => setSelectedFile(null)}
+                        footer={null}
+                        destroyOnHidden
+                        maskClosable
+                        title={selectedFile?.filename || "File details"}
+                        width={720}
+                >
+                    <FileDetails file={selectedFile || undefined}/>
+                </Modal>
             </Space>
     );
 }

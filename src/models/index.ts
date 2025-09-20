@@ -1,2 +1,6 @@
 export type {BuildInfo} from './BuildInfo';
-export {PathCompletionEnum} from './PathCompletionEnum';
+
+
+// Enums
+export {FileTypeEnum} from "./FileTypeEnum";
+export {PathCompletionEnum} from "./PathCompletionEnum";

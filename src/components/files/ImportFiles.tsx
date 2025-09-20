@@ -5,6 +5,8 @@ import type {PathCompletionRequest, ScanRequest} from "../../models/requests";
 import {fileScannerAPI, pathCompletionAPI} from "../../services";
 import type {ColumnsType} from "antd/es/table";
 import {PathCompletionEnum} from "../../models";
+import dayjs from "dayjs";
+import {compareDayjsNullable, formatDayjsNullable} from "../../tools";
 
 export function ImportFiles() {
     const [loading, setLoading] = useState(false);
@@ -50,8 +52,11 @@ export function ImportFiles() {
             dataIndex: 'original_datetime',
             key: 'original_datetime',
             sorter: (a: FileResponse, b: FileResponse) =>
-                    new Date(a.original_datetime).getTime() - new Date(b.original_datetime).getTime(),
-            render: (date: string) => new Date(date).toLocaleString(),
+                    compareDayjsNullable(
+                            a.original_datetime ? dayjs(a.original_datetime as unknown as string) : null,
+                            b.original_datetime ? dayjs(b.original_datetime as unknown as string) : null
+                    ),
+            render: (date: string) => formatDayjsNullable(date ? dayjs(date) : null),
         },
         {
             title: 'Description',
