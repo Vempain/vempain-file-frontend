@@ -16,6 +16,8 @@ export interface FileResponse extends AbstractResponse {
     rights_holder: string;
     rights_terms: string;
     rights_url: string;
+    gps_timestamp: Date;
+    gps_location_id: number;
     creator_name: string;
     creator_country: string;
     creator_email: string;
