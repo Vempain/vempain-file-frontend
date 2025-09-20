@@ -6,8 +6,10 @@ import type {DocumentFileResponse} from "../../models/responses";
 import type {ColumnsType} from "antd/es/table";
 import {FileDetails} from "./FileDetails";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
+import {useTranslation} from "react-i18next";
 
 export function DocumentFiles() {
+    const {t} = useTranslation();
     const [loading, setLoading] = useState(true);
     const [documentFiles, setDocumentFiles] = useState<DocumentFileResponse[]>([]);
     const [detailsOpen, setDetailsOpen] = useState(false);
@@ -20,7 +22,7 @@ export function DocumentFiles() {
             setDocumentFiles(response);
         } catch (err) {
             console.error("Failed to fetch document files:", err);
-            message.error("Failed to load document files");
+            message.error(t("DocumentFiles.messages.fetchError"));
         } finally {
             setLoading(false);
         }
@@ -33,11 +35,11 @@ export function DocumentFiles() {
     const handleDelete = async (id: number) => {
         try {
             await documentFileAPI.delete(id);
-            message.success("Document file deleted successfully");
+            message.success(t("DocumentFiles.messages.deleteSuccess"));
             fetchDocumentFiles();
         } catch (err) {
             console.error("Failed to delete document file:", err);
-            message.error("Failed to delete document file");
+            message.error(t("DocumentFiles.messages.deleteError"));
         }
     };
 
@@ -45,31 +47,31 @@ export function DocumentFiles() {
         filenameColumn<DocumentFileResponse>((record) => {
             setSelectedFile(record);
             setDetailsOpen(true);
-        }),
-        filePathColumn<DocumentFileResponse>(),
-        fileSizeColumn<DocumentFileResponse>(),
-        mimetypeColumn<DocumentFileResponse>(),
+        }, t),
+        filePathColumn<DocumentFileResponse>(t),
+        fileSizeColumn<DocumentFileResponse>(t),
+        mimetypeColumn<DocumentFileResponse>(t),
         {
-            title: 'Page Count',
+            title: t("DocumentFiles.columns.page_count.title"),
             dataIndex: 'page_count',
             key: 'page_count',
         },
         {
-            title: 'Format',
+            title: t("DocumentFiles.columns.format.title"),
             dataIndex: 'format',
             key: 'format',
         },
-        createdColumn<DocumentFileResponse>(),
+        createdColumn<DocumentFileResponse>(t),
         {
-            title: 'Actions',
+            title: t("DocumentFiles.columns.actions.title"),
             key: 'actions',
             render: (_: undefined, record: DocumentFileResponse) => (
                     <Popconfirm
-                            title="Delete this document file"
-                            description="Are you sure you want to delete this document file?"
+                            title={t("DocumentFiles.popconfirm.delete.title")}
+                            description={t("DocumentFiles.popconfirm.delete.description")}
                             onConfirm={() => handleDelete(record.id)}
-                            okText="Yes"
-                            cancelText="No"
+                            okText={t("Common.popconfirm.yes")}
+                            cancelText={t("Common.popconfirm.no")}
                     >
                         <Button danger icon={<DeleteOutlined/>}/>
                     </Popconfirm>
@@ -99,7 +101,7 @@ export function DocumentFiles() {
                         footer={null}
                         destroyOnHidden
                         maskClosable
-                        title={selectedFile?.filename || "File details"}
+                        title={selectedFile?.filename || t("Common.modal.fileDetailsTitle")}
                         width={720}
                 >
                     {selectedFile != null && <FileDetails file={selectedFile}/>}

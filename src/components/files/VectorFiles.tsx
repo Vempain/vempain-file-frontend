@@ -6,8 +6,10 @@ import type {VectorFileResponse} from "../../models/responses";
 import type {ColumnsType} from "antd/es/table";
 import {FileDetails} from "./FileDetails";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
+import {useTranslation} from "react-i18next";
 
 export function VectorFiles() {
+    const {t} = useTranslation();
     const [loading, setLoading] = useState(true);
     const [vectorFiles, setVectorFiles] = useState<VectorFileResponse[]>([]);
     const [detailsOpen, setDetailsOpen] = useState(false);
@@ -20,7 +22,7 @@ export function VectorFiles() {
             setVectorFiles(response);
         } catch (err) {
             console.error("Failed to fetch vector files:", err);
-            message.error("Failed to load vector files");
+            message.error(t("VectorFiles.messages.fetchError"));
         } finally {
             setLoading(false);
         }
@@ -33,11 +35,11 @@ export function VectorFiles() {
     const handleDelete = async (id: number) => {
         try {
             await vectorFileAPI.delete(id);
-            message.success("Vector file deleted successfully");
+            message.success(t("VectorFiles.messages.deleteSuccess"));
             fetchVectorFiles();
         } catch (err) {
             console.error("Failed to delete vector file:", err);
-            message.error("Failed to delete vector file");
+            message.error(t("VectorFiles.messages.deleteError"));
         }
     };
 
@@ -45,38 +47,38 @@ export function VectorFiles() {
         filenameColumn<VectorFileResponse>((record) => {
             setSelectedFile(record);
             setDetailsOpen(true);
-        }),
-        filePathColumn<VectorFileResponse>(),
-        fileSizeColumn<VectorFileResponse>(),
-        mimetypeColumn<VectorFileResponse>(),
+        }, t),
+        filePathColumn<VectorFileResponse>(t),
+        fileSizeColumn<VectorFileResponse>(t),
+        mimetypeColumn<VectorFileResponse>(t),
         {
-            title: 'Width',
+            title: t("VectorFiles.columns.width.title"),
             dataIndex: 'width',
             key: 'width',
             sorter: (a, b) => a.width - b.width,
         },
         {
-            title: 'Height',
+            title: t("VectorFiles.columns.height.title"),
             dataIndex: 'height',
             key: 'height',
             sorter: (a, b) => a.height - b.height,
         },
         {
-            title: 'Layers Count',
+            title: t("VectorFiles.columns.layers_count.title"),
             dataIndex: 'layers_count',
             key: 'layers_count',
         },
-        createdColumn<VectorFileResponse>(),
+        createdColumn<VectorFileResponse>(t),
         {
-            title: 'Actions',
+            title: t("VectorFiles.columns.actions.title"),
             key: 'actions',
             render: (_: undefined, record: VectorFileResponse) => (
                     <Popconfirm
-                            title="Delete this vector file"
-                            description="Are you sure you want to delete this vector file?"
+                            title={t("VectorFiles.popconfirm.delete.title")}
+                            description={t("VectorFiles.popconfirm.delete.description")}
                             onConfirm={() => handleDelete(record.id)}
-                            okText="Yes"
-                            cancelText="No"
+                            okText={t("Common.popconfirm.yes")}
+                            cancelText={t("Common.popconfirm.no")}
                     >
                         <Button danger icon={<DeleteOutlined/>}/>
                     </Popconfirm>
@@ -106,7 +108,7 @@ export function VectorFiles() {
                         footer={null}
                         destroyOnHidden
                         maskClosable
-                        title={selectedFile?.filename || "File details"}
+                        title={selectedFile?.filename || t("Common.modal.fileDetailsTitle")}
                         width={720}
                 >
                     {selectedFile != null && <FileDetails file={selectedFile}/>}
