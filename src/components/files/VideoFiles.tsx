@@ -6,8 +6,10 @@ import type {VideoFileResponse} from "../../models/responses";
 import type {ColumnsType} from "antd/es/table";
 import {FileDetails} from "./FileDetails";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
+import {useTranslation} from "react-i18next";
 
 export function VideoFiles() {
+    const {t} = useTranslation();
     const [loading, setLoading] = useState(true);
     const [videoFiles, setVideoFiles] = useState<VideoFileResponse[]>([]);
     const [detailsOpen, setDetailsOpen] = useState(false);
@@ -20,7 +22,7 @@ export function VideoFiles() {
             setVideoFiles(response);
         } catch (err) {
             console.error("Failed to fetch video files:", err);
-            message.error("Failed to load video files");
+            message.error(t("VideoFiles.messages.fetchError"));
         } finally {
             setLoading(false);
         }
@@ -33,11 +35,11 @@ export function VideoFiles() {
     const handleDelete = async (id: number) => {
         try {
             await videoFileAPI.delete(id);
-            message.success("Video file deleted successfully");
+            message.success(t("VideoFiles.messages.deleteSuccess"));
             fetchVideoFiles();
         } catch (err) {
             console.error("Failed to delete video file:", err);
-            message.error("Failed to delete video file");
+            message.error(t("VideoFiles.messages.deleteError"));
         }
     };
 
@@ -45,49 +47,49 @@ export function VideoFiles() {
         filenameColumn<VideoFileResponse>((record) => {
             setSelectedFile(record);
             setDetailsOpen(true);
-        }),
-        filePathColumn<VideoFileResponse>(),
-        fileSizeColumn<VideoFileResponse>(),
-        mimetypeColumn<VideoFileResponse>(),
+        }, t),
+        filePathColumn<VideoFileResponse>(t),
+        fileSizeColumn<VideoFileResponse>(t),
+        mimetypeColumn<VideoFileResponse>(t),
         {
-            title: 'Width',
+            title: t("VideoFiles.columns.width.title"),
             dataIndex: 'width',
             key: 'width',
             sorter: (a, b) => a.width - b.width,
         },
         {
-            title: 'Height',
+            title: t("VideoFiles.columns.height.title"),
             dataIndex: 'height',
             key: 'height',
             sorter: (a, b) => a.height - b.height,
         },
         {
-            title: 'Frame Rate',
+            title: t("VideoFiles.columns.frame_rate.title"),
             dataIndex: 'frame_rate',
             key: 'frame_rate',
         },
         {
-            title: 'Duration',
+            title: t("VideoFiles.columns.duration.title"),
             dataIndex: 'duration',
             key: 'duration',
             render: (duration: number) => `${duration}s`,
         },
         {
-            title: 'Codec',
+            title: t("VideoFiles.columns.codec.title"),
             dataIndex: 'codec',
             key: 'codec',
         },
-        createdColumn<VideoFileResponse>(),
+        createdColumn<VideoFileResponse>(t),
         {
-            title: 'Actions',
+            title: t("VideoFiles.columns.actions.title"),
             key: 'actions',
             render: (_: undefined, record: VideoFileResponse) => (
                     <Popconfirm
-                            title="Delete this video file"
-                            description="Are you sure you want to delete this video file?"
+                            title={t("VideoFiles.popconfirm.delete.title")}
+                            description={t("VideoFiles.popconfirm.delete.description")}
                             onConfirm={() => handleDelete(record.id)}
-                            okText="Yes"
-                            cancelText="No"
+                            okText={t("Common.popconfirm.yes")}
+                            cancelText={t("Common.popconfirm.no")}
                     >
                         <Button danger icon={<DeleteOutlined/>}/>
                     </Popconfirm>
@@ -117,10 +119,10 @@ export function VideoFiles() {
                         footer={null}
                         destroyOnHidden
                         maskClosable
-                        title={selectedFile?.filename || "File details"}
+                        title={selectedFile?.filename || t("Common.modal.fileDetailsTitle")}
                         width={720}
                 >
-                    <FileDetails file={selectedFile || undefined}/>
+                    {selectedFile != null && <FileDetails file={selectedFile}/>}
                 </Modal>
             </Space>
     );

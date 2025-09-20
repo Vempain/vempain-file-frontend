@@ -26,11 +26,16 @@ import {
     VectorFiles,
     VideoFiles
 } from "./components";
-import {Login, Logout} from "@vempain/vempain-auth-frontend";
+import {Login, Logout, useSession} from "@vempain/vempain-auth-frontend";
+import i18next from "i18next";
 
 const {Content} = Layout;
 
 export default function App() {
+    const {getSessionLanguage} = useSession();
+
+    const sessionLanguage = getSessionLanguage();
+
     const {darkAlgorithm} = theme;
     const darkThemeTokens = {
         colorBgBase: "#050505",
@@ -44,6 +49,10 @@ export default function App() {
         colorMenuItemText: "#E0E0E0",
         colorMenuItemActiveBg: "#444444",
     };
+
+    if (sessionLanguage !== undefined && sessionLanguage !== i18next.language) {
+        i18next.changeLanguage(getSessionLanguage());
+    }
 
     return (
             <ConfigProvider theme={{algorithm: darkAlgorithm, token: darkThemeTokens}}>

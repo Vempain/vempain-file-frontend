@@ -5,6 +5,7 @@ import dayjs, {type Dayjs} from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import {fileTypeEnum2Tag, formatDateWithTimeZone} from "../../tools";
 import {FileTypeEnum} from "../../models";
+import {useTranslation} from "react-i18next";
 
 dayjs.extend(utc);
 
@@ -24,64 +25,65 @@ function formatBytesToKB(val?: number): string {
 }
 
 export function FileDetails({file}: Props) {
+    const {t} = useTranslation();
+
     if (!file) {
         return null;
     }
 
     const columns: ColumnsType<DetailRow> = [
-        {title: "Field", dataIndex: "label", key: "label", width: 240},
-        {
-            title: "Value",
-            dataIndex: "value",
-            key: "value",
-        },
+        {title: t("FileDetails.table.field"), dataIndex: "label", key: "label", width: 240},
+        {title: t("FileDetails.table.value"), dataIndex: "value", key: "value"},
     ];
 
     console.log("Rendering FileDetails with file:", file);
 
     const rows: DetailRow[] = [
-        {key: "id", label: "ID", value: file.id},
-        {key: "filename", label: "Filename", value: file.filename},
-        {key: "file_path", label: "File path", value: file.file_path},
-        {key: "external_file_id", label: "External File ID", value: file.external_file_id},
-        {key: "mimetype", label: "MIME Type", value: file.mimetype},
-        {key: "filesize", label: "File Size", value: formatBytesToKB(file.filesize)},
-        {key: "sha256sum", label: "SHA256 Sum", value: file.sha256sum},
+        {key: "id", label: t("FileDetails.rows.id.label"), value: file.id},
+        {key: "filename", label: t("FileDetails.rows.filename.label"), value: file.filename},
+        {key: "file_path", label: t("FileDetails.rows.file_path.label"), value: file.file_path},
+        {key: "external_file_id", label: t("FileDetails.rows.external_file_id.label"), value: file.external_file_id},
+        {key: "mimetype", label: t("FileDetails.rows.mimetype.label"), value: file.mimetype},
+        {key: "filesize", label: t("FileDetails.rows.filesize.label"), value: formatBytesToKB(file.filesize)},
+        {key: "sha256sum", label: t("FileDetails.rows.sha256sum.label"), value: file.sha256sum},
         {
             key: "original_datetime",
-            label: "Original Date",
-            value: formatDateWithTimeZone(file.original_datetime == null ? null : file.original_datetime as Dayjs)
+            label: t("FileDetails.rows.original_datetime.label"),
+            value: formatDateWithTimeZone(file.original_datetime == null ? null : (file.original_datetime as Dayjs))
         },
-        {key: "original_second_fraction", label: "Original Second Fraction", value: file.original_second_fraction ?? ""},
-        {key: "original_document_id", label: "Original Document ID", value: file.original_document_id},
-        {key: "description", label: "Description", value: file.description},
-        {key: "file_type", label: "File Type", value: fileTypeEnum2Tag(file.file_type ?? FileTypeEnum.OTHER, null, 1)},
-        {key: "rights_holder", label: "Rights Holder", value: file.rights_holder},
-        {key: "rights_terms", label: "Rights Terms", value: file.rights_terms},
-        {key: "rights_url", label: "Rights URL", value: file.rights_url},
-        {key: "gps_timestamp", label: "GPS Timestamp", value: formatDateWithTimeZone(file.gps_timestamp == null ? null : file.gps_timestamp as Dayjs)},
-        {key: "gps_location_id", label: "GPS Location ID", value: file.gps_location_id},
-        {key: "creator_name", label: "Creator Name", value: file.creator_name},
-        {key: "creator_country", label: "Creator Country", value: file.creator_country},
-        {key: "creator_email", label: "Creator Email", value: file.creator_email},
-        {key: "creator_url", label: "Creator URL", value: file.creator_url},
+        {key: "original_second_fraction", label: t("FileDetails.rows.original_second_fraction.label"), value: file.original_second_fraction ?? ""},
+        {key: "original_document_id", label: t("FileDetails.rows.original_document_id.label"), value: file.original_document_id},
+        {key: "description", label: t("FileDetails.rows.description.label"), value: file.description},
+        {key: "file_type", label: t("FileDetails.rows.file_type.label"), value: fileTypeEnum2Tag(file.file_type ?? FileTypeEnum.OTHER, t, 1)},
+        {key: "rights_holder", label: t("FileDetails.rows.rights_holder.label"), value: file.rights_holder},
+        {key: "rights_terms", label: t("FileDetails.rows.rights_terms.label"), value: file.rights_terms},
+        {key: "rights_url", label: t("FileDetails.rows.rights_url.label"), value: file.rights_url},
+        {
+            key: "gps_timestamp",
+            label: t("FileDetails.rows.gps_timestamp.label"),
+            value: formatDateWithTimeZone(file.gps_timestamp == null ? null : (file.gps_timestamp as Dayjs))
+        },
+        {key: "gps_location_id", label: t("FileDetails.rows.gps_location_id.label"), value: file.gps_location_id},
+        {key: "creator_name", label: t("FileDetails.rows.creator_name.label"), value: file.creator_name},
+        {key: "creator_country", label: t("FileDetails.rows.creator_country.label"), value: file.creator_country},
+        {key: "creator_email", label: t("FileDetails.rows.creator_email.label"), value: file.creator_email},
+        {key: "creator_url", label: t("FileDetails.rows.creator_url.label"), value: file.creator_url},
         {
             key: "tags",
-            label: "Tags",
+            label: t("FileDetails.rows.tags.label"),
             value: (file.tags ?? []).length
                     ? (file.tags ?? []).map(tag => <Tag key={tag}>{tag}</Tag>)
                     : "",
         },
-        // AbstractResponse fields
-        {key: "locked", label: "Locked", value: file.locked ? "Yes" : "No"},
-        {key: "creator", label: "Creator (ID)", value: file.creator ?? ""},
-        {key: "created", label: "Created", value: formatDateWithTimeZone(file.created == null ? null : file.created as string)},
-        {key: "modifier", label: "Modifier (ID)", value: file.modifier ?? ""},
-        {key: "modified", label: "Modified", value: formatDateWithTimeZone(file.modified == null ? null : file.modified as string)},
+        {key: "locked", label: t("FileDetails.rows.locked.label"), value: file.locked ? t("Common.general.yes") : t("Common.general.no")},
+        {key: "creator", label: t("FileDetails.rows.creator.label"), value: file.creator ?? ""},
+        {key: "created", label: t("FileDetails.rows.created.label"), value: formatDateWithTimeZone(file.created == null ? null : (file.created as string))},
+        {key: "modifier", label: t("FileDetails.rows.modifier.label"), value: file.modifier ?? ""},
+        {key: "modified", label: t("FileDetails.rows.modified.label"), value: formatDateWithTimeZone(file.modified == null ? null : (file.modified as string))},
         {
             key: "acls",
-            label: "ACLs",
-            value: Array.isArray(file.acls) ? `${file.acls.length} entr${file.acls.length === 1 ? "y" : "ies"}` : "",
+            label: t("FileDetails.rows.acls.label"),
+            value: Array.isArray(file.acls) ? file.acls.length : "",
         },
     ];
 

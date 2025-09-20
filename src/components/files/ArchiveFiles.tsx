@@ -6,8 +6,10 @@ import type {ArchiveFileResponse} from "../../models/responses";
 import type {ColumnsType} from "antd/es/table";
 import {FileDetails} from "./FileDetails";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
+import {useTranslation} from "react-i18next";
 
 export function ArchiveFiles() {
+    const {t} = useTranslation();
     const [loading, setLoading] = useState(true);
     const [archiveFiles, setArchiveFiles] = useState<ArchiveFileResponse[]>([]);
     const [detailsOpen, setDetailsOpen] = useState(false);
@@ -21,7 +23,7 @@ export function ArchiveFiles() {
                 })
                 .catch(err => {
                     console.error("Failed to fetch archive files:", err);
-                    message.error("Failed to load archive files");
+                    message.error(t("ArchiveFiles.messages.fetchError"));
                 })
                 .finally(() => {
                     setLoading(false);
@@ -35,11 +37,11 @@ export function ArchiveFiles() {
     const handleDelete = async (id: number) => {
         try {
             await archiveFileAPI.delete(id);
-            message.success("Archive file deleted successfully");
+            message.success(t("ArchiveFiles.messages.deleteSuccess"));
             fetchArchiveFiles();
         } catch (err) {
             console.error("Failed to delete archive file:", err);
-            message.error("Failed to delete archive file");
+            message.error(t("ArchiveFiles.messages.deleteError"));
         }
     };
 
@@ -47,43 +49,43 @@ export function ArchiveFiles() {
         filenameColumn<ArchiveFileResponse>((record) => {
             setSelectedFile(record);
             setDetailsOpen(true);
-        }),
-        filePathColumn<ArchiveFileResponse>(),
-        fileSizeColumn<ArchiveFileResponse>(),
-        mimetypeColumn<ArchiveFileResponse>(),
+        }, t),
+        filePathColumn<ArchiveFileResponse>(t),
+        fileSizeColumn<ArchiveFileResponse>(t),
+        mimetypeColumn<ArchiveFileResponse>(t),
         {
-            title: 'Compression Method',
+            title: t("ArchiveFiles.columns.compression_method.title"),
             dataIndex: 'compression_method',
             key: 'compression_method',
         },
         {
-            title: 'Uncompressed Size',
+            title: t("ArchiveFiles.columns.uncompressed_size.title"),
             dataIndex: 'uncompressed_size',
             key: 'uncompressed_size',
             render: (size: number) => `${(size / 1024).toFixed(2)} KB`,
         },
         {
-            title: 'Content Count',
+            title: t("ArchiveFiles.columns.content_count.title"),
             dataIndex: 'content_count',
             key: 'content_count',
         },
         {
-            title: 'Encrypted',
+            title: t("ArchiveFiles.columns.is_encrypted.title"),
             dataIndex: 'is_encrypted',
             key: 'is_encrypted',
-            render: (val: boolean) => val ? "Yes" : "No",
+            render: (val: boolean) => val ? t("Common.general.yes") : t("Common.general.no"),
         },
-        createdColumn<ArchiveFileResponse>(),
+        createdColumn<ArchiveFileResponse>(t),
         {
-            title: 'Actions',
+            title: t("ArchiveFiles.columns.actions.title"),
             key: 'actions',
             render: (_: undefined, record: ArchiveFileResponse) => (
                     <Popconfirm
-                            title="Delete this archive file"
-                            description="Are you sure you want to delete this archive file?"
+                            title={t("ArchiveFiles.popconfirm.delete.title")}
+                            description={t("ArchiveFiles.popconfirm.delete.description")}
                             onConfirm={() => handleDelete(record.id)}
-                            okText="Yes"
-                            cancelText="No"
+                            okText={t("Common.popconfirm.yes")}
+                            cancelText={t("Common.popconfirm.no")}
                     >
                         <Button danger icon={<DeleteOutlined/>}/>
                     </Popconfirm>
@@ -113,10 +115,10 @@ export function ArchiveFiles() {
                         footer={null}
                         destroyOnHidden
                         maskClosable
-                        title={selectedFile?.filename || "File details"}
+                        title={selectedFile?.filename || t("Common.modal.fileDetailsTitle")}
                         width={720}
                 >
-                    <FileDetails file={selectedFile || undefined}/>
+                    {selectedFile != null && <FileDetails file={selectedFile}/>}
                 </Modal>
             </Space>
     );

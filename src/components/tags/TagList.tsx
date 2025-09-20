@@ -4,8 +4,10 @@ import {tagsAPI} from "../../services";
 import type {TagResponse} from "../../models/responses";
 import {getPaginationConfig} from "../../tools/tablePaginationConfig.ts";
 import type {TagRequest} from "../../models/requests";
+import {useTranslation} from "react-i18next";
 
 export function TagList() {
+    const {t} = useTranslation();
     const [tags, setTags] = useState<TagResponse[]>([]);
     const [loading, setLoading] = useState(true);
     const [pagination, setPagination] = useState({});
@@ -20,10 +22,11 @@ export function TagList() {
                     setPagination(getPaginationConfig(response.length));
                 })
                 .catch((error: unknown) => {
-                    message.error("Error fetching tags " + (error instanceof Error ? error.message : "Unknown error"));
+                    const errMsg = error instanceof Error ? error.message : "Unknown error";
+                    message.error(t("TagList.messages.fetchError", {error: errMsg}));
                 })
                 .finally(() => setLoading(false));
-    }, []);
+    }, [t]);
 
     const startEdit = (record: TagResponse) => {
         setEditingRowId(record.id);
@@ -38,18 +41,17 @@ export function TagList() {
     const saveEdit = async (id: number) => {
         setLoading(true);
         if (!editedRow) {
-            message.error("No changes to save");
+            message.error(t("TagList.messages.noChanges"));
             setLoading(false);
             return;
         }
 
         if (!editedRow.tag_name) {
-            message.error("Tag name is required");
+            message.error(t("TagList.messages.tagNameRequired"));
             setLoading(false);
             return;
         }
 
-        // Create a request object with the necessary fields
         const requestPayload: TagRequest = {
             id: id,
             tag_name: editedRow.tag_name,
@@ -62,20 +64,20 @@ export function TagList() {
         try {
             tagsAPI.update(requestPayload)
                     .then(() => {
-                        message.success("Tag updated successfully");
+                        message.success(t("TagList.messages.updateSuccess"));
                         setTags(tags =>
                                 tags.map(tag => tag.id === id ? {...tag, ...editedRow} : tag)
                         );
                     })
                     .catch((error: unknown) => {
-                        message.error("Failed to update tag: " + error);
+                        message.error(t("TagList.messages.updateFailedWithReason", {error: String(error)}));
                     })
                     .finally(() => {
                         setLoading(false);
                     });
-            message.success("Tag updated");
+            message.success(t("TagList.messages.updated"));
         } catch {
-            message.error("Failed to update tag");
+            message.error(t("TagList.messages.updateFailed"));
         } finally {
             setEditingRowId(null);
             setEditedRow({});
@@ -114,55 +116,55 @@ export function TagList() {
 
     const tagColumns = [
         {
-            title: "ID",
+            title: t("TagList.tableColumns.id.title"),
             dataIndex: "id",
             key: "id",
             sorter: (a: TagResponse, b: TagResponse) => a.id - b.id,
         },
         {
-            title: "Tag Name",
+            title: t("TagList.tableColumns.tag_name.title"),
             dataIndex: "tag_name",
             key: "tag_name",
             sorter: (a: TagResponse, b: TagResponse) => a.tag_name.localeCompare(b.tag_name),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name", record),
         },
         {
-            title: "Tag Name (De)",
+            title: t("TagList.tableColumns.tag_name_de.title"),
             dataIndex: "tag_name_de",
             key: "tag_name_de",
             sorter: (a: TagResponse, b: TagResponse) => a.tag_name_de.localeCompare(b.tag_name_de),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name_de", record),
         },
         {
-            title: "Tag Name (En)",
+            title: t("TagList.tableColumns.tag_name_en.title"),
             dataIndex: "tag_name_en",
             key: "tag_name_en",
             sorter: (a: TagResponse, b: TagResponse) => a.tag_name_en.localeCompare(b.tag_name_en),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name_en", record),
         },
         {
-            title: "Tag Name (Es)",
+            title: t("TagList.tableColumns.tag_name_es.title"),
             dataIndex: "tag_name_es",
             key: "tag_name_es",
             sorter: (a: TagResponse, b: TagResponse) => a.tag_name_es.localeCompare(b.tag_name_es),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name_es", record),
         },
         {
-            title: "Tag Name (Fi)",
+            title: t("TagList.tableColumns.tag_name_fi.title"),
             dataIndex: "tag_name_fi",
             key: "tag_name_fi",
             sorter: (a: TagResponse, b: TagResponse) => a.tag_name_fi.localeCompare(b.tag_name_fi),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name_fi", record),
         },
         {
-            title: "Tag Name (Sv)",
+            title: t("TagList.tableColumns.tag_name_sv.title"),
             dataIndex: "tag_name_sv",
             key: "tag_name_sv",
             sorter: (a: TagResponse, b: TagResponse) => a.tag_name_sv.localeCompare(b.tag_name_sv),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name_sv", record),
         },
         {
-            title: "Actions",
+            title: t("TagList.tableColumns.actions.title"),
             key: "actions",
             render: (_: undefined, record: TagResponse) => {
                 if (editingRowId === record.id) {
@@ -173,17 +175,17 @@ export function TagList() {
                                         onClick={() => saveEdit(record.id)}
                                         disabled={!isRowChanged(record)}
                                 >
-                                    Save
+                                    {t("TagList.actions.save")}
                                 </Button>
-                                <Button onClick={cancelEdit}>Cancel</Button>
+                                <Button onClick={cancelEdit}>{t("TagList.actions.cancel")}</Button>
                             </Space>
                     );
                 }
                 return (
                         <Space>
-                            <a href={`/tags/${record.id}`}>View tagged files</a>
+                            <a href={`/tags/${record.id}`}>{t("TagList.actions.viewTaggedFiles")}</a>
                             <Button onClick={() => startEdit(record)} size="small">
-                                Edit
+                                {t("TagList.actions.edit")}
                             </Button>
                         </Space>
                 );
@@ -193,7 +195,7 @@ export function TagList() {
 
     return (
             <div className={"DarkDiv"} key={"tagListDiv"}>
-                <Spin tip={"Loading"} spinning={loading} key={"componentListSpinner"}>
+                <Spin tip={t("TagList.messages.loadingTip")} spinning={loading} key={"componentListSpinner"}>
                     {!loading &&
                             <Table
                                     dataSource={tags}

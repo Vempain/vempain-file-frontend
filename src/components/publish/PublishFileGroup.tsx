@@ -3,32 +3,35 @@ import {Button, message, Select, Space, Spin, Typography} from "antd";
 import {fileGroupAPI, publishAPI} from "../../services";
 import type {FileGroupResponse, PublishFileGroupResponse} from "../../models/responses";
 import type {PublishFileGroupRequest} from "../../models/requests";
+import {useTranslation} from "react-i18next";
 
 export function PublishFileGroup() {
     const [fileGroups, setFileGroups] = useState<FileGroupResponse[]>([]);
     const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
+    const {t} = useTranslation();
 
     useEffect(() => {
         setLoading(true);
         fileGroupAPI.findAll()
                 .then((groups: FileGroupResponse[]) => setFileGroups(groups))
-                .catch(() => message.error("Failed to load file groups"))
+                .catch(() => message.error(t("PublishFileGroup.messages.fetchError")))
                 .finally(() => setLoading(false));
-    }, []);
+    }, [t]);
 
     const handlePublish = () => {
         if (!selectedGroupId) {
-            message.warning("Please select a file group to publish");
+            message.warning(t("PublishFileGroup.messages.selectWarning"));
             return;
         }
         setLoading(true);
         const request: PublishFileGroupRequest = {file_group_id: selectedGroupId};
         publishAPI.publishFileGroup(request)
                 .then((result: PublishFileGroupResponse[]) => {
-                    message.success(`Published ${result[0]?.files_to_publish_count ?? 0} files`);
+                    const count = result[0]?.files_to_publish_count ?? 0;
+                    message.success(t("PublishFileGroup.messages.publishSuccess", {count}));
                 })
-                .catch(() => message.error("Failed to publish file group"))
+                .catch(() => message.error(t("PublishFileGroup.messages.publishError")))
                 .finally(() => setLoading(false));
     };
 
@@ -36,10 +39,10 @@ export function PublishFileGroup() {
             <div className={"darkDiv"}>
                 <Spin spinning={loading}>
                     <Space direction="vertical" style={{width: "100%", margin: 30}} size="large">
-                        <Typography.Title level={4}>Publish File Group</Typography.Title>
+                        <Typography.Title level={4}>{t("PublishFileGroup.header.title")}</Typography.Title>
                         <Select
                                 style={{width: 400}}
-                                placeholder="Select file group"
+                                placeholder={t("PublishFileGroup.select.placeholder")}
                                 loading={loading}
                                 value={selectedGroupId ?? undefined}
                                 onChange={setSelectedGroupId}
@@ -55,7 +58,7 @@ export function PublishFileGroup() {
                                 disabled={!selectedGroupId}
                                 loading={loading}
                         >
-                            Publish
+                            {t("PublishFileGroup.actions.publish")}
                         </Button>
                     </Space>
                 </Spin>

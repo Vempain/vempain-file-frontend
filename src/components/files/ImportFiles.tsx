@@ -7,8 +7,10 @@ import type {ColumnsType} from "antd/es/table";
 import {PathCompletionEnum} from "../../models";
 import dayjs from "dayjs";
 import {compareDayjsNullable, formatDayjsNullable} from "../../tools";
+import {useTranslation} from "react-i18next";
 
 export function ImportFiles() {
+    const {t} = useTranslation();
     const [loading, setLoading] = useState(false);
     const [completionsLoading, setCompletionsLoading] = useState(false);
     const [result, setResult] = useState<ScanResponses | null>(null);
@@ -19,36 +21,36 @@ export function ImportFiles() {
     // File response columns for the table
     const fileColumns: ColumnsType<FileResponse> = [
         {
-            title: 'Filename',
+            title: t("ImportFiles.fileColumns.filename.title"),
             dataIndex: 'filename',
             key: 'filename',
             sorter: (a: FileResponse, b: FileResponse) => a.filename.localeCompare(b.filename),
         },
         {
-            title: 'External File ID',
+            title: t("ImportFiles.fileColumns.external_file_id.title"),
             dataIndex: 'external_file_id',
             key: 'external_file_id',
         },
         {
-            title: 'MIME Type',
+            title: t("ImportFiles.fileColumns.mimetype.title"),
             dataIndex: 'mimetype',
             key: 'mimetype',
             sorter: (a: FileResponse, b: FileResponse) => a.mimetype.localeCompare(b.mimetype),
         },
         {
-            title: 'File Size',
+            title: t("ImportFiles.fileColumns.filesize.title"),
             dataIndex: 'filesize',
             key: 'filesize',
             sorter: (a: FileResponse, b: FileResponse) => a.filesize - b.filesize,
             render: (size: number) => `${(size / 1024).toFixed(2)} KB`,
         },
         {
-            title: 'SHA256 Sum',
+            title: t("ImportFiles.fileColumns.sha256sum.title"),
             dataIndex: 'sha256sum',
             key: 'sha256sum',
         },
         {
-            title: 'Original Date',
+            title: t("ImportFiles.fileColumns.original_datetime.title"),
             dataIndex: 'original_datetime',
             key: 'original_datetime',
             sorter: (a: FileResponse, b: FileResponse) =>
@@ -59,67 +61,67 @@ export function ImportFiles() {
             render: (date: string) => formatDayjsNullable(date ? dayjs(date) : null),
         },
         {
-            title: 'Description',
+            title: t("ImportFiles.fileColumns.description.title"),
             dataIndex: 'description',
             key: 'description',
         },
         {
-            title: 'File Type',
+            title: t("ImportFiles.fileColumns.file_type.title"),
             dataIndex: 'file_type',
             key: 'file_type',
             sorter: (a: FileResponse, b: FileResponse) => a.file_type.localeCompare(b.file_type),
         },
         {
-            title: 'Rights Holder',
+            title: t("ImportFiles.fileColumns.rights_holder.title"),
             dataIndex: 'rights_holder',
             key: 'rights_holder',
             sorter: (a: FileResponse, b: FileResponse) => a.rights_holder.localeCompare(b.rights_holder),
         },
 
         {
-            title: 'Rights Terms',
+            title: t("ImportFiles.fileColumns.rights_terms.title"),
             dataIndex: 'rights_terms',
             key: 'rights_terms',
             sorter: (a: FileResponse, b: FileResponse) => a.rights_terms.localeCompare(b.rights_terms),
         },
         {
-            title: 'Rights URL',
+            title: t("ImportFiles.fileColumns.rights_url.title"),
             dataIndex: 'rights_url',
             key: 'rights_url',
             sorter: (a: FileResponse, b: FileResponse) => a.rights_url.localeCompare(b.rights_url),
         },
         {
-            title: 'Creator Name',
+            title: t("ImportFiles.fileColumns.creator_name.title"),
             dataIndex: 'creator_name',
             key: 'creator_name',
             sorter: (a: FileResponse, b: FileResponse) => a.creator_name.localeCompare(b.creator_name),
         },
         {
-            title: 'Creator Country',
+            title: t("ImportFiles.fileColumns.creator_country.title"),
             dataIndex: 'creator_country',
             key: 'creator_country',
             sorter: (a: FileResponse, b: FileResponse) => a.creator_country.localeCompare(b.creator_country),
         },
         {
-            title: 'Creator Email',
+            title: t("ImportFiles.fileColumns.creator_email.title"),
             dataIndex: 'creator_email',
             key: 'creator_email',
             sorter: (a: FileResponse, b: FileResponse) => a.creator_email.localeCompare(b.creator_email),
         },
         {
-            title: 'Creator URL',
+            title: t("ImportFiles.fileColumns.creator_url.title"),
             dataIndex: 'creator_url',
             key: 'creator_url',
             sorter: (a: FileResponse, b: FileResponse) => a.creator_url.localeCompare(b.creator_url),
         },
         {
-            title: 'Tags',
+            title: t("ImportFiles.fileColumns.tags.title"),
             dataIndex: 'tags',
             key: 'tags',
             render: (tags: string[]) => tags?.join(', ') || '',
         },
         {
-            title: 'Created',
+            title: t("ImportFiles.fileColumns.created.title"),
             dataIndex: 'created',
             key: 'created',
             sorter: (a: FileResponse, b: FileResponse) =>
@@ -127,7 +129,7 @@ export function ImportFiles() {
             render: (date: string) => new Date(date).toLocaleString(),
         },
         {
-            title: 'Modified',
+            title: t("ImportFiles.fileColumns.modified.title"),
             dataIndex: 'modified',
             key: 'modified',
             sorter: (a: FileResponse, b: FileResponse) =>
@@ -135,13 +137,13 @@ export function ImportFiles() {
             render: (date: string) => new Date(date).toLocaleString(),
         },
         {
-            title: 'Locked',
+            title: t("ImportFiles.fileColumns.locked.title"),
             dataIndex: 'locked',
             key: 'locked',
-            render: (locked: boolean) => locked ? 'Yes' : 'No',
+            render: (locked: boolean) => locked ? t("Common.general.yes") : t("Common.general.no"),
             filters: [
-                {text: 'Yes', value: true},
-                {text: 'No', value: false},
+                {text: t("ImportFiles.fileColumns.locked.filters.yes"), value: true},
+                {text: t("ImportFiles.fileColumns.locked.filters.no"), value: false},
             ],
             onFilter: (value: boolean | Key, record: FileResponse) => record.locked === value,
         },
@@ -149,52 +151,36 @@ export function ImportFiles() {
 
     // Exported file response columns for the export files table
     const exportFileColumns: ColumnsType<ExportFileResponse> = [
+        {title: t("ImportFiles.exportFileColumns.id.title"), dataIndex: 'id', key: 'id'},
+        {title: t("ImportFiles.exportFileColumns.file_id.title"), dataIndex: 'file_id', key: 'file_id'},
         {
-            title: 'ID',
-            dataIndex: 'id',
-            key: 'id',
-        },
-        {
-            title: 'File ID',
-            dataIndex: 'file_id',
-            key: 'file_id',
-        },
-        {
-            title: 'Filename',
+            title: t("ImportFiles.exportFileColumns.filename.title"),
             dataIndex: 'filename',
             key: 'filename',
             sorter: (a: ExportFileResponse, b: ExportFileResponse) => a.filename.localeCompare(b.filename),
         },
+        {title: t("ImportFiles.exportFileColumns.file_path.title"), dataIndex: 'file_path', key: 'file_path'},
         {
-            title: 'File Path',
-            dataIndex: 'file_path',
-            key: 'file_path',
-        },
-        {
-            title: 'MIME Type',
+            title: t("ImportFiles.exportFileColumns.mimetype.title"),
             dataIndex: 'mimetype',
             key: 'mimetype',
             sorter: (a: ExportFileResponse, b: ExportFileResponse) => a.mimetype.localeCompare(b.mimetype),
         },
         {
-            title: 'File Size',
+            title: t("ImportFiles.exportFileColumns.filesize.title"),
             dataIndex: 'filesize',
             key: 'filesize',
             sorter: (a: ExportFileResponse, b: ExportFileResponse) => a.filesize - b.filesize,
             render: (size: number) => `${(size / 1024).toFixed(2)} KB`,
         },
+        {title: t("ImportFiles.exportFileColumns.sha256sum.title"), dataIndex: 'sha256sum', key: 'sha256sum'},
         {
-            title: 'SHA256 Sum',
-            dataIndex: 'sha256sum',
-            key: 'sha256sum',
-        },
-        {
-            title: 'Original Document ID',
+            title: t("ImportFiles.exportFileColumns.original_document_id.title"),
             dataIndex: 'original_document_id',
             key: 'original_document_id',
         },
         {
-            title: 'Created',
+            title: t("ImportFiles.exportFileColumns.created.title"),
             dataIndex: 'created',
             key: 'created',
             sorter: (a: ExportFileResponse, b: ExportFileResponse) =>
@@ -206,10 +192,10 @@ export function ImportFiles() {
     useEffect(() => {
         // Load initial path suggestions when component mounts
         setLoading(true);
-
         Promise.all([
             fetchPathCompletions(PathCompletionEnum.ORIGINAL, "/"),
-            fetchPathCompletions(PathCompletionEnum.EXPORTED, "/")])
+            fetchPathCompletions(PathCompletionEnum.EXPORTED, "/"),
+        ])
                 .then(() => {
                     console.log("Initial path completions loaded");
                 })
@@ -307,16 +293,14 @@ export function ImportFiles() {
                             initialValues={{directory_name: "/"}}
                     >
                         <Form.Item
-                                label="Original Path"
+                                label={t("ImportFiles.form.originalPath.label")}
                                 name="original_directory"
                                 rules={[
                                     {
                                         validator: async (_, value) => {
                                             const exportDir = form.getFieldValue("export_directory");
                                             if (!value && !exportDir) {
-                                                return Promise.reject(
-                                                        new Error("At least one of Original Path or Export Path must be filled!")
-                                                );
+                                                return Promise.reject(new Error(t("ImportFiles.form.validation.atLeastOnePath")));
                                             }
                                             return Promise.resolve();
                                         }
@@ -327,22 +311,20 @@ export function ImportFiles() {
                                     options={originalPathOptions}
                                     onSearch={handleSearchOriginal}
                                     onSelect={handleSelectOriginal}
-                                    placeholder="e.g. /data/files"
-                                    notFoundContent={completionsLoading ? <Spin size="small"/> : "No suggestions"}
+                                    placeholder={t("ImportFiles.form.placeholder.pathExample")}
+                                    notFoundContent={completionsLoading ? <Spin size="small"/> : t("ImportFiles.form.noSuggestions")}
                             />
                         </Form.Item>
 
                         <Form.Item
-                                label="Export Path"
+                                label={t("ImportFiles.form.exportPath.label")}
                                 name="export_directory"
                                 rules={[
                                     {
                                         validator: async (_, value) => {
                                             const origDir = form.getFieldValue("original_directory");
                                             if (!value && !origDir) {
-                                                return Promise.reject(
-                                                        new Error("At least one of Original Path or Export Path must be filled!")
-                                                );
+                                                return Promise.reject(new Error(t("ImportFiles.form.validation.atLeastOnePath")));
                                             }
                                             return Promise.resolve();
                                         }
@@ -353,30 +335,26 @@ export function ImportFiles() {
                                     options={exportedPathOptions}
                                     onSearch={handleSearchExported}
                                     onSelect={handleSelectExported}
-                                    placeholder="e.g. /data/files"
-                                    notFoundContent={completionsLoading ? <Spin size="small"/> : "No suggestions"}
+                                    placeholder={t("ImportFiles.form.placeholder.pathExample")}
+                                    notFoundContent={completionsLoading ? <Spin size="small"/> : t("ImportFiles.form.noSuggestions")}
                             />
                         </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="submit">
-                                Start Scan
+                                {t("ImportFiles.form.submit.startScan")}
                             </Button>
                         </Form.Item>
                     </Form>
                 </Spin>
                 {result != null && (
                         <div style={{width: "100%"}}>
-                            <h2 key={"original-header"}>Scan Result for original files</h2>
+                            <h2 key={"original-header"}>{t("ImportFiles.results.original.title")}</h2>
                             {result.scan_original_response && result.scan_original_response.failed_files?.length > 0 && (
                                     <>
-                                        <h3 key={"original-header-fail"}>Failed to scan the following files</h3>
+                                        <h3 key={"original-header-fail"}>{t("ImportFiles.results.failed.title")}</h3>
                                         <Table
                                                 columns={[
-                                                    {
-                                                        title: 'Filename',
-                                                        dataIndex: 'file',
-                                                        key: 'file',
-                                                    }
+                                                    {title: t("ImportFiles.failedTable.filename.title"), dataIndex: 'file', key: 'file'}
                                                 ]}
                                                 dataSource={result.scan_original_response.failed_files}
                                                 scroll={{x: 'max-content'}}
@@ -392,7 +370,7 @@ export function ImportFiles() {
 
                             {result.scan_original_response && result.scan_original_response.successful_files?.length > 0 && (
                                     <>
-                                        <h3 key={"original-header-success"}>Successful Files</h3>
+                                        <h3 key={"original-header-success"}>{t("ImportFiles.results.success.title")}</h3>
                                         <Table
                                                 dataSource={result.scan_original_response.successful_files}
                                                 columns={fileColumns}
@@ -405,17 +383,13 @@ export function ImportFiles() {
                                         />
                                     </>
                             )}
-                            <h2 key={"export-header"}>Scan Result for exported files</h2>
+                            <h2 key={"export-header"}>{t("ImportFiles.results.export.title")}</h2>
                             {result.scan_export_response && result.scan_export_response.failed_files?.length > 0 && (
                                     <>
-                                        <h3 key={"export-header-fail"}>Failed to scan the following files</h3>
+                                        <h3 key={"export-header-fail"}>{t("ImportFiles.results.failed.title")}</h3>
                                         <Table
                                                 columns={[
-                                                    {
-                                                        title: 'Filename',
-                                                        dataIndex: 'file',
-                                                        key: 'file',
-                                                    }
+                                                    {title: t("ImportFiles.failedTable.filename.title"), dataIndex: 'file', key: 'file'}
                                                 ]}
                                                 dataSource={result.scan_export_response.failed_files}
                                                 scroll={{x: 'max-content'}}
@@ -431,7 +405,7 @@ export function ImportFiles() {
 
                             {result.scan_export_response && result.scan_export_response.successful_files?.length > 0 && (
                                     <>
-                                        <h3 key={"export-header-success"}>Successful Files</h3>
+                                        <h3 key={"export-header-success"}>{t("ImportFiles.results.success.title")}</h3>
                                         <Table
                                                 dataSource={result.scan_export_response.successful_files}
                                                 columns={exportFileColumns}

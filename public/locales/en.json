@@ -1,0 +1,664 @@
+{
+  "Common" : {
+    "general" : {
+      "yes" : "Yes",
+      "no" : "No"
+    },
+    "popconfirm" : {
+      "yes" : "Yes",
+      "no" : "No"
+    },
+    "modal" : {
+      "fileDetailsTitle" : "File details"
+    }
+  },
+  "CommonColumns" : {
+    "columns" : {
+      "filename" : {
+        "title" : "Filename"
+      },
+      "file_path" : {
+        "title" : "File path"
+      },
+      "filesize" : {
+        "title" : "File Size"
+      },
+      "mimetype" : {
+        "title" : "MIME Type"
+      },
+      "created" : {
+        "title" : "Created"
+      },
+      "modified" : {
+        "title" : "Modified"
+      }
+    }
+  },
+  "ArchiveFiles" : {
+    "messages" : {
+      "fetchError" : "Failed to load archive files",
+      "deleteSuccess" : "Archive file deleted successfully",
+      "deleteError" : "Failed to delete archive file"
+    },
+    "columns" : {
+      "compression_method" : {
+        "title" : "Compression Method"
+      },
+      "uncompressed_size" : {
+        "title" : "Uncompressed Size"
+      },
+      "content_count" : {
+        "title" : "Content Count"
+      },
+      "is_encrypted" : {
+        "title" : "Encrypted"
+      },
+      "actions" : {
+        "title" : "Actions"
+      }
+    },
+    "popconfirm" : {
+      "delete" : {
+        "title" : "Delete this archive file",
+        "description" : "Are you sure you want to delete this archive file?"
+      }
+    }
+  },
+  "AudioFiles" : {
+    "messages" : {
+      "fetchError" : "Failed to load audio files",
+      "deleteSuccess" : "Audio file deleted successfully",
+      "deleteError" : "Failed to delete audio file"
+    },
+    "columns" : {
+      "duration" : {
+        "title" : "Duration"
+      },
+      "bit_rate" : {
+        "title" : "Bit Rate"
+      },
+      "sample_rate" : {
+        "title" : "Sample Rate"
+      },
+      "codec" : {
+        "title" : "Codec"
+      },
+      "channels" : {
+        "title" : "Channels"
+      },
+      "actions" : {
+        "title" : "Actions"
+      }
+    },
+    "popconfirm" : {
+      "delete" : {
+        "title" : "Delete this audio file",
+        "description" : "Are you sure you want to delete this audio file?"
+      }
+    }
+  },
+  "DocumentFiles" : {
+    "messages" : {
+      "fetchError" : "Failed to load document files",
+      "deleteSuccess" : "Document file deleted successfully",
+      "deleteError" : "Failed to delete document file"
+    },
+    "columns" : {
+      "page_count" : {
+        "title" : "Page Count"
+      },
+      "format" : {
+        "title" : "Format"
+      },
+      "actions" : {
+        "title" : "Actions"
+      }
+    },
+    "popconfirm" : {
+      "delete" : {
+        "title" : "Delete this document file",
+        "description" : "Are you sure you want to delete this document file?"
+      }
+    }
+  },
+  "ImageFiles" : {
+    "messages" : {
+      "fetchError" : "Failed to load image files",
+      "deleteSuccess" : "Image file deleted successfully",
+      "deleteError" : "Failed to delete image file"
+    },
+    "columns" : {
+      "width" : {
+        "title" : "Width"
+      },
+      "height" : {
+        "title" : "Height"
+      },
+      "dpi" : {
+        "title" : "DPI"
+      },
+      "color_depth" : {
+        "title" : "Color Depth"
+      },
+      "group_label" : {
+        "title" : "Group label"
+      },
+      "actions" : {
+        "title" : "Actions"
+      }
+    },
+    "popconfirm" : {
+      "delete" : {
+        "title" : "Delete this image file",
+        "description" : "Are you sure you want to delete this image file?"
+      }
+    }
+  },
+  "ImportFiles" : {
+    "form" : {
+      "originalPath" : {
+        "label" : "Original Path"
+      },
+      "exportPath" : {
+        "label" : "Export Path"
+      },
+      "validation" : {
+        "atLeastOnePath" : "At least one of Original Path or Export Path must be filled!"
+      },
+      "placeholder" : {
+        "pathExample" : "e.g. /data/files"
+      },
+      "submit" : {
+        "startScan" : "Start Scan"
+      },
+      "noSuggestions" : "No suggestions"
+    },
+    "results" : {
+      "original" : {
+        "title" : "Scan Result for original files"
+      },
+      "export" : {
+        "title" : "Scan Result for exported files"
+      },
+      "failed" : {
+        "title" : "Failed to scan the following files"
+      },
+      "success" : {
+        "title" : "Successful Files"
+      }
+    },
+    "failedTable" : {
+      "filename" : {
+        "title" : "Filename"
+      }
+    },
+    "fileColumns" : {
+      "filename" : {
+        "title" : "Filename"
+      },
+      "external_file_id" : {
+        "title" : "External File ID"
+      },
+      "mimetype" : {
+        "title" : "MIME Type"
+      },
+      "filesize" : {
+        "title" : "File Size"
+      },
+      "sha256sum" : {
+        "title" : "SHA256 Sum"
+      },
+      "original_datetime" : {
+        "title" : "Original Date"
+      },
+      "description" : {
+        "title" : "Description"
+      },
+      "file_type" : {
+        "title" : "File Type"
+      },
+      "rights_holder" : {
+        "title" : "Rights Holder"
+      },
+      "rights_terms" : {
+        "title" : "Rights Terms"
+      },
+      "rights_url" : {
+        "title" : "Rights URL"
+      },
+      "creator_name" : {
+        "title" : "Creator Name"
+      },
+      "creator_country" : {
+        "title" : "Creator Country"
+      },
+      "creator_email" : {
+        "title" : "Creator Email"
+      },
+      "creator_url" : {
+        "title" : "Creator URL"
+      },
+      "tags" : {
+        "title" : "Tags"
+      },
+      "created" : {
+        "title" : "Created"
+      },
+      "modified" : {
+        "title" : "Modified"
+      },
+      "locked" : {
+        "title" : "Locked",
+        "filters" : {
+          "yes" : "Yes",
+          "no" : "No"
+        }
+      }
+    },
+    "exportFileColumns" : {
+      "id" : {
+        "title" : "ID"
+      },
+      "file_id" : {
+        "title" : "File ID"
+      },
+      "filename" : {
+        "title" : "Filename"
+      },
+      "file_path" : {
+        "title" : "File Path"
+      },
+      "mimetype" : {
+        "title" : "MIME Type"
+      },
+      "filesize" : {
+        "title" : "File Size"
+      },
+      "sha256sum" : {
+        "title" : "SHA256 Sum"
+      },
+      "original_document_id" : {
+        "title" : "Original Document ID"
+      },
+      "created" : {
+        "title" : "Created"
+      }
+    }
+  },
+  "FileDetails" : {
+    "table" : {
+      "field" : "Field",
+      "value" : "Value"
+    },
+    "rows" : {
+      "id" : {
+        "label" : "ID"
+      },
+      "filename" : {
+        "label" : "Filename"
+      },
+      "file_path" : {
+        "label" : "File path"
+      },
+      "external_file_id" : {
+        "label" : "External File ID"
+      },
+      "mimetype" : {
+        "label" : "MIME Type"
+      },
+      "filesize" : {
+        "label" : "File Size"
+      },
+      "sha256sum" : {
+        "label" : "SHA256 Sum"
+      },
+      "original_datetime" : {
+        "label" : "Original Date"
+      },
+      "original_second_fraction" : {
+        "label" : "Original Second Fraction"
+      },
+      "original_document_id" : {
+        "label" : "Original Document ID"
+      },
+      "description" : {
+        "label" : "Description"
+      },
+      "file_type" : {
+        "label" : "File Type"
+      },
+      "rights_holder" : {
+        "label" : "Rights Holder"
+      },
+      "rights_terms" : {
+        "label" : "Rights Terms"
+      },
+      "rights_url" : {
+        "label" : "Rights URL"
+      },
+      "gps_timestamp" : {
+        "label" : "GPS Timestamp"
+      },
+      "gps_location_id" : {
+        "label" : "GPS Location ID"
+      },
+      "creator_name" : {
+        "label" : "Creator Name"
+      },
+      "creator_country" : {
+        "label" : "Creator Country"
+      },
+      "creator_email" : {
+        "label" : "Creator Email"
+      },
+      "creator_url" : {
+        "label" : "Creator URL"
+      },
+      "tags" : {
+        "label" : "Tags"
+      },
+      "locked" : {
+        "label" : "Locked"
+      },
+      "creator" : {
+        "label" : "Creator (ID)"
+      },
+      "created" : {
+        "label" : "Created"
+      },
+      "modifier" : {
+        "label" : "Modifier (ID)"
+      },
+      "modified" : {
+        "label" : "Modified"
+      },
+      "acls" : {
+        "label" : "ACLs"
+      }
+    }
+  },
+  "VectorFiles" : {
+    "messages" : {
+      "fetchError" : "Failed to load vector files",
+      "deleteSuccess" : "Vector file deleted successfully",
+      "deleteError" : "Failed to delete vector file"
+    },
+    "columns" : {
+      "width" : {
+        "title" : "Width"
+      },
+      "height" : {
+        "title" : "Height"
+      },
+      "layers_count" : {
+        "title" : "Layers Count"
+      },
+      "actions" : {
+        "title" : "Actions"
+      }
+    },
+    "popconfirm" : {
+      "delete" : {
+        "title" : "Delete this vector file",
+        "description" : "Are you sure you want to delete this vector file?"
+      }
+    }
+  },
+  "FilePermissions" : {
+    "alert" : {
+      "message" : "FilePermissions",
+      "description" : "This is the FilePermissions page.",
+      "returnButton" : "Return to front page"
+    }
+  },
+  "SearchFiles" : {
+    "alert" : {
+      "message" : "Search Files",
+      "description" : "This is the Search Files page.",
+      "returnButton" : "Return to front page"
+    }
+  },
+  "Units" : {
+    "alert" : {
+      "message" : "Units",
+      "description" : "This is the Units page.",
+      "returnButton" : "Return to front page"
+    }
+  },
+  "Users" : {
+    "alert" : {
+      "message" : "Users",
+      "description" : "This is the Users page.",
+      "returnButton" : "Return to front page"
+    }
+  },
+  "VideoFiles" : {
+    "messages" : {
+      "fetchError" : "Failed to load video files",
+      "deleteSuccess" : "Video file deleted successfully",
+      "deleteError" : "Failed to delete video file"
+    },
+    "columns" : {
+      "width" : {
+        "title" : "Width"
+      },
+      "height" : {
+        "title" : "Height"
+      },
+      "frame_rate" : {
+        "title" : "Frame Rate"
+      },
+      "duration" : {
+        "title" : "Duration"
+      },
+      "codec" : {
+        "title" : "Codec"
+      },
+      "actions" : {
+        "title" : "Actions"
+      }
+    },
+    "popconfirm" : {
+      "delete" : {
+        "title" : "Delete this video file",
+        "description" : "Are you sure you want to delete this video file?"
+      }
+    }
+  },
+  "FileImports" : {
+    "alert" : {
+      "message" : "File Import",
+      "description" : "This is the File Import page.",
+      "returnButton" : "Return to front page"
+    }
+  },
+  "Publishing" : {
+    "alert" : {
+      "message" : "Publishing",
+      "description" : "This is the Publishing page.",
+      "returnButton" : "Return to front page"
+    }
+  },
+  "SystemSchedules" : {
+    "alert" : {
+      "message" : "System schedules",
+      "description" : "This is the System schedules page.",
+      "returnButton" : "Return to front page"
+    }
+  },
+  "TagCreate" : {
+    "alert" : {
+      "message" : "Tag Create",
+      "description" : "This is the Tag Create page.",
+      "returnButton" : "Return to front page"
+    }
+  },
+  "PublishFileGroup" : {
+    "header" : {
+      "title" : "Publish File Group"
+    },
+    "select" : {
+      "placeholder" : "Select file group"
+    },
+    "messages" : {
+      "fetchError" : "Failed to load file groups",
+      "selectWarning" : "Please select a file group to publish",
+      "publishSuccess" : "Published {{count}} files",
+      "publishError" : "Failed to publish file group"
+    },
+    "actions" : {
+      "publish" : "Publish"
+    }
+  },
+  "BottomFooter" : {
+    "text" : {
+      "versionPrefix" : "v",
+      "builtPrefix" : "built:"
+    }
+  },
+  "Account" : {
+    "alert" : {
+      "message" : "Account",
+      "description" : "This is the Account page.",
+      "returnButton" : "Return to front page"
+    }
+  },
+  "ChangePassword" : {
+    "alert" : {
+      "message" : "Change password",
+      "description" : "This is the Change password page.",
+      "returnButton" : "Return to front page"
+    }
+  },
+  "TagEdit" : {
+    "alert" : {
+      "message" : "Tag edit",
+      "description" : "This is the Tag edit page.",
+      "returnButton" : "Return to front page"
+    }
+  },
+  "TagSearch" : {
+    "alert" : {
+      "message" : "Tag search",
+      "description" : "This is the Tag search page.",
+      "returnButton" : "Return to front page"
+    }
+  },
+  "TagList" : {
+    "tableColumns" : {
+      "id" : {
+        "title" : "ID"
+      },
+      "tag_name" : {
+        "title" : "Tag Name"
+      },
+      "tag_name_de" : {
+        "title" : "Tag Name (De)"
+      },
+      "tag_name_en" : {
+        "title" : "Tag Name (En)"
+      },
+      "tag_name_es" : {
+        "title" : "Tag Name (Es)"
+      },
+      "tag_name_fi" : {
+        "title" : "Tag Name (Fi)"
+      },
+      "tag_name_sv" : {
+        "title" : "Tag Name (Sv)"
+      },
+      "actions" : {
+        "title" : "Actions"
+      }
+    },
+    "actions" : {
+      "save" : "Save",
+      "cancel" : "Cancel",
+      "edit" : "Edit",
+      "viewTaggedFiles" : "View tagged files"
+    },
+    "messages" : {
+      "fetchError" : "Error fetching tags {{error}}",
+      "noChanges" : "No changes to save",
+      "tagNameRequired" : "Tag name is required",
+      "updateSuccess" : "Tag updated successfully",
+      "updateFailedWithReason" : "Failed to update tag: {{error}}",
+      "updateFailed" : "Failed to update tag",
+      "updated" : "Tag updated",
+      "loadingTip" : "Loading"
+    }
+  },
+  "Home" : {
+    "title" : "Home"
+  },
+  "TopBar" : {
+    "tooltip" : {
+      "brand" : "Vempain File"
+    },
+    "brand" : {
+      "homeAlt" : "Home"
+    },
+    "a11y" : {
+      "openMenu" : "Open menu"
+    },
+    "menu" : {
+      "tagManagement" : {
+        "title" : "Tag management",
+        "tags" : "Tags",
+        "newTag" : "New tag",
+        "search" : "Search"
+      },
+      "fileManagement" : {
+        "title" : "File Management",
+        "archive" : "Archive",
+        "audio" : "Audio",
+        "document" : "Document",
+        "image" : "Image",
+        "vector" : "Vector",
+        "video" : "Video",
+        "importFiles" : "Import files",
+        "searchFiles" : "Search files"
+      },
+      "publishing" : {
+        "title" : "Publishing",
+        "fileGroup" : "File group"
+      },
+      "schedules" : {
+        "title" : "Schedule Management",
+        "systemSchedules" : "System schedules",
+        "fileImports" : "File imports",
+        "publishing" : "Publishing"
+      },
+      "userManagement" : {
+        "title" : "User Management",
+        "users" : "Users",
+        "units" : "Units"
+      },
+      "profile" : {
+        "title" : "Profile",
+        "account" : "Account",
+        "changePassword" : "Change password",
+        "logout" : "Log out"
+      },
+      "auth" : {
+        "login" : "Login",
+        "register" : "Register"
+      }
+    }
+  },
+  "FileTypeEnum" : {
+    "image" : "Image",
+    "video" : "Video",
+    "audio" : "Audio",
+    "document" : "Document",
+    "vector" : "Vector",
+    "icon" : "Icon",
+    "font" : "Font",
+    "archive" : "Archive",
+    "other" : "Other"
+  },
+  "PathCompletionEnum" : {
+    "original" : "Original",
+    "exported" : "Exported"
+  }
+}

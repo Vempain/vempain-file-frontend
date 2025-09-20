@@ -62,4 +62,3 @@ export function pathCompletionEnum2Tag(value: PathCompletionEnumType, t: TFuncti
 
     return <Tag color={color} key={`path-completion-${value}-${recordId}`}>{label}</Tag>;
 }
-
