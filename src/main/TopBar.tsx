@@ -1,5 +1,5 @@
 import {Button, Drawer, Grid, Layout, Menu, type MenuProps, Tooltip} from "antd";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {
     AppstoreOutlined,
     ArrowsAltOutlined,
@@ -12,6 +12,7 @@ import {
     FileUnknownOutlined,
     FileZipOutlined,
     FormOutlined,
+    GlobalOutlined,
     ImportOutlined,
     InfoCircleOutlined,
     LoginOutlined,
@@ -30,14 +31,16 @@ import {
 import {NavLink} from "react-router-dom";
 import {useSession} from "@vempain/vempain-auth-frontend";
 import {useTranslation} from "react-i18next";
+import {LanguageTool} from "../tools";
 
 const {Header} = Layout;
 const {useBreakpoint} = Grid;
 
 export function TopBar() {
     const [current, setCurrent] = useState("mail");
-    const {userSession} = useSession();
+    const {userSession, getSessionLanguage, setSessionLanguage} = useSession();
     const {t} = useTranslation();
+    const [supportedLanguages, setSupportedLanguages] = useState<{ label: string; value: string }[]>([]);
 
     const screens = useBreakpoint();
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -198,9 +201,30 @@ export function TopBar() {
                         key: "user-register",
                         icon: <FormOutlined/>
                     }
-                ])
+                ]),
+        ...(supportedLanguages.length > 0 &&
+                [
+                    {
+                        label: LanguageTool.getLabelByValue(getSessionLanguage()),
+                        key: "language-menu-main",
+                        icon: <GlobalOutlined/>,
+                        children: supportedLanguages.map(lang => {
+                            return {
+                                label: lang.label,
+                                key: lang.value,
+                                onClick: () => {
+                                    setSessionLanguage(lang.value);
+                                }
+                            };
+                        })
+                    }] || []),
+
     ];
 
+
+    useEffect(() => {
+        setSupportedLanguages(LanguageTool.getLanguages());
+    }, []);
     const onClick: MenuProps["onClick"] = (e) => {
         setCurrent(e.key);
     };
