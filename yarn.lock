@@ -1480,6 +1480,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-leaflet/core@npm:^3.0.0-rc.2":
+  version: 3.0.0
+  resolution: "@react-leaflet/core@npm:3.0.0"
+  peerDependencies:
+    leaflet: ^1.9.0
+    react: ^19.0.0
+    react-dom: ^19.0.0
+  checksum: 10c0/1e20f92ea99d378121d7ba57b9571ca3a67a86247729d8cd5726ded26105fcbffbbdf727da34b2ad5976438979819a38c93b94389313abb3ff80ca81632609a6
+  languageName: node
+  linkType: hard
+
 "@rolldown/pluginutils@npm:1.0.0-beta.35":
   version: 1.0.0-beta.35
   resolution: "@rolldown/pluginutils@npm:1.0.0-beta.35"
@@ -1869,6 +1880,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/geojson@npm:*":
+  version: 7946.0.16
+  resolution: "@types/geojson@npm:7946.0.16"
+  checksum: 10c0/1ff24a288bd5860b766b073ead337d31d73bdc715e5b50a2cee5cb0af57a1ed02cc04ef295f5fa68dc40fe3e4f104dd31282b2b818a5ba3231bc1001ba084e3c
+  languageName: node
+  linkType: hard
+
 "@types/istanbul-lib-coverage@npm:*, @types/istanbul-lib-coverage@npm:^2.0.1, @types/istanbul-lib-coverage@npm:^2.0.6":
   version: 2.0.6
   resolution: "@types/istanbul-lib-coverage@npm:2.0.6"
@@ -1919,6 +1937,15 @@ __metadata:
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
   checksum: 10c0/a996a745e6c5d60292f36731dd41341339d4eeed8180bb09226e5c8d23759067692b1d88e5d91d72ee83dfc00d3aca8e7bd43ea120516c17922cbcb7c3e252db
+  languageName: node
+  linkType: hard
+
+"@types/leaflet@npm:^1.9.20":
+  version: 1.9.20
+  resolution: "@types/leaflet@npm:1.9.20"
+  dependencies:
+    "@types/geojson": "npm:*"
+  checksum: 10c0/14a32df400c6a371bc7e65ee4467118dc1b977cae002c45f7315ed032fade30bac3b97feac60a08809dd767bd68b17900ae6f947258cc0745412562ad12f2e82
   languageName: node
   linkType: hard
 
@@ -2285,6 +2312,7 @@ __metadata:
     "@eslint/js": "npm:^9.30.1"
     "@testing-library/jest-dom": "npm:^6.7.0"
     "@types/jest": "npm:^30.0.0"
+    "@types/leaflet": "npm:^1.9.20"
     "@types/react": "npm:^19.1.9"
     "@types/react-dom": "npm:^19.1.6"
     "@vempain/vempain-auth-frontend": "npm:^0.9.8"
@@ -2301,9 +2329,11 @@ __metadata:
     i18next-http-backend: "npm:^3.0.2"
     jest: "npm:^30.0.5"
     jest-environment-jsdom: "npm:^30.0.5"
-    react: "npm:^19.1.0"
-    react-dom: "npm:^19.1.0"
+    leaflet: "npm:^1.9.4"
+    react: "npm:19.0.0-rc.1"
+    react-dom: "npm:19.0.0-rc.1"
     react-i18next: "npm:^15.7.2"
+    react-leaflet: "npm:5.0.0-rc.2"
     translation-check: "npm:^1.1.1"
     ts-jest: "npm:^29.1.2"
     typescript: "npm:^5.9.2"
@@ -4794,6 +4824,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"leaflet@npm:^1.9.4":
+  version: 1.9.4
+  resolution: "leaflet@npm:1.9.4"
+  checksum: 10c0/f639441dbb7eb9ae3fcd29ffd7d3508f6c6106892441634b0232fafb9ffb1588b05a8244ec7085de2c98b5ed703894df246898477836cfd0ce5b96d4717b5ca1
+  languageName: node
+  linkType: hard
+
 "leven@npm:^3.1.0":
   version: 3.1.0
   resolution: "leven@npm:3.1.0"
@@ -6053,14 +6090,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^19.1.0":
-  version: 19.1.1
-  resolution: "react-dom@npm:19.1.1"
+"react-dom@npm:19.0.0-rc.1":
+  version: 19.0.0-rc.1
+  resolution: "react-dom@npm:19.0.0-rc.1"
   dependencies:
-    scheduler: "npm:^0.26.0"
+    scheduler: "npm:0.25.0-rc.1"
   peerDependencies:
-    react: ^19.1.1
-  checksum: 10c0/8c91198510521299c56e4e8d5e3a4508b2734fb5e52f29eeac33811de64e76fe586ad32c32182e2e84e070d98df67125da346c3360013357228172dbcd20bcdd
+    react: 19.0.0-rc.1
+  checksum: 10c0/26fba423f41c8b3c7a47278ea490146506333175028e111e49eb39310110b6bda956cc772c77412abc8a7f28244eea80ebade15ec5b4382d79e2ac1b39bd2d0c
   languageName: node
   linkType: hard
 
@@ -6092,6 +6129,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-leaflet@npm:5.0.0-rc.2":
+  version: 5.0.0-rc.2
+  resolution: "react-leaflet@npm:5.0.0-rc.2"
+  dependencies:
+    "@react-leaflet/core": "npm:^3.0.0-rc.2"
+  peerDependencies:
+    leaflet: ^1.9.0
+    react: ^19.0.0
+    react-dom: ^19.0.0
+  checksum: 10c0/76c782b03f1f227ea6ec68951324e345aa871ceb5f866798a8a8e7200ee369239faece3165126b75b4e1296505280dac879c508e15ddcd81bba372ffe67d7974
+  languageName: node
+  linkType: hard
+
 "react-router-dom@npm:^7.2.0":
   version: 7.9.1
   resolution: "react-router-dom@npm:7.9.1"
@@ -6120,10 +6170,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^19.1.0":
-  version: 19.1.1
-  resolution: "react@npm:19.1.1"
-  checksum: 10c0/8c9769a2dfd02e603af6445058325e6c8a24b47b185d0e461f66a6454765ddcaecb3f0a90184836c68bb509f3c38248359edbc42f0d07c23eb500a5c30c87b4e
+"react@npm:19.0.0-rc.1":
+  version: 19.0.0-rc.1
+  resolution: "react@npm:19.0.0-rc.1"
+  checksum: 10c0/8f453ee0ff05ec4b11701cf4240fb0039217e73f576d2a9b871a91e34ff17d66e16294ebd0fc72c237918a3a997cc42f0328c860bc0a2cfa18e6a41f49a1c871
   languageName: node
   linkType: hard
 
@@ -6315,10 +6365,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.26.0":
-  version: 0.26.0
-  resolution: "scheduler@npm:0.26.0"
-  checksum: 10c0/5b8d5bfddaae3513410eda54f2268e98a376a429931921a81b5c3a2873aab7ca4d775a8caac5498f8cbc7d0daeab947cf923dbd8e215d61671f9f4e392d34356
+"scheduler@npm:0.25.0-rc.1":
+  version: 0.25.0-rc.1
+  resolution: "scheduler@npm:0.25.0-rc.1"
+  checksum: 10c0/dd4549eeb54cf3019c04257c622c4bbee12ef99dc547c4a96e1d5da8985ae44534111275ebcc4fea84b0d1299197b69071f912928adc5da4cab1e8168d09a44d
   languageName: node
   linkType: hard
 

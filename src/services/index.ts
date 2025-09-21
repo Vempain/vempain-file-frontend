@@ -6,6 +6,7 @@ export {fileScannerAPI} from './FileScannerAPI';
 export {fontFileAPI} from './FontFileAPI';
 export {iconFileAPI} from './IconFileAPI';
 export {imageFileAPI} from './ImageFileAPI';
+export {locationAPI} from './LocationAPI';
 export {pathCompletionAPI} from './PathCompletionAPI';
 export {publishAPI} from './PublishAPI';
 export {tagsAPI} from './TagsAPI';
