@@ -1,11 +1,13 @@
 import {Space, Table, Tag} from "antd";
 import type {ColumnsType} from "antd/es/table";
-import type {FileResponse} from "../../models/responses";
+import type {FileResponse, LocationResponse} from "../../models/responses";
 import dayjs, {type Dayjs} from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import {fileTypeEnum2Tag, formatDateWithTimeZone} from "../../tools";
 import {FileTypeEnum} from "../../models";
 import {useTranslation} from "react-i18next";
+import {useEffect, useState} from "react";
+import {locationAPI} from "../../services";
 
 dayjs.extend(utc);
 
@@ -25,7 +27,32 @@ function formatBytesToKB(val?: number): string {
 }
 
 export function FileDetails({file}: Props) {
+    const [loading, setLoading] = useState(true);
+    const [location, setLocation] = useState<LocationResponse | null>(null);
     const {t} = useTranslation();
+
+    useEffect(() => {
+        if (!file) {
+            return;
+        }
+
+        setLoading(true);
+        const tmpLocationId = file.gps_location_id;
+
+        if (tmpLocationId !== null
+                && tmpLocationId !== undefined) {
+            locationAPI.findById(tmpLocationId, null)
+                    .then(location => {
+                        setLocation(location);
+                    })
+                    .catch(err => {
+                        console.error("Error fetching location:", err);
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    });
+        }
+    }, [file]);
 
     if (!file) {
         return null;
@@ -63,7 +90,7 @@ export function FileDetails({file}: Props) {
             label: t("FileDetails.rows.gps_timestamp.label"),
             value: formatDateWithTimeZone(file.gps_timestamp == null ? null : (file.gps_timestamp as Dayjs))
         },
-        {key: "gps_location_id", label: t("FileDetails.rows.gps_location_id.label"), value: file.gps_location_id},
+        {key: "gps_location_id", label: t("FileDetails.rows.gps_location_id.label"), value: location},
         {key: "creator_name", label: t("FileDetails.rows.creator_name.label"), value: file.creator_name},
         {key: "creator_country", label: t("FileDetails.rows.creator_country.label"), value: file.creator_country},
         {key: "creator_email", label: t("FileDetails.rows.creator_email.label"), value: file.creator_email},
@@ -77,9 +104,9 @@ export function FileDetails({file}: Props) {
         },
         {key: "locked", label: t("FileDetails.rows.locked.label"), value: file.locked ? t("Common.general.yes") : t("Common.general.no")},
         {key: "creator", label: t("FileDetails.rows.creator.label"), value: file.creator ?? ""},
-        {key: "created", label: t("FileDetails.rows.created.label"), value: formatDateWithTimeZone(file.created == null ? null : (file.created as string))},
+        {key: "created", label: t("FileDetails.rows.created.label"), value: formatDateWithTimeZone(file.created == null ? null : file.created)},
         {key: "modifier", label: t("FileDetails.rows.modifier.label"), value: file.modifier ?? ""},
-        {key: "modified", label: t("FileDetails.rows.modified.label"), value: formatDateWithTimeZone(file.modified == null ? null : (file.modified as string))},
+        {key: "modified", label: t("FileDetails.rows.modified.label"), value: formatDateWithTimeZone(file.modified == null ? null : file.modified)},
         {
             key: "acls",
             label: t("FileDetails.rows.acls.label"),
@@ -88,15 +115,15 @@ export function FileDetails({file}: Props) {
     ];
 
     return (
+
             <Space direction="vertical" style={{width: "100%"}}>
-                <Table
+                {!loading && <Table
                         columns={columns}
                         dataSource={rows}
                         pagination={false}
                         showHeader={false}
                         size="small"
                         rowKey="key"
-                />
-            </Space>
-    );
+                />}
+            </Space>);
 }
