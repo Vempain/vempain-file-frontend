@@ -1,13 +1,14 @@
 import {Space, Table, Tag} from "antd";
 import type {ColumnsType} from "antd/es/table";
-import type {FileResponse, LocationResponse} from "../../models/responses";
+import type {FileResponse, LocationResponse} from "../../models";
+import {FileTypeEnum} from "../../models";
 import dayjs, {type Dayjs} from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import {fileTypeEnum2Tag, formatDateWithTimeZone} from "../../tools";
-import {FileTypeEnum} from "../../models";
 import {useTranslation} from "react-i18next";
 import {useEffect, useState} from "react";
 import {locationAPI} from "../../services";
+import {DisplayMap} from "../common";
 
 dayjs.extend(utc);
 
@@ -51,6 +52,10 @@ export function FileDetails({file}: Props) {
                     .finally(() => {
                         setLoading(false);
                     });
+        } else {
+            // Ensure table renders when no location is present
+            setLocation(null);
+            setLoading(false);
         }
     }, [file]);
 
@@ -90,7 +95,11 @@ export function FileDetails({file}: Props) {
             label: t("FileDetails.rows.gps_timestamp.label"),
             value: formatDateWithTimeZone(file.gps_timestamp == null ? null : (file.gps_timestamp as Dayjs))
         },
-        {key: "gps_location_id", label: t("FileDetails.rows.gps_location_id.label"), value: location},
+        {
+            key: "gps_location_id",
+            label: t("FileDetails.rows.gps_location_id.label"),
+            value: location ? <DisplayMap location={location}/> : ""
+        },
         {key: "creator_name", label: t("FileDetails.rows.creator_name.label"), value: file.creator_name},
         {key: "creator_country", label: t("FileDetails.rows.creator_country.label"), value: file.creator_country},
         {key: "creator_email", label: t("FileDetails.rows.creator_email.label"), value: file.creator_email},
