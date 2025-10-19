@@ -1,4 +1,4 @@
-import type {FontFileResponse} from "../models/responses";
+import type {FontFileResponse} from "../models";
 import {AbstractAPI} from "@vempain/vempain-auth-frontend";
 
 class FontFileAPI extends AbstractAPI<FontFileResponse, FontFileResponse> {

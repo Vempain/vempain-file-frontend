@@ -1,4 +1,4 @@
-import type {IconFileResponse} from "../models/responses";
+import type {IconFileResponse} from "../models";
 import {AbstractAPI} from "@vempain/vempain-auth-frontend";
 
 class IconFileAPI extends AbstractAPI<IconFileResponse, IconFileResponse> {

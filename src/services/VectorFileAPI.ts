@@ -1,4 +1,4 @@
-import type {VectorFileResponse} from '../models/responses';
+import type {VectorFileResponse} from '../models';
 import {AbstractAPI} from "@vempain/vempain-auth-frontend";
 
 class VectorFileAPI extends AbstractAPI<VectorFileResponse, VectorFileResponse> {

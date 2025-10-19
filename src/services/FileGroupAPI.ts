@@ -1,6 +1,5 @@
 import {AbstractAPI} from "@vempain/vempain-auth-frontend";
-import type {FileGroupResponse} from "../models/responses";
-import type {FileGroupRequest} from "../models/requests";
+import type {FileGroupRequest, FileGroupResponse} from "../models";
 
 class FileGroupAPI extends AbstractAPI<FileGroupRequest, FileGroupResponse> {
 }

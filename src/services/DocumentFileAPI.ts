@@ -1,4 +1,4 @@
-import type {DocumentFileResponse} from "../models/responses";
+import type {DocumentFileResponse} from "../models";
 import {AbstractAPI} from "@vempain/vempain-auth-frontend";
 
 class DocumentFileAPI extends AbstractAPI<DocumentFileResponse, DocumentFileResponse> {
