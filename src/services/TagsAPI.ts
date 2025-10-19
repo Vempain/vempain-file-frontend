@@ -1,6 +1,5 @@
 // services/TagsAPI.ts
-import type {TagResponse} from "../models/responses";
-import type {TagRequest} from "../models/requests";
+import type {TagRequest, TagResponse} from "../models";
 import {AbstractAPI} from "@vempain/vempain-auth-frontend";
 
 class TagsAPI extends AbstractAPI<TagRequest, TagResponse> {

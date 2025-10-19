@@ -1,5 +1,4 @@
-import type {PathCompletionRequest} from "../models/requests";
-import type {PathCompletionResponse} from "../models/responses";
+import type {PathCompletionRequest, PathCompletionResponse} from "../models";
 import {AbstractAPI} from "@vempain/vempain-auth-frontend";
 
 export class PathCompletionAPI extends AbstractAPI<PathCompletionRequest, PathCompletionResponse> {

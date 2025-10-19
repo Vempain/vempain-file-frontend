@@ -1,4 +1,4 @@
-import type {VideoFileResponse} from '../models/responses';
+import type {VideoFileResponse} from '../models';
 import {AbstractAPI} from "@vempain/vempain-auth-frontend";
 
 class VideoFileAPI extends AbstractAPI<VideoFileResponse, VideoFileResponse> {

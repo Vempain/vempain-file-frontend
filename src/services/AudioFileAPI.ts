@@ -1,4 +1,4 @@
-import type {AudioFileResponse} from "../models/responses";
+import type {AudioFileResponse} from "../models";
 import {AbstractAPI} from "@vempain/vempain-auth-frontend";
 
 class AudioFileAPI extends AbstractAPI<AudioFileResponse, AudioFileResponse> {

@@ -1,7 +1,6 @@
 import Axios, {type AxiosInstance} from "axios";
 import type {JwtResponse} from "@vempain/vempain-auth-frontend";
-import type {PublishFileGroupResponse} from "../models/responses";
-import type {PublishFileGroupRequest} from "../models/requests";
+import type {PublishFileGroupRequest, PublishFileGroupResponse} from "../models";
 
 class PublishAPI {
     protected axiosInstance: AxiosInstance;
