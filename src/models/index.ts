@@ -1,5 +1,5 @@
 export type {BuildInfo} from './BuildInfo';
-
+export type {PagedResponse} from "./PagedResponse.ts";
 
 // Enums
 export {FileTypeEnum} from "./FileTypeEnum";
