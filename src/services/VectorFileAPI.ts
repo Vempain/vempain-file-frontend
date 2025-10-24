@@ -1,7 +1,7 @@
 import type {VectorFileResponse} from '../models';
-import {AbstractAPI} from "@vempain/vempain-auth-frontend";
+import {AbstractFileAPI} from "./AbstractFileAPI.ts";
 
-class VectorFileAPI extends AbstractAPI<VectorFileResponse, VectorFileResponse> {
+class VectorFileAPI extends AbstractFileAPI<VectorFileResponse, VectorFileResponse> {
 }
 
 export const vectorFileAPI = new VectorFileAPI(import.meta.env.VITE_APP_API_URL, "/files/vector");

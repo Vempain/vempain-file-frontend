@@ -1,4 +1,4 @@
-import {Button, message, Modal, Popconfirm, Space, Table} from "antd";
+import {Button, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
 import {useEffect, useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
 import {imageFileAPI} from "../../services";
@@ -19,51 +19,46 @@ export function ImageFiles() {
     const [pageSize, setPageSize] = useState<number>(10);
     const [totalElements, setTotalElements] = useState<number>(0);
 
-    // Fetch with page + size (Table is 1-based; backend is assumed 0-based)
-    const fetchImageFiles = (page: number = currentPage, size: number = pageSize) => {
+    function fetchImageFiles(page: number = currentPage, size: number = pageSize) {
         setLoading(true);
         imageFileAPI.findAllPageable(page - 1, size)
-                .then((response) => {
-                    setImageFiles(response.content);
+                .then(response => {
+                    if (response && response.content) {
+                        setImageFiles(response.content);
+                    }
+
                     setTotalElements(response.totalElements ?? 0);
-                    // Sync page/size from server response (convert page to 1-based)
-                    if (typeof response.page === "number") {
-                        setCurrentPage(response.page + 1);
-                    } else {
-                        setCurrentPage(page);
-                    }
-                    if (typeof response.size === "number") {
-                        setPageSize(response.size);
-                    } else {
-                        setPageSize(size);
-                    }
+                    setCurrentPage(response.page + 1);
+                    setPageSize(response.size);
                 })
-                .catch((err) => {
+                .catch(err => {
                     console.error("Failed to fetch image files:", err);
                     message.error(t("ImageFiles.messages.fetchError"));
                 })
                 .finally(() => {
                     setLoading(false);
                 });
-    };
+    }
 
     useEffect(() => {
-        // initial load
         fetchImageFiles(1, pageSize);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleDelete = async (id: number) => {
-        try {
-            await imageFileAPI.delete(id);
-            message.success(t("ImageFiles.messages.deleteSuccess"));
-            // Refresh current page after deletion
-            fetchImageFiles(currentPage, pageSize);
-        } catch (err) {
-            console.error("Failed to delete image file:", err);
-            message.error(t("ImageFiles.messages.deleteError"));
-        }
-    };
+    function handleDelete(id: number) {
+        setLoading(true);
+        imageFileAPI.delete(id)
+                .then(_ => {
+                    message.success(t("ImageFiles.messages.deleteSuccess"));
+                    fetchImageFiles();
+                })
+                .catch(err => {
+                    console.error("Failed to delete image file:", err);
+                    message.error(t("ImageFiles.messages.deleteError"));
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+    }
 
     const columns: ColumnsType<ImageFileResponse> = [
         filenameColumn<ImageFileResponse>((record) => {
@@ -118,33 +113,35 @@ export function ImageFiles() {
         },
     ];
 
-    // Handle page/pageSize changes from Table
-    const handleTableChange = (pagination: { current?: number; pageSize?: number }) => {
+    function handleTableChange(pagination: { current?: number; pageSize?: number }) {
         const nextPage = pagination.current ?? 1;
         const nextSize = pagination.pageSize ?? pageSize;
         setCurrentPage(nextPage);
         setPageSize(nextSize);
         fetchImageFiles(nextPage, nextSize);
-    };
+    }
 
     return (
             <Space direction="vertical" style={{width: "100%", margin: 30}} size="large">
-                <Table
-                        columns={columns}
-                        dataSource={imageFiles.map(file => ({...file, key: file.id}))}
-                        loading={loading}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: pageSize,
-                            total: totalElements,
-                            showSizeChanger: true,
-                            pageSizeOptions: ['10', '20', '50'],
-                        }}
-                        onChange={handleTableChange}
-                        scroll={{x: 'max-content'}}
-                        key="image-files-table"
-                        rowKey="external_file_id"
-                />
+                <Spin spinning={loading}>
+                    {imageFiles.length > 0 && <Table
+                            columns={columns}
+                            dataSource={imageFiles.map(file => ({...file, key: file.id}))}
+                            loading={loading}
+                            pagination={{
+                                current: currentPage,
+                                pageSize: pageSize,
+                                total: totalElements,
+                                showSizeChanger: true,
+                                pageSizeOptions: ['10', '20', '50', '100'],
+                            }}
+                            onChange={handleTableChange}
+                            scroll={{x: 'max-content'}}
+                            key="image-files-table"
+                            rowKey="external_file_id"
+                    />
+                    }{imageFiles.length === 0 && !loading && t("ImageFiles.messages.noFiles")}
+                </Spin>
                 <Modal
                         open={detailsOpen}
                         onCancel={() => setDetailsOpen(false)}

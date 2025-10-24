@@ -1,8 +1,8 @@
-import {Button, message, Modal, Popconfirm, Space, Table} from "antd";
+import {Button, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
 import {useEffect, useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
 import {vectorFileAPI} from "../../services";
-import type {VectorFileResponse} from "../../models/responses";
+import type {VectorFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
 import {FileDetails} from "./FileDetails";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
@@ -14,34 +14,51 @@ export function VectorFiles() {
     const [vectorFiles, setVectorFiles] = useState<VectorFileResponse[]>([]);
     const [detailsOpen, setDetailsOpen] = useState(false);
     const [selectedFile, setSelectedFile] = useState<VectorFileResponse | null>(null);
+    // Add paging state
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [pageSize, setPageSize] = useState<number>(10);
+    const [totalElements, setTotalElements] = useState<number>(0);
 
-    const fetchVectorFiles = async () => {
+    function fetchVectorFiles(page: number = currentPage, size: number = pageSize) {
         setLoading(true);
-        try {
-            const response = await vectorFileAPI.findAll();
-            setVectorFiles(response);
-        } catch (err) {
-            console.error("Failed to fetch vector files:", err);
-            message.error(t("VectorFiles.messages.fetchError"));
-        } finally {
-            setLoading(false);
-        }
-    };
+        vectorFileAPI.findAllPageable(page - 1, size)
+                .then(response => {
+                    if (response && response.content) {
+                        setVectorFiles(response.content);
+                    }
+
+                    setTotalElements(response.totalElements ?? 0);
+                    setCurrentPage(response.page + 1);
+                    setPageSize(response.size);
+                })
+                .catch(err => {
+                    console.error("Failed to fetch image files:", err);
+                    message.error(t("VectorFiles.messages.fetchError"));
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+    }
 
     useEffect(() => {
         fetchVectorFiles();
     }, []);
 
-    const handleDelete = async (id: number) => {
-        try {
-            await vectorFileAPI.delete(id);
-            message.success(t("VectorFiles.messages.deleteSuccess"));
-            fetchVectorFiles();
-        } catch (err) {
-            console.error("Failed to delete vector file:", err);
-            message.error(t("VectorFiles.messages.deleteError"));
-        }
-    };
+    function handleDelete(id: number) {
+        setLoading(true);
+        vectorFileAPI.delete(id)
+                .then(_ => {
+                    message.success(t("VectorFiles.messages.deleteSuccess"));
+                    fetchVectorFiles();
+                })
+                .catch(err => {
+                    console.error("Failed to delete vector file:", err);
+                    message.error(t("VectorFiles.messages.deleteError"));
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+    }
 
     const columns: ColumnsType<VectorFileResponse> = [
         filenameColumn<VectorFileResponse>((record) => {
@@ -86,21 +103,35 @@ export function VectorFiles() {
         },
     ];
 
+    function handleTableChange(pagination: { current?: number; pageSize?: number }) {
+        const nextPage = pagination.current ?? 1;
+        const nextSize = pagination.pageSize ?? pageSize;
+        setCurrentPage(nextPage);
+        setPageSize(nextSize);
+        fetchVectorFiles(nextPage, nextSize);
+    }
+
     return (
             <Space direction="vertical" style={{width: "100%", margin: 30}} size="large">
-                <Table
-                        columns={columns}
-                        dataSource={vectorFiles.map(file => ({...file, key: file.id}))}
-                        loading={loading}
-                        pagination={{
-                            pageSize: 10,
-                            showSizeChanger: true,
-                            pageSizeOptions: ['10', '20', '50'],
-                        }}
-                        scroll={{x: 'max-content'}}
-                        key="vector-files-table"
-                        rowKey="external_file_id"
-                />
+                <Spin spinning={loading}>
+                    {vectorFiles.length > 0 && <Table
+                            columns={columns}
+                            dataSource={vectorFiles.map(file => ({...file, key: file.id}))}
+                            loading={loading}
+                            pagination={{
+                                current: currentPage,
+                                pageSize: pageSize,
+                                total: totalElements,
+                                showSizeChanger: true,
+                                pageSizeOptions: ['10', '20', '50', '100'],
+                            }}
+                            onChange={handleTableChange}
+                            scroll={{x: 'max-content'}}
+                            key="vector-files-table"
+                            rowKey="external_file_id"
+                    />
+                    }{vectorFiles.length === 0 && !loading && t("VectorFiles.messages.noFiles")}
+                </Spin>
                 <Modal
                         open={detailsOpen}
                         onCancel={() => setDetailsOpen(false)}
