@@ -1,3 +1,4 @@
+export {AbstractFileAPI} from './AbstractFileAPI';
 export {archiveFileAPI} from './ArchiveFileAPI';
 export {audioFileAPI} from './AudioFileAPI';
 export {documentFileAPI} from './DocumentFileAPI';

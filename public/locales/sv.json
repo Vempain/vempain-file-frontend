@@ -1,51 +1,18 @@
 {
-  "Common" : {
-    "general" : {
-      "yes" : "Ja",
-      "no" : "Nej"
-    },
-    "popconfirm" : {
-      "yes" : "Ja",
-      "no" : "Nej"
-    },
-    "modal" : {
-      "fileDetailsTitle" : "Fildetaljer"
-    }
-  },
-  "CommonColumns" : {
-    "columns" : {
-      "filename" : {
-        "title" : "Filnamn"
-      },
-      "file_path" : {
-        "title" : "Filsökväg"
-      },
-      "filesize" : {
-        "title" : "Filstorlek"
-      },
-      "mimetype" : {
-        "title" : "MIME-typ"
-      },
-      "created" : {
-        "title" : "Skapad"
-      },
-      "modified" : {
-        "title" : "Ändrad"
-      }
+  "Account" : {
+    "alert" : {
+      "description" : "Detta är sidan Konto.",
+      "message" : "Konto",
+      "returnButton" : "Till startsidan"
     }
   },
   "ArchiveFiles" : {
-    "messages" : {
-      "fetchError" : "Misslyckades att ladda arkivfiler",
-      "deleteSuccess" : "Arkivfil borttagen",
-      "deleteError" : "Misslyckades att ta bort arkivfil"
-    },
     "columns" : {
+      "actions" : {
+        "title" : "Åtgärder"
+      },
       "compression_method" : {
         "title" : "Komprimeringsmetod"
-      },
-      "uncompressed_size" : {
-        "title" : "Okomprimerad storlek"
       },
       "content_count" : {
         "title" : "Innehållsantal"
@@ -53,279 +20,197 @@
       "is_encrypted" : {
         "title" : "Krypterad"
       },
-      "actions" : {
-        "title" : "Åtgärder"
+      "uncompressed_size" : {
+        "title" : "Okomprimerad storlek"
       }
+    },
+    "messages" : {
+      "deleteError" : "Misslyckades att ta bort arkivfil",
+      "deleteSuccess" : "Arkivfil borttagen",
+      "fetchError" : "Misslyckades att ladda arkivfiler"
     },
     "popconfirm" : {
       "delete" : {
-        "title" : "Ta bort denna arkivfil",
-        "description" : "Är du säker på att du vill ta bort denna arkivfil?"
+        "description" : "Är du säker på att du vill ta bort denna arkivfil?",
+        "title" : "Ta bort denna arkivfil"
       }
     }
   },
   "AudioFiles" : {
-    "messages" : {
-      "fetchError" : "Misslyckades att ladda ljudfiler",
-      "deleteSuccess" : "Ljudfil borttagen",
-      "deleteError" : "Misslyckades att ta bort ljudfil"
-    },
     "columns" : {
-      "duration" : {
-        "title" : "Längd"
+      "actions" : {
+        "title" : "Åtgärder"
       },
       "bit_rate" : {
         "title" : "Bithastighet"
       },
-      "sample_rate" : {
-        "title" : "Samplingsfrekvens"
+      "channels" : {
+        "title" : "Kanaler"
       },
       "codec" : {
         "title" : "Kodek"
       },
-      "channels" : {
-        "title" : "Kanaler"
+      "duration" : {
+        "title" : "Längd"
       },
-      "actions" : {
-        "title" : "Åtgärder"
+      "sample_rate" : {
+        "title" : "Samplingsfrekvens"
       }
     },
-    "popconfirm" : {
-      "delete" : {
-        "title" : "Ta bort denna ljudfil",
-        "description" : "Är du säker på att du vill ta bort denna ljudfil?"
-      }
-    }
-  },
-  "DocumentFiles" : {
     "messages" : {
-      "fetchError" : "Misslyckades att ladda dokumentfiler",
-      "deleteSuccess" : "Dokumentfil borttagen",
-      "deleteError" : "Misslyckades att ta bort dokumentfil"
-    },
-    "columns" : {
-      "page_count" : {
-        "title" : "Sidantal"
-      },
-      "format" : {
-        "title" : "Format"
-      },
-      "actions" : {
-        "title" : "Åtgärder"
-      }
+      "deleteError" : "Misslyckades att ta bort ljudfil",
+      "deleteSuccess" : "Ljudfil borttagen",
+      "fetchError" : "Misslyckades att ladda ljudfiler"
     },
     "popconfirm" : {
       "delete" : {
-        "title" : "Ta bort denna dokumentfil",
-        "description" : "Är du säker på att du vill ta bort denna dokumentfil?"
+        "description" : "Är du säker på att du vill ta bort denna ljudfil?",
+        "title" : "Ta bort denna ljudfil"
       }
     }
   },
-  "ImageFiles" : {
-    "messages" : {
-      "fetchError" : "Misslyckades att ladda bildfiler",
-      "deleteSuccess" : "Bildfil borttagen",
-      "deleteError" : "Misslyckades att ta bort bildfil"
+  "BottomFooter" : {
+    "text" : {
+      "builtPrefix" : "byggd:",
+      "versionPrefix" : "v"
+    }
+  },
+  "ChangePassword" : {
+    "alert" : {
+      "description" : "Detta är sidan Byt lösenord.",
+      "message" : "Byt lösenord",
+      "returnButton" : "Till startsidan"
+    }
+  },
+  "Common" : {
+    "general" : {
+      "no" : "Nej",
+      "yes" : "Ja"
     },
-    "columns" : {
-      "width" : {
-        "title" : "Bredd"
-      },
-      "height" : {
-        "title" : "Höjd"
-      },
-      "dpi" : {
-        "title" : "DPI"
-      },
-      "color_depth" : {
-        "title" : "Färgdjup"
-      },
-      "group_label" : {
-        "title" : "Gruppetikett"
-      },
-      "actions" : {
-        "title" : "Åtgärder"
-      }
+    "modal" : {
+      "fileDetailsTitle" : "Fildetaljer"
     },
     "popconfirm" : {
-      "delete" : {
-        "title" : "Ta bort denna bildfil",
-        "description" : "Är du säker på att du vill ta bort denna bildfil?"
-      }
+      "no" : "Nej",
+      "yes" : "Ja"
     }
   },
-  "ImportFiles" : {
-    "form" : {
-      "originalPath" : {
-        "label" : "Original sökväg"
-      },
-      "exportPath" : {
-        "label" : "Export-sökväg"
-      },
-      "validation" : {
-        "atLeastOnePath" : "Minst ett av fälten måste fyllas i!"
-      },
-      "placeholder" : {
-        "pathExample" : "t.ex. /data/files"
-      },
-      "submit" : {
-        "startScan" : "Starta skanning"
-      },
-      "noSuggestions" : "Inga förslag"
-    },
-    "results" : {
-      "original" : {
-        "title" : "Skanningsresultat för originalfiler"
-      },
-      "export" : {
-        "title" : "Skanningsresultat för exporterade filer"
-      },
-      "failed" : {
-        "title" : "Misslyckades att skanna följande filer"
-      },
-      "success" : {
-        "title" : "Lyckade filer"
-      }
-    },
-    "failedTable" : {
-      "filename" : {
-        "title" : "Filnamn"
-      }
-    },
-    "fileColumns" : {
-      "filename" : {
-        "title" : "Filnamn"
-      },
-      "external_file_id" : {
-        "title" : "Extern fil-ID"
-      },
-      "mimetype" : {
-        "title" : "MIME-typ"
-      },
-      "filesize" : {
-        "title" : "Filstorlek"
-      },
-      "sha256sum" : {
-        "title" : "SHA256-summa"
-      },
-      "original_datetime" : {
-        "title" : "Ursprungligt datum"
-      },
-      "description" : {
-        "title" : "Beskrivning"
-      },
-      "file_type" : {
-        "title" : "Filtyp"
-      },
-      "rights_holder" : {
-        "title" : "Rättighetsinnehavare"
-      },
-      "rights_terms" : {
-        "title" : "Rättsvillkor"
-      },
-      "rights_url" : {
-        "title" : "Rättighets-URL"
-      },
-      "creator_name" : {
-        "title" : "Skaparens namn"
-      },
-      "creator_country" : {
-        "title" : "Skaparens land"
-      },
-      "creator_email" : {
-        "title" : "Skaparens e-post"
-      },
-      "creator_url" : {
-        "title" : "Skaparens URL"
-      },
-      "tags" : {
-        "title" : "Taggar"
-      },
+  "CommonColumns" : {
+    "columns" : {
       "created" : {
         "title" : "Skapad"
-      },
-      "modified" : {
-        "title" : "Ändrad"
-      },
-      "locked" : {
-        "title" : "Låst",
-        "filters" : {
-          "yes" : "Ja",
-          "no" : "Nej"
-        }
-      }
-    },
-    "exportFileColumns" : {
-      "id" : {
-        "title" : "ID"
-      },
-      "file_id" : {
-        "title" : "Fil-ID"
-      },
-      "filename" : {
-        "title" : "Filnamn"
       },
       "file_path" : {
         "title" : "Filsökväg"
       },
-      "mimetype" : {
-        "title" : "MIME-typ"
+      "filename" : {
+        "title" : "Filnamn"
       },
       "filesize" : {
         "title" : "Filstorlek"
       },
-      "sha256sum" : {
-        "title" : "SHA256-summa"
+      "mimetype" : {
+        "title" : "MIME-typ"
       },
-      "original_document_id" : {
-        "title" : "Originaldokument-ID"
+      "modified" : {
+        "title" : "Ändrad"
+      }
+    }
+  },
+  "DocumentFiles" : {
+    "columns" : {
+      "actions" : {
+        "title" : "Åtgärder"
       },
-      "created" : {
-        "title" : "Skapad"
+      "format" : {
+        "title" : "Format"
+      },
+      "page_count" : {
+        "title" : "Sidantal"
+      }
+    },
+    "messages" : {
+      "deleteError" : "Misslyckades att ta bort dokumentfil",
+      "deleteSuccess" : "Dokumentfil borttagen",
+      "fetchError" : "Misslyckades att ladda dokumentfiler"
+    },
+    "popconfirm" : {
+      "delete" : {
+        "description" : "Är du säker på att du vill ta bort denna dokumentfil?",
+        "title" : "Ta bort denna dokumentfil"
       }
     }
   },
   "FileDetails" : {
-    "table" : {
-      "field" : "Fält",
-      "value" : "Värde"
-    },
     "rows" : {
-      "id" : {
-        "label" : "ID"
+      "acls" : {
+        "label" : "ACL:er"
       },
-      "filename" : {
-        "label" : "Filnamn"
+      "created" : {
+        "label" : "Skapad"
       },
-      "file_path" : {
-        "label" : "Filsökväg"
+      "creator" : {
+        "label" : "Skapare (ID)"
       },
-      "external_file_id" : {
-        "label" : "Extern fil-ID"
+      "creator_country" : {
+        "label" : "Skaparens land"
       },
-      "mimetype" : {
-        "label" : "MIME-typ"
+      "creator_email" : {
+        "label" : "Skaparens e-post"
       },
-      "filesize" : {
-        "label" : "Filstorlek"
+      "creator_name" : {
+        "label" : "Skaparens namn"
       },
-      "sha256sum" : {
-        "label" : "SHA256-summa"
-      },
-      "original_datetime" : {
-        "label" : "Ursprungligt datum"
-      },
-      "original_second_fraction" : {
-        "label" : "Ursprunglig sekundfraktion"
-      },
-      "original_document_id" : {
-        "label" : "Originaldokument-ID"
+      "creator_url" : {
+        "label" : "Skaparens URL"
       },
       "description" : {
         "label" : "Beskrivning"
       },
+      "external_file_id" : {
+        "label" : "Extern fil-ID"
+      },
+      "file_path" : {
+        "label" : "Filsökväg"
+      },
       "file_type" : {
         "label" : "Filtyp"
+      },
+      "filename" : {
+        "label" : "Filnamn"
+      },
+      "filesize" : {
+        "label" : "Filstorlek"
+      },
+      "gps_location_id" : {
+        "label" : "GPS-plats-ID"
+      },
+      "gps_timestamp" : {
+        "label" : "GPS-tidsstämpel"
+      },
+      "id" : {
+        "label" : "ID"
+      },
+      "locked" : {
+        "label" : "Låst"
+      },
+      "mimetype" : {
+        "label" : "MIME-typ"
+      },
+      "modified" : {
+        "label" : "Ändrad"
+      },
+      "modifier" : {
+        "label" : "Ändrad av (ID)"
+      },
+      "original_datetime" : {
+        "label" : "Ursprungligt datum"
+      },
+      "original_document_id" : {
+        "label" : "Originaldokument-ID"
+      },
+      "original_second_fraction" : {
+        "label" : "Ursprunglig sekundfraktion"
       },
       "rights_holder" : {
         "label" : "Rättighetsinnehavare"
@@ -336,216 +221,320 @@
       "rights_url" : {
         "label" : "Rättighets-URL"
       },
-      "gps_timestamp" : {
-        "label" : "GPS-tidsstämpel"
-      },
-      "gps_location_id" : {
-        "label" : "GPS-plats-ID"
-      },
-      "creator_name" : {
-        "label" : "Skaparens namn"
-      },
-      "creator_country" : {
-        "label" : "Skaparens land"
-      },
-      "creator_email" : {
-        "label" : "Skaparens e-post"
-      },
-      "creator_url" : {
-        "label" : "Skaparens URL"
+      "sha256sum" : {
+        "label" : "SHA256-summa"
       },
       "tags" : {
         "label" : "Taggar"
-      },
-      "locked" : {
-        "label" : "Låst"
-      },
-      "creator" : {
-        "label" : "Skapare (ID)"
-      },
-      "created" : {
-        "label" : "Skapad"
-      },
-      "modifier" : {
-        "label" : "Ändrad av (ID)"
-      },
-      "modified" : {
-        "label" : "Ändrad"
-      },
-      "acls" : {
-        "label" : "ACL:er"
       }
+    },
+    "table" : {
+      "field" : "Fält",
+      "value" : "Värde"
     }
   },
-  "VectorFiles" : {
-    "messages" : {
-      "fetchError" : "Misslyckades att ladda vektorfiler",
-      "deleteSuccess" : "Vektorfil borttagen",
-      "deleteError" : "Misslyckades att ta bort vektorfil"
-    },
+  "FileGroups" : {
     "columns" : {
-      "width" : {
-        "title" : "Bredd"
-      },
-      "height" : {
-        "title" : "Höjd"
-      },
-      "layers_count" : {
-        "title" : "Antal lager"
-      },
       "actions" : {
         "title" : "Åtgärder"
-      }
-    },
-    "popconfirm" : {
-      "delete" : {
-        "title" : "Ta bort denna vektorfil",
-        "description" : "Är du säker på att du vill ta bort denna vektorfil?"
-      }
-    }
-  },
-  "FilePermissions" : {
-    "alert" : {
-      "message" : "Filbehörigheter",
-      "description" : "Detta är sidan Filbehörigheter.",
-      "returnButton" : "Till startsidan"
-    }
-  },
-  "SearchFiles" : {
-    "alert" : {
-      "message" : "Sök filer",
-      "description" : "Detta är sidan Sök filer.",
-      "returnButton" : "Till startsidan"
-    }
-  },
-  "Units" : {
-    "alert" : {
-      "message" : "Enheter",
-      "description" : "Detta är sidan Enheter.",
-      "returnButton" : "Till startsidan"
-    }
-  },
-  "Users" : {
-    "alert" : {
-      "message" : "Användare",
-      "description" : "Detta är sidan Användare.",
-      "returnButton" : "Till startsidan"
-    }
-  },
-  "VideoFiles" : {
-    "messages" : {
-      "fetchError" : "Misslyckades att ladda videofiler",
-      "deleteSuccess" : "Videofil borttagen",
-      "deleteError" : "Misslyckades att ta bort videofil"
-    },
-    "columns" : {
-      "width" : {
-        "title" : "Bredd"
       },
-      "height" : {
-        "title" : "Höjd"
+      "file_count" : {
+        "title" : "Antal filer"
       },
-      "frame_rate" : {
-        "title" : "Bildfrekvens"
+      "group_name" : {
+        "title" : "Gruppnamn"
       },
-      "duration" : {
-        "title" : "Längd"
-      },
-      "codec" : {
-        "title" : "Kodek"
-      },
-      "actions" : {
-        "title" : "Åtgärder"
-      }
-    },
-    "popconfirm" : {
-      "delete" : {
-        "title" : "Ta bort denna videofil",
-        "description" : "Är du säker på att du vill ta bort denna videofil?"
+      "path" : {
+        "title" : "Sökväg"
       }
     }
   },
   "FileImports" : {
     "alert" : {
-      "message" : "Filimport",
       "description" : "Detta är sidan Filimport.",
+      "message" : "Filimport",
       "returnButton" : "Till startsidan"
+    }
+  },
+  "FilePermissions" : {
+    "alert" : {
+      "description" : "Detta är sidan Filbehörigheter.",
+      "message" : "Filbehörigheter",
+      "returnButton" : "Till startsidan"
+    }
+  },
+  "FileTypeEnum" : {
+    "archive" : "Arkiv",
+    "audio" : "Ljud",
+    "document" : "Dokument",
+    "font" : "Typsnitt",
+    "icon" : "Ikon",
+    "image" : "Bild",
+    "other" : "Annat",
+    "vector" : "Vektor",
+    "video" : "Video"
+  },
+  "Home" : {
+    "title" : "Hem"
+  },
+  "ImageFiles" : {
+    "columns" : {
+      "actions" : {
+        "title" : "Åtgärder"
+      },
+      "color_depth" : {
+        "title" : "Färgdjup"
+      },
+      "dpi" : {
+        "title" : "DPI"
+      },
+      "group_label" : {
+        "title" : "Gruppetikett"
+      },
+      "height" : {
+        "title" : "Höjd"
+      },
+      "width" : {
+        "title" : "Bredd"
+      }
+    },
+    "messages" : {
+      "deleteError" : "Misslyckades att ta bort bildfil",
+      "deleteSuccess" : "Bildfil borttagen",
+      "fetchError" : "Misslyckades att ladda bildfiler"
+    },
+    "popconfirm" : {
+      "delete" : {
+        "description" : "Är du säker på att du vill ta bort denna bildfil?",
+        "title" : "Ta bort denna bildfil"
+      }
+    }
+  },
+  "ImportFiles" : {
+    "exportFileColumns" : {
+      "created" : {
+        "title" : "Skapad"
+      },
+      "file_id" : {
+        "title" : "Fil-ID"
+      },
+      "file_path" : {
+        "title" : "Filsökväg"
+      },
+      "filename" : {
+        "title" : "Filnamn"
+      },
+      "filesize" : {
+        "title" : "Filstorlek"
+      },
+      "id" : {
+        "title" : "ID"
+      },
+      "mimetype" : {
+        "title" : "MIME-typ"
+      },
+      "original_document_id" : {
+        "title" : "Originaldokument-ID"
+      },
+      "sha256sum" : {
+        "title" : "SHA256-summa"
+      }
+    },
+    "failedTable" : {
+      "filename" : {
+        "title" : "Filnamn"
+      }
+    },
+    "fileColumns" : {
+      "created" : {
+        "title" : "Skapad"
+      },
+      "creator_country" : {
+        "title" : "Skaparens land"
+      },
+      "creator_email" : {
+        "title" : "Skaparens e-post"
+      },
+      "creator_name" : {
+        "title" : "Skaparens namn"
+      },
+      "creator_url" : {
+        "title" : "Skaparens URL"
+      },
+      "description" : {
+        "title" : "Beskrivning"
+      },
+      "external_file_id" : {
+        "title" : "Extern fil-ID"
+      },
+      "file_type" : {
+        "title" : "Filtyp"
+      },
+      "filename" : {
+        "title" : "Filnamn"
+      },
+      "filesize" : {
+        "title" : "Filstorlek"
+      },
+      "locked" : {
+        "filters" : {
+          "no" : "Nej",
+          "yes" : "Ja"
+        },
+        "title" : "Låst"
+      },
+      "mimetype" : {
+        "title" : "MIME-typ"
+      },
+      "modified" : {
+        "title" : "Ändrad"
+      },
+      "original_datetime" : {
+        "title" : "Ursprungligt datum"
+      },
+      "rights_holder" : {
+        "title" : "Rättighetsinnehavare"
+      },
+      "rights_terms" : {
+        "title" : "Rättsvillkor"
+      },
+      "rights_url" : {
+        "title" : "Rättighets-URL"
+      },
+      "sha256sum" : {
+        "title" : "SHA256-summa"
+      },
+      "tags" : {
+        "title" : "Taggar"
+      }
+    },
+    "form" : {
+      "exportPath" : {
+        "label" : "Export-sökväg"
+      },
+      "noSuggestions" : "Inga förslag",
+      "originalPath" : {
+        "label" : "Original sökväg"
+      },
+      "placeholder" : {
+        "pathExample" : "t.ex. /data/files"
+      },
+      "submit" : {
+        "startScan" : "Starta skanning"
+      },
+      "validation" : {
+        "atLeastOnePath" : "Minst ett av fälten måste fyllas i!"
+      }
+    },
+    "results" : {
+      "export" : {
+        "title" : "Skanningsresultat för exporterade filer"
+      },
+      "failed" : {
+        "title" : "Misslyckades att skanna följande filer"
+      },
+      "original" : {
+        "title" : "Skanningsresultat för originalfiler"
+      },
+      "success" : {
+        "title" : "Lyckade filer"
+      }
+    }
+  },
+  "PathCompletionEnum" : {
+    "exported" : "Exporterad",
+    "original" : "Original"
+  },
+  "PublishFileGroup" : {
+    "actions" : {
+      "publish" : "Publicera",
+      "show" : "Visa"
+    },
+    "header" : {
+      "title" : "Publicera filgrupp"
+    },
+    "messages" : {
+      "deleteError" : "Misslyckades att ta bort filgrupp",
+      "deleteSuccess" : "Filgrupp borttagen",
+      "fetchError" : "Misslyckades att ladda filgrupper",
+      "publishError" : "Misslyckades att publicera filgrupp",
+      "publishSuccess" : "Publicerade {{count}} filer",
+      "selectWarning" : "Välj en filgrupp att publicera"
+    },
+    "popconfirm" : {
+      "delete" : {
+        "description" : "Är du säker på att du vill ta bort denna filgrupp?",
+        "title" : "Ta bort denna filgrupp"
+      }
+    },
+    "select" : {
+      "placeholder" : "Välj filgrupp"
     }
   },
   "Publishing" : {
     "alert" : {
-      "message" : "Publicering",
       "description" : "Detta är sidan Publicering.",
+      "message" : "Publicering",
       "returnButton" : "Till startsidan"
+    }
+  },
+  "SearchFiles" : {
+    "alert" : {
+      "description" : "Detta är sidan Sök filer.",
+      "message" : "Sök filer",
+      "returnButton" : "Till startsidan"
+    }
+  },
+  "ShowFileGroup" : {
+    "header" : {
+      "title" : "Filgruppens detaljer"
+    },
+    "messages" : {
+      "fetchError" : "Misslyckades att ladda filgrupp"
     }
   },
   "SystemSchedules" : {
     "alert" : {
-      "message" : "Systemscheman",
       "description" : "Detta är sidan Systemscheman.",
+      "message" : "Systemscheman",
       "returnButton" : "Till startsidan"
     }
   },
   "TagCreate" : {
     "alert" : {
-      "message" : "Skapa tagg",
       "description" : "Detta är sidan Skapa tagg.",
-      "returnButton" : "Till startsidan"
-    }
-  },
-  "PublishFileGroup" : {
-    "header" : {
-      "title" : "Publicera filgrupp"
-    },
-    "select" : {
-      "placeholder" : "Välj filgrupp"
-    },
-    "messages" : {
-      "fetchError" : "Misslyckades att ladda filgrupper",
-      "selectWarning" : "Välj en filgrupp att publicera",
-      "publishSuccess" : "Publicerade {{count}} filer",
-      "publishError" : "Misslyckades att publicera filgrupp"
-    },
-    "actions" : {
-      "publish" : "Publicera"
-    }
-  },
-  "BottomFooter" : {
-    "text" : {
-      "versionPrefix" : "v",
-      "builtPrefix" : "byggd:"
-    }
-  },
-  "Account" : {
-    "alert" : {
-      "message" : "Konto",
-      "description" : "Detta är sidan Konto.",
-      "returnButton" : "Till startsidan"
-    }
-  },
-  "ChangePassword" : {
-    "alert" : {
-      "message" : "Byt lösenord",
-      "description" : "Detta är sidan Byt lösenord.",
+      "message" : "Skapa tagg",
       "returnButton" : "Till startsidan"
     }
   },
   "TagEdit" : {
     "alert" : {
-      "message" : "Redigera tagg",
       "description" : "Detta är sidan Redigera tagg.",
-      "returnButton" : "Till startsidan"
-    }
-  },
-  "TagSearch" : {
-    "alert" : {
-      "message" : "Taggsökning",
-      "description" : "Detta är sidan Taggsökning.",
+      "message" : "Redigera tagg",
       "returnButton" : "Till startsidan"
     }
   },
   "TagList" : {
+    "actions" : {
+      "cancel" : "Avbryt",
+      "edit" : "Redigera",
+      "save" : "Spara",
+      "viewTaggedFiles" : "Visa taggade filer"
+    },
+    "messages" : {
+      "fetchError" : "Fel vid hämtning av taggar {{error}}",
+      "loadingTip" : "Laddar",
+      "noChanges" : "Inga ändringar att spara",
+      "tagNameRequired" : "Taggnamn krävs",
+      "updateFailed" : "Misslyckades att uppdatera tagg",
+      "updateFailedWithReason" : "Misslyckades att uppdatera tagg: {{error}}",
+      "updateSuccess" : "Tagg uppdaterad",
+      "updated" : "Tagg uppdaterad"
+    },
     "tableColumns" : {
+      "actions" : {
+        "title" : "Åtgärder"
+      },
       "id" : {
         "title" : "ID"
       },
@@ -566,99 +555,143 @@
       },
       "tag_name_sv" : {
         "title" : "Taggnamn (Sv)"
-      },
-      "actions" : {
-        "title" : "Åtgärder"
       }
-    },
-    "actions" : {
-      "save" : "Spara",
-      "cancel" : "Avbryt",
-      "edit" : "Redigera",
-      "viewTaggedFiles" : "Visa taggade filer"
-    },
-    "messages" : {
-      "fetchError" : "Fel vid hämtning av taggar {{error}}",
-      "noChanges" : "Inga ändringar att spara",
-      "tagNameRequired" : "Taggnamn krävs",
-      "updateSuccess" : "Tagg uppdaterad",
-      "updateFailedWithReason" : "Misslyckades att uppdatera tagg: {{error}}",
-      "updateFailed" : "Misslyckades att uppdatera tagg",
-      "updated" : "Tagg uppdaterad",
-      "loadingTip" : "Laddar"
     }
   },
-  "Home" : {
-    "title" : "Hem"
+  "TagSearch" : {
+    "alert" : {
+      "description" : "Detta är sidan Taggsökning.",
+      "message" : "Taggsökning",
+      "returnButton" : "Till startsidan"
+    }
   },
   "TopBar" : {
-    "tooltip" : {
-      "brand" : "Vempain Fil"
+    "a11y" : {
+      "openMenu" : "Öppna menyn"
     },
     "brand" : {
       "homeAlt" : "Hem"
     },
-    "a11y" : {
-      "openMenu" : "Öppna menyn"
-    },
     "menu" : {
-      "tagManagement" : {
-        "title" : "Tagghantering",
-        "tags" : "Taggar",
-        "newTag" : "Ny tagg",
-        "search" : "Sök"
+      "auth" : {
+        "login" : "Logga in",
+        "register" : "Registrera"
+      },
+      "file-group" : {
+        "fileGroup" : "Filgrupp",
+        "title" : "Publicering"
       },
       "fileManagement" : {
-        "title" : "Filhantering",
         "archive" : "Arkiv",
         "audio" : "Ljud",
         "document" : "Dokument",
         "image" : "Bild",
-        "vector" : "Vektor",
-        "video" : "Video",
         "importFiles" : "Importera filer",
-        "searchFiles" : "Sök filer"
+        "searchFiles" : "Sök filer",
+        "title" : "Filhantering",
+        "vector" : "Vektor",
+        "video" : "Video"
       },
-      "publishing" : {
-        "title" : "Publicering",
-        "fileGroup" : "Filgrupp"
+      "profile" : {
+        "account" : "Konto",
+        "changePassword" : "Byt lösenord",
+        "logout" : "Logga ut",
+        "title" : "Profil"
       },
       "schedules" : {
-        "title" : "Schemaläggning",
-        "systemSchedules" : "Systemscheman",
         "fileImports" : "Filimporter",
-        "publishing" : "Publicering"
+        "publishing" : "Publicering",
+        "systemSchedules" : "Systemscheman",
+        "title" : "Schemaläggning"
+      },
+      "tagManagement" : {
+        "newTag" : "Ny tagg",
+        "search" : "Sök",
+        "tags" : "Taggar",
+        "title" : "Tagghantering"
       },
       "userManagement" : {
         "title" : "Användarhantering",
-        "users" : "Användare",
-        "units" : "Enheter"
+        "units" : "Enheter",
+        "users" : "Användare"
+      }
+    },
+    "tooltip" : {
+      "brand" : "Vempain Fil"
+    }
+  },
+  "Units" : {
+    "alert" : {
+      "description" : "Detta är sidan Enheter.",
+      "message" : "Enheter",
+      "returnButton" : "Till startsidan"
+    }
+  },
+  "Users" : {
+    "alert" : {
+      "description" : "Detta är sidan Användare.",
+      "message" : "Användare",
+      "returnButton" : "Till startsidan"
+    }
+  },
+  "VectorFiles" : {
+    "columns" : {
+      "actions" : {
+        "title" : "Åtgärder"
       },
-      "profile" : {
-        "title" : "Profil",
-        "account" : "Konto",
-        "changePassword" : "Byt lösenord",
-        "logout" : "Logga ut"
+      "height" : {
+        "title" : "Höjd"
       },
-      "auth" : {
-        "login" : "Logga in",
-        "register" : "Registrera"
+      "layers_count" : {
+        "title" : "Antal lager"
+      },
+      "width" : {
+        "title" : "Bredd"
+      }
+    },
+    "messages" : {
+      "deleteError" : "Misslyckades att ta bort vektorfil",
+      "deleteSuccess" : "Vektorfil borttagen",
+      "fetchError" : "Misslyckades att ladda vektorfiler"
+    },
+    "popconfirm" : {
+      "delete" : {
+        "description" : "Är du säker på att du vill ta bort denna vektorfil?",
+        "title" : "Ta bort denna vektorfil"
       }
     }
   },
-  "FileTypeEnum" : {
-    "image" : "Bild",
-    "video" : "Video",
-    "audio" : "Ljud",
-    "document" : "Dokument",
-    "vector" : "Vektor",
-    "icon" : "Ikon",
-    "font" : "Typsnitt",
-    "archive" : "Arkiv",
-    "other" : "Annat"
-  },
-  "PathCompletionEnum" : {
-    "original" : "Original",
-    "exported" : "Exporterad"
+  "VideoFiles" : {
+    "columns" : {
+      "actions" : {
+        "title" : "Åtgärder"
+      },
+      "codec" : {
+        "title" : "Kodek"
+      },
+      "duration" : {
+        "title" : "Längd"
+      },
+      "frame_rate" : {
+        "title" : "Bildfrekvens"
+      },
+      "height" : {
+        "title" : "Höjd"
+      },
+      "width" : {
+        "title" : "Bredd"
+      }
+    },
+    "messages" : {
+      "deleteError" : "Misslyckades att ta bort videofil",
+      "deleteSuccess" : "Videofil borttagen",
+      "fetchError" : "Misslyckades att ladda videofiler"
+    },
+    "popconfirm" : {
+      "delete" : {
+        "description" : "Är du säker på att du vill ta bort denna videofil?",
+        "title" : "Ta bort denna videofil"
+      }
+    }
   }
 }

@@ -1,7 +1,7 @@
 import type {FontFileResponse} from "../models";
-import {AbstractAPI} from "@vempain/vempain-auth-frontend";
+import {AbstractFileAPI} from "./AbstractFileAPI.ts";
 
-class FontFileAPI extends AbstractAPI<FontFileResponse, FontFileResponse> {
+class FontFileAPI extends AbstractFileAPI<FontFileResponse, FontFileResponse> {
 }
 
 export const fontFileAPI = new FontFileAPI(import.meta.env.VITE_APP_API_URL, "/files/font");

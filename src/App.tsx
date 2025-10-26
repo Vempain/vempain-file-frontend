@@ -10,13 +10,14 @@ import {
     AudioFiles,
     ChangePassword,
     DocumentFiles,
+    FileGroups,
     FileImports,
     FilePermissions,
     ImageFiles,
     ImportFiles,
-    PublishFileGroup,
     Publishing,
     SearchFiles,
+    ShowFileGroup,
     SystemSchedules,
     TagCreate,
     TagList,
@@ -76,7 +77,8 @@ export default function App() {
                             <Route path="/files/videos" element={<VideoFiles/>}/>
                             <Route path="/files/import" element={<ImportFiles/>}/>
                             <Route path="/files/search" element={<SearchFiles/>}/>
-                            <Route path="/publish/file-group" element={<PublishFileGroup/>}/>
+                            <Route path="/file-groups" element={<FileGroups/>}/>
+                            <Route path="/file-groups/:id" element={<ShowFileGroup/>}/>
                             <Route path="/schedules/system" element={<SystemSchedules/>}/>
                             <Route path="/schedules/file-imports" element={<FileImports/>}/>
                             <Route path="/schedules/publishing" element={<Publishing/>}/>

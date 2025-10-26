@@ -118,13 +118,13 @@ export function TopBar() {
                         ],
                     },
                     {
-                        label: t("TopBar.menu.publishing.title"),
-                        key: "publishingManagement",
+                        label: t("TopBar.menu.file-group.title"),
+                        key: "pageGroupManagement",
                         icon: <ClockCircleOutlined/>,
                         children: [
                             {
-                                label: (<NavLink to={"/publish/file-group"}>{t("TopBar.menu.publishing.fileGroup")}</NavLink>),
-                                key: "publishing-publishFileGroup",
+                                label: (<NavLink to={"/file-groups"}>{t("TopBar.menu.file-group.fileGroup")}</NavLink>),
+                                key: "file-group-listFileGroup",
                                 icon: <AppstoreOutlined/>
                             }
                         ],

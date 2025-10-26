@@ -1,51 +1,18 @@
 {
-  "Common" : {
-    "general" : {
-      "yes" : "Kyllä",
-      "no" : "Ei"
-    },
-    "popconfirm" : {
-      "yes" : "Kyllä",
-      "no" : "Ei"
-    },
-    "modal" : {
-      "fileDetailsTitle" : "Tiedoston tiedot"
-    }
-  },
-  "CommonColumns" : {
-    "columns" : {
-      "filename" : {
-        "title" : "Tiedostonimi"
-      },
-      "file_path" : {
-        "title" : "Tiedostopolku"
-      },
-      "filesize" : {
-        "title" : "Tiedostokoko"
-      },
-      "mimetype" : {
-        "title" : "MIME-tyyppi"
-      },
-      "created" : {
-        "title" : "Luotu"
-      },
-      "modified" : {
-        "title" : "Muokattu"
-      }
+  "Account" : {
+    "alert" : {
+      "description" : "Tämä on Tili-sivu.",
+      "message" : "Tili",
+      "returnButton" : "Palaa etusivulle"
     }
   },
   "ArchiveFiles" : {
-    "messages" : {
-      "fetchError" : "Arkistotiedostojen lataaminen epäonnistui",
-      "deleteSuccess" : "Arkistotiedosto poistettu onnistuneesti",
-      "deleteError" : "Arkistotiedoston poistaminen epäonnistui"
-    },
     "columns" : {
+      "actions" : {
+        "title" : "Toiminnot"
+      },
       "compression_method" : {
         "title" : "Pakkausmenetelmä"
-      },
-      "uncompressed_size" : {
-        "title" : "Pakkaamaton koko"
       },
       "content_count" : {
         "title" : "Sisällön määrä"
@@ -53,279 +20,197 @@
       "is_encrypted" : {
         "title" : "Salattu"
       },
-      "actions" : {
-        "title" : "Toiminnot"
+      "uncompressed_size" : {
+        "title" : "Pakkaamaton koko"
       }
+    },
+    "messages" : {
+      "deleteError" : "Arkistotiedoston poistaminen epäonnistui",
+      "deleteSuccess" : "Arkistotiedosto poistettu onnistuneesti",
+      "fetchError" : "Arkistotiedostojen lataaminen epäonnistui"
     },
     "popconfirm" : {
       "delete" : {
-        "title" : "Poista tämä arkistotiedosto",
-        "description" : "Haluatko varmasti poistaa tämän arkistotiedoston?"
+        "description" : "Haluatko varmasti poistaa tämän arkistotiedoston?",
+        "title" : "Poista tämä arkistotiedosto"
       }
     }
   },
   "AudioFiles" : {
-    "messages" : {
-      "fetchError" : "Äänitiedostojen lataaminen epäonnistui",
-      "deleteSuccess" : "Äänitiedosto poistettu onnistuneesti",
-      "deleteError" : "Äänitiedoston poistaminen epäonnistui"
-    },
     "columns" : {
-      "duration" : {
-        "title" : "Kesto"
+      "actions" : {
+        "title" : "Toiminnot"
       },
       "bit_rate" : {
         "title" : "Bittinopeus"
       },
-      "sample_rate" : {
-        "title" : "Näytteenottotaajuus"
+      "channels" : {
+        "title" : "Kanavat"
       },
       "codec" : {
         "title" : "Koodekki"
       },
-      "channels" : {
-        "title" : "Kanavat"
+      "duration" : {
+        "title" : "Kesto"
       },
-      "actions" : {
-        "title" : "Toiminnot"
+      "sample_rate" : {
+        "title" : "Näytteenottotaajuus"
       }
     },
-    "popconfirm" : {
-      "delete" : {
-        "title" : "Poista tämä äänitiedosto",
-        "description" : "Haluatko varmasti poistaa tämän äänitiedoston?"
-      }
-    }
-  },
-  "DocumentFiles" : {
     "messages" : {
-      "fetchError" : "Dokumenttitiedostojen lataaminen epäonnistui",
-      "deleteSuccess" : "Dokumenttitiedosto poistettu onnistuneesti",
-      "deleteError" : "Dokumenttitiedoston poistaminen epäonnistui"
-    },
-    "columns" : {
-      "page_count" : {
-        "title" : "Sivumäärä"
-      },
-      "format" : {
-        "title" : "Muoto"
-      },
-      "actions" : {
-        "title" : "Toiminnot"
-      }
+      "deleteError" : "Äänitiedoston poistaminen epäonnistui",
+      "deleteSuccess" : "Äänitiedosto poistettu onnistuneesti",
+      "fetchError" : "Äänitiedostojen lataaminen epäonnistui"
     },
     "popconfirm" : {
       "delete" : {
-        "title" : "Poista tämä dokumenttitiedosto",
-        "description" : "Haluatko varmasti poistaa tämän dokumenttitiedoston?"
+        "description" : "Haluatko varmasti poistaa tämän äänitiedoston?",
+        "title" : "Poista tämä äänitiedosto"
       }
     }
   },
-  "ImageFiles" : {
-    "messages" : {
-      "fetchError" : "Kuvatiedostojen lataaminen epäonnistui",
-      "deleteSuccess" : "Kuvatiedosto poistettu onnistuneesti",
-      "deleteError" : "Kuvatiedoston poistaminen epäonnistui"
+  "BottomFooter" : {
+    "text" : {
+      "builtPrefix" : "koottu:",
+      "versionPrefix" : "v"
+    }
+  },
+  "ChangePassword" : {
+    "alert" : {
+      "description" : "Tämä on Vaihda salasana -sivu.",
+      "message" : "Vaihda salasana",
+      "returnButton" : "Palaa etusivulle"
+    }
+  },
+  "Common" : {
+    "general" : {
+      "no" : "Ei",
+      "yes" : "Kyllä"
     },
-    "columns" : {
-      "width" : {
-        "title" : "Leveys"
-      },
-      "height" : {
-        "title" : "Korkeus"
-      },
-      "dpi" : {
-        "title" : "DPI"
-      },
-      "color_depth" : {
-        "title" : "Väritarkkuus"
-      },
-      "group_label" : {
-        "title" : "Ryhmämerkintä"
-      },
-      "actions" : {
-        "title" : "Toiminnot"
-      }
+    "modal" : {
+      "fileDetailsTitle" : "Tiedoston tiedot"
     },
     "popconfirm" : {
-      "delete" : {
-        "title" : "Poista tämä kuvatiedosto",
-        "description" : "Haluatko varmasti poistaa tämän kuvatiedoston?"
-      }
+      "no" : "Ei",
+      "yes" : "Kyllä"
     }
   },
-  "ImportFiles" : {
-    "form" : {
-      "originalPath" : {
-        "label" : "Alkuperäinen polku"
-      },
-      "exportPath" : {
-        "label" : "Vientipolku"
-      },
-      "validation" : {
-        "atLeastOnePath" : "Vähintään jompikumpi kentistä on täytettävä!"
-      },
-      "placeholder" : {
-        "pathExample" : "esim. /data/files"
-      },
-      "submit" : {
-        "startScan" : "Aloita skannaus"
-      },
-      "noSuggestions" : "Ei ehdotuksia"
-    },
-    "results" : {
-      "original" : {
-        "title" : "Skannauksen tulos alkuperäisille tiedostoille"
-      },
-      "export" : {
-        "title" : "Skannauksen tulos viedyille tiedostoille"
-      },
-      "failed" : {
-        "title" : "Seuraavien tiedostojen skannaus epäonnistui"
-      },
-      "success" : {
-        "title" : "Onnistuneet tiedostot"
-      }
-    },
-    "failedTable" : {
-      "filename" : {
-        "title" : "Tiedostonimi"
-      }
-    },
-    "fileColumns" : {
-      "filename" : {
-        "title" : "Tiedostonimi"
-      },
-      "external_file_id" : {
-        "title" : "Ulkoinen tiedosto-ID"
-      },
-      "mimetype" : {
-        "title" : "MIME-tyyppi"
-      },
-      "filesize" : {
-        "title" : "Tiedostokoko"
-      },
-      "sha256sum" : {
-        "title" : "SHA256-summa"
-      },
-      "original_datetime" : {
-        "title" : "Alkuperäinen päiväys"
-      },
-      "description" : {
-        "title" : "Kuvaus"
-      },
-      "file_type" : {
-        "title" : "Tiedostotyyppi"
-      },
-      "rights_holder" : {
-        "title" : "Oikeudenhaltija"
-      },
-      "rights_terms" : {
-        "title" : "Oikeusehdot"
-      },
-      "rights_url" : {
-        "title" : "Oikeuksien URL"
-      },
-      "creator_name" : {
-        "title" : "Tekijän nimi"
-      },
-      "creator_country" : {
-        "title" : "Tekijän maa"
-      },
-      "creator_email" : {
-        "title" : "Tekijän sähköposti"
-      },
-      "creator_url" : {
-        "title" : "Tekijän URL"
-      },
-      "tags" : {
-        "title" : "Tunnisteet"
-      },
+  "CommonColumns" : {
+    "columns" : {
       "created" : {
         "title" : "Luotu"
-      },
-      "modified" : {
-        "title" : "Muokattu"
-      },
-      "locked" : {
-        "title" : "Lukittu",
-        "filters" : {
-          "yes" : "Kyllä",
-          "no" : "Ei"
-        }
-      }
-    },
-    "exportFileColumns" : {
-      "id" : {
-        "title" : "ID"
-      },
-      "file_id" : {
-        "title" : "Tiedosto-ID"
-      },
-      "filename" : {
-        "title" : "Tiedostonimi"
       },
       "file_path" : {
         "title" : "Tiedostopolku"
       },
-      "mimetype" : {
-        "title" : "MIME-tyyppi"
+      "filename" : {
+        "title" : "Tiedostonimi"
       },
       "filesize" : {
         "title" : "Tiedostokoko"
       },
-      "sha256sum" : {
-        "title" : "SHA256-summa"
+      "mimetype" : {
+        "title" : "MIME-tyyppi"
       },
-      "original_document_id" : {
-        "title" : "Alkuperäisen dokumentin ID"
+      "modified" : {
+        "title" : "Muokattu"
+      }
+    }
+  },
+  "DocumentFiles" : {
+    "columns" : {
+      "actions" : {
+        "title" : "Toiminnot"
       },
-      "created" : {
-        "title" : "Luotu"
+      "format" : {
+        "title" : "Muoto"
+      },
+      "page_count" : {
+        "title" : "Sivumäärä"
+      }
+    },
+    "messages" : {
+      "deleteError" : "Dokumenttitiedoston poistaminen epäonnistui",
+      "deleteSuccess" : "Dokumenttitiedosto poistettu onnistuneesti",
+      "fetchError" : "Dokumenttitiedostojen lataaminen epäonnistui"
+    },
+    "popconfirm" : {
+      "delete" : {
+        "description" : "Haluatko varmasti poistaa tämän dokumenttitiedoston?",
+        "title" : "Poista tämä dokumenttitiedosto"
       }
     }
   },
   "FileDetails" : {
-    "table" : {
-      "field" : "Kenttä",
-      "value" : "Arvo"
-    },
     "rows" : {
-      "id" : {
-        "label" : "ID"
+      "acls" : {
+        "label" : "ACL:t"
       },
-      "filename" : {
-        "label" : "Tiedostonimi"
+      "created" : {
+        "label" : "Luotu"
       },
-      "file_path" : {
-        "label" : "Tiedostopolku"
+      "creator" : {
+        "label" : "Tekijä (ID)"
       },
-      "external_file_id" : {
-        "label" : "Ulkoinen tiedosto-ID"
+      "creator_country" : {
+        "label" : "Tekijän maa"
       },
-      "mimetype" : {
-        "label" : "MIME-tyyppi"
+      "creator_email" : {
+        "label" : "Tekijän sähköposti"
       },
-      "filesize" : {
-        "label" : "Tiedostokoko"
+      "creator_name" : {
+        "label" : "Tekijän nimi"
       },
-      "sha256sum" : {
-        "label" : "SHA256-summa"
-      },
-      "original_datetime" : {
-        "label" : "Alkuperäinen päiväys"
-      },
-      "original_second_fraction" : {
-        "label" : "Alkuperäinen sekunnin murto-osa"
-      },
-      "original_document_id" : {
-        "label" : "Alkuperäisen dokumentin ID"
+      "creator_url" : {
+        "label" : "Tekijän URL"
       },
       "description" : {
         "label" : "Kuvaus"
       },
+      "external_file_id" : {
+        "label" : "Ulkoinen tiedosto-ID"
+      },
+      "file_path" : {
+        "label" : "Tiedostopolku"
+      },
       "file_type" : {
         "label" : "Tiedostotyyppi"
+      },
+      "filename" : {
+        "label" : "Tiedostonimi"
+      },
+      "filesize" : {
+        "label" : "Tiedostokoko"
+      },
+      "gps_location_id" : {
+        "label" : "GPS-sijainnin ID"
+      },
+      "gps_timestamp" : {
+        "label" : "GPS-aikaleima"
+      },
+      "id" : {
+        "label" : "ID"
+      },
+      "locked" : {
+        "label" : "Lukittu"
+      },
+      "mimetype" : {
+        "label" : "MIME-tyyppi"
+      },
+      "modified" : {
+        "label" : "Muokattu"
+      },
+      "modifier" : {
+        "label" : "Muokkaaja (ID)"
+      },
+      "original_datetime" : {
+        "label" : "Alkuperäinen päiväys"
+      },
+      "original_document_id" : {
+        "label" : "Alkuperäisen dokumentin ID"
+      },
+      "original_second_fraction" : {
+        "label" : "Alkuperäinen sekunnin murto-osa"
       },
       "rights_holder" : {
         "label" : "Oikeudenhaltija"
@@ -336,216 +221,320 @@
       "rights_url" : {
         "label" : "Oikeuksien URL"
       },
-      "gps_timestamp" : {
-        "label" : "GPS-aikaleima"
-      },
-      "gps_location_id" : {
-        "label" : "GPS-sijainnin ID"
-      },
-      "creator_name" : {
-        "label" : "Tekijän nimi"
-      },
-      "creator_country" : {
-        "label" : "Tekijän maa"
-      },
-      "creator_email" : {
-        "label" : "Tekijän sähköposti"
-      },
-      "creator_url" : {
-        "label" : "Tekijän URL"
+      "sha256sum" : {
+        "label" : "SHA256-summa"
       },
       "tags" : {
         "label" : "Tunnisteet"
-      },
-      "locked" : {
-        "label" : "Lukittu"
-      },
-      "creator" : {
-        "label" : "Tekijä (ID)"
-      },
-      "created" : {
-        "label" : "Luotu"
-      },
-      "modifier" : {
-        "label" : "Muokkaaja (ID)"
-      },
-      "modified" : {
-        "label" : "Muokattu"
-      },
-      "acls" : {
-        "label" : "ACL:t"
       }
+    },
+    "table" : {
+      "field" : "Kenttä",
+      "value" : "Arvo"
     }
   },
-  "VectorFiles" : {
-    "messages" : {
-      "fetchError" : "Vektoritiedostojen lataaminen epäonnistui",
-      "deleteSuccess" : "Vektoritiedosto poistettu onnistuneesti",
-      "deleteError" : "Vektoritiedoston poistaminen epäonnistui"
-    },
+  "FileGroups" : {
     "columns" : {
-      "width" : {
-        "title" : "Leveys"
-      },
-      "height" : {
-        "title" : "Korkeus"
-      },
-      "layers_count" : {
-        "title" : "Tasojen määrä"
-      },
       "actions" : {
         "title" : "Toiminnot"
-      }
-    },
-    "popconfirm" : {
-      "delete" : {
-        "title" : "Poista tämä vektoritiedosto",
-        "description" : "Haluatko varmasti poistaa tämän vektoritiedoston?"
-      }
-    }
-  },
-  "FilePermissions" : {
-    "alert" : {
-      "message" : "Tiedosto-oikeudet",
-      "description" : "Tämä on Tiedosto-oikeudet -sivu.",
-      "returnButton" : "Palaa etusivulle"
-    }
-  },
-  "SearchFiles" : {
-    "alert" : {
-      "message" : "Hae tiedostoja",
-      "description" : "Tämä on Hae tiedostoja -sivu.",
-      "returnButton" : "Palaa etusivulle"
-    }
-  },
-  "Units" : {
-    "alert" : {
-      "message" : "Yksiköt",
-      "description" : "Tämä on Yksiköt -sivu.",
-      "returnButton" : "Palaa etusivulle"
-    }
-  },
-  "Users" : {
-    "alert" : {
-      "message" : "Käyttäjät",
-      "description" : "Tämä on Käyttäjät -sivu.",
-      "returnButton" : "Palaa etusivulle"
-    }
-  },
-  "VideoFiles" : {
-    "messages" : {
-      "fetchError" : "Videotiedostojen lataaminen epäonnistui",
-      "deleteSuccess" : "Videotiedosto poistettu onnistuneesti",
-      "deleteError" : "Videotiedoston poistaminen epäonnistui"
-    },
-    "columns" : {
-      "width" : {
-        "title" : "Leveys"
       },
-      "height" : {
-        "title" : "Korkeus"
+      "file_count" : {
+        "title" : "Tiedostojen määrä"
       },
-      "frame_rate" : {
-        "title" : "Ruutunopeus"
+      "group_name" : {
+        "title" : "Ryhmän nimi"
       },
-      "duration" : {
-        "title" : "Kesto"
-      },
-      "codec" : {
-        "title" : "Koodekki"
-      },
-      "actions" : {
-        "title" : "Toiminnot"
-      }
-    },
-    "popconfirm" : {
-      "delete" : {
-        "title" : "Poista tämä videotiedosto",
-        "description" : "Haluatko varmasti poistaa tämän videotiedoston?"
+      "path" : {
+        "title" : "Polku"
       }
     }
   },
   "FileImports" : {
     "alert" : {
-      "message" : "Tiedostojen tuonti",
       "description" : "Tämä on Tiedostojen tuonti -sivu.",
+      "message" : "Tiedostojen tuonti",
       "returnButton" : "Palaa etusivulle"
+    }
+  },
+  "FilePermissions" : {
+    "alert" : {
+      "description" : "Tämä on Tiedosto-oikeudet -sivu.",
+      "message" : "Tiedosto-oikeudet",
+      "returnButton" : "Palaa etusivulle"
+    }
+  },
+  "FileTypeEnum" : {
+    "archive" : "Arkisto",
+    "audio" : "Ääni",
+    "document" : "Dokumentti",
+    "font" : "Fontti",
+    "icon" : "Ikoni",
+    "image" : "Kuva",
+    "other" : "Muu",
+    "vector" : "Vektori",
+    "video" : "Video"
+  },
+  "Home" : {
+    "title" : "Etusivu"
+  },
+  "ImageFiles" : {
+    "columns" : {
+      "actions" : {
+        "title" : "Toiminnot"
+      },
+      "color_depth" : {
+        "title" : "Väritarkkuus"
+      },
+      "dpi" : {
+        "title" : "DPI"
+      },
+      "group_label" : {
+        "title" : "Ryhmämerkintä"
+      },
+      "height" : {
+        "title" : "Korkeus"
+      },
+      "width" : {
+        "title" : "Leveys"
+      }
+    },
+    "messages" : {
+      "deleteError" : "Kuvatiedoston poistaminen epäonnistui",
+      "deleteSuccess" : "Kuvatiedosto poistettu onnistuneesti",
+      "fetchError" : "Kuvatiedostojen lataaminen epäonnistui"
+    },
+    "popconfirm" : {
+      "delete" : {
+        "description" : "Haluatko varmasti poistaa tämän kuvatiedoston?",
+        "title" : "Poista tämä kuvatiedosto"
+      }
+    }
+  },
+  "ImportFiles" : {
+    "exportFileColumns" : {
+      "created" : {
+        "title" : "Luotu"
+      },
+      "file_id" : {
+        "title" : "Tiedosto-ID"
+      },
+      "file_path" : {
+        "title" : "Tiedostopolku"
+      },
+      "filename" : {
+        "title" : "Tiedostonimi"
+      },
+      "filesize" : {
+        "title" : "Tiedostokoko"
+      },
+      "id" : {
+        "title" : "ID"
+      },
+      "mimetype" : {
+        "title" : "MIME-tyyppi"
+      },
+      "original_document_id" : {
+        "title" : "Alkuperäisen dokumentin ID"
+      },
+      "sha256sum" : {
+        "title" : "SHA256-summa"
+      }
+    },
+    "failedTable" : {
+      "filename" : {
+        "title" : "Tiedostonimi"
+      }
+    },
+    "fileColumns" : {
+      "created" : {
+        "title" : "Luotu"
+      },
+      "creator_country" : {
+        "title" : "Tekijän maa"
+      },
+      "creator_email" : {
+        "title" : "Tekijän sähköposti"
+      },
+      "creator_name" : {
+        "title" : "Tekijän nimi"
+      },
+      "creator_url" : {
+        "title" : "Tekijän URL"
+      },
+      "description" : {
+        "title" : "Kuvaus"
+      },
+      "external_file_id" : {
+        "title" : "Ulkoinen tiedosto-ID"
+      },
+      "file_type" : {
+        "title" : "Tiedostotyyppi"
+      },
+      "filename" : {
+        "title" : "Tiedostonimi"
+      },
+      "filesize" : {
+        "title" : "Tiedostokoko"
+      },
+      "locked" : {
+        "filters" : {
+          "no" : "Ei",
+          "yes" : "Kyllä"
+        },
+        "title" : "Lukittu"
+      },
+      "mimetype" : {
+        "title" : "MIME-tyyppi"
+      },
+      "modified" : {
+        "title" : "Muokattu"
+      },
+      "original_datetime" : {
+        "title" : "Alkuperäinen päiväys"
+      },
+      "rights_holder" : {
+        "title" : "Oikeudenhaltija"
+      },
+      "rights_terms" : {
+        "title" : "Oikeusehdot"
+      },
+      "rights_url" : {
+        "title" : "Oikeuksien URL"
+      },
+      "sha256sum" : {
+        "title" : "SHA256-summa"
+      },
+      "tags" : {
+        "title" : "Tunnisteet"
+      }
+    },
+    "form" : {
+      "exportPath" : {
+        "label" : "Vientipolku"
+      },
+      "noSuggestions" : "Ei ehdotuksia",
+      "originalPath" : {
+        "label" : "Alkuperäinen polku"
+      },
+      "placeholder" : {
+        "pathExample" : "esim. /data/files"
+      },
+      "submit" : {
+        "startScan" : "Aloita skannaus"
+      },
+      "validation" : {
+        "atLeastOnePath" : "Vähintään jompikumpi kentistä on täytettävä!"
+      }
+    },
+    "results" : {
+      "export" : {
+        "title" : "Skannauksen tulos viedyille tiedostoille"
+      },
+      "failed" : {
+        "title" : "Seuraavien tiedostojen skannaus epäonnistui"
+      },
+      "original" : {
+        "title" : "Skannauksen tulos alkuperäisille tiedostoille"
+      },
+      "success" : {
+        "title" : "Onnistuneet tiedostot"
+      }
+    }
+  },
+  "PathCompletionEnum" : {
+    "exported" : "Viety",
+    "original" : "Alkuperäinen"
+  },
+  "PublishFileGroup" : {
+    "actions" : {
+      "publish" : "Julkaise",
+      "show" : "Näytä"
+    },
+    "header" : {
+      "title" : "Julkaise tiedostoryhmä"
+    },
+    "messages" : {
+      "deleteError" : "Tiedostoryhmän poistaminen epäonnistui",
+      "deleteSuccess" : "Tiedostoryhmä poistettu onnistuneesti",
+      "fetchError" : "Tiedostoryhmien lataus epäonnistui",
+      "publishError" : "Tiedostoryhmän julkaisu epäonnistui",
+      "publishSuccess" : "Julkaistu {{count}} tiedostoa",
+      "selectWarning" : "Valitse julkaistava tiedostoryhmä"
+    },
+    "popconfirm" : {
+      "delete" : {
+        "description" : "Haluatko varmasti poistaa tämän tiedostoryhmän?",
+        "title" : "Poista tämä tiedostoryhmä"
+      }
+    },
+    "select" : {
+      "placeholder" : "Valitse tiedostoryhmä"
     }
   },
   "Publishing" : {
     "alert" : {
-      "message" : "Julkaisu",
       "description" : "Tämä on Julkaisu -sivu.",
+      "message" : "Julkaisu",
       "returnButton" : "Palaa etusivulle"
+    }
+  },
+  "SearchFiles" : {
+    "alert" : {
+      "description" : "Tämä on Hae tiedostoja -sivu.",
+      "message" : "Hae tiedostoja",
+      "returnButton" : "Palaa etusivulle"
+    }
+  },
+  "ShowFileGroup" : {
+    "header" : {
+      "title" : "Tiedostoryhmän tiedot"
+    },
+    "messages" : {
+      "fetchError" : "Tiedostoryhmän lataaminen epäonnistui"
     }
   },
   "SystemSchedules" : {
     "alert" : {
-      "message" : "Järjestelmän aikataulut",
       "description" : "Tämä on Järjestelmän aikataulut -sivu.",
+      "message" : "Järjestelmän aikataulut",
       "returnButton" : "Palaa etusivulle"
     }
   },
   "TagCreate" : {
     "alert" : {
-      "message" : "Tunnisteen luonti",
       "description" : "Tämä on Tunnisteen luonti -sivu.",
-      "returnButton" : "Palaa etusivulle"
-    }
-  },
-  "PublishFileGroup" : {
-    "header" : {
-      "title" : "Julkaise tiedostoryhmä"
-    },
-    "select" : {
-      "placeholder" : "Valitse tiedostoryhmä"
-    },
-    "messages" : {
-      "fetchError" : "Tiedostoryhmien lataus epäonnistui",
-      "selectWarning" : "Valitse julkaistava tiedostoryhmä",
-      "publishSuccess" : "Julkaistu {{count}} tiedostoa",
-      "publishError" : "Tiedostoryhmän julkaisu epäonnistui"
-    },
-    "actions" : {
-      "publish" : "Julkaise"
-    }
-  },
-  "BottomFooter" : {
-    "text" : {
-      "versionPrefix" : "v",
-      "builtPrefix" : "koottu:"
-    }
-  },
-  "Account" : {
-    "alert" : {
-      "message" : "Tili",
-      "description" : "Tämä on Tili-sivu.",
-      "returnButton" : "Palaa etusivulle"
-    }
-  },
-  "ChangePassword" : {
-    "alert" : {
-      "message" : "Vaihda salasana",
-      "description" : "Tämä on Vaihda salasana -sivu.",
+      "message" : "Tunnisteen luonti",
       "returnButton" : "Palaa etusivulle"
     }
   },
   "TagEdit" : {
     "alert" : {
-      "message" : "Tunnisteen muokkaus",
       "description" : "Tämä on Tunnisteen muokkaus -sivu.",
-      "returnButton" : "Palaa etusivulle"
-    }
-  },
-  "TagSearch" : {
-    "alert" : {
-      "message" : "Tunnistehaku",
-      "description" : "Tämä on Tunnistehaku -sivu.",
+      "message" : "Tunnisteen muokkaus",
       "returnButton" : "Palaa etusivulle"
     }
   },
   "TagList" : {
+    "actions" : {
+      "cancel" : "Peruuta",
+      "edit" : "Muokkaa",
+      "save" : "Tallenna",
+      "viewTaggedFiles" : "Näytä tunnisteen tiedostot"
+    },
+    "messages" : {
+      "fetchError" : "Virhe tunnisteiden haussa {{error}}",
+      "loadingTip" : "Ladataan",
+      "noChanges" : "Ei tallennettavia muutoksia",
+      "tagNameRequired" : "Tunnisteen nimi on pakollinen",
+      "updateFailed" : "Tunnisteen päivitys epäonnistui",
+      "updateFailedWithReason" : "Tunnisteen päivitys epäonnistui: {{error}}",
+      "updateSuccess" : "Tunniste päivitetty onnistuneesti",
+      "updated" : "Tunniste päivitetty"
+    },
     "tableColumns" : {
+      "actions" : {
+        "title" : "Toiminnot"
+      },
       "id" : {
         "title" : "ID"
       },
@@ -566,99 +555,143 @@
       },
       "tag_name_sv" : {
         "title" : "Tunnisteen nimi (Sv)"
-      },
-      "actions" : {
-        "title" : "Toiminnot"
       }
-    },
-    "actions" : {
-      "save" : "Tallenna",
-      "cancel" : "Peruuta",
-      "edit" : "Muokkaa",
-      "viewTaggedFiles" : "Näytä tunnisteen tiedostot"
-    },
-    "messages" : {
-      "fetchError" : "Virhe tunnisteiden haussa {{error}}",
-      "noChanges" : "Ei tallennettavia muutoksia",
-      "tagNameRequired" : "Tunnisteen nimi on pakollinen",
-      "updateSuccess" : "Tunniste päivitetty onnistuneesti",
-      "updateFailedWithReason" : "Tunnisteen päivitys epäonnistui: {{error}}",
-      "updateFailed" : "Tunnisteen päivitys epäonnistui",
-      "updated" : "Tunniste päivitetty",
-      "loadingTip" : "Ladataan"
     }
   },
-  "Home" : {
-    "title" : "Etusivu"
+  "TagSearch" : {
+    "alert" : {
+      "description" : "Tämä on Tunnistehaku -sivu.",
+      "message" : "Tunnistehaku",
+      "returnButton" : "Palaa etusivulle"
+    }
   },
   "TopBar" : {
-    "tooltip" : {
-      "brand" : "Vempain Tiedosto"
+    "a11y" : {
+      "openMenu" : "Avaa valikko"
     },
     "brand" : {
       "homeAlt" : "Etusivu"
     },
-    "a11y" : {
-      "openMenu" : "Avaa valikko"
-    },
     "menu" : {
-      "tagManagement" : {
-        "title" : "Tunnisteiden hallinta",
-        "tags" : "Tunnisteet",
-        "newTag" : "Uusi tunniste",
-        "search" : "Haku"
+      "auth" : {
+        "login" : "Kirjaudu sisään",
+        "register" : "Rekisteröidy"
+      },
+      "file-group" : {
+        "fileGroup" : "Tiedostoryhmä",
+        "title" : "Julkaisu"
       },
       "fileManagement" : {
-        "title" : "Tiedostojen hallinta",
         "archive" : "Arkisto",
         "audio" : "Ääni",
         "document" : "Dokumentti",
         "image" : "Kuva",
-        "vector" : "Vektori",
-        "video" : "Video",
         "importFiles" : "Tuo tiedostoja",
-        "searchFiles" : "Hae tiedostoja"
+        "searchFiles" : "Hae tiedostoja",
+        "title" : "Tiedostojen hallinta",
+        "vector" : "Vektori",
+        "video" : "Video"
       },
-      "publishing" : {
-        "title" : "Julkaisu",
-        "fileGroup" : "Tiedostoryhmä"
+      "profile" : {
+        "account" : "Tili",
+        "changePassword" : "Vaihda salasana",
+        "logout" : "Kirjaudu ulos",
+        "title" : "Profiili"
       },
       "schedules" : {
-        "title" : "Aikataulujen hallinta",
-        "systemSchedules" : "Järjestelmän aikataulut",
         "fileImports" : "Tiedostojen tuonnit",
-        "publishing" : "Julkaisu"
+        "publishing" : "Julkaisu",
+        "systemSchedules" : "Järjestelmän aikataulut",
+        "title" : "Aikataulujen hallinta"
+      },
+      "tagManagement" : {
+        "newTag" : "Uusi tunniste",
+        "search" : "Haku",
+        "tags" : "Tunnisteet",
+        "title" : "Tunnisteiden hallinta"
       },
       "userManagement" : {
         "title" : "Käyttäjien hallinta",
-        "users" : "Käyttäjät",
-        "units" : "Yksiköt"
+        "units" : "Yksiköt",
+        "users" : "Käyttäjät"
+      }
+    },
+    "tooltip" : {
+      "brand" : "Vempain Tiedosto"
+    }
+  },
+  "Units" : {
+    "alert" : {
+      "description" : "Tämä on Yksiköt -sivu.",
+      "message" : "Yksiköt",
+      "returnButton" : "Palaa etusivulle"
+    }
+  },
+  "Users" : {
+    "alert" : {
+      "description" : "Tämä on Käyttäjät -sivu.",
+      "message" : "Käyttäjät",
+      "returnButton" : "Palaa etusivulle"
+    }
+  },
+  "VectorFiles" : {
+    "columns" : {
+      "actions" : {
+        "title" : "Toiminnot"
       },
-      "profile" : {
-        "title" : "Profiili",
-        "account" : "Tili",
-        "changePassword" : "Vaihda salasana",
-        "logout" : "Kirjaudu ulos"
+      "height" : {
+        "title" : "Korkeus"
       },
-      "auth" : {
-        "login" : "Kirjaudu sisään",
-        "register" : "Rekisteröidy"
+      "layers_count" : {
+        "title" : "Tasojen määrä"
+      },
+      "width" : {
+        "title" : "Leveys"
+      }
+    },
+    "messages" : {
+      "deleteError" : "Vektoritiedoston poistaminen epäonnistui",
+      "deleteSuccess" : "Vektoritiedosto poistettu onnistuneesti",
+      "fetchError" : "Vektoritiedostojen lataaminen epäonnistui"
+    },
+    "popconfirm" : {
+      "delete" : {
+        "description" : "Haluatko varmasti poistaa tämän vektoritiedoston?",
+        "title" : "Poista tämä vektoritiedosto"
       }
     }
   },
-  "FileTypeEnum" : {
-    "image" : "Kuva",
-    "video" : "Video",
-    "audio" : "Ääni",
-    "document" : "Dokumentti",
-    "vector" : "Vektori",
-    "icon" : "Ikoni",
-    "font" : "Fontti",
-    "archive" : "Arkisto",
-    "other" : "Muu"
-  },
-  "PathCompletionEnum" : {
-    "original" : "Alkuperäinen",
-    "exported" : "Viety"
+  "VideoFiles" : {
+    "columns" : {
+      "actions" : {
+        "title" : "Toiminnot"
+      },
+      "codec" : {
+        "title" : "Koodekki"
+      },
+      "duration" : {
+        "title" : "Kesto"
+      },
+      "frame_rate" : {
+        "title" : "Ruutunopeus"
+      },
+      "height" : {
+        "title" : "Korkeus"
+      },
+      "width" : {
+        "title" : "Leveys"
+      }
+    },
+    "messages" : {
+      "deleteError" : "Videotiedoston poistaminen epäonnistui",
+      "deleteSuccess" : "Videotiedosto poistettu onnistuneesti",
+      "fetchError" : "Videotiedostojen lataaminen epäonnistui"
+    },
+    "popconfirm" : {
+      "delete" : {
+        "description" : "Haluatko varmasti poistaa tämän videotiedoston?",
+        "title" : "Poista tämä videotiedosto"
+      }
+    }
   }
 }

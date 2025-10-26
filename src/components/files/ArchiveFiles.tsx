@@ -1,8 +1,8 @@
-import {Button, message, Modal, Popconfirm, Space, Table} from "antd";
+import {Button, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
 import {useEffect, useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
 import {archiveFileAPI} from "../../services";
-import type {ArchiveFileResponse} from "../../models/responses";
+import type {ArchiveFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
 import {FileDetails} from "./FileDetails";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
@@ -14,12 +14,21 @@ export function ArchiveFiles() {
     const [archiveFiles, setArchiveFiles] = useState<ArchiveFileResponse[]>([]);
     const [detailsOpen, setDetailsOpen] = useState(false);
     const [selectedFile, setSelectedFile] = useState<ArchiveFileResponse | null>(null);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [pageSize, setPageSize] = useState<number>(10);
+    const [totalElements, setTotalElements] = useState<number>(0);
 
-    function fetchArchiveFiles() {
+    function fetchArchiveFiles(page: number = currentPage, size: number = pageSize) {
         setLoading(true);
-        archiveFileAPI.findAll()
+        archiveFileAPI.findAllPageable(page - 1, size)
                 .then(response => {
-                    setArchiveFiles(response);
+                    if (response && response.content) {
+                        setArchiveFiles(response.content);
+                    }
+
+                    setTotalElements(response.totalElements ?? 0);
+                    setCurrentPage(response.page + 1);
+                    setPageSize(response.size);
                 })
                 .catch(err => {
                     console.error("Failed to fetch archive files:", err);
@@ -31,19 +40,24 @@ export function ArchiveFiles() {
     }
 
     useEffect(() => {
-        fetchArchiveFiles();
+        fetchArchiveFiles(1, pageSize);
     }, []);
 
-    const handleDelete = async (id: number) => {
-        try {
-            await archiveFileAPI.delete(id);
-            message.success(t("ArchiveFiles.messages.deleteSuccess"));
-            fetchArchiveFiles();
-        } catch (err) {
-            console.error("Failed to delete archive file:", err);
-            message.error(t("ArchiveFiles.messages.deleteError"));
-        }
-    };
+    function handleDelete(id: number) {
+        setLoading(true);
+        archiveFileAPI.delete(id)
+                .then(_ => {
+                    message.success(t("ArchiveFiles.messages.deleteSuccess"));
+                    fetchArchiveFiles();
+                })
+                .catch(err => {
+                    console.error("Failed to delete archive file:", err);
+                    message.error(t("ArchiveFiles.messages.deleteError"));
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+    }
 
     const columns: ColumnsType<ArchiveFileResponse> = [
         filenameColumn<ArchiveFileResponse>((record) => {
@@ -93,21 +107,35 @@ export function ArchiveFiles() {
         },
     ];
 
+    function handleTableChange(pagination: { current?: number; pageSize?: number }) {
+        const nextPage = pagination.current ?? 1;
+        const nextSize = pagination.pageSize ?? pageSize;
+        setCurrentPage(nextPage);
+        setPageSize(nextSize);
+        fetchArchiveFiles(nextPage, nextSize);
+    }
+
     return (
             <Space direction="vertical" style={{width: "100%", margin: 30}} size="large">
-                <Table
-                        columns={columns}
-                        dataSource={archiveFiles.map(file => ({...file, key: file.id}))}
-                        loading={loading}
-                        pagination={{
-                            pageSize: 10,
-                            showSizeChanger: true,
-                            pageSizeOptions: ['10', '20', '50'],
-                        }}
-                        scroll={{x: 'max-content'}}
-                        key="archive-files-table"
-                        rowKey="external_file_id"
-                />
+                <Spin spinning={loading}>
+                    {archiveFiles.length > 0 && <Table
+                            columns={columns}
+                            dataSource={archiveFiles.map(file => ({...file, key: file.id}))}
+                            loading={loading}
+                            pagination={{
+                                current: currentPage,
+                                pageSize: pageSize,
+                                total: totalElements,
+                                showSizeChanger: true,
+                                pageSizeOptions: ['10', '20', '50', '100'],
+                            }}
+                            onChange={handleTableChange}
+                            scroll={{x: 'max-content'}}
+                            key="archive-files-table"
+                            rowKey="external_file_id"
+                    />
+                    }{archiveFiles.length === 0 && !loading && t("ArchiveFiles.messages.noFiles")}
+                </Spin>
                 <Modal
                         open={detailsOpen}
                         onCancel={() => setDetailsOpen(false)}

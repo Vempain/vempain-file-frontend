@@ -1,8 +1,8 @@
-import {Button, message, Modal, Popconfirm, Space, Table} from "antd";
+import {Button, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
 import {useEffect, useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
 import {documentFileAPI} from "../../services";
-import type {DocumentFileResponse} from "../../models/responses";
+import type {DocumentFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
 import {FileDetails} from "./FileDetails";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
@@ -14,34 +14,51 @@ export function DocumentFiles() {
     const [documentFiles, setDocumentFiles] = useState<DocumentFileResponse[]>([]);
     const [detailsOpen, setDetailsOpen] = useState(false);
     const [selectedFile, setSelectedFile] = useState<DocumentFileResponse | null>(null);
+    // Add paging state
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [pageSize, setPageSize] = useState<number>(10);
+    const [totalElements, setTotalElements] = useState<number>(0);
 
-    const fetchDocumentFiles = async () => {
+    function fetchDocumentFiles(page: number = currentPage, size: number = pageSize) {
         setLoading(true);
-        try {
-            const response = await documentFileAPI.findAll();
-            setDocumentFiles(response);
-        } catch (err) {
-            console.error("Failed to fetch document files:", err);
-            message.error(t("DocumentFiles.messages.fetchError"));
-        } finally {
-            setLoading(false);
-        }
-    };
+        documentFileAPI.findAllPageable(page - 1, size)
+                .then(response => {
+                    if (response && response.content) {
+                        setDocumentFiles(response.content);
+                    }
+
+                    setTotalElements(response.totalElements ?? 0);
+                    setCurrentPage(response.page + 1);
+                    setPageSize(response.size);
+                })
+                .catch(err => {
+                    console.error("Failed to fetch archive files:", err);
+                    message.error(t("DocumentFiles.messages.fetchError"));
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+    }
 
     useEffect(() => {
         fetchDocumentFiles();
     }, []);
 
-    const handleDelete = async (id: number) => {
-        try {
-            await documentFileAPI.delete(id);
-            message.success(t("DocumentFiles.messages.deleteSuccess"));
-            fetchDocumentFiles();
-        } catch (err) {
-            console.error("Failed to delete document file:", err);
-            message.error(t("DocumentFiles.messages.deleteError"));
-        }
-    };
+    function handleDelete(id: number) {
+        setLoading(true);
+        documentFileAPI.delete(id)
+                .then(_ => {
+                    message.success(t("DocumentFiles.messages.deleteSuccess"));
+                    fetchDocumentFiles();
+                })
+                .catch(err => {
+                    console.error("Failed to delete document file:", err);
+                    message.error(t("DocumentFiles.messages.deleteError"));
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+    }
 
     const columns: ColumnsType<DocumentFileResponse> = [
         filenameColumn<DocumentFileResponse>((record) => {
@@ -79,21 +96,35 @@ export function DocumentFiles() {
         },
     ];
 
+    function handleTableChange(pagination: { current?: number; pageSize?: number }) {
+        const nextPage = pagination.current ?? 1;
+        const nextSize = pagination.pageSize ?? pageSize;
+        setCurrentPage(nextPage);
+        setPageSize(nextSize);
+        fetchDocumentFiles(nextPage, nextSize);
+    }
+
     return (
             <Space direction="vertical" style={{width: "100%", margin: 30}} size="large">
-                <Table
-                        columns={columns}
-                        dataSource={documentFiles.map(file => ({...file, key: file.id}))}
-                        loading={loading}
-                        pagination={{
-                            pageSize: 10,
-                            showSizeChanger: true,
-                            pageSizeOptions: ['10', '20', '50'],
-                        }}
-                        scroll={{x: 'max-content'}}
-                        key="document-files-table"
-                        rowKey="external_file_id"
-                />
+                <Spin spinning={loading}>
+                    {documentFiles.length > 0 && <Table
+                            columns={columns}
+                            dataSource={documentFiles.map(file => ({...file, key: file.id}))}
+                            loading={loading}
+                            pagination={{
+                                current: currentPage,
+                                pageSize: pageSize,
+                                total: totalElements,
+                                showSizeChanger: true,
+                                pageSizeOptions: ['10', '20', '50', '100'],
+                            }}
+                            onChange={handleTableChange}
+                            scroll={{x: 'max-content'}}
+                            key="document-files-table"
+                            rowKey="external_file_id"
+                    />
+                    }{documentFiles.length === 0 && !loading && t("DocumentFiles.messages.noFiles")}
+                </Spin>
                 <Modal
                         open={detailsOpen}
                         onCancel={() => setDetailsOpen(false)}
