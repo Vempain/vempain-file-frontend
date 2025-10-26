@@ -12,5 +12,4 @@ export abstract class AbstractFileAPI<REQUEST, RESPONSE> extends AbstractAPI<REQ
 
         return response.data;
     }
-
 }

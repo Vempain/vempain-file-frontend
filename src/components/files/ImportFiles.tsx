@@ -125,15 +125,28 @@ export function ImportFiles() {
             dataIndex: 'created',
             key: 'created',
             sorter: (a: FileResponse, b: FileResponse) =>
-                    new Date(a.created).getTime() - new Date(b.created).getTime(),
+                    a.created.isAfter(b.created) ? 1 :
+                            a.created.isBefore(b.created) ? -1 : 0,
             render: (date: string) => new Date(date).toLocaleString(),
         },
         {
             title: t("ImportFiles.fileColumns.modified.title"),
             dataIndex: 'modified',
             key: 'modified',
-            sorter: (a: FileResponse, b: FileResponse) =>
-                    new Date(a.modified).getTime() - new Date(b.modified).getTime(),
+            sorter: (a: FileResponse, b: FileResponse) => {
+                if (a.modified == null && b.modified == null) {
+                    return 0;
+                }
+                if (a.modified == null) {
+                    return -1;
+                }
+                if (b.modified == null) {
+                    return 1;
+                }
+                return a.modified.isAfter(b.modified) ? 1 :
+                        a.modified.isBefore(b.modified) ? -1 :
+                                0;
+            },
             render: (date: string) => new Date(date).toLocaleString(),
         },
         {

@@ -14,7 +14,6 @@ export function ArchiveFiles() {
     const [archiveFiles, setArchiveFiles] = useState<ArchiveFileResponse[]>([]);
     const [detailsOpen, setDetailsOpen] = useState(false);
     const [selectedFile, setSelectedFile] = useState<ArchiveFileResponse | null>(null);
-    // Add paging state
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [totalElements, setTotalElements] = useState<number>(0);
