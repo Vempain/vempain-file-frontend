@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Button, message, Popconfirm, Space, Spin, Table, Typography} from "antd";
+import {Button, Form, Input, message, Modal, Popconfirm, Space, Spin, Table, Typography} from "antd";
 import {useNavigate} from "react-router-dom";
 import {fileGroupAPI, publishAPI} from "../../services";
 import type {FileGroupListResponse, PublishFileGroupRequest, PublishFileGroupResponse} from "../../models";
@@ -14,6 +14,11 @@ export function FileGroups() {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [totalElements, setTotalElements] = useState<number>(0);
+    // New modal/form state
+    const [publishModalOpen, setPublishModalOpen] = useState<boolean>(false);
+    const [publishSubmitting, setPublishSubmitting] = useState<boolean>(false);
+    const [selectedGroup, setSelectedGroup] = useState<FileGroupListResponse | null>(null);
+    const [form] = Form.useForm();
 
     const navigate = useNavigate();
 
@@ -43,21 +48,51 @@ export function FileGroups() {
         fetchFileGroups(1, pageSize);
     }, []);
 
-    function handlePublish(groupId: number) {
-        setLoading(true);
-        const request: PublishFileGroupRequest = {file_group_id: groupId};
-        publishAPI.publishFileGroup(request)
-                .then((result: PublishFileGroupResponse[]) => {
-                    const count = result[0]?.files_to_publish_count ?? 0;
-                    message.success(t("PublishFileGroup.messages.publishSuccess", {count}));
-                    // Refresh page list (counts might have changed)
-                    fetchFileGroups(currentPage, pageSize);
+    // Open modal and prefill fields from selected group
+    function openPublishModal(group: FileGroupListResponse) {
+        setSelectedGroup(group);
+        setPublishModalOpen(true);
+        form.setFieldsValue({
+            gallery_name: group.group_name ?? "",
+            gallery_description: ""
+        });
+    }
+
+    // Close modal and reset form
+    function closePublishModal() {
+        setPublishModalOpen(false);
+        setSelectedGroup(null);
+        form.resetFields();
+    }
+
+    // Submit publish with extra fields
+    function submitPublish() {
+        form.validateFields()
+                .then(values => {
+                    if (!selectedGroup) return;
+                    setPublishSubmitting(true);
+                    const request: PublishFileGroupRequest = {
+                        file_group_id: selectedGroup.id,
+                        gallery_name: values.gallery_name || null,
+                        gallery_description: values.gallery_description || null
+                    };
+                    publishAPI.publishFileGroup(request)
+                            .then((result: PublishFileGroupResponse[]) => {
+                                const count = result[0]?.files_to_publish_count ?? 0;
+                                message.success(t("PublishFileGroup.messages.publishSuccess", {count}));
+                                // Refresh page list (counts might have changed)
+                                fetchFileGroups(currentPage, pageSize);
+                                closePublishModal();
+                            })
+                            .catch(err => {
+                                console.error("Failed to publish file group:", err);
+                                message.error(t("PublishFileGroup.messages.publishError"));
+                            })
+                            .finally(() => setPublishSubmitting(false));
                 })
-                .catch(err => {
-                    console.error("Failed to publish file group:", err);
-                    message.error(t("PublishFileGroup.messages.publishError"));
-                })
-                .finally(() => setLoading(false));
+                .catch(() => {
+                    // validation errors are shown by antd Form
+                });
     }
 
     function handleDelete(groupId: number) {
@@ -82,6 +117,12 @@ export function FileGroups() {
     }
 
     const columns: ColumnsType<FileGroupListResponse> = [
+        {
+            title: t("FileGroups.columns.id.title"),
+            dataIndex: 'id',
+            key: 'id',
+            sorter: (a, b) => a.id - b.id,
+        },
         {
             title: t("FileGroups.columns.path.title"),
             dataIndex: 'path',
@@ -109,7 +150,7 @@ export function FileGroups() {
                         <Button
                                 type="primary"
                                 icon={<UploadOutlined/>}
-                                onClick={() => handlePublish(record.id)}
+                                onClick={() => openPublishModal(record)}
                                 loading={loading}
                         >
                             {t("PublishFileGroup.actions.publish")}
@@ -145,7 +186,7 @@ export function FileGroups() {
     return (
             <div className={"darkDiv"}>
                 <Spin spinning={loading}>
-                    <Space direction="vertical" style={{width: "100%", margin: 30}} size="large">
+                    <Space direction="vertical" style={{width: "95%", margin: 30}} size="large">
                         <Typography.Title level={4}>{t("PublishFileGroup.header.title")}</Typography.Title>
                         <Table
                                 columns={columns}
@@ -164,6 +205,34 @@ export function FileGroups() {
                         />
                     </Space>
                 </Spin>
+
+                {/* Publish modal */}
+                <Modal
+                        open={publishModalOpen}
+                        title={t("PublishFileGroup.modal.title")}
+                        onOk={submitPublish}
+                        onCancel={closePublishModal}
+                        confirmLoading={publishSubmitting}
+                        destroyOnClose
+                >
+                    <Form layout="vertical" form={form}>
+                        <Form.Item
+                                name="gallery_name"
+                                label={t("PublishFileGroup.modal.galleryName.label")}
+                        >
+                            <Input placeholder={t("PublishFileGroup.modal.galleryName.placeholder")}/>
+                        </Form.Item>
+                        <Form.Item
+                                name="gallery_description"
+                                label={t("PublishFileGroup.modal.galleryDescription.label")}
+                        >
+                            <Input.TextArea
+                                    rows={4}
+                                    placeholder={t("PublishFileGroup.modal.galleryDescription.placeholder")}
+                            />
+                        </Form.Item>
+                    </Form>
+                </Modal>
             </div>
     );
 }
