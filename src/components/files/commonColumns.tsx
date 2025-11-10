@@ -1,6 +1,6 @@
 import {Button} from "antd";
 import type {ColumnType} from "antd/es/table";
-import type {FileResponse} from "../../models/responses";
+import type {FileResponse} from "../../models";
 import {formatDateWithTimeZone} from "../../tools";
 import type {TFunction} from "i18next";
 
@@ -64,7 +64,7 @@ export function createdColumn<T extends FileResponse>(t: TFunction): ColumnType<
         title: t("CommonColumns.columns.created.title"),
         dataIndex: "created",
         key: "created",
-        sorter: (a: T, b: T) => new Date(a.created).getTime() - new Date(b.created).getTime(),
+        sorter: (a: T, b: T) => a.created.valueOf() - b.created.valueOf(),
         render: (date: string) => formatDateWithTimeZone(date == null ? null : (date as string)),
     };
 }
@@ -75,7 +75,12 @@ export function modifiedColumn<T extends FileResponse>(t: TFunction): ColumnType
         title: t("CommonColumns.columns.modified.title"),
         dataIndex: "modified",
         key: "modified",
-        sorter: (a: T, b: T) => new Date(a.modified).getTime() - new Date(b.modified).getTime(),
+        sorter: (a: T, b: T) => {
+            if (a.modified == null && b.modified == null) return 0;
+            if (a.modified == null) return -1;
+            if (b.modified == null) return 1;
+            return a.modified.valueOf() - b.modified.valueOf();
+        },
         render: (date: string) => formatDateWithTimeZone(date == null ? null : (date as string)),
     };
 }

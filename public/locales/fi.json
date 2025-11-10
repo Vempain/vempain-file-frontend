@@ -461,6 +461,17 @@
       "publishSuccess" : "Julkaistu {{count}} tiedostoa",
       "selectWarning" : "Valitse julkaistava tiedostoryhmä"
     },
+    "modal" : {
+      "galleryDescription" : {
+        "label" : "Gallerian kuvaus",
+        "placeholder" : "Syötä gallerian kuvaus tähän"
+      },
+      "galleryName" : {
+        "label" : "Gallerian lyhyt nimi",
+        "placeholder" : "Syötä gallerian lyhyt nimi tähän"
+      },
+      "title" : "Julkaise tiedostoryhmä"
+    },
     "popconfirm" : {
       "delete" : {
         "description" : "Haluatko varmasti poistaa tämän tiedostoryhmän?",
