@@ -64,7 +64,12 @@ export function createdColumn<T extends FileResponse>(t: TFunction): ColumnType<
         title: t("CommonColumns.columns.created.title"),
         dataIndex: "created",
         key: "created",
-        sorter: (a: T, b: T) => a.created.valueOf() - b.created.valueOf(),
+        sorter: (a: T, b: T) => {
+            if (a.created == null && b.created == null) return 0;
+            if (a.created == null) return -1;
+            if (b.created == null) return 1;
+            return a.created.valueOf() - b.created.valueOf();
+        },
         render: (date: string) => formatDateWithTimeZone(date == null ? null : (date as string)),
     };
 }
