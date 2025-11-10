@@ -1,7 +1,7 @@
 import type {AbstractResponse} from "@vempain/vempain-auth-frontend";
 import {Dayjs} from "dayjs";
 import type {FileTypeEnum} from "../FileTypeEnum.ts";
-
+import type {LocationResponse} from "./LocationsResponse.ts";
 
 export interface FileResponse extends AbstractResponse {
     filename: string;
@@ -20,7 +20,7 @@ export interface FileResponse extends AbstractResponse {
     rights_terms: string;
     rights_url: string;
     gps_timestamp: Dayjs | null;
-    gps_location_id: number;
+    location: LocationResponse | null;
     creator_name: string;
     creator_country: string;
     creator_email: string;

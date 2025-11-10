@@ -461,6 +461,17 @@
       "publishSuccess" : "Publicerade {{count}} filer",
       "selectWarning" : "Välj en filgrupp att publicera"
     },
+    "modal" : {
+      "galleryDescription" : {
+        "label" : "Galleribeskrivning",
+        "placeholder" : "Ange galleribeskrivning här"
+      },
+      "galleryName" : {
+        "label" : "Galleriets kortnamn",
+        "placeholder" : "Ange galleriets kortnamn här"
+      },
+      "title" : "Publicera filgrupp"
+    },
     "popconfirm" : {
       "delete" : {
         "description" : "Är du säker på att du vill ta bort denna filgrupp?",

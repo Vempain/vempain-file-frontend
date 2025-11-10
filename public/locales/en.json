@@ -461,6 +461,17 @@
       "publishSuccess" : "Published {{count}} files",
       "selectWarning" : "Please select a file group to publish"
     },
+    "modal" : {
+      "galleryDescription" : {
+        "label" : "Gallery description",
+        "placeholder" : "Enter gallery description here"
+      },
+      "galleryName" : {
+        "label" : "Gallery short name",
+        "placeholder" : "Enter gallery shortname here"
+      },
+      "title" : "Publish File Group"
+    },
     "popconfirm" : {
       "delete" : {
         "description" : "Are you sure you want to delete this file group?",

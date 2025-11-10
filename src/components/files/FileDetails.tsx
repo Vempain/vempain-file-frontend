@@ -1,13 +1,11 @@
 import {Space, Table, Tag} from "antd";
 import type {ColumnsType} from "antd/es/table";
-import type {FileResponse, LocationResponse} from "../../models";
+import type {FileResponse} from "../../models";
 import {FileTypeEnum} from "../../models";
 import dayjs, {type Dayjs} from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import {fileTypeEnum2Tag, formatDateWithTimeZone} from "../../tools";
 import {useTranslation} from "react-i18next";
-import {useEffect, useState} from "react";
-import {locationAPI} from "../../services";
 import {DisplayMap} from "../common";
 
 dayjs.extend(utc);
@@ -28,36 +26,7 @@ function formatBytesToKB(val?: number): string {
 }
 
 export function FileDetails({file}: Props) {
-    const [loading, setLoading] = useState(true);
-    const [location, setLocation] = useState<LocationResponse | null>(null);
     const {t} = useTranslation();
-
-    useEffect(() => {
-        if (!file) {
-            return;
-        }
-
-        setLoading(true);
-        const tmpLocationId = file.gps_location_id;
-
-        if (tmpLocationId !== null
-                && tmpLocationId !== undefined) {
-            locationAPI.findById(tmpLocationId, null)
-                    .then(location => {
-                        setLocation(location);
-                    })
-                    .catch(err => {
-                        console.error("Error fetching location:", err);
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                    });
-        } else {
-            // Ensure table renders when no location is present
-            setLocation(null);
-            setLoading(false);
-        }
-    }, [file]);
 
     if (!file) {
         return null;
@@ -98,7 +67,7 @@ export function FileDetails({file}: Props) {
         {
             key: "gps_location_id",
             label: t("FileDetails.rows.gps_location_id.label"),
-            value: location ? <DisplayMap location={location}/> : ""
+            value: file.location ? <DisplayMap location={file.location}/> : ""
         },
         {key: "creator_name", label: t("FileDetails.rows.creator_name.label"), value: file.creator_name},
         {key: "creator_country", label: t("FileDetails.rows.creator_country.label"), value: file.creator_country},
@@ -126,13 +95,13 @@ export function FileDetails({file}: Props) {
     return (
 
             <Space direction="vertical" style={{width: "100%"}}>
-                {!loading && <Table
+                <Table
                         columns={columns}
                         dataSource={rows}
                         pagination={false}
                         showHeader={false}
                         size="small"
                         rowKey="key"
-                />}
+                />
             </Space>);
 }
