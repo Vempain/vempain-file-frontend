@@ -11,13 +11,6 @@ const __dirname = path.dirname(__filename);
 const versionFilePath = path.resolve(__dirname, 'VERSION');
 const baseVersion = fs.readFileSync(versionFilePath, 'utf8').trim();
 
-/**
- * Replicates the logic in .github/workflows/ci.yaml:
- *  git fetch --tags origin
- *  currentVersion=$(git tag --list --sort=-version:refname "${baseVersion}.*" | head -n 1 || "${baseVersion}.0")
- *  if empty -> newVersion=baseVersion.0
- *  else increment patch component
- */
 function computeNewVersion(baseVersion) {
     try {
         execSync('git fetch --tags origin', {stdio: 'ignore'});
