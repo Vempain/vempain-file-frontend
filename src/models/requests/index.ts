@@ -1,4 +1,5 @@
 export type {FileGroupRequest} from "./FileGroupRequest";
+export type {LocationGuardRequest} from "./LocationGuardRequest";
 export type {LocationRequest} from "./LocationRequest";
 export type {PathCompletionRequest} from "./PathCompletionRequest";
 export type {PublishFileGroupRequest} from "./PublishFileGroupRequest";

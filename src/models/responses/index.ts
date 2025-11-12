@@ -9,6 +9,7 @@ export type {FileResponse} from "./FileResponse";
 export type {FontFileResponse} from "./FontFileResponse";
 export type {IconFileResponse} from "./IconFileResponse";
 export type {ImageFileResponse} from "./ImageFileResponse";
+export type {LocationGuardResponse} from "./LocationGuardResponse";
 export type {LocationResponse} from "./LocationsResponse";
 export type {OriginalScanResponse} from "./OriginalScanResponse.ts";
 export type {PathCompletionResponse} from "./PathCompletionResponse";

@@ -13,6 +13,7 @@ import {
     FileZipOutlined,
     FormOutlined,
     GlobalOutlined,
+    HeatMapOutlined,
     ImportOutlined,
     InfoCircleOutlined,
     LoginOutlined,
@@ -156,6 +157,11 @@ export function TopBar() {
                         key: "userManagement",
                         icon: <UserOutlined/>,
                         children: [
+                            {
+                                label: (<NavLink to={"/management/location-guards"}>{t("TopBar.menu.userManagement.location-guards")}</NavLink>),
+                                key: "user-location-guards",
+                                icon: <HeatMapOutlined/>
+                            },
                             {
                                 label: (<NavLink to={"/management/users"}>{t("TopBar.menu.userManagement.users")}</NavLink>),
                                 key: "user-users",
