@@ -6,7 +6,7 @@ import type {GeoCoordinate, LocationGuardRequest, LocationGuardResponse} from ".
 import {GuardTypeEnum} from "../../models";
 
 // react-leaflet map picker
-import {CircleMarker, MapContainer, TileLayer, useMapEvents} from "react-leaflet";
+import {CircleMarker, MapContainer, TileLayer, useMap, useMapEvents} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import {LocationAPI} from "../../services/LocationAPI.ts";
 
@@ -49,11 +49,13 @@ function MapPicker({
                        onChange,
                        height = 220,
                        readOnly = false,
+                       active = false,
                    }: {
     value?: GeoCoordinate | null;
     onChange?: (coord: GeoCoordinate) => void;
     height?: number;
     readOnly?: boolean;
+    active?: boolean; // whether the modal/popover is open
 }) {
     const center = useMemo<[number, number]>(() => {
         if (value && typeof value.latitude === "number" && typeof value.longitude === "number") {
@@ -63,6 +65,22 @@ function MapPicker({
         return [60.1699, 24.9384];
     }, [value]);
 
+    // Helper to invalidate size after modal open and recenter on coord change
+    function MapEffects({activeDep, centerDep}: { activeDep: boolean; centerDep: [number, number] }) {
+        const map = useMap();
+        useEffect(() => {
+            if (activeDep) {
+                // Delay to allow modal animation/layout to finish
+                const t = setTimeout(() => map.invalidateSize(), 80);
+                return () => clearTimeout(t);
+            }
+        }, [activeDep, map]);
+        useEffect(() => {
+            map.setView(centerDep);
+        }, [centerDep[0], centerDep[1], map]);
+        return null;
+    }
+
     return (
             <div style={{height, width: "100%", border: "1px solid #eee", borderRadius: 6, overflow: "hidden"}}>
                 <MapContainer center={center} zoom={value ? 12 : 10} style={{height: "100%", width: "100%"}}>
@@ -70,6 +88,7 @@ function MapPicker({
                             attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
+                    <MapEffects activeDep={active} centerDep={center}/>
                     {value && typeof value.latitude === "number" && typeof value.longitude === "number" && (
                             <CircleMarker center={[value.latitude, value.longitude]} radius={8} pathOptions={{color: "#1677ff"}}/>
                     )}
@@ -331,6 +350,7 @@ export function LocationGuards() {
                                 value={form.getFieldValue("primary_coordinate")}
                                 onChange={(c) => form.setFieldsValue({primary_coordinate: LocationAPI.roundCoord(c)!})}
                                 height={220}
+                                active={modalOpen}
                         />
 
                         {guardType === GuardTypeEnum.SQUARE ? (
@@ -396,6 +416,7 @@ export function LocationGuards() {
                                             value={form.getFieldValue("secondary_coordinate")}
                                             onChange={(c) => form.setFieldsValue({secondary_coordinate: LocationAPI.roundCoord(c)!})}
                                             height={220}
+                                            active={modalOpen}
                                     />
                                 </>
                         ) : (
