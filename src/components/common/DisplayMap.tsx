@@ -1,11 +1,14 @@
 import 'leaflet/dist/leaflet.css';
-import {CircleMarker, MapContainer, TileLayer} from 'react-leaflet';
+import {CircleMarker, MapContainer, TileLayer, useMap} from 'react-leaflet';
 import type {LocationResponse} from "../../models";
+import {useEffect} from "react";
 
 type Props = {
     location: LocationResponse;
     heightPx?: number;
     zoom?: number;
+    // When true, the map invalidates its size (useful when inside a Modal/Drawer)
+    active?: boolean;
 };
 
 function toSignedCoord(value: number, ref: 'N' | 'S' | 'E' | 'W'): number {
@@ -13,7 +16,28 @@ function toSignedCoord(value: number, ref: 'N' | 'S' | 'E' | 'W'): number {
     return Math.abs(value);
 }
 
-export function DisplayMap({location, heightPx = 240, zoom = 13}: Props) {
+// Re-invalidate map size after becoming visible and recenter on coord changes
+function MapEffects({center, active}: { center: [number, number]; active: boolean }) {
+    const map = useMap();
+
+    useEffect(() => {
+        if (active) {
+            const t = setTimeout(() => {
+                map.invalidateSize();
+                map.setView(center);
+            }, 80);
+            return () => clearTimeout(t);
+        }
+    }, [active, map, center]);
+
+    useEffect(() => {
+        map.setView(center);
+    }, [center[0], center[1], map]);
+
+    return null;
+}
+
+export function DisplayMap({location, heightPx = 240, zoom = 13, active = true}: Props) {
     const lat = toSignedCoord(location.latitude, location.latitude_ref);
     const lon = toSignedCoord(location.longitude, location.longitude_ref);
 
@@ -29,9 +53,9 @@ export function DisplayMap({location, heightPx = 240, zoom = 13}: Props) {
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
+                    <MapEffects center={[lat, lon]} active={!!active}/>
                     <CircleMarker center={[lat, lon]} radius={8} color="red" fillColor="red" fillOpacity={0.8}/>
                 </MapContainer>
             </div>
     );
 }
-

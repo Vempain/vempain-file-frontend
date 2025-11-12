@@ -15,6 +15,7 @@ import {
     FilePermissions,
     ImageFiles,
     ImportFiles,
+    LocationGuards,
     Publishing,
     SearchFiles,
     ShowFileGroup,
@@ -82,6 +83,7 @@ export default function App() {
                             <Route path="/schedules/system" element={<SystemSchedules/>}/>
                             <Route path="/schedules/file-imports" element={<FileImports/>}/>
                             <Route path="/schedules/publishing" element={<Publishing/>}/>
+                            <Route path="/management/location-guards" element={<LocationGuards/>}/>
                             <Route path="/management/users" element={<Users/>}/>
                             <Route path="/management/units" element={<Units/>}/>
                             <Route path="/management/permissions" element={<FilePermissions/>}/>
