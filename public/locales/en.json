@@ -441,6 +441,101 @@
       }
     }
   },
+  "LocationGuards" : {
+    "actions" : {
+      "delete" : "Delete",
+      "edit" : "Edit",
+      "new" : "New guard"
+    },
+    "columns" : {
+      "actions" : {
+        "title" : "Actions"
+      },
+      "guard_type" : {
+        "title" : "Type"
+      },
+      "id" : {
+        "title" : "ID"
+      },
+      "primary" : {
+        "title" : "Primary (lat, lon)"
+      },
+      "radius" : {
+        "title" : "Radius (m)"
+      },
+      "secondary" : {
+        "title" : "Secondary (lat, lon)"
+      }
+    },
+    "header" : {
+      "title" : "Location Guards"
+    },
+    "messages" : {
+      "createError" : "Failed to create location guard",
+      "createSuccess" : "Location guard created",
+      "deleteError" : "Failed to delete location guard",
+      "deleteSuccess" : "Location guard deleted",
+      "fetchError" : "Failed to load location guards",
+      "mapClickInfo" : "Click on the map to set coordinates",
+      "updateError" : "Failed to update location guard",
+      "updateSuccess" : "Location guard updated"
+    },
+    "modal" : {
+      "buttons" : {
+        "useMap" : "Use map below"
+      },
+      "circle" : {
+        "helper" : "Click on the map to set the center point. Radius defines the guard circle size.",
+        "title" : "Circle settings"
+      },
+      "create" : {
+        "title" : "Create Location Guard"
+      },
+      "edit" : {
+        "title" : "Edit Location Guard"
+      },
+      "guard_type" : {
+        "label" : "Guard type",
+        "validation" : {
+          "required" : "Please select guard type"
+        }
+      },
+      "latitude" : {
+        "label" : "Latitude",
+        "placeholder" : "Latitude",
+        "validation" : {
+          "required" : "Latitude required"
+        }
+      },
+      "longitude" : {
+        "label" : "Longitude",
+        "placeholder" : "Longitude",
+        "validation" : {
+          "required" : "Longitude required"
+        }
+      },
+      "primary" : {
+        "title" : "Primary coordinate"
+      },
+      "radius" : {
+        "label" : "Radius (meters)",
+        "placeholder" : "Radius in meters",
+        "validation" : {
+          "min" : "Radius must be greater than 0",
+          "required" : "Radius required"
+        }
+      },
+      "secondary" : {
+        "title" : "Secondary coordinate (square)"
+      }
+    },
+    "popconfirm" : {
+      "delete" : {
+        "description" : "Are you sure you want to delete this location guard?",
+        "title" : "Delete this guard?"
+      }
+    }
+  },
   "PathCompletionEnum" : {
     "exported" : "Exported",
     "original" : "Original"
@@ -590,6 +685,7 @@
       },
       "file-group" : {
         "fileGroup" : "File group",
+        "location-guards" : "Location guards",
         "title" : "Publishing"
       },
       "fileManagement" : {

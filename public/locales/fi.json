@@ -441,6 +441,101 @@
       }
     }
   },
+  "LocationGuards" : {
+    "actions" : {
+      "delete" : "Poista",
+      "edit" : "Muokkaa",
+      "new" : "Uusi suoja"
+    },
+    "columns" : {
+      "actions" : {
+        "title" : "Toiminnot"
+      },
+      "guard_type" : {
+        "title" : "Tyyppi"
+      },
+      "id" : {
+        "title" : "ID"
+      },
+      "primary" : {
+        "title" : "Ensisijainen (lat, lon)"
+      },
+      "radius" : {
+        "title" : "Säde (m)"
+      },
+      "secondary" : {
+        "title" : "Toissijainen (lat, lon)"
+      }
+    },
+    "header" : {
+      "title" : "Sijaintisuojat"
+    },
+    "messages" : {
+      "createError" : "Sijaintisuojan luonti epäonnistui",
+      "createSuccess" : "Sijaintisuoja luotu",
+      "deleteError" : "Sijaintisuojan poistaminen epäonnistui",
+      "deleteSuccess" : "Sijaintisuoja poistettu",
+      "fetchError" : "Sijaintisuojiin liittyvien tietojen lataus epäonnistui",
+      "mapClickInfo" : "Aseta koordinaatit klikkaamalla karttaa",
+      "updateError" : "Sijaintisuojan päivitys epäonnistui",
+      "updateSuccess" : "Sijaintisuoja päivitetty"
+    },
+    "modal" : {
+      "buttons" : {
+        "useMap" : "Käytä alla olevaa karttaa"
+      },
+      "circle" : {
+        "helper" : "Aseta keskuspiste klikkaamalla karttaa. Säde määrittää suojaympyrän koon.",
+        "title" : "Ympyrän asetukset"
+      },
+      "create" : {
+        "title" : "Luo sijaintisuoja"
+      },
+      "edit" : {
+        "title" : "Muokkaa sijaintisuojaa"
+      },
+      "guard_type" : {
+        "label" : "Suojan tyyppi",
+        "validation" : {
+          "required" : "Valitse suojan tyyppi"
+        }
+      },
+      "latitude" : {
+        "label" : "Leveysaste",
+        "placeholder" : "Leveysaste",
+        "validation" : {
+          "required" : "Leveysaste on pakollinen"
+        }
+      },
+      "longitude" : {
+        "label" : "Pituusaste",
+        "placeholder" : "Pituusaste",
+        "validation" : {
+          "required" : "Pituusaste on pakollinen"
+        }
+      },
+      "primary" : {
+        "title" : "Ensisijainen koordinaatti"
+      },
+      "radius" : {
+        "label" : "Säde (metriä)",
+        "placeholder" : "Säde metreissä",
+        "validation" : {
+          "min" : "Säteen tulee olla suurempi kuin 0",
+          "required" : "Säde on pakollinen"
+        }
+      },
+      "secondary" : {
+        "title" : "Toissijainen koordinaatti (neliö)"
+      }
+    },
+    "popconfirm" : {
+      "delete" : {
+        "description" : "Haluatko varmasti poistaa tämän sijaintisuojan?",
+        "title" : "Poistetaanko tämä suoja?"
+      }
+    }
+  },
   "PathCompletionEnum" : {
     "exported" : "Viety",
     "original" : "Alkuperäinen"
@@ -456,9 +551,9 @@
     "messages" : {
       "deleteError" : "Tiedostoryhmän poistaminen epäonnistui",
       "deleteSuccess" : "Tiedostoryhmä poistettu onnistuneesti",
-      "fetchError" : "Tiedostoryhmien lataus epäonnistui",
+      "fetchError" : "Tiedostoryhmien lataaminen epäonnistui",
       "publishError" : "Tiedostoryhmän julkaisu epäonnistui",
-      "publishSuccess" : "Julkaistu {{count}} tiedostoa",
+      "publishSuccess" : "Julkaistiin {{count}} tiedostoa",
       "selectWarning" : "Valitse julkaistava tiedostoryhmä"
     },
     "modal" : {
@@ -467,8 +562,8 @@
         "placeholder" : "Syötä gallerian kuvaus tähän"
       },
       "galleryName" : {
-        "label" : "Gallerian lyhyt nimi",
-        "placeholder" : "Syötä gallerian lyhyt nimi tähän"
+        "label" : "Gallerian lyhytnimi",
+        "placeholder" : "Syötä gallerian lyhytnimi tähän"
       },
       "title" : "Julkaise tiedostoryhmä"
     },
@@ -590,6 +685,7 @@
       },
       "file-group" : {
         "fileGroup" : "Tiedostoryhmä",
+        "location-guards" : "Sijaintisuojat",
         "title" : "Julkaisu"
       },
       "fileManagement" : {
