@@ -1,4 +1,4 @@
-import {Button, Collapse, Form, Input, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
+import {Button, Form, Input, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
 import {DeleteOutlined, EditOutlined, PlusOutlined} from "@ant-design/icons";
 import {useEffect, useMemo, useState} from "react";
 import type {ColumnsType} from "antd/es/table";
@@ -163,6 +163,11 @@ export function FileGroups() {
             key: "group_name",
         },
         {
+            title: t("FileGroups.columns.description.title", {defaultValue: "Description"}),
+            dataIndex: "description",
+            key: "description",
+        },
+        {
             title: t("FileGroups.columns.file_count.title", {defaultValue: "Files"}),
             dataIndex: "file_count",
             key: "file_count",
@@ -240,23 +245,19 @@ export function FileGroups() {
                                     const id = (record as any).id as number;
                                     const state = groupFiles[id] ?? {loading: false, files: []};
                                     return (
-                                            <Collapse bordered={false} defaultActiveKey={[]} style={{background: "transparent"}}>
-                                                <Collapse.Panel header={t("FileGroups.files.panelHeader", {defaultValue: "Files"})} key="files">
-                                                    <Spin spinning={state.loading}>
-                                                        <Table<FileResponse>
-                                                                columns={fileColumns}
-                                                                dataSource={(state.files ?? []).map(f => ({...f, key: (f as any).id ?? f.external_file_id}))}
-                                                                pagination={false}
-                                                                size="small"
-                                                                rowKey={(f) => (f as any).external_file_id}
-                                                        />
-                                                    </Spin>
-                                                </Collapse.Panel>
-                                            </Collapse>
+                                            <Spin spinning={state.loading}>
+                                                <Table<FileResponse>
+                                                        columns={fileColumns}
+                                                        dataSource={(state.files ?? []).map(f => ({...f, key: (f as any).id ?? f.external_file_id}))}
+                                                        pagination={false}
+                                                        size="small"
+                                                        rowKey={(f) => (f as any).external_file_id}
+                                                />
+                                            </Spin>
                                     );
                                 }
                             }}
-                            rowKey={(r) => String((r as any).id)}
+                            rowKey={(r) => (r as any).id}  // FIX: return numeric id to match expandedRowKeys
                     />
                 </Spin>
 

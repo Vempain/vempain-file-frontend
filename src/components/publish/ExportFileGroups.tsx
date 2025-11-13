@@ -2,9 +2,10 @@ import {useEffect, useState} from "react";
 import {Button, Form, Input, message, Modal, Popconfirm, Space, Spin, Table, Typography} from "antd";
 import {useNavigate} from "react-router-dom";
 import {fileGroupAPI, publishAPI} from "../../services";
-import type {FileGroupListResponse, PublishFileGroupRequest, PublishFileGroupResponse} from "../../models";
+// Add missing import for editing payload
+import type {FileGroupListResponse, FileGroupRequest, PublishFileGroupRequest, PublishFileGroupResponse} from "../../models";
 import {useTranslation} from "react-i18next";
-import {DeleteOutlined, EyeOutlined, UploadOutlined} from "@ant-design/icons";
+import {DeleteOutlined, EditOutlined, EyeOutlined, UploadOutlined} from "@ant-design/icons";
 import type {ColumnsType} from "antd/es/table";
 
 export function ExportFileGroups() {
@@ -19,6 +20,9 @@ export function ExportFileGroups() {
     const [publishSubmitting, setPublishSubmitting] = useState<boolean>(false);
     const [selectedGroup, setSelectedGroup] = useState<FileGroupListResponse | null>(null);
     const [form] = Form.useForm();
+    // Edit modal state
+    const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+    const [editForm] = Form.useForm<FileGroupRequest>();
 
     const navigate = useNavigate();
 
@@ -116,6 +120,57 @@ export function ExportFileGroups() {
         navigate(`/publishing/file-groups/${groupId}`);
     }
 
+    // Open edit modal and populate form
+    function openEditModal(group: FileGroupListResponse) {
+        setSelectedGroup(group);
+        setEditModalOpen(true);
+        editForm.setFieldsValue({
+            id: group.id,
+            path: group.path ?? "",
+            group_name: group.group_name ?? "",
+            description: group.description ?? "",
+            files: []
+        } as unknown as FileGroupRequest);
+    }
+
+    function closeEditModal() {
+        setEditModalOpen(false);
+        setSelectedGroup(null);
+        editForm.resetFields();
+    }
+
+    function submitEdit() {
+        editForm.validateFields()
+                .then(values => {
+                    const payload: FileGroupRequest = {
+                        id: values.id,
+                        path: values.path?.trim() ?? "",
+                        group_name: values.group_name?.trim() ?? "",
+                        description: values.description?.trim() ?? "",
+                        files: []
+                    };
+                    return fileGroupAPI.update(payload)
+                            .then(() => {
+                                message.success(
+                                        // reuse FileGroups i18n keys if available
+                                        "FileGroups.messages.updateSuccess" in ({} as any)
+                                                ? (t("FileGroups.messages.updateSuccess") as any)
+                                                : t("Common.messages.saved", {defaultValue: "Saved"})
+                                );
+                                closeEditModal();
+                                fetchFileGroups(currentPage, pageSize);
+                            })
+                            .catch(err => {
+                                console.error("Failed to update file group:", err);
+                                message.error(
+                                        "FileGroups.messages.updateError" in ({} as any)
+                                                ? (t("FileGroups.messages.updateError") as any)
+                                                : t("Common.messages.saveFailed", {defaultValue: "Save failed"})
+                                );
+                            });
+                });
+    }
+
     const columns: ColumnsType<FileGroupListResponse> = [
         {
             title: t("FileGroups.columns.id.title"),
@@ -137,6 +192,12 @@ export function ExportFileGroups() {
             sorter: (a, b) => a.group_name.localeCompare(b.group_name),
         },
         {
+            title: t("FileGroups.columns.description.title", {defaultValue: "Description"}),
+            dataIndex: 'description',
+            key: 'description',
+            sorter: (a, b) => (a.description ?? "").localeCompare(b.description ?? ""),
+        },
+        {
             title: t("FileGroups.columns.file_count.title"),
             dataIndex: 'file_count',
             key: 'file_count',
@@ -147,6 +208,12 @@ export function ExportFileGroups() {
             key: 'actions',
             render: (_: undefined, record: FileGroupListResponse) => (
                     <Space>
+                        <Button
+                                icon={<EditOutlined/>}
+                                onClick={() => openEditModal(record)}
+                        >
+                            {t("FileGroups.actions.edit", {defaultValue: "Edit"})}
+                        </Button>
                         <Button
                                 type="primary"
                                 icon={<UploadOutlined/>}
@@ -230,6 +297,47 @@ export function ExportFileGroups() {
                                     rows={4}
                                     placeholder={t("PublishFileGroup.modal.galleryDescription.placeholder")}
                             />
+                        </Form.Item>
+                    </Form>
+                </Modal>
+
+                {/* Edit modal */}
+                <Modal
+                        open={editModalOpen}
+                        title={t("FileGroups.modal.edit.title", {defaultValue: "Edit file group"})}
+                        okText={t("Common.modal.save", {defaultValue: "Save"})}
+                        cancelText={t("Common.modal.cancel", {defaultValue: "Cancel"})}
+                        onOk={submitEdit}
+                        onCancel={closeEditModal}
+                        destroyOnClose
+                        maskClosable
+                >
+                    <Form layout="vertical" form={editForm}>
+                        <Form.Item name="id" hidden>
+                            <Input type="hidden"/>
+                        </Form.Item>
+                        <Form.Item
+                                label={t("FileGroups.modal.path.label", {defaultValue: "Path"})}
+                                name="path"
+                                rules={[{required: true, message: t("FileGroups.modal.path.validation.required", {defaultValue: "Path is required"})}]}
+                        >
+                            <Input placeholder={t("FileGroups.modal.path.placeholder", {defaultValue: "Enter path"})}/>
+                        </Form.Item>
+                        <Form.Item
+                                label={t("FileGroups.modal.group_name.label", {defaultValue: "Group name"})}
+                                name="group_name"
+                                rules={[{
+                                    required: true,
+                                    message: t("FileGroups.modal.group_name.validation.required", {defaultValue: "Group name is required"})
+                                }]}
+                        >
+                            <Input placeholder={t("FileGroups.modal.group_name.placeholder", {defaultValue: "Enter group name"})}/>
+                        </Form.Item>
+                        <Form.Item
+                                label={t("FileGroups.modal.description.label", {defaultValue: "Description"})}
+                                name="description"
+                        >
+                            <Input.TextArea placeholder={t("FileGroups.modal.description.placeholder", {defaultValue: "Enter description"})} rows={3}/>
                         </Form.Item>
                     </Form>
                 </Modal>
