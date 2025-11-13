@@ -13,6 +13,7 @@ import {
     FileZipOutlined,
     FormOutlined,
     GlobalOutlined,
+    GroupOutlined,
     HeatMapOutlined,
     ImportOutlined,
     InfoCircleOutlined,
@@ -107,6 +108,11 @@ export function TopBar() {
                                 icon: <VideoCameraOutlined/>
                             },
                             {
+                                label: (<NavLink to={"/files/file-groups"}>{t("TopBar.menu.fileManagement.file-groups")}</NavLink>),
+                                key: "file-file-groups",
+                                icon: <GroupOutlined/>
+                            },
+                            {
                                 label: (<NavLink to={"/files/import"}>{t("TopBar.menu.fileManagement.importFiles")}</NavLink>),
                                 key: "file-importFiles",
                                 icon: <ImportOutlined/>
@@ -124,12 +130,12 @@ export function TopBar() {
                         icon: <ClockCircleOutlined/>,
                         children: [
                             {
-                                label: (<NavLink to={"/management/location-guards"}>{t("TopBar.menu.file-group.location-guards")}</NavLink>),
+                                label: (<NavLink to={"/publishing/location-guards"}>{t("TopBar.menu.file-group.location-guards")}</NavLink>),
                                 key: "user-location-guards",
                                 icon: <HeatMapOutlined/>
                             },
                             {
-                                label: (<NavLink to={"/file-groups"}>{t("TopBar.menu.file-group.fileGroup")}</NavLink>),
+                                label: (<NavLink to={"/publishing/file-groups"}>{t("TopBar.menu.file-group.fileGroup")}</NavLink>),
                                 key: "file-group-listFileGroup",
                                 icon: <AppstoreOutlined/>
                             }

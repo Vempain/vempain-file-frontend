@@ -7,7 +7,7 @@ import {useTranslation} from "react-i18next";
 import {DeleteOutlined, EyeOutlined, UploadOutlined} from "@ant-design/icons";
 import type {ColumnsType} from "antd/es/table";
 
-export function FileGroups() {
+export function ExportFileGroups() {
     const [fileGroups, setFileGroups] = useState<FileGroupListResponse[]>([]);
     const [loading, setLoading] = useState(false);
     const {t} = useTranslation();
@@ -113,7 +113,7 @@ export function FileGroups() {
 
     function handleShow(groupId: number) {
         // navigate to the ShowFileGroup route; App.tsx already has routing for it
-        navigate(`/file-groups/${groupId}`);
+        navigate(`/publishing/file-groups/${groupId}`);
     }
 
     const columns: ColumnsType<FileGroupListResponse> = [
