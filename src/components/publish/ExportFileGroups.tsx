@@ -31,6 +31,10 @@ export function ExportFileGroups() {
     const [candidates, setCandidates] = useState<FileResponse[]>([]);
     const [candidatesLoading, setCandidatesLoading] = useState<boolean>(false);
     const [candidateSelectedIds, setCandidateSelectedIds] = useState<number[]>([]);
+    // NEW: pageable state for candidates
+    const [candidatePage, setCandidatePage] = useState<number>(1);
+    const candidatePageSize = 20;
+    const [candidateHasMore, setCandidateHasMore] = useState<boolean>(true);
 
     const navigate = useNavigate();
 
@@ -149,6 +153,8 @@ export function ExportFileGroups() {
         setCandidateType(undefined);
         setCandidates([]);
         setCandidateSelectedIds([]);
+        setCandidateHasMore(true);
+        setCandidatePage(1);
     }
 
     function closeEditModal() {
@@ -298,23 +304,33 @@ export function ExportFileGroups() {
         FileTypeEnum.VIDEO,
     ].map(v => ({value: v, label: t(`FileTypeEnum.${v.toLowerCase()}`, {defaultValue: v})}));
 
-    const fetchCandidatesByType = (type: FileTypeEnum | undefined) => {
-        setCandidates([]);
-        setCandidateSelectedIds([]);
-        if (!type) return;
-        const svc = getServiceForType(type);
-        if (!svc) return;
+    // NEW: paged loader
+    const loadCandidatesPage = (type: FileTypeEnum, page: number) => {
+        const service = getServiceForType(type);
+        if (!service) return;
         setCandidatesLoading(true);
-        svc.findAll()
-                .then((res: any) => {
-                    const list: FileResponse[] = Array.isArray(res) ? res : (res?.content ?? []);
-                    setCandidates(list ?? []);
+        service.findAllPageable(page - 1, candidatePageSize)
+                .then((res: { content?: FileResponse[]; last?: boolean; page?: number }) => {
+                    const list = res?.content ?? [];
+                    setCandidates(prev => (page === 1 ? list : [...prev, ...list]));
+                    setCandidateHasMore(!(res?.last ?? true));
+                    setCandidatePage(page + 1);
                 })
                 .catch((err: any) => {
                     console.error("Failed to load files by type:", err);
                     message.error(t("FileGroups.messages.fetchError", {defaultValue: "Failed to load files"}));
                 })
                 .finally(() => setCandidatesLoading(false));
+    };
+
+    // REPLACED: fetchCandidatesByType now resets & loads first page
+    const fetchCandidatesByType = (type: FileTypeEnum | undefined) => {
+        setCandidates([]);
+        setCandidateSelectedIds([]);
+        setCandidateHasMore(true);
+        setCandidatePage(1);
+        if (!type) return;
+        loadCandidatesPage(type, 1);
     };
 
     const addSelectedCandidates = () => {
@@ -433,8 +449,9 @@ export function ExportFileGroups() {
                                     placeholder={t("FileGroups.modal.files.type.placeholder", {defaultValue: "Select file type"})}
                                     value={candidateType}
                                     onChange={(val) => {
-                                        setCandidateType(val as FileTypeEnum);
-                                        fetchCandidatesByType(val as FileTypeEnum);
+                                        const nextType = val as FileTypeEnum;
+                                        setCandidateType(nextType);
+                                        fetchCandidatesByType(nextType);
                                     }}
                                     options={typeOptions}
                             />
@@ -452,6 +469,24 @@ export function ExportFileGroups() {
                                     }))}
                                     optionFilterProp="label"
                                     maxTagCount="responsive"
+                                    // NEW: dropdown footer to paginate
+                                    dropdownRender={(menu) => (
+                                            <div>
+                                                {menu}
+                                                <div style={{display: "flex", justifyContent: "center", padding: 8}}>
+                                                    <Button
+                                                            type="link"
+                                                            onClick={() => candidateType && loadCandidatesPage(candidateType, candidatePage)}
+                                                            disabled={!candidateHasMore || !candidateType}
+                                                            loading={candidatesLoading}
+                                                    >
+                                                        {candidateHasMore
+                                                                ? t("FileGroups.modal.files.loadMore", {defaultValue: "Load more"})
+                                                                : t("FileGroups.modal.files.noMore", {defaultValue: "No more results"})}
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                    )}
                             />
                             <Button type="primary" onClick={addSelectedCandidates} disabled={candidateSelectedIds.length === 0}>
                                 {t("FileGroups.modal.files.add", {defaultValue: "Add selected"})}
