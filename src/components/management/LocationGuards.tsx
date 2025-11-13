@@ -9,6 +9,7 @@ import {GuardTypeEnum} from "../../models";
 import {CircleMarker, MapContainer, TileLayer, useMap, useMapEvents} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import {LocationAPI} from "../../services/LocationAPI.ts";
+import {useTranslation} from "react-i18next";
 
 const {Title, Text} = Typography;
 
@@ -105,13 +106,14 @@ export function LocationGuards() {
     const [submitting, setSubmitting] = useState(false);
     const [editing, setEditing] = useState<LocationGuardResponse | null>(null);
     const [form] = Form.useForm<GuardFormValues>();
+    const {t} = useTranslation();
 
     const fetchGuards = () => {
         setLoading(true);
         locationAPI
                 .findAllLocationGuards()
                 .then((res) => setGuards(res))
-                .catch(() => message.error("Failed to load location guards"))
+                .catch(() => message.error(t("LocationGuards.messages.fetchError")))
                 .finally(() => setLoading(false));
     };
 
@@ -147,10 +149,10 @@ export function LocationGuards() {
         locationAPI
                 .deleteLocationGuard(rec.id)
                 .then(() => {
-                    message.success("Location guard deleted");
+                    message.success(t("LocationGuards.messages.deleteSuccess"));
                     fetchGuards();
                 })
-                .catch(() => message.error("Failed to delete location guard"));
+                .catch(() => message.error(t("LocationGuards.messages.deleteError")));
     };
 
     const guardType = Form.useWatch("guard_type", form);
@@ -175,11 +177,11 @@ export function LocationGuards() {
 
                     const req = editing ? locationAPI.updateLocationGuard(payload) : locationAPI.addLocationGuard(payload);
                     req.then(() => {
-                        message.success(editing ? "Location guard updated" : "Location guard created");
+                        message.success(editing ? t("LocationGuards.messages.updateSuccess") : t("LocationGuards.messages.createSuccess"));
                         setModalOpen(false);
                         fetchGuards();
                     })
-                            .catch(() => message.error(editing ? "Failed to update location guard" : "Failed to create location guard"))
+                            .catch(() => message.error(editing ? t("LocationGuards.messages.updateError") : t("LocationGuards.messages.createError")))
                             .finally(() => setSubmitting(false));
                 })
                 .catch(() => void 0);
@@ -187,14 +189,14 @@ export function LocationGuards() {
 
     const columns: ColumnsType<LocationGuardResponse> = [
         {
-            title: "ID",
+            title: t("LocationGuards.columns.id.title"),
             dataIndex: "id",
             key: "id",
             width: 90,
             sorter: (a, b) => a.id - b.id,
         },
         {
-            title: "Type",
+            title: t("LocationGuards.columns.guard_type.title"),
             dataIndex: "guard_type",
             key: "guard_type",
             render: (v: LocationGuardResponse["guard_type"]) => typeTag(v),
@@ -206,17 +208,17 @@ export function LocationGuards() {
             onFilter: (val, rec) => rec.guard_type === val,
         },
         {
-            title: "Primary (lat, lon)",
+            title: t("LocationGuards.columns.primary.title"),
             key: "primary",
             render: (_: unknown, rec) => formatCoord(rec.primary_coordinate),
         },
         {
-            title: "Secondary (lat, lon)",
+            title: t("LocationGuards.columns.secondary.title"),
             key: "secondary",
             render: (_: unknown, rec) => formatCoord(rec.secondary_coordinate),
         },
         {
-            title: "Radius (m)",
+            title: t("LocationGuards.columns.radius.title"),
             dataIndex: "radius",
             key: "radius",
             render: (v?: number | null) => (v ? `${v}` : "—"),
@@ -224,20 +226,20 @@ export function LocationGuards() {
             width: 140,
         },
         {
-            title: "Actions",
+            title: t("LocationGuards.columns.actions.title"),
             key: "actions",
             width: 220,
             render: (_: unknown, rec) => (
                     <Space>
-                        <Button onClick={() => openEdit(rec)}>Edit</Button>
+                        <Button onClick={() => openEdit(rec)}>{t("LocationGuards.actions.edit")}</Button>
                         <Popconfirm
-                                title="Delete this guard?"
-                                description="Are you sure you want to delete this location guard?"
-                                okText="Yes"
-                                cancelText="No"
+                                title={t("LocationGuards.popconfirm.delete.title")}
+                                description={t("LocationGuards.popconfirm.delete.description")}
+                                okText={t("Common.popconfirm.yes")}
+                                cancelText={t("Common.popconfirm.no")}
                                 onConfirm={() => handleDelete(rec)}
                         >
-                            <Button danger>Delete</Button>
+                            <Button danger>{t("LocationGuards.actions.delete")}</Button>
                         </Popconfirm>
                     </Space>
             ),
@@ -249,12 +251,12 @@ export function LocationGuards() {
                 <Row justify="space-between" align="middle">
                     <Col>
                         <Title level={3} style={{margin: 0}}>
-                            Location Guards
+                            {t("LocationGuards.header.title")}
                         </Title>
                     </Col>
                     <Col>
                         <Button type="primary" onClick={openCreate}>
-                            New guard
+                            {t("LocationGuards.actions.new")}
                         </Button>
                     </Col>
                 </Row>
@@ -269,7 +271,7 @@ export function LocationGuards() {
                 />
 
                 <Modal
-                        title={editing ? "Edit Location Guard" : "Create Location Guard"}
+                        title={editing ? t("LocationGuards.modal.edit.title") : t("LocationGuards.modal.create.title")}
                         open={modalOpen}
                         onCancel={() => setModalOpen(false)}
                         onOk={onSubmit}
@@ -283,8 +285,8 @@ export function LocationGuards() {
                             <Col span={12}>
                                 <Form.Item
                                         name="guard_type"
-                                        label="Guard type"
-                                        rules={[{required: true, message: "Please select guard type"}]}
+                                        label={t("LocationGuards.modal.guard_type.label")}
+                                        rules={[{required: true, message: t("LocationGuards.modal.guard_type.validation.required")}]}
                                         initialValue={GuardTypeEnum.CIRCLE}
                                 >
                                     <Select
@@ -297,17 +299,17 @@ export function LocationGuards() {
                             </Col>
                         </Row>
 
-                        <Divider>Primary coordinate</Divider>
+                        <Divider>{t("LocationGuards.modal.primary.title")}</Divider>
                         <Row gutter={16}>
                             <Col span={8}>
                                 <Form.Item
                                         name={["primary_coordinate", "latitude"]}
-                                        label="Latitude"
-                                        rules={[{required: true, message: "Latitude required"}]}
+                                        label={t("LocationGuards.modal.latitude.label")}
+                                        rules={[{required: true, message: t("LocationGuards.modal.latitude.validation.required")}]}
                                 >
                                     <InputNumber
                                             style={{width: "100%"}}
-                                            placeholder="Latitude"
+                                            placeholder={t("LocationGuards.modal.latitude.placeholder")}
                                             min={-90}
                                             max={90}
                                             step={0.00001}
@@ -318,12 +320,12 @@ export function LocationGuards() {
                             <Col span={8}>
                                 <Form.Item
                                         name={["primary_coordinate", "longitude"]}
-                                        label="Longitude"
-                                        rules={[{required: true, message: "Longitude required"}]}
+                                        label={t("LocationGuards.modal.longitude.label")}
+                                        rules={[{required: true, message: t("LocationGuards.modal.longitude.validation.required")}]}
                                 >
                                     <InputNumber
                                             style={{width: "100%"}}
-                                            placeholder="Longitude"
+                                            placeholder={t("LocationGuards.modal.longitude.placeholder")}
                                             min={-180}
                                             max={180}
                                             step={0.00001}
@@ -336,13 +338,13 @@ export function LocationGuards() {
                                         onClick={() => {
                                             const coord = form.getFieldValue("primary_coordinate") as GeoCoordinate | undefined;
                                             if (!coord || typeof coord.latitude !== "number" || typeof coord.longitude !== "number") {
-                                                message.info("Click on the map to set coordinates");
+                                                message.info(t("LocationGuards.messages.mapClickInfo"));
                                             } else {
                                                 form.setFieldsValue({primary_coordinate: LocationAPI.roundCoord(coord) as GeoCoordinate});
                                             }
                                         }}
                                 >
-                                    Use map below
+                                    {t("LocationGuards.modal.buttons.useMap")}
                                 </Button>
                             </Col>
                         </Row>
@@ -355,21 +357,21 @@ export function LocationGuards() {
 
                         {guardType === GuardTypeEnum.SQUARE ? (
                                 <>
-                                    <Divider>Secondary coordinate (square)</Divider>
+                                    <Divider>{t("LocationGuards.modal.secondary.title")}</Divider>
                                     <Row gutter={16}>
                                         <Col span={8}>
                                             <Form.Item
                                                     name={["secondary_coordinate", "latitude"]}
-                                                    label="Latitude"
+                                                    label={t("LocationGuards.modal.latitude.label")}
                                                     rules={
                                                         guardType === GuardTypeEnum.SQUARE
-                                                                ? [{required: true, message: "Latitude required"}]
+                                                                ? [{required: true, message: t("LocationGuards.modal.latitude.validation.required")}]
                                                                 : undefined
                                                     }
                                             >
                                                 <InputNumber
                                                         style={{width: "100%"}}
-                                                        placeholder="Latitude"
+                                                        placeholder={t("LocationGuards.modal.latitude.placeholder")}
                                                         min={-90}
                                                         max={90}
                                                         step={0.00001}
@@ -380,16 +382,16 @@ export function LocationGuards() {
                                         <Col span={8}>
                                             <Form.Item
                                                     name={["secondary_coordinate", "longitude"]}
-                                                    label="Longitude"
+                                                    label={t("LocationGuards.modal.longitude.label")}
                                                     rules={
                                                         guardType === GuardTypeEnum.SQUARE
-                                                                ? [{required: true, message: "Longitude required"}]
+                                                                ? [{required: true, message: t("LocationGuards.modal.longitude.validation.required")}]
                                                                 : undefined
                                                     }
                                             >
                                                 <InputNumber
                                                         style={{width: "100%"}}
-                                                        placeholder="Longitude"
+                                                        placeholder={t("LocationGuards.modal.longitude.placeholder")}
                                                         min={-180}
                                                         max={180}
                                                         step={0.00001}
@@ -402,13 +404,13 @@ export function LocationGuards() {
                                                     onClick={() => {
                                                         const coord = form.getFieldValue("secondary_coordinate") as GeoCoordinate | undefined;
                                                         if (!coord || typeof coord.latitude !== "number" || typeof coord.longitude !== "number") {
-                                                            message.info("Click on the map to set coordinates");
+                                                            message.info(t("LocationGuards.messages.mapClickInfo"));
                                                         } else {
                                                             form.setFieldsValue({secondary_coordinate: LocationAPI.roundCoord(coord) as GeoCoordinate});
                                                         }
                                                     }}
                                             >
-                                                Use map below
+                                                {t("LocationGuards.modal.buttons.useMap")}
                                             </Button>
                                         </Col>
                                     </Row>
@@ -421,27 +423,32 @@ export function LocationGuards() {
                                 </>
                         ) : (
                                 <>
-                                    <Divider>Circle settings</Divider>
+                                    <Divider>{t("LocationGuards.modal.circle.title")}</Divider>
                                     <Row gutter={16}>
                                         <Col span={8}>
                                             <Form.Item
                                                     name="radius"
-                                                    label="Radius (meters)"
+                                                    label={t("LocationGuards.modal.radius.label")}
                                                     rules={
                                                         guardType === GuardTypeEnum.CIRCLE
                                                                 ? [
-                                                                    {required: true, message: "Radius required"},
-                                                                    {type: "number", min: 1, message: "Radius must be greater than 0"},
+                                                                    {required: true, message: t("LocationGuards.modal.radius.validation.required")},
+                                                                    {type: "number", min: 1, message: t("LocationGuards.modal.radius.validation.min")},
                                                                 ]
                                                                 : undefined
                                                     }
                                             >
-                                                <InputNumber style={{width: "100%"}} placeholder="Radius in meters" min={1} step={1}/>
+                                                <InputNumber
+                                                        style={{width: "100%"}}
+                                                        placeholder={t("LocationGuards.modal.radius.placeholder")}
+                                                        min={1}
+                                                        step={1}
+                                                />
                                             </Form.Item>
                                         </Col>
                                         <Col span={16} style={{display: "flex", alignItems: "center"}}>
                                             <Text type="secondary">
-                                                Click on the map to set the center point. Radius defines the guard circle size.
+                                                {t("LocationGuards.modal.circle.helper")}
                                             </Text>
                                         </Col>
                                     </Row>

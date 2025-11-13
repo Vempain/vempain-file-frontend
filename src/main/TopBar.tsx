@@ -124,6 +124,11 @@ export function TopBar() {
                         icon: <ClockCircleOutlined/>,
                         children: [
                             {
+                                label: (<NavLink to={"/management/location-guards"}>{t("TopBar.menu.file-group.location-guards")}</NavLink>),
+                                key: "user-location-guards",
+                                icon: <HeatMapOutlined/>
+                            },
+                            {
                                 label: (<NavLink to={"/file-groups"}>{t("TopBar.menu.file-group.fileGroup")}</NavLink>),
                                 key: "file-group-listFileGroup",
                                 icon: <AppstoreOutlined/>
@@ -157,11 +162,6 @@ export function TopBar() {
                         key: "userManagement",
                         icon: <UserOutlined/>,
                         children: [
-                            {
-                                label: (<NavLink to={"/management/location-guards"}>{t("TopBar.menu.userManagement.location-guards")}</NavLink>),
-                                key: "user-location-guards",
-                                icon: <HeatMapOutlined/>
-                            },
                             {
                                 label: (<NavLink to={"/management/users"}>{t("TopBar.menu.userManagement.users")}</NavLink>),
                                 key: "user-users",

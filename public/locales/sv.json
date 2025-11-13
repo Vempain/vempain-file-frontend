@@ -441,6 +441,101 @@
       }
     }
   },
+  "LocationGuards" : {
+    "actions" : {
+      "delete" : "Ta bort",
+      "edit" : "Redigera",
+      "new" : "Ny skyddszon"
+    },
+    "columns" : {
+      "actions" : {
+        "title" : "Åtgärder"
+      },
+      "guard_type" : {
+        "title" : "Typ"
+      },
+      "id" : {
+        "title" : "ID"
+      },
+      "primary" : {
+        "title" : "Primär (lat, lon)"
+      },
+      "radius" : {
+        "title" : "Radie (m)"
+      },
+      "secondary" : {
+        "title" : "Sekundär (lat, lon)"
+      }
+    },
+    "header" : {
+      "title" : "Platsskydd"
+    },
+    "messages" : {
+      "createError" : "Misslyckades att skapa platsskydd",
+      "createSuccess" : "Platsskydd skapat",
+      "deleteError" : "Misslyckades att ta bort platsskydd",
+      "deleteSuccess" : "Platsskydd borttaget",
+      "fetchError" : "Misslyckades att läsa in platsskydd",
+      "mapClickInfo" : "Klicka på kartan för att ange koordinater",
+      "updateError" : "Misslyckades att uppdatera platsskydd",
+      "updateSuccess" : "Platsskydd uppdaterat"
+    },
+    "modal" : {
+      "buttons" : {
+        "useMap" : "Använd kartan nedan"
+      },
+      "circle" : {
+        "helper" : "Klicka på kartan för att ange mittpunkten. Radien bestämmer cirkelns storlek.",
+        "title" : "Cirkelinställningar"
+      },
+      "create" : {
+        "title" : "Skapa platsskydd"
+      },
+      "edit" : {
+        "title" : "Redigera platsskydd"
+      },
+      "guard_type" : {
+        "label" : "Skyddstyp",
+        "validation" : {
+          "required" : "Välj skyddstyp"
+        }
+      },
+      "latitude" : {
+        "label" : "Latitud",
+        "placeholder" : "Latitud",
+        "validation" : {
+          "required" : "Latitud krävs"
+        }
+      },
+      "longitude" : {
+        "label" : "Longitud",
+        "placeholder" : "Longitud",
+        "validation" : {
+          "required" : "Longitud krävs"
+        }
+      },
+      "primary" : {
+        "title" : "Primär koordinat"
+      },
+      "radius" : {
+        "label" : "Radie (meter)",
+        "placeholder" : "Radie i meter",
+        "validation" : {
+          "min" : "Radien måste vara större än 0",
+          "required" : "Radie krävs"
+        }
+      },
+      "secondary" : {
+        "title" : "Sekundär koordinat (kvadrat)"
+      }
+    },
+    "popconfirm" : {
+      "delete" : {
+        "description" : "Är du säker på att du vill ta bort detta platsskydd?",
+        "title" : "Ta bort detta skydd?"
+      }
+    }
+  },
   "PathCompletionEnum" : {
     "exported" : "Exporterad",
     "original" : "Original"
@@ -590,6 +685,7 @@
       },
       "file-group" : {
         "fileGroup" : "Filgrupp",
+        "location-guards" : "Platsskydd",
         "title" : "Publicering"
       },
       "fileManagement" : {
