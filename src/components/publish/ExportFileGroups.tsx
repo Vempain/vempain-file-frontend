@@ -1,12 +1,13 @@
 import {useEffect, useState} from "react";
-import {Button, Form, Input, message, Modal, Popconfirm, Space, Spin, Table, Typography} from "antd";
+import {Button, Form, Input, message, Modal, Popconfirm, Select, Space, Spin, Table, Typography} from "antd";
 import {useNavigate} from "react-router-dom";
-import {fileGroupAPI, publishAPI} from "../../services";
+import {archiveFileAPI, audioFileAPI, documentFileAPI, fileGroupAPI, imageFileAPI, publishAPI, vectorFileAPI, videoFileAPI} from "../../services";
 // Add missing import for editing payload
-import type {FileGroupListResponse, FileGroupRequest, PublishFileGroupRequest, PublishFileGroupResponse} from "../../models";
+import type {FileGroupListResponse, FileGroupRequest, FileResponse, PublishFileGroupRequest, PublishFileGroupResponse} from "../../models";
 import {useTranslation} from "react-i18next";
 import {DeleteOutlined, EditOutlined, EyeOutlined, UploadOutlined} from "@ant-design/icons";
 import type {ColumnsType} from "antd/es/table";
+import {FileTypeEnum} from "../../models/FileTypeEnum";
 
 export function ExportFileGroups() {
     const [fileGroups, setFileGroups] = useState<FileGroupListResponse[]>([]);
@@ -23,6 +24,13 @@ export function ExportFileGroups() {
     // Edit modal state
     const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
     const [editForm] = Form.useForm<FileGroupRequest>();
+
+    // File selection state for edit modal
+    const [selectedFiles, setSelectedFiles] = useState<FileResponse[]>([]);
+    const [candidateType, setCandidateType] = useState<FileTypeEnum | undefined>(undefined);
+    const [candidates, setCandidates] = useState<FileResponse[]>([]);
+    const [candidatesLoading, setCandidatesLoading] = useState<boolean>(false);
+    const [candidateSelectedIds, setCandidateSelectedIds] = useState<number[]>([]);
 
     const navigate = useNavigate();
 
@@ -129,8 +137,18 @@ export function ExportFileGroups() {
             path: group.path ?? "",
             group_name: group.group_name ?? "",
             description: group.description ?? "",
-            files: []
+            fileIds: []
         } as unknown as FileGroupRequest);
+        // preload existing files
+        fileGroupAPI.findById(group.id)
+                .then(full => setSelectedFiles((full as any).files ?? []))
+                .catch(err => {
+                    console.error("Failed to load group files:", err);
+                    message.error(t("FileGroups.messages.fetchError", {defaultValue: "Failed to load file group details"}));
+                });
+        setCandidateType(undefined);
+        setCandidates([]);
+        setCandidateSelectedIds([]);
     }
 
     function closeEditModal() {
@@ -147,7 +165,7 @@ export function ExportFileGroups() {
                         path: values.path?.trim() ?? "",
                         group_name: values.group_name?.trim() ?? "",
                         description: values.description?.trim() ?? "",
-                        files: []
+                        fileIds: selectedFiles.map(f => (f as any).id),
                     };
                     return fileGroupAPI.update(payload)
                             .then(() => {
@@ -250,6 +268,68 @@ export function ExportFileGroups() {
         fetchFileGroups(nextPage, nextSize);
     }
 
+    const getServiceForType = (type: FileTypeEnum | undefined) => {
+        if (!type) return undefined;
+        const map: Record<FileTypeEnum, any> = {
+            [FileTypeEnum.ARCHIVE]: archiveFileAPI,
+            [FileTypeEnum.AUDIO]: audioFileAPI,
+            [FileTypeEnum.DOCUMENT]: documentFileAPI,
+            [FileTypeEnum.IMAGE]: imageFileAPI,
+            [FileTypeEnum.VECTOR]: vectorFileAPI,
+            [FileTypeEnum.VIDEO]: videoFileAPI,
+            [FileTypeEnum.BINARY]: undefined,
+            [FileTypeEnum.DATA]: undefined,
+            [FileTypeEnum.EXECUTABLE]: undefined,
+            [FileTypeEnum.FONT]: undefined,
+            [FileTypeEnum.ICON]: undefined,
+            [FileTypeEnum.INTERACTIVE]: undefined,
+            [FileTypeEnum.THUMB]: undefined,
+            [FileTypeEnum.UNKNOWN]: undefined,
+        } as any;
+        return map[type];
+    };
+
+    const typeOptions = [
+        FileTypeEnum.ARCHIVE,
+        FileTypeEnum.AUDIO,
+        FileTypeEnum.DOCUMENT,
+        FileTypeEnum.IMAGE,
+        FileTypeEnum.VECTOR,
+        FileTypeEnum.VIDEO,
+    ].map(v => ({value: v, label: t(`FileTypeEnum.${v.toLowerCase()}`, {defaultValue: v})}));
+
+    const fetchCandidatesByType = (type: FileTypeEnum | undefined) => {
+        setCandidates([]);
+        setCandidateSelectedIds([]);
+        if (!type) return;
+        const svc = getServiceForType(type);
+        if (!svc) return;
+        setCandidatesLoading(true);
+        svc.findAll()
+                .then((res: any) => {
+                    const list: FileResponse[] = Array.isArray(res) ? res : (res?.content ?? []);
+                    setCandidates(list ?? []);
+                })
+                .catch((err: any) => {
+                    console.error("Failed to load files by type:", err);
+                    message.error(t("FileGroups.messages.fetchError", {defaultValue: "Failed to load files"}));
+                })
+                .finally(() => setCandidatesLoading(false));
+    };
+
+    const addSelectedCandidates = () => {
+        if (candidateSelectedIds.length === 0) return;
+        const toAdd = candidates.filter(f => candidateSelectedIds.includes((f as any).id));
+        const existingIds = new Set(selectedFiles.map(f => (f as any).id));
+        const merged = [...selectedFiles, ...toAdd.filter(f => !existingIds.has((f as any).id))];
+        setSelectedFiles(merged);
+        setCandidateSelectedIds([]);
+    };
+
+    const removeSelectedFile = (id: number) => {
+        setSelectedFiles(prev => prev.filter(f => (f as any).id !== id));
+    };
+
     return (
             <div className={"darkDiv"}>
                 <Spin spinning={loading}>
@@ -311,6 +391,7 @@ export function ExportFileGroups() {
                         onCancel={closeEditModal}
                         destroyOnClose
                         maskClosable
+                        width={900}
                 >
                     <Form layout="vertical" form={editForm}>
                         <Form.Item name="id" hidden>
@@ -340,6 +421,78 @@ export function ExportFileGroups() {
                             <Input.TextArea placeholder={t("FileGroups.modal.description.placeholder", {defaultValue: "Enter description"})} rows={3}/>
                         </Form.Item>
                     </Form>
+
+                    <Typography.Title level={5} style={{marginTop: 8}}>
+                        {t("FileGroups.modal.files.title", {defaultValue: "Files in group"})}
+                    </Typography.Title>
+
+                    <Space direction="vertical" style={{width: "100%"}} size="middle">
+                        <Space wrap>
+                            <Select
+                                    style={{minWidth: 220}}
+                                    placeholder={t("FileGroups.modal.files.type.placeholder", {defaultValue: "Select file type"})}
+                                    value={candidateType}
+                                    onChange={(val) => {
+                                        setCandidateType(val as FileTypeEnum);
+                                        fetchCandidatesByType(val as FileTypeEnum);
+                                    }}
+                                    options={typeOptions}
+                            />
+                            <Select
+                                    mode="multiple"
+                                    allowClear
+                                    loading={candidatesLoading}
+                                    style={{minWidth: 360}}
+                                    placeholder={t("FileGroups.modal.files.select.placeholder", {defaultValue: "Select files to add"})}
+                                    value={candidateSelectedIds}
+                                    onChange={(vals: number[]) => setCandidateSelectedIds(vals)}
+                                    options={(Array.isArray(candidates) ? candidates : []).map(f => ({
+                                        value: (f as any).id,
+                                        label: `${(f as any).filename} — ${(f as any).file_path}`,
+                                    }))}
+                                    optionFilterProp="label"
+                                    maxTagCount="responsive"
+                            />
+                            <Button type="primary" onClick={addSelectedCandidates} disabled={candidateSelectedIds.length === 0}>
+                                {t("FileGroups.modal.files.add", {defaultValue: "Add selected"})}
+                            </Button>
+                        </Space>
+
+                        <Table<FileResponse>
+                                size="small"
+                                pagination={false}
+                                dataSource={selectedFiles.map(f => ({...f, key: (f as any).id}))}
+                                columns={[
+                                    {
+                                        title: t("FileGroups.columns.filename.title", {defaultValue: "Filename"}),
+                                        dataIndex: "filename",
+                                        key: "filename",
+                                    },
+                                    {
+                                        title: t("FileGroups.columns.file_path.title", {defaultValue: "File path"}),
+                                        dataIndex: "file_path",
+                                        key: "file_path",
+                                    },
+                                    {
+                                        title: t("FileGroups.modal.files.actions.title", {defaultValue: "Actions"}),
+                                        key: "actions",
+                                        width: 100,
+                                        render: (_: any, record: FileResponse) => (
+                                                <Popconfirm
+                                                        title={t("FileGroups.modal.files.remove.title", {defaultValue: "Remove file"})}
+                                                        description={t("FileGroups.modal.files.remove.description", {defaultValue: "Remove this file from the group?"})}
+                                                        okText={t("Common.popconfirm.yes", {defaultValue: "Yes"})}
+                                                        cancelText={t("Common.popconfirm.no", {defaultValue: "No"})}
+                                                        onConfirm={() => removeSelectedFile((record as any).id)}
+                                                >
+                                                    <Button danger icon={<DeleteOutlined/>}/>
+                                                </Popconfirm>
+                                        )
+                                    }
+                                ]}
+                                rowKey={(f) => (f as any).id}
+                        />
+                    </Space>
                 </Modal>
             </div>
     );
