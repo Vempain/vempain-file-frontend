@@ -4,10 +4,10 @@ import {useNavigate} from "react-router-dom";
 import {archiveFileAPI, audioFileAPI, documentFileAPI, fileGroupAPI, imageFileAPI, publishAPI, vectorFileAPI, videoFileAPI} from "../../services";
 // Add missing import for editing payload
 import type {FileGroupListResponse, FileGroupRequest, FileResponse, PublishFileGroupRequest, PublishFileGroupResponse} from "../../models";
+import {FileTypeEnum} from "../../models";
 import {useTranslation} from "react-i18next";
 import {DeleteOutlined, EditOutlined, EyeOutlined, UploadOutlined} from "@ant-design/icons";
 import type {ColumnsType} from "antd/es/table";
-import {FileTypeEnum} from "../../models/FileTypeEnum";
 
 export function ExportFileGroups() {
     const [fileGroups, setFileGroups] = useState<FileGroupListResponse[]>([]);
@@ -70,7 +70,7 @@ export function ExportFileGroups() {
         setPublishModalOpen(true);
         form.setFieldsValue({
             gallery_name: group.group_name ?? "",
-            gallery_description: ""
+            gallery_description: group.description ?? ""
         });
     }
 
@@ -141,7 +141,7 @@ export function ExportFileGroups() {
             path: group.path ?? "",
             group_name: group.group_name ?? "",
             description: group.description ?? "",
-            fileIds: []
+            file_ids: []
         } as unknown as FileGroupRequest);
         // preload existing files
         fileGroupAPI.findById(group.id)
@@ -171,7 +171,7 @@ export function ExportFileGroups() {
                         path: values.path?.trim() ?? "",
                         group_name: values.group_name?.trim() ?? "",
                         description: values.description?.trim() ?? "",
-                        fileIds: selectedFiles.map(f => (f as any).id),
+                        file_ids: selectedFiles.map(f => (f as any).id),
                     };
                     return fileGroupAPI.update(payload)
                             .then(() => {

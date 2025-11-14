@@ -190,7 +190,7 @@ export function FileGroups() {
                         path: values.path?.trim() ?? "",
                         group_name: values.group_name?.trim() ?? "",
                         description: values.description?.trim() ?? "",
-                        fileIds: selectedFiles.map(f => (f as any).id),
+                        file_ids: selectedFiles.map(f => (f as any).id),
                     };
 
                     const op = editingGroup ? fileGroupAPI.update(payload) : fileGroupAPI.create(payload);

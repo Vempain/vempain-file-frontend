@@ -3,5 +3,5 @@ export interface FileGroupRequest {
     path: string;
     group_name: string;
     description: string;
-    fileIds: number[];
+    file_ids: number[];
 }
