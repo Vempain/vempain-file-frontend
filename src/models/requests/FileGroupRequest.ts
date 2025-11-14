@@ -1,5 +1,7 @@
 export interface FileGroupRequest {
     id: number;
     path: string;
-    files: number[];
+    group_name: string;
+    description: string;
+    file_ids: number[];
 }

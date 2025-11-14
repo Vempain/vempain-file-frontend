@@ -2,6 +2,7 @@ export {ArchiveFiles} from "./ArchiveFiles";
 export {AudioFiles} from "./AudioFiles";
 export {DocumentFiles} from "./DocumentFiles";
 export {FileDetails} from "./FileDetails";
+export {FileGroups} from "./FileGroups";
 export {ImageFiles} from "./ImageFiles";
 export {ImportFiles} from "./ImportFiles";
 export {SearchFiles} from "./SearchFiles";

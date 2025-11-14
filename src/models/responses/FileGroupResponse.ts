@@ -4,5 +4,6 @@ export interface FileGroupResponse {
     id: number;
     path: string;
     group_name: string;
+    description: string;
     files: FileResponse[]
 }

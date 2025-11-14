@@ -10,6 +10,7 @@ import {
     AudioFiles,
     ChangePassword,
     DocumentFiles,
+    ExportFileGroups,
     FileGroups,
     FileImports,
     FilePermissions,
@@ -66,32 +67,31 @@ export default function App() {
                             <Route path={"/"} element={<Home/>}/>
                             <Route path={"/login"} element={<Login/>}/>
                             <Route path={"/logout"} element={<Logout/>}/>
-                            <Route path="/" element={<Home/>}/>
-                            <Route path="/tags/list" element={<TagList/>}/>
-                            <Route path="/tags/create" element={<TagCreate/>}/>
-                            <Route path="/tags/search" element={<TagSearch/>}/>
-                            <Route path="/files/archives" element={<ArchiveFiles/>}/>
-                            <Route path="/files/audios" element={<AudioFiles/>}/>
-                            <Route path="/files/documents" element={<DocumentFiles/>}/>
-                            <Route path="/files/images" element={<ImageFiles/>}/>
-                            <Route path="/files/vectors" element={<VectorFiles/>}/>
-                            <Route path="/files/videos" element={<VideoFiles/>}/>
-                            <Route path="/files/import" element={<ImportFiles/>}/>
-                            <Route path="/files/search" element={<SearchFiles/>}/>
-                            <Route path="/file-groups" element={<FileGroups/>}/>
-                            <Route path="/file-groups/:id" element={<ShowFileGroup/>}/>
-                            <Route path="/schedules/system" element={<SystemSchedules/>}/>
-                            <Route path="/schedules/file-imports" element={<FileImports/>}/>
-                            <Route path="/schedules/publishing" element={<Publishing/>}/>
-                            <Route path="/management/location-guards" element={<LocationGuards/>}/>
-                            <Route path="/management/users" element={<Users/>}/>
-                            <Route path="/management/units" element={<Units/>}/>
-                            <Route path="/management/permissions" element={<FilePermissions/>}/>
-                            <Route path="/user/account" element={<Account/>}/>
-                            <Route path="/user/password" element={<ChangePassword/>}/>
-                            <Route path="/user/logout" element={<Logout/>}/>
-                            <Route path="/login" element={<Login/>}/>
-                            <Route path="/logout" element={<Logout/>}/> </Routes>
+                            <Route path={"/files/archives"} element={<ArchiveFiles/>}/>
+                            <Route path={"/files/audios"} element={<AudioFiles/>}/>
+                            <Route path={"/files/documents"} element={<DocumentFiles/>}/>
+                            <Route path={"/files/file-groups"} element={<FileGroups/>}/>
+                            <Route path={"/files/images"} element={<ImageFiles/>}/>
+                            <Route path={"/files/import"} element={<ImportFiles/>}/>
+                            <Route path={"/files/search"} element={<SearchFiles/>}/>
+                            <Route path={"/files/vectors"} element={<VectorFiles/>}/>
+                            <Route path={"/files/videos"} element={<VideoFiles/>}/>
+                            <Route path={"/management/permissions"} element={<FilePermissions/>}/>
+                            <Route path={"/management/units"} element={<Units/>}/>
+                            <Route path={"/management/users"} element={<Users/>}/>
+                            <Route path={"/publishing/file-groups"} element={<ExportFileGroups/>}/>
+                            <Route path={"/publishing/file-groups/:id"} element={<ShowFileGroup/>}/>
+                            <Route path={"/publishing/location-guards"} element={<LocationGuards/>}/>
+                            <Route path={"/schedules/file-imports"} element={<FileImports/>}/>
+                            <Route path={"/schedules/publishing"} element={<Publishing/>}/>
+                            <Route path={"/schedules/system"} element={<SystemSchedules/>}/>
+                            <Route path={"/tags/create"} element={<TagCreate/>}/>
+                            <Route path={"/tags/list"} element={<TagList/>}/>
+                            <Route path={"/tags/search"} element={<TagSearch/>}/>
+                            <Route path={"/user/account"} element={<Account/>}/>
+                            <Route path={"/user/logout"} element={<Logout/>}/>
+                            <Route path={"/user/password"} element={<ChangePassword/>}/>
+                        </Routes>
                         <BottomFooter/>
                     </Content>
                 </Layout>
