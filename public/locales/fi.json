@@ -692,6 +692,7 @@
         "archive" : "Arkisto",
         "audio" : "Ääni",
         "document" : "Dokumentti",
+        "file-groups" : "Tiedostoryhmät",
         "image" : "Kuva",
         "importFiles" : "Tuo tiedostoja",
         "searchFiles" : "Hae tiedostoja",

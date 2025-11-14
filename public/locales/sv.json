@@ -692,6 +692,7 @@
         "archive" : "Arkiv",
         "audio" : "Ljud",
         "document" : "Dokument",
+        "file-groups" : "Filgrupper",
         "image" : "Bild",
         "importFiles" : "Importera filer",
         "searchFiles" : "Sök filer",
