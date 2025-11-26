@@ -7,10 +7,10 @@ export function FilePermissions() {
     const {t} = useTranslation();
 
     return (
-            <Space direction="vertical" style={{width: "100%", margin: 30}} align="center" size="large">
+            <Space vertical={true} style={{width: "100%", margin: 30}} align="center" size="large">
                 <Alert
                         type="info"
-                        message={t("FilePermissions.alert.message")}
+                        title={t("FilePermissions.alert.message")}
                         description={t("FilePermissions.alert.description")}
                         showIcon
                         action={

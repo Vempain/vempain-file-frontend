@@ -105,7 +105,7 @@ export function DocumentFiles() {
     }
 
     return (
-            <Space direction="vertical" style={{width: "100%", margin: 30}} size="large">
+            <Space vertical={true} style={{width: "100%", margin: 30}} size="large">
                 <Spin spinning={loading}>
                     {documentFiles.length > 0 && <Table
                             columns={columns}

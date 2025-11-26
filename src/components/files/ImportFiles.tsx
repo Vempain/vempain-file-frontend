@@ -296,7 +296,7 @@ export function ImportFiles() {
     }
 
     return (
-            <Space direction="vertical" style={{width: "95%", margin: 30}} align="center" size="large">
+            <Space vertical={true} style={{width: "95%", margin: 30}} align="center" size="large">
                 <Spin spinning={loading}>
                     <Form
                             layout="vertical"

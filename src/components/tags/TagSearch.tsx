@@ -7,10 +7,10 @@ export function TagSearch() {
     const {t} = useTranslation();
 
     return (
-            <Space direction="vertical" style={{width: "100%", margin: 30}} align="center" size="large">
+            <Space vertical={true} style={{width: "100%", margin: 30}} align="center" size="large">
                 <Alert
                         type="info"
-                        message={t("TagSearch.alert.message")}
+                        title={t("TagSearch.alert.message")}
                         description={t("TagSearch.alert.description")}
                         showIcon
                         action={

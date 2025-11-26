@@ -322,7 +322,7 @@ export function FileGroups() {
     }
 
     return (
-            <Space direction="vertical" style={{width: "95%", margin: 30}} size="large">
+            <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
                 <Space style={{width: "100%", justifyContent: "space-between"}}>
                     <div/>
                     <Button type="primary" icon={<PlusOutlined/>} onClick={openCreateModal}>
@@ -417,7 +417,7 @@ export function FileGroups() {
                         {t("FileGroups.modal.files.title", {defaultValue: "Files in group"})}
                     </Typography.Title>
 
-                    <Space direction="vertical" style={{width: "100%"}} size="middle">
+                    <Space vertical={true} style={{width: "100%"}} size="middle">
                         <Space wrap>
                             <Select
                                     style={{minWidth: 220}}

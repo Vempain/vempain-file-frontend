@@ -123,7 +123,7 @@ export function VideoFiles() {
     }
 
     return (
-            <Space direction="vertical" style={{width: "100%", margin: 30}} size="large">
+            <Space vertical={true} style={{width: "100%", margin: 30}} size="large">
                 <Spin spinning={loading}>
                     {videoFiles.length > 0 && <Table
                             columns={columns}

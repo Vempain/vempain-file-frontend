@@ -349,7 +349,7 @@ export function ExportFileGroups() {
     return (
             <div className={"darkDiv"}>
                 <Spin spinning={loading}>
-                    <Space direction="vertical" style={{width: "95%", margin: 30}} size="large">
+                    <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
                         <Typography.Title level={4}>{t("PublishFileGroup.header.title")}</Typography.Title>
                         <Table
                                 columns={columns}
@@ -442,7 +442,7 @@ export function ExportFileGroups() {
                         {t("FileGroups.modal.files.title", {defaultValue: "Files in group"})}
                     </Typography.Title>
 
-                    <Space direction="vertical" style={{width: "100%"}} size="middle">
+                    <Space vertical={true} style={{width: "100%"}} size="middle">
                         <Space wrap>
                             <Select
                                     style={{minWidth: 220}}

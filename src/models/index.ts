@@ -6,6 +6,7 @@ export type {GeoCoordinate} from "./GeoCoordinate.ts";
 export {FileTypeEnum} from "./FileTypeEnum";
 export {GuardTypeEnum} from "./GuardTypeEnum";
 export {PathCompletionEnum} from "./PathCompletionEnum";
+export {PublishProgressStatusEnum} from "./PublishProgressStatusEnum";
 
 export * from './responses'
 export * from './requests'
