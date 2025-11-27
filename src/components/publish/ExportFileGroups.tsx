@@ -497,7 +497,9 @@ export function ExportFileGroups() {
                                 {isPublishing && (
                                         <div style={{minWidth: 240}}>
                                             <Progress
-                                                    percent={Math.round(((publishProgress?.completed ?? 0) + (publishProgress?.failed ?? 0)) / Math.max(1, (publishProgress?.total_groups ?? 1)) * 100)}
+                                                    percent={publishProgress?.total_groups
+                                                        ? Math.round(((publishProgress.completed ?? 0) + (publishProgress.failed ?? 0)) / publishProgress.total_groups * 100)
+                                                        : 0}
                                                     status={((publishProgress?.completed ?? 0) + (publishProgress?.failed ?? 0)) >= (publishProgress?.total_groups ?? 0) ? 'success' : 'active'}
                                                     strokeLinecap="square"
                                             />
