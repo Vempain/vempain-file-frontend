@@ -1,6 +1,6 @@
 import Axios, {type AxiosInstance} from "axios";
 import type {JwtResponse} from "@vempain/vempain-auth-frontend";
-import type {PublishFileGroupRequest, PublishFileGroupResponse} from "../models";
+import type {PublishAllFileGroupsResponse, PublishFileGroupRequest, PublishFileGroupResponse, PublishProgressResponse} from "../models";
 
 class PublishAPI {
     protected axiosInstance: AxiosInstance;
@@ -31,6 +31,19 @@ class PublishAPI {
         return response.data;
     }
 
+    public async publishAllFileGroups(): Promise<PublishAllFileGroupsResponse> {
+        this.setAuthorizationHeader();
+        this.axiosInstance.defaults.headers.put['Content-Type'] = 'application/json;charset=utf-8';
+        const response = await this.axiosInstance.get<PublishAllFileGroupsResponse>("/all-file-groups");
+        return response.data;
+    }
+
+    public async getPublishProgress(): Promise<PublishProgressResponse> {
+        this.setAuthorizationHeader();
+        this.axiosInstance.defaults.headers.put['Content-Type'] = 'application/json;charset=utf-8';
+        const response = await this.axiosInstance.get<PublishProgressResponse>("/progress");
+        return response.data;
+    }
 }
 
 export const publishAPI = new PublishAPI("/publish");

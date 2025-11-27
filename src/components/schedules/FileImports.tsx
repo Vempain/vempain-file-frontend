@@ -7,10 +7,10 @@ export function FileImports() {
     const {t} = useTranslation();
 
     return (
-            <Space direction="vertical" style={{width: "100%", margin: 30}} align="center" size="large">
+            <Space vertical={true} style={{width: "100%", margin: 30}} align="center" size="large">
                 <Alert
                         type="info"
-                        message={t("FileImports.alert.message")}
+                        title={t("FileImports.alert.message")}
                         description={t("FileImports.alert.description")}
                         showIcon
                         action={

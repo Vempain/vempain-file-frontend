@@ -44,7 +44,7 @@ export function ShowFileGroup() {
     ];
 
     return (
-            <Space direction="vertical" style={{width: "95%", margin: 30}} size="large">
+            <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
                 <Spin spinning={loading}>
                     {group && (
                             <>

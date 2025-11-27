@@ -7,10 +7,10 @@ export function TagEdit() {
     const {t} = useTranslation();
 
     return (
-            <Space direction="vertical" style={{width: "100%", margin: 30}} align="center" size="large">
+            <Space vertical={true} style={{width: "100%", margin: 30}} align="center" size="large">
                 <Alert
                         type="info"
-                        message={t("TagEdit.alert.message")}
+                        title={t("TagEdit.alert.message")}
                         description={t("TagEdit.alert.description")}
                         showIcon
                         action={

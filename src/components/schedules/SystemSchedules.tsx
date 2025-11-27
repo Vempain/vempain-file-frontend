@@ -7,10 +7,10 @@ export function SystemSchedules() {
     const {t} = useTranslation();
 
     return (
-            <Space direction="vertical" style={{width: "100%", margin: 30}} align="center" size="large">
+            <Space vertical={true} style={{width: "100%", margin: 30}} align="center" size="large">
                 <Alert
                         type="info"
-                        message={t("SystemSchedules.alert.message")}
+                        title={t("SystemSchedules.alert.message")}
                         description={t("SystemSchedules.alert.description")}
                         showIcon
                         action={

@@ -247,7 +247,7 @@ export function LocationGuards() {
     ];
 
     return (
-            <Space direction="vertical" style={{width: "100%", padding: 24}} size="large">
+            <Space vertical={true} style={{width: "100%", padding: 24}} size="large">
                 <Row justify="space-between" align="middle">
                     <Col>
                         <Title level={3} style={{margin: 0}}>

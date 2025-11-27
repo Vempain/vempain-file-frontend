@@ -7,10 +7,10 @@ export function ChangePassword() {
     const {t} = useTranslation();
 
     return (
-            <Space direction="vertical" style={{width: "100%", margin: 30}} align="center" size="large">
+            <Space vertical={true} style={{width: "100%", margin: 30}} align="center" size="large">
                 <Alert
                         type="info"
-                        message={t("ChangePassword.alert.message")}
+                        title={t("ChangePassword.alert.message")}
                         description={t("ChangePassword.alert.description")}
                         showIcon
                         action={
