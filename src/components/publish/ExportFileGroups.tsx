@@ -1,9 +1,17 @@
-import {useEffect, useState} from "react";
-import {Button, Form, Input, message, Modal, Popconfirm, Select, Space, Spin, Table, Typography} from "antd";
+import {useEffect, useRef, useState} from "react";
+import {Alert, Button, Form, Input, message, Modal, Popconfirm, Progress, Select, Space, Spin, Table, Typography} from "antd";
 import {useNavigate} from "react-router-dom";
 import {archiveFileAPI, audioFileAPI, documentFileAPI, fileGroupAPI, imageFileAPI, publishAPI, vectorFileAPI, videoFileAPI} from "../../services";
 // Add missing import for editing payload
-import type {FileGroupListResponse, FileGroupRequest, FileResponse, PublishFileGroupRequest, PublishFileGroupResponse} from "../../models";
+import type {
+    FileGroupListResponse,
+    FileGroupRequest,
+    FileResponse,
+    PublishAllFileGroupsResponse,
+    PublishFileGroupRequest,
+    PublishFileGroupResponse,
+    PublishProgressResponse
+} from "../../models";
 import {FileTypeEnum} from "../../models";
 import {useTranslation} from "react-i18next";
 import {DeleteOutlined, EditOutlined, EyeOutlined, UploadOutlined} from "@ant-design/icons";
@@ -37,6 +45,126 @@ export function ExportFileGroups() {
     const [candidateHasMore, setCandidateHasMore] = useState<boolean>(true);
 
     const navigate = useNavigate();
+
+    // --- New publish-all related state & refs ---
+    const PUBLISH_STATE_KEY = "vempain_publish_state";
+    const [isPublishing, setIsPublishing] = useState<boolean>(false);
+    const [publishInfo, setPublishInfo] = useState<PublishAllFileGroupsResponse | null>(null);
+    const [publishProgress, setPublishProgress] = useState<PublishProgressResponse | null>(null);
+    const pollRef = useRef<number | null>(null);
+    // Track whether user has triggered a publish (single or all) - persisted so returning to page shows final status only if user actually triggered
+    const [hasAnyPublishTriggered, setHasAnyPublishTriggered] = useState<boolean>(false);
+
+    // Helper: persist publish state to localStorage
+    const persistPublishState = (inProgress: boolean, progress?: PublishProgressResponse | null, info?: PublishAllFileGroupsResponse | null, triggered: boolean = false) => {
+        const payload = {inProgress, progress: progress ?? null, info: info ?? null, triggered: triggered ?? false, updatedAt: new Date().toISOString()};
+        try {
+            localStorage.setItem(PUBLISH_STATE_KEY, JSON.stringify(payload));
+        } catch (e) { /* ignore */
+        }
+    };
+
+    const clearPersistedPublishState = () => {
+        try {
+            localStorage.removeItem(PUBLISH_STATE_KEY);
+        } catch (e) { /* ignore */
+        }
+    };
+
+    const startPollingProgress = () => {
+        if (pollRef.current) return; // already polling
+        pollRef.current = window.setInterval(async () => {
+            try {
+                const progress = await publishAPI.getPublishProgress();
+                setPublishProgress(progress);
+                // determine completion: consider finished when completed+failed >= total_groups
+                const total = progress.total_groups ?? 0;
+                const done = (progress.completed ?? 0) + (progress.failed ?? 0);
+                const finished = total === 0 || done >= total;
+                setIsPublishing(!finished);
+                // persist 'triggered' only if we already know user triggered or publishInfo exists
+                persistPublishState(!finished, progress, publishInfo, hasAnyPublishTriggered || !!publishInfo);
+                if (finished) {
+                    // stop polling
+                    if (pollRef.current) {
+                        clearInterval(pollRef.current);
+                        pollRef.current = null;
+                    }
+                    // clear in-progress flag but keep final progress/info for display
+                    persistPublishState(false, progress, publishInfo, hasAnyPublishTriggered || !!publishInfo);
+                }
+            } catch (err) {
+                console.error("Failed to poll publish progress:", err);
+                // don't stop polling on transient errors; they may recover
+            }
+        }, 2000);
+    };
+
+    const stopPollingProgress = () => {
+        if (pollRef.current) {
+            clearInterval(pollRef.current);
+            pollRef.current = null;
+        }
+    };
+
+    const fetchInitialPublishState = async () => {
+        // Try to restore persisted state and also query server for current progress
+        try {
+            const raw = localStorage.getItem(PUBLISH_STATE_KEY);
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (parsed && parsed.info) setPublishInfo(parsed.info);
+                if (parsed && parsed.progress) setPublishProgress(parsed.progress);
+                if (parsed && parsed.inProgress) setIsPublishing(true);
+                if (parsed && parsed.triggered) setHasAnyPublishTriggered(true);
+            }
+        } catch (e) {
+            // ignore parse errors
+        }
+
+        try {
+            const progress = await publishAPI.getPublishProgress();
+            setPublishProgress(progress);
+            const total = progress.total_groups ?? 0;
+            const done = (progress.completed ?? 0) + (progress.failed ?? 0);
+            const finished = total === 0 || done >= total;
+            setIsPublishing(!finished);
+            persistPublishState(!finished, progress, publishInfo, hasAnyPublishTriggered || !!publishInfo);
+            if (!finished) startPollingProgress();
+            else clearPersistedPublishState();
+        } catch (err) {
+            // no publish in progress or server error; keep persisted info if any
+            console.debug("No active publish progress or cannot retrieve it yet", err);
+        }
+    };
+
+    useEffect(() => {
+        fetchInitialPublishState();
+        return () => {
+            stopPollingProgress();
+        };
+    }, []);
+
+    // Function to trigger publishing all file groups
+    const handlePublishAll = async () => {
+        setIsPublishing(true);
+        try {
+            const resp = await publishAPI.publishAllFileGroups();
+            setPublishInfo(resp);
+            // mark that user triggered a publish
+            setHasAnyPublishTriggered(true);
+            message.success(t("PublishFileGroup.messages.publishScheduled", {defaultValue: "Publish scheduled"}));
+            // show an alert as requested by user - we'll keep it rendered in the component
+            persistPublishState(true, publishProgress ?? null, resp, true);
+            // start polling for progress
+            startPollingProgress();
+        } catch (err) {
+            console.error("Failed to publish all file groups:", err);
+            message.error(t("PublishFileGroup.messages.publishError"));
+            setIsPublishing(false);
+            persistPublishState(false, null, null, false);
+        }
+    };
 
     function fetchFileGroups(page: number = currentPage, size: number = pageSize) {
         setLoading(true);
@@ -96,6 +224,9 @@ export function ExportFileGroups() {
                             .then((result: PublishFileGroupResponse[]) => {
                                 const count = result[0]?.files_to_publish_count ?? 0;
                                 message.success(t("PublishFileGroup.messages.publishSuccess", {count}));
+                                // Mark that a publish was triggered by user (single-group publish)
+                                setHasAnyPublishTriggered(true);
+                                persistPublishState(false, publishProgress ?? null, publishInfo ?? null, true);
                                 // Refresh page list (counts might have changed)
                                 fetchFileGroups(currentPage, pageSize);
                                 closePublishModal();
@@ -351,6 +482,42 @@ export function ExportFileGroups() {
                 <Spin spinning={loading}>
                     <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
                         <Typography.Title level={4}>{t("PublishFileGroup.header.title")}</Typography.Title>
+
+                        {/* New Publish All controls */}
+                        <Space style={{display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between'}}>
+                            <Space>
+                                <Button
+                                        type="primary"
+                                        icon={<UploadOutlined/>}
+                                        onClick={handlePublishAll}
+                                        disabled={isPublishing}
+                                >
+                                    {t("PublishFileGroup.actions.publishAll", {defaultValue: "Publish all"})}
+                                </Button>
+                                {isPublishing && (
+                                        <div style={{minWidth: 240}}>
+                                            <Progress
+                                                    percent={Math.round(((publishProgress?.completed ?? 0) + (publishProgress?.failed ?? 0)) / Math.max(1, (publishProgress?.total_groups ?? 1)) * 100)}
+                                                    status={((publishProgress?.completed ?? 0) + (publishProgress?.failed ?? 0)) >= (publishProgress?.total_groups ?? 0) ? 'success' : 'active'}
+                                                    strokeLinecap="square"
+                                            />
+                                        </div>
+                                )}
+                            </Space>
+
+                            {/* right side: display brief publish summary or last known progress timestamp */}
+                            <div style={{textAlign: 'right'}}>
+                                {publishInfo && (
+                                        <Alert type="info" showIcon
+                                               message={t("PublishFileGroup.messages.scheduledInfo", {count: publishInfo.file_group_count})}/>
+                                )}
+                                {publishProgress && !isPublishing && hasAnyPublishTriggered && (((publishProgress.completed ?? 0) + (publishProgress.failed ?? 0)) >= (publishProgress.total_groups ?? 0)) && (
+                                        <Alert type="success" showIcon
+                                               message={t("PublishFileGroup.messages.publishCompleted", {defaultValue: "Publishing completed"})}/>
+                                )}
+                            </div>
+                        </Space>
+
                         <Table
                                 columns={columns}
                                 dataSource={fileGroups.map(group => ({...group, key: group.id}))}
