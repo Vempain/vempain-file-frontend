@@ -1,7 +1,9 @@
-import {useEffect, useRef, useState} from "react";
-import {Alert, Button, Form, Input, message, Modal, Popconfirm, Progress, Select, Space, Spin, Table, Typography} from "antd";
+import {useCallback, useEffect, useRef, useState} from "react";
+import {Alert, Button, Form, Input, message, Modal, Popconfirm, Progress, Select, Space, Spin, Switch, Table, Typography} from "antd";
+import type {ColumnsType} from "antd/es/table";
+import type {SorterResult, SortOrder} from "antd/es/table/interface";
 import {useNavigate} from "react-router-dom";
-import {archiveFileAPI, audioFileAPI, documentFileAPI, fileGroupAPI, imageFileAPI, publishAPI, vectorFileAPI, videoFileAPI} from "../../services";
+import {fileGroupAPI, publishAPI} from "../../services";
 // Add missing import for editing payload
 import type {
     FileGroupListResponse,
@@ -15,7 +17,6 @@ import type {
 import {FileTypeEnum} from "../../models";
 import {useTranslation} from "react-i18next";
 import {DeleteOutlined, EditOutlined, EyeOutlined, UploadOutlined} from "@ant-design/icons";
-import type {ColumnsType} from "antd/es/table";
 
 export function ExportFileGroups() {
     const [fileGroups, setFileGroups] = useState<FileGroupListResponse[]>([]);
@@ -24,6 +25,11 @@ export function ExportFileGroups() {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [totalElements, setTotalElements] = useState<number>(0);
+    const [sortField, setSortField] = useState<string>("path");
+    const [sortOrder, setSortOrder] = useState<SortOrder>("ascend");
+    const [searchInput, setSearchInput] = useState<string>("");
+    const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
+    const [caseSensitive, setCaseSensitive] = useState<boolean>(false);
     // New modal/form state
     const [publishModalOpen, setPublishModalOpen] = useState<boolean>(false);
     const [publishSubmitting, setPublishSubmitting] = useState<boolean>(false);
@@ -41,7 +47,6 @@ export function ExportFileGroups() {
     const [candidateSelectedIds, setCandidateSelectedIds] = useState<number[]>([]);
     // NEW: pageable state for candidates
     const [candidatePage, setCandidatePage] = useState<number>(1);
-    const candidatePageSize = 20;
     const [candidateHasMore, setCandidateHasMore] = useState<boolean>(true);
 
     const navigate = useNavigate();
@@ -166,9 +171,16 @@ export function ExportFileGroups() {
         }
     };
 
-    function fetchFileGroups(page: number = currentPage, size: number = pageSize) {
+    const fetchFileGroups = useCallback((page: number = currentPage, size: number = pageSize) => {
         setLoading(true);
-        fileGroupAPI.findAllPageable(page - 1, size)
+        fileGroupAPI.getFileGroups({
+            page: page - 1,
+            size,
+            sort: sortField,
+            direction: sortOrder === "descend" ? "DESC" : "ASC",
+            search: searchTerm,
+            caseSensitive
+        })
                 .then(response => {
                     if (response && response.content) {
                         setFileGroups(response.content);
@@ -176,8 +188,8 @@ export function ExportFileGroups() {
                         setFileGroups([]);
                     }
                     setTotalElements(response.totalElements ?? 0);
-                    setCurrentPage(response.page + 1);
-                    setPageSize(response.size);
+                    setCurrentPage((response.page ?? (page - 1)) + 1);
+                    setPageSize(response.size ?? size);
                 })
                 .catch(err => {
                     console.error("Failed to fetch file groups:", err);
@@ -186,11 +198,11 @@ export function ExportFileGroups() {
                 .finally(() => {
                     setLoading(false);
                 });
-    }
+    }, [caseSensitive, currentPage, pageSize, searchTerm, sortField, sortOrder, t]);
 
     useEffect(() => {
-        fetchFileGroups(1, pageSize);
-    }, []);
+        fetchFileGroups();
+    }, [fetchFileGroups]);
 
     // Open modal and prefill fields from selected group
     function openPublishModal(group: FileGroupListResponse) {
@@ -331,32 +343,37 @@ export function ExportFileGroups() {
             title: t("FileGroups.columns.id.title"),
             dataIndex: 'id',
             key: 'id',
-            sorter: (a, b) => a.id - b.id,
+            sorter: true,
+            sortOrder: sortField === "id" ? sortOrder : undefined,
         },
         {
             title: t("FileGroups.columns.path.title"),
             dataIndex: 'path',
             key: 'path',
-            sorter: (a, b) => a.path.localeCompare(b.path),
+            sorter: true,
+            sortOrder: sortField === "path" ? sortOrder : undefined,
             render: (text: string) => <span>{text}</span>,
         },
         {
             title: t("FileGroups.columns.group_name.title"),
             dataIndex: 'group_name',
             key: 'group_name',
-            sorter: (a, b) => a.group_name.localeCompare(b.group_name),
+            sorter: true,
+            sortOrder: sortField === "group_name" ? sortOrder : undefined,
         },
         {
             title: t("FileGroups.columns.description.title", {defaultValue: "Description"}),
             dataIndex: 'description',
             key: 'description',
-            sorter: (a, b) => (a.description ?? "").localeCompare(b.description ?? ""),
+            sorter: true,
+            sortOrder: sortField === "description" ? sortOrder : undefined,
         },
         {
             title: t("FileGroups.columns.file_count.title"),
             dataIndex: 'file_count',
             key: 'file_count',
-            sorter: (a, b) => a.file_count - b.file_count,
+            sorter: true,
+            sortOrder: sortField === "file_count" ? sortOrder : undefined,
         },
         {
             title: t("FileGroups.columns.actions.title"),
@@ -397,84 +414,49 @@ export function ExportFileGroups() {
         },
     ];
 
-    function handleTableChange(pagination: { current?: number; pageSize?: number }) {
+    const toBackendSortField = (field?: string): string => {
+        switch (field) {
+            case "id":
+                return "id";
+            case "group_name":
+                return "group_name";
+            case "description":
+                return "description";
+            case "file_count":
+                return "file_count";
+            case "path":
+            default:
+                return "path";
+        }
+    };
+
+    function handleTableChange(
+            pagination: { current?: number; pageSize?: number },
+            _filters: Record<string, any>,
+            sorter: SorterResult<FileGroupListResponse> | SorterResult<FileGroupListResponse>[]
+    ) {
         const nextPage = pagination.current ?? 1;
         const nextSize = pagination.pageSize ?? pageSize;
         setCurrentPage(nextPage);
         setPageSize(nextSize);
-        fetchFileGroups(nextPage, nextSize);
+        if (!Array.isArray(sorter) && sorter.field) {
+            setSortField(toBackendSortField(sorter.field as string));
+            setSortOrder(sorter.order ?? "ascend");
+        } else {
+            setSortField("path");
+            setSortOrder("ascend");
+        }
     }
 
-    const getServiceForType = (type: FileTypeEnum | undefined) => {
-        if (!type) return undefined;
-        const map: Record<FileTypeEnum, any> = {
-            [FileTypeEnum.ARCHIVE]: archiveFileAPI,
-            [FileTypeEnum.AUDIO]: audioFileAPI,
-            [FileTypeEnum.DOCUMENT]: documentFileAPI,
-            [FileTypeEnum.IMAGE]: imageFileAPI,
-            [FileTypeEnum.VECTOR]: vectorFileAPI,
-            [FileTypeEnum.VIDEO]: videoFileAPI,
-            [FileTypeEnum.BINARY]: undefined,
-            [FileTypeEnum.DATA]: undefined,
-            [FileTypeEnum.EXECUTABLE]: undefined,
-            [FileTypeEnum.FONT]: undefined,
-            [FileTypeEnum.ICON]: undefined,
-            [FileTypeEnum.INTERACTIVE]: undefined,
-            [FileTypeEnum.THUMB]: undefined,
-            [FileTypeEnum.UNKNOWN]: undefined,
-        } as any;
-        return map[type];
+    const handleSearch = (value: string) => {
+        setSearchInput(value);
+        setSearchTerm(value || undefined);
+        setCurrentPage(1);
     };
 
-    const typeOptions = [
-        FileTypeEnum.ARCHIVE,
-        FileTypeEnum.AUDIO,
-        FileTypeEnum.DOCUMENT,
-        FileTypeEnum.IMAGE,
-        FileTypeEnum.VECTOR,
-        FileTypeEnum.VIDEO,
-    ].map(v => ({value: v, label: t(`FileTypeEnum.${v.toLowerCase()}`, {defaultValue: v})}));
-
-    // NEW: paged loader
-    const loadCandidatesPage = (type: FileTypeEnum, page: number) => {
-        const service = getServiceForType(type);
-        if (!service) return;
-        setCandidatesLoading(true);
-        service.findAllPageable(page - 1, candidatePageSize)
-                .then((res: { content?: FileResponse[]; last?: boolean; page?: number }) => {
-                    const list = res?.content ?? [];
-                    setCandidates(prev => (page === 1 ? list : [...prev, ...list]));
-                    setCandidateHasMore(!(res?.last ?? true));
-                    setCandidatePage(page + 1);
-                })
-                .catch((err: any) => {
-                    console.error("Failed to load files by type:", err);
-                    message.error(t("FileGroups.messages.fetchError", {defaultValue: "Failed to load files"}));
-                })
-                .finally(() => setCandidatesLoading(false));
-    };
-
-    // REPLACED: fetchCandidatesByType now resets & loads first page
-    const fetchCandidatesByType = (type: FileTypeEnum | undefined) => {
-        setCandidates([]);
-        setCandidateSelectedIds([]);
-        setCandidateHasMore(true);
-        setCandidatePage(1);
-        if (!type) return;
-        loadCandidatesPage(type, 1);
-    };
-
-    const addSelectedCandidates = () => {
-        if (candidateSelectedIds.length === 0) return;
-        const toAdd = candidates.filter(f => candidateSelectedIds.includes((f as any).id));
-        const existingIds = new Set(selectedFiles.map(f => (f as any).id));
-        const merged = [...selectedFiles, ...toAdd.filter(f => !existingIds.has((f as any).id))];
-        setSelectedFiles(merged);
-        setCandidateSelectedIds([]);
-    };
-
-    const removeSelectedFile = (id: number) => {
-        setSelectedFiles(prev => prev.filter(f => (f as any).id !== id));
+    const handleCaseSensitiveChange = (checked: boolean) => {
+        setCaseSensitive(checked);
+        setCurrentPage(1);
     };
 
     return (
@@ -483,23 +465,34 @@ export function ExportFileGroups() {
                     <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
                         <Typography.Title level={4}>{t("PublishFileGroup.header.title")}</Typography.Title>
 
-                        {/* New Publish All controls */}
+                        <Space style={{width: "100%", justifyContent: "space-between", flexWrap: "wrap"}}>
+                            <Space align="center" size={16} wrap>
+                                <Input.Search
+                                        placeholder={t("FileGroups.search.placeholder", {defaultValue: "Search file groups"})}
+                                        allowClear
+                                        value={searchInput}
+                                        onChange={(event) => setSearchInput(event.target.value)}
+                                        onSearch={handleSearch}
+                                        style={{minWidth: 260}}
+                                />
+                                <Space align="center">
+                                    {t("FileGroups.search.caseSensitive", {defaultValue: "Case sensitive"})}
+                                    <Switch size="small" checked={caseSensitive} onChange={handleCaseSensitiveChange}/>
+                                </Space>
+                            </Space>
+                            <Button type="primary" icon={<UploadOutlined/>} onClick={handlePublishAll} disabled={isPublishing}>
+                                {t("PublishFileGroup.actions.publishAll", {defaultValue: "Publish all"})}
+                            </Button>
+                        </Space>
+
                         <Space style={{display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between'}}>
                             <Space>
-                                <Button
-                                        type="primary"
-                                        icon={<UploadOutlined/>}
-                                        onClick={handlePublishAll}
-                                        disabled={isPublishing}
-                                >
-                                    {t("PublishFileGroup.actions.publishAll", {defaultValue: "Publish all"})}
-                                </Button>
                                 {isPublishing && (
-                                        <div style={{minWidth: 240}}>
+                                        <div style={{minWidth: 260}}>
                                             <Progress
                                                     percent={publishProgress?.total_groups
-                                                        ? Math.round(((publishProgress.completed ?? 0) + (publishProgress.failed ?? 0)) / publishProgress.total_groups * 100)
-                                                        : 0}
+                                                            ? Math.round(((publishProgress.completed ?? 0) + (publishProgress.failed ?? 0)) / publishProgress.total_groups * 100)
+                                                            : 0}
                                                     status={((publishProgress?.completed ?? 0) + (publishProgress?.failed ?? 0)) >= (publishProgress?.total_groups ?? 0) ? 'success' : 'active'}
                                                     strokeLinecap="square"
                                             />
@@ -507,9 +500,8 @@ export function ExportFileGroups() {
                                 )}
                             </Space>
 
-                            {/* right side: display brief publish summary or last known progress timestamp */}
                             <div style={{textAlign: 'right'}}>
-                                {publishInfo && (
+                                {publishInfo && hasAnyPublishTriggered && (
                                         <Alert type="info" showIcon
                                                message={t("PublishFileGroup.messages.scheduledInfo", {count: publishInfo.file_group_count})}/>
                                 )}
@@ -545,7 +537,7 @@ export function ExportFileGroups() {
                         onOk={submitPublish}
                         onCancel={closePublishModal}
                         confirmLoading={publishSubmitting}
-                        destroyOnClose
+                        destroyOnHidden
                 >
                     <Form layout="vertical" form={form}>
                         <Form.Item

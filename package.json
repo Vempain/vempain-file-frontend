@@ -23,7 +23,7 @@
     "@ant-design/v5-patch-for-react-19" : "^1.0.3",
     "@testing-library/jest-dom" : "^6.9.1",
     "@types/jest" : "^30.0.0",
-    "@vempain/vempain-auth-frontend" : "^0.9.17",
+    "@vempain/vempain-auth-frontend" : "^0.9.24",
     "antd" : "^6.0.1",
     "axios" : "^1.13.2",
     "dayjs" : "^1.11.19",

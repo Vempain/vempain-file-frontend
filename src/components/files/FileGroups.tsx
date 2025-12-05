@@ -1,13 +1,14 @@
-import {Button, Form, Input, message, Modal, Popconfirm, Select, Space, Spin, Table, Typography} from "antd";
+import {Button, Form, Input, message, Modal, Popconfirm, Select, Space, Spin, Switch, Table, Typography} from "antd";
 import {DeleteOutlined, EditOutlined, PlusOutlined} from "@ant-design/icons";
-import {useEffect, useMemo, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import type {ColumnsType} from "antd/es/table";
+import type {SorterResult, SortOrder} from "antd/es/table/interface";
 import {archiveFileAPI, audioFileAPI, documentFileAPI, fileGroupAPI, imageFileAPI, vectorFileAPI, videoFileAPI} from "../../services";
 import type {FileGroupListResponse, FileGroupRequest, FileGroupResponse, FileResponse} from "../../models";
+import {FileTypeEnum} from "../../models";
 import {FileDetails} from "./FileDetails";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
 import {useTranslation} from "react-i18next";
-import {FileTypeEnum} from "../../models/FileTypeEnum";
 
 export function FileGroups() {
     const {t} = useTranslation();
@@ -18,6 +19,11 @@ export function FileGroups() {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [totalElements, setTotalElements] = useState<number>(0);
+    const [sortField, setSortField] = useState<string>("path");
+    const [sortOrder, setSortOrder] = useState<SortOrder>("ascend");
+    const [searchInput, setSearchInput] = useState<string>("");
+    const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
+    const [caseSensitive, setCaseSensitive] = useState<boolean>(false);
 
     // Edit/Create modal state
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -117,13 +123,20 @@ export function FileGroups() {
         setSelectedFiles(prev => prev.filter(f => (f as any).id !== id));
     };
 
-    function fetchGroups(page: number = currentPage, size: number = pageSize) {
+    const fetchGroups = useCallback((page: number = currentPage, size: number = pageSize) => {
         setLoading(true);
-        fileGroupAPI.findAllPageable(page - 1, size)
+        fileGroupAPI.getFileGroups({
+            page: page - 1,
+            size,
+            sort: sortField,
+            direction: sortOrder === "descend" ? "DESC" : "ASC",
+            search: searchTerm,
+            caseSensitive
+        })
                 .then((res) => {
                     setGroups(res.content ?? []);
                     setTotalElements(res.totalElements ?? 0);
-                    setCurrentPage((res.page ?? 0) + 1);
+                    setCurrentPage((res.page ?? (page - 1)) + 1);
                     setPageSize(res.size ?? size);
                 })
                 .catch((err) => {
@@ -131,12 +144,11 @@ export function FileGroups() {
                     message.error(t("FileGroups.messages.fetchError", {defaultValue: "Failed to load file groups"}));
                 })
                 .finally(() => setLoading(false));
-    }
+    }, [caseSensitive, currentPage, pageSize, searchTerm, sortField, sortOrder, t]);
 
     useEffect(() => {
         fetchGroups();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [fetchGroups]);
 
     function openCreateModal() {
         setEditingGroup(null);
@@ -261,21 +273,29 @@ export function FileGroups() {
             title: t("FileGroups.columns.path.title", {defaultValue: "Path"}),
             dataIndex: "path",
             key: "path",
+            sorter: true,
+            sortOrder: sortField === "path" ? sortOrder : undefined,
         },
         {
             title: t("FileGroups.columns.group_name.title", {defaultValue: "Group name"}),
             dataIndex: "group_name",
             key: "group_name",
+            sorter: true,
+            sortOrder: sortField === "group_name" ? sortOrder : undefined,
         },
         {
             title: t("FileGroups.columns.description.title", {defaultValue: "Description"}),
             dataIndex: "description",
             key: "description",
+            sorter: true,
+            sortOrder: sortField === "description" ? sortOrder : undefined,
         },
         {
             title: t("FileGroups.columns.file_count.title", {defaultValue: "Files"}),
             dataIndex: "file_count",
             key: "file_count",
+            sorter: true,
+            sortOrder: sortField === "file_count" ? sortOrder : undefined,
             render: (_: any, record) => (record as any).file_count ?? (record as any).files?.length ?? "",
         },
         {
@@ -300,7 +320,7 @@ export function FileGroups() {
                 );
             }
         }
-    ], [t]);
+    ], [sortField, sortOrder, t]);
 
     const fileColumns: ColumnsType<FileResponse> = useMemo(() => [
         filenameColumn<FileResponse>((record) => {
@@ -313,18 +333,66 @@ export function FileGroups() {
         createdColumn<FileResponse>(t),
     ], [t]);
 
-    function handleTableChange(pagination: { current?: number; pageSize?: number }) {
+    const toBackendSortField = (field?: string): string => {
+        switch (field) {
+            case "group_name":
+                return "group_name";
+            case "description":
+                return "description";
+            case "file_count":
+                return "file_count";
+            case "path":
+            default:
+                return "path";
+        }
+    };
+
+    function handleTableChange(
+            pagination: { current?: number; pageSize?: number },
+            _filters: Record<string, any>,
+            sorter: SorterResult<FileGroupListResponse> | SorterResult<FileGroupListResponse>[]
+    ) {
         const nextPage = pagination.current ?? 1;
         const nextSize = pagination.pageSize ?? pageSize;
         setCurrentPage(nextPage);
         setPageSize(nextSize);
-        fetchGroups(nextPage, nextSize);
+        if (!Array.isArray(sorter) && sorter.field) {
+            setSortField(toBackendSortField(sorter.field as string));
+            setSortOrder(sorter.order ?? "ascend");
+        } else {
+            setSortField("path");
+            setSortOrder("ascend");
+        }
     }
+
+    const handleSearch = (value: string) => {
+        setSearchInput(value);
+        setSearchTerm(value || undefined);
+        setCurrentPage(1);
+    };
+
+    const handleCaseSensitiveChange = (checked: boolean) => {
+        setCaseSensitive(checked);
+        setCurrentPage(1);
+    };
 
     return (
             <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
                 <Space style={{width: "100%", justifyContent: "space-between"}}>
-                    <div/>
+                    <Space align="center" size={16}>
+                        <Input.Search
+                                placeholder={t("FileGroups.search.placeholder", {defaultValue: "Search file groups"})}
+                                allowClear
+                                value={searchInput}
+                                onChange={(event) => setSearchInput(event.target.value)}
+                                onSearch={handleSearch}
+                                style={{minWidth: 260}}
+                        />
+                        <Space align="center">
+                            {t("FileGroups.search.caseSensitive", {defaultValue: "Case sensitive"})}
+                            <Switch size="small" checked={caseSensitive} onChange={handleCaseSensitiveChange}/>
+                        </Space>
+                    </Space>
                     <Button type="primary" icon={<PlusOutlined/>} onClick={openCreateModal}>
                         {t("FileGroups.actions.new", {defaultValue: "New group"})}
                     </Button>
@@ -377,7 +445,7 @@ export function FileGroups() {
                         cancelText={t("Common.modal.cancel", {defaultValue: "Cancel"})}
                         onOk={handleSubmit}
                         onCancel={() => setIsModalOpen(false)}
-                        destroyOnClose
+                        destroyOnHidden
                         maskClosable
                         width={900}
                 >
@@ -507,7 +575,7 @@ export function FileGroups() {
                         onCancel={() => setDetailsOpen(false)}
                         afterClose={() => setSelectedFile(null)}
                         footer={null}
-                        destroyOnClose
+                        destroyOnHidden
                         maskClosable
                         title={selectedFile?.filename || t("Common.modal.fileDetailsTitle", {defaultValue: "File details"})}
                         width={720}
