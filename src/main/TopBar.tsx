@@ -125,19 +125,14 @@ export function TopBar() {
                         ],
                     },
                     {
-                        label: t("TopBar.menu.file-group.title"),
-                        key: "pageGroupManagement",
+                        label: t("TopBar.menu.security-management.title"),
+                        key: "securityManagement",
                         icon: <ClockCircleOutlined/>,
                         children: [
                             {
-                                label: (<NavLink to={"/publishing/location-guards"}>{t("TopBar.menu.file-group.location-guards")}</NavLink>),
+                                label: (<NavLink to={"/security/location-guards"}>{t("TopBar.menu.security-management.location-guards")}</NavLink>),
                                 key: "user-location-guards",
                                 icon: <HeatMapOutlined/>
-                            },
-                            {
-                                label: (<NavLink to={"/publishing/file-groups"}>{t("TopBar.menu.file-group.fileGroup")}</NavLink>),
-                                key: "file-group-listFileGroup",
-                                icon: <AppstoreOutlined/>
                             }
                         ],
                     },

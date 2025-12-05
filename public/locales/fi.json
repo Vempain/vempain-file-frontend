@@ -683,10 +683,10 @@
         "login" : "Kirjaudu sisään",
         "register" : "Rekisteröidy"
       },
-      "file-group" : {
+      "security-management" : {
         "fileGroup" : "Tiedostoryhmä",
         "location-guards" : "Sijaintisuojat",
-        "title" : "Julkaisu"
+        "title" : "Turvallisuus"
       },
       "fileManagement" : {
         "archive" : "Arkisto",

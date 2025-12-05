@@ -1,10 +1,10 @@
 import {Button, Form, Input, message, Modal, Popconfirm, Select, Space, Spin, Switch, Table, Typography} from "antd";
-import {DeleteOutlined, EditOutlined, PlusOutlined} from "@ant-design/icons";
+import {DeleteOutlined, EditOutlined, PlusOutlined, UploadOutlined} from "@ant-design/icons";
 import {useCallback, useEffect, useMemo, useState} from "react";
 import type {ColumnsType} from "antd/es/table";
 import type {SorterResult, SortOrder} from "antd/es/table/interface";
-import {archiveFileAPI, audioFileAPI, documentFileAPI, fileGroupAPI, imageFileAPI, vectorFileAPI, videoFileAPI} from "../../services";
-import type {FileGroupListResponse, FileGroupRequest, FileGroupResponse, FileResponse} from "../../models";
+import {archiveFileAPI, audioFileAPI, documentFileAPI, fileGroupAPI, imageFileAPI, publishAPI, vectorFileAPI, videoFileAPI} from "../../services";
+import type {FileGroupListResponse, FileGroupRequest, FileGroupResponse, FileResponse, PublishFileGroupRequest, PublishFileGroupResponse} from "../../models";
 import {FileTypeEnum} from "../../models";
 import {FileDetails} from "./FileDetails";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
@@ -29,6 +29,10 @@ export function FileGroups() {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [editingGroup, setEditingGroup] = useState<FileGroupListResponse | null>(null);
     const [form] = Form.useForm<FileGroupRequest>();
+    const [publishModalOpen, setPublishModalOpen] = useState<boolean>(false);
+    const [publishSubmitting, setPublishSubmitting] = useState<boolean>(false);
+    const [publishingGroup, setPublishingGroup] = useState<FileGroupListResponse | null>(null);
+    const [publishForm] = Form.useForm();
 
     // Expanded rows: cache files per group id
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
@@ -301,12 +305,20 @@ export function FileGroups() {
         {
             title: t("FileGroups.columns.actions.title", {defaultValue: "Actions"}),
             key: "actions",
-            width: 160,
+            width: 210,
             render: (_: any, record: FileGroupListResponse) => {
                 const id = (record as any).id as number;
                 return (
                         <Space>
                             <Button icon={<EditOutlined/>} onClick={() => openEditModal(record)}/>
+                            <Button
+                                    type="primary"
+                                    icon={<UploadOutlined/>}
+                                    style={{background: "#389e0d", borderColor: "#389e0d"}}
+                                    onClick={() => openPublishModal(record)}
+                            >
+                                {t("FileGroups.actions.publish", {defaultValue: "Publish"})}
+                            </Button>
                             <Popconfirm
                                     title={t("FileGroups.popconfirm.delete.title", {defaultValue: "Delete file group"})}
                                     description={t("FileGroups.popconfirm.delete.description", {defaultValue: "Are you sure you want to delete this file group?"})}
@@ -374,6 +386,55 @@ export function FileGroups() {
     const handleCaseSensitiveChange = (checked: boolean) => {
         setCaseSensitive(checked);
         setCurrentPage(1);
+    };
+
+    const openPublishModal = (record: FileGroupListResponse) => {
+        setPublishingGroup(record);
+        publishForm.setFieldsValue({
+            gallery_name: (record as any).group_name ?? "",
+            gallery_description: (record as any).description ?? ""
+        });
+        setPublishModalOpen(true);
+    };
+
+    const closePublishModal = () => {
+        setPublishModalOpen(false);
+        setPublishingGroup(null);
+        publishForm.resetFields();
+    };
+
+    const submitPublish = () => {
+        publishForm.validateFields()
+                .then(values => {
+                    if (!publishingGroup) return;
+                    setPublishSubmitting(true);
+                    const request: PublishFileGroupRequest = {
+                        file_group_id: (publishingGroup as any).id,
+                        gallery_name: values.gallery_name || null,
+                        gallery_description: values.gallery_description || null
+                    };
+                    publishAPI.publishFileGroup(request)
+                            .then((result: PublishFileGroupResponse[]) => {
+                                const count = result?.[0]?.files_to_publish_count ?? 0;
+                                message.success(t("PublishFileGroup.messages.publishSuccess", {count}));
+                                closePublishModal();
+                            })
+                            .catch(err => {
+                                console.error("Failed to publish file group:", err);
+                                message.error(t("PublishFileGroup.messages.publishError", {defaultValue: "Failed to publish file group"}));
+                            })
+                            .finally(() => {
+                                setPublishSubmitting(false);
+                                fetchGroups();
+                            });
+                })
+                .catch(() => undefined);
+    };
+
+    const handleCandidateTypeChange = (val: FileTypeEnum) => {
+        const nextType = val as FileTypeEnum;
+        setCandidateType(nextType);
+        fetchCandidatesByType(nextType);
     };
 
     return (
@@ -491,11 +552,7 @@ export function FileGroups() {
                                     style={{minWidth: 220}}
                                     placeholder={t("FileGroups.modal.files.type.placeholder", {defaultValue: "Select file type"})}
                                     value={candidateType}
-                                    onChange={(val) => {
-                                        const nextType = val as FileTypeEnum;
-                                        setCandidateType(nextType);
-                                        fetchCandidatesByType(nextType);
-                                    }}
+                                    onChange={handleCandidateTypeChange}
                                     options={typeOptions}
                             />
                             <Select
@@ -568,6 +625,31 @@ export function FileGroups() {
                                 rowKey={(f) => (f as any).id}
                         />
                     </Space>
+                </Modal>
+
+                <Modal
+                        open={publishModalOpen}
+                        title={t("PublishFileGroup.modal.title", {defaultValue: "Publish file group"})}
+                        onOk={submitPublish}
+                        onCancel={closePublishModal}
+                        confirmLoading={publishSubmitting}
+                        destroyOnClose
+                >
+                    <Form form={publishForm} layout="vertical">
+                        <Form.Item
+                                name="gallery_name"
+                                label={t("PublishFileGroup.modal.galleryName.label", {defaultValue: "Gallery name"})}
+                        >
+                            <Input placeholder={t("PublishFileGroup.modal.galleryName.placeholder", {defaultValue: "Enter gallery name"})}/>
+                        </Form.Item>
+                        <Form.Item
+                                name="gallery_description"
+                                label={t("PublishFileGroup.modal.galleryDescription.label", {defaultValue: "Gallery description"})}
+                        >
+                            <Input.TextArea rows={4}
+                                            placeholder={t("PublishFileGroup.modal.galleryDescription.placeholder", {defaultValue: "Describe the gallery"})}/>
+                        </Form.Item>
+                    </Form>
                 </Modal>
 
                 <Modal

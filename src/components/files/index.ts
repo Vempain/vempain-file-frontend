@@ -6,6 +6,7 @@ export {FileGroups} from "./FileGroups";
 export {ImageFiles} from "./ImageFiles";
 export {ImportFiles} from "./ImportFiles";
 export {SearchFiles} from "./SearchFiles";
+export {ShowFileGroup} from "./ShowFileGroup";
 export {VectorFiles} from "./VectorFiles";
 export {VideoFiles} from "./VideoFiles";
 export {formatSizeKB, filenameColumn, createdColumn, modifiedColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";

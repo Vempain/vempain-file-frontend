@@ -10,7 +10,6 @@ import {
     AudioFiles,
     ChangePassword,
     DocumentFiles,
-    ExportFileGroups,
     FileGroups,
     FileImports,
     FilePermissions,
@@ -19,7 +18,6 @@ import {
     LocationGuards,
     Publishing,
     SearchFiles,
-    ShowFileGroup,
     SystemSchedules,
     TagCreate,
     TagList,
@@ -79,9 +77,7 @@ export default function App() {
                             <Route path={"/management/permissions"} element={<FilePermissions/>}/>
                             <Route path={"/management/units"} element={<Units/>}/>
                             <Route path={"/management/users"} element={<Users/>}/>
-                            <Route path={"/publishing/file-groups"} element={<ExportFileGroups/>}/>
-                            <Route path={"/publishing/file-groups/:id"} element={<ShowFileGroup/>}/>
-                            <Route path={"/publishing/location-guards"} element={<LocationGuards/>}/>
+                            <Route path={"/security/location-guards"} element={<LocationGuards/>}/>
                             <Route path={"/schedules/file-imports"} element={<FileImports/>}/>
                             <Route path={"/schedules/publishing"} element={<Publishing/>}/>
                             <Route path={"/schedules/system"} element={<SystemSchedules/>}/>
