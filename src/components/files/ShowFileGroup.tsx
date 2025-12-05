@@ -5,7 +5,7 @@ import {fileGroupAPI} from "../../services";
 import type {FileGroupResponse, FileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
 import {useTranslation} from "react-i18next";
-import {createdColumn, FileDetails, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "../files";
+import {createdColumn, FileDetails, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./index";
 
 export function ShowFileGroup() {
     const {t} = useTranslation();

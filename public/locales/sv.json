@@ -683,10 +683,10 @@
         "login" : "Logga in",
         "register" : "Registrera"
       },
-      "file-group" : {
+      "security-management" : {
         "fileGroup" : "Filgrupp",
         "location-guards" : "Platsskydd",
-        "title" : "Publicering"
+        "title" : "Säkerhet"
       },
       "fileManagement" : {
         "archive" : "Arkiv",
