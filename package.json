@@ -6,7 +6,7 @@
   "author" : "Paul-Erik Törrönen",
   "homepage" : "https://vempain.poltsi.fi",
   "license" : "GPL-2.0",
-  "packageManager" : "yarn@4.11.0",
+  "packageManager" : "yarn@4.12.0",
   "scripts" : {
     "prebuild" : "node generateBuildInfo.js",
     "prestart" : "node generateBuildInfo.js",
@@ -22,7 +22,7 @@
   "dependencies" : {
     "@testing-library/jest-dom" : "^6.9.1",
     "@types/jest" : "^30.0.0",
-    "@vempain/vempain-auth-frontend" : "^0.9.26",
+    "@vempain/vempain-auth-frontend" : "^0.9.29",
     "antd" : "^6.0.1",
     "axios" : "^1.13.2",
     "dayjs" : "^1.11.19",

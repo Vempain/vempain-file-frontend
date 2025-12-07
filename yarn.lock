@@ -2724,9 +2724,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vempain/vempain-auth-frontend@npm:^0.9.26":
-  version: 0.9.26
-  resolution: "@vempain/vempain-auth-frontend@npm:0.9.26::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40vempain%2Fvempain-auth-frontend%2F0.9.26%2Fb539ced6417f3b9f5925b6019f7f446f03ee0369"
+"@vempain/vempain-auth-frontend@npm:^0.9.29":
+  version: 0.9.29
+  resolution: "@vempain/vempain-auth-frontend@npm:0.9.29::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40vempain%2Fvempain-auth-frontend%2F0.9.29%2F3eab0da6f0f9b2ad7d1a13b0e12aa85bf57b8acc"
   dependencies:
     antd: "npm:^6.0.0"
     dayjs: "npm:^1.11.19"
@@ -2739,7 +2739,7 @@ __metadata:
     axios: ^1.13.2
     react: ^19.2.0
     react-dom: ^19.2.0
-  checksum: 10c0/76c4efc48ba8ddc55cebfe0155e8810a65af6fdd6c6148c398e80b1b2bb7eb7991717b63cb939faa71e8d27b8fe7332e934bfc0b2135429b73a19eb13dea4516
+  checksum: 10c0/9ecbdb96f4ce5424026985a4c3c0f818fb8ebcf20b2556f8add4d84eb93bf88f63cafe77d8f3fef0af8689fc6661de7b6a8ad0eabbad79273c1f2ee3b2e2e91e
   languageName: node
   linkType: hard
 
@@ -2753,7 +2753,7 @@ __metadata:
     "@types/leaflet": "npm:^1.9.20"
     "@types/react": "npm:^19.1.9"
     "@types/react-dom": "npm:^19.1.6"
-    "@vempain/vempain-auth-frontend": "npm:^0.9.26"
+    "@vempain/vempain-auth-frontend": "npm:^0.9.29"
     "@vitejs/plugin-react-swc": "npm:^4.2.1"
     antd: "npm:^6.0.1"
     axios: "npm:^1.13.2"
