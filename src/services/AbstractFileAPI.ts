@@ -1,5 +1,4 @@
-import type {PagedResponse} from "../models";
-import {AbstractAPI} from "@vempain/vempain-auth-frontend";
+import {AbstractAPI, type PagedResponse} from "@vempain/vempain-auth-frontend";
 
 export abstract class AbstractFileAPI<REQUEST, RESPONSE> extends AbstractAPI<REQUEST, RESPONSE> {
     public async findAllPageable(page: number, size: number): Promise<PagedResponse<RESPONSE>> {

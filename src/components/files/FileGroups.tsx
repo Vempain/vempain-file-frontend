@@ -9,6 +9,7 @@ import {FileTypeEnum} from "../../models";
 import {FileDetails} from "./FileDetails";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
 import {useTranslation} from "react-i18next";
+import type {PagedRequest} from "@vempain/vempain-auth-frontend";
 
 export function FileGroups() {
     const {t} = useTranslation();
@@ -129,17 +130,19 @@ export function FileGroups() {
 
     const fetchGroups = useCallback((page: number = currentPage, size: number = pageSize) => {
         setLoading(true);
-        fileGroupAPI.getFileGroups({
+
+        const pagedRequest: PagedRequest = {
             page: page - 1,
-            size,
-            sort: sortField,
+            size: size,
+            sort_by: sortField,
             direction: sortOrder === "descend" ? "DESC" : "ASC",
             search: searchTerm,
-            caseSensitive
-        })
+            case_sensitive: caseSensitive
+        };
+        fileGroupAPI.getFileGroups(pagedRequest)
                 .then((res) => {
                     setGroups(res.content ?? []);
-                    setTotalElements(res.totalElements ?? 0);
+                    setTotalElements(res.total_elements ?? 0);
                     setCurrentPage((res.page ?? (page - 1)) + 1);
                     setPageSize(res.size ?? size);
                 })

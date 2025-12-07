@@ -2724,9 +2724,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vempain/vempain-auth-frontend@npm:^0.9.24":
-  version: 0.9.24
-  resolution: "@vempain/vempain-auth-frontend@npm:0.9.24::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40vempain%2Fvempain-auth-frontend%2F0.9.24%2Ffa44f4c5ef6d133100b10154d0d062e3d818432d"
+"@vempain/vempain-auth-frontend@npm:^0.9.26":
+  version: 0.9.26
+  resolution: "@vempain/vempain-auth-frontend@npm:0.9.26::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40vempain%2Fvempain-auth-frontend%2F0.9.26%2Fb539ced6417f3b9f5925b6019f7f446f03ee0369"
   dependencies:
     antd: "npm:^6.0.0"
     dayjs: "npm:^1.11.19"
@@ -2739,7 +2739,7 @@ __metadata:
     axios: ^1.13.2
     react: ^19.2.0
     react-dom: ^19.2.0
-  checksum: 10c0/bbdc195a95f865a95ea7981d5f5c9077a7457a657851c07c1818e390a9569ae9b674f440955ba705a2bbaf74327fcb43a1db3cb0050e8431a400b63ae22d83cf
+  checksum: 10c0/76c4efc48ba8ddc55cebfe0155e8810a65af6fdd6c6148c398e80b1b2bb7eb7991717b63cb939faa71e8d27b8fe7332e934bfc0b2135429b73a19eb13dea4516
   languageName: node
   linkType: hard
 
@@ -2753,7 +2753,7 @@ __metadata:
     "@types/leaflet": "npm:^1.9.20"
     "@types/react": "npm:^19.1.9"
     "@types/react-dom": "npm:^19.1.6"
-    "@vempain/vempain-auth-frontend": "npm:^0.9.24"
+    "@vempain/vempain-auth-frontend": "npm:^0.9.26"
     "@vitejs/plugin-react-swc": "npm:^4.2.1"
     antd: "npm:^6.0.1"
     axios: "npm:^1.13.2"
@@ -3091,11 +3091,11 @@ __metadata:
   linkType: hard
 
 "baseline-browser-mapping@npm:^2.9.0":
-  version: 2.9.3
-  resolution: "baseline-browser-mapping@npm:2.9.3"
+  version: 2.9.4
+  resolution: "baseline-browser-mapping@npm:2.9.4"
   bin:
     baseline-browser-mapping: dist/cli.js
-  checksum: 10c0/5d17ae997e41036756b32c22df74ed222c2f31c1e6970d0bfe7912a6f00dc2b4a45c2ac68740ce9de7d0ee9ae049a5d22683b3ba692bdb981880189795ccb8b5
+  checksum: 10c0/5f33f2505130a234d70b332e3dbedf79655fa2be8287c4f4ea2dd0caca9e1c0c2598d8f5c3798e632382404a414de2b47710ec06b6741deb5e1236eb0b62803b
   languageName: node
   linkType: hard
 
@@ -5734,9 +5734,9 @@ __metadata:
   linkType: hard
 
 "nwsapi@npm:^2.2.16":
-  version: 2.2.22
-  resolution: "nwsapi@npm:2.2.22"
-  checksum: 10c0/b6a0e5ea6754aacfdfe551c8c0f1b374eaf94d48b0a4e7eac666f879ecbc1892ef1d7c457e9b02eefad3fa1323ea1faebcba533eeab6582e24c9c503411bf879
+  version: 2.2.23
+  resolution: "nwsapi@npm:2.2.23"
+  checksum: 10c0/e44bfc9246baf659581206ed716d291a1905185247795fb8a302cb09315c943a31023b4ac4d026a5eaf32b2def51d77b3d0f9ebf4f3d35f70e105fcb6447c76e
   languageName: node
   linkType: hard
 
