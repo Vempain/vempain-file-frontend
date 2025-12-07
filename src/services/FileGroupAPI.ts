@@ -12,7 +12,7 @@ class FileGroupAPI extends AbstractAPI<FileGroupRequest, FileGroupResponse> {
     public async getFileGroups(pagedRequest: PagedRequest): Promise<PagedResponse<FileGroupListResponse>> {
         this.setAuthorizationHeader();
         this.axiosInstance.defaults.headers.get["Content-Type"] = "application/json;charset=utf-8";
-        console.log("Paged Request:", pagedRequest);
+        
         const response = await this.axiosInstance.post<PagedResponse<FileGroupListResponse>>("/paged", pagedRequest);
 
         return response.data;
