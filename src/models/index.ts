@@ -1,5 +1,4 @@
 export type {BuildInfo} from './BuildInfo';
-export type {PagedResponse} from "./PagedResponse.ts";
 export type {GeoCoordinate} from "./GeoCoordinate.ts";
 
 // Enums

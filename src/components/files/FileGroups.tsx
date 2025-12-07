@@ -9,6 +9,7 @@ import {FileTypeEnum} from "../../models";
 import {FileDetails} from "./FileDetails";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
 import {useTranslation} from "react-i18next";
+import type {PagedRequest} from "@vempain/vempain-auth-frontend";
 
 export function FileGroups() {
     const {t} = useTranslation();
@@ -44,6 +45,7 @@ export function FileGroups() {
 
     // File selection state for modal
     const [selectedFiles, setSelectedFiles] = useState<FileResponse[]>([]);
+    const [loadingSelectedFiles, setLoadingSelectedFiles] = useState<boolean>(false);
     const [candidateType, setCandidateType] = useState<FileTypeEnum | undefined>(undefined);
     const [candidates, setCandidates] = useState<FileResponse[]>([]);
     const [candidatesLoading, setCandidatesLoading] = useState<boolean>(false);
@@ -129,17 +131,19 @@ export function FileGroups() {
 
     const fetchGroups = useCallback((page: number = currentPage, size: number = pageSize) => {
         setLoading(true);
-        fileGroupAPI.getFileGroups({
+
+        const pagedRequest: PagedRequest = {
             page: page - 1,
-            size,
-            sort: sortField,
+            size: size,
+            sort_by: sortField,
             direction: sortOrder === "descend" ? "DESC" : "ASC",
             search: searchTerm,
-            caseSensitive
-        })
+            case_sensitive: caseSensitive
+        };
+        fileGroupAPI.getFileGroups(pagedRequest)
                 .then((res) => {
                     setGroups(res.content ?? []);
-                    setTotalElements(res.totalElements ?? 0);
+                    setTotalElements(res.total_elements ?? 0);
                     setCurrentPage((res.page ?? (page - 1)) + 1);
                     setPageSize(res.size ?? size);
                 })
@@ -175,6 +179,7 @@ export function FileGroups() {
 
     function openEditModal(record: FileGroupListResponse) {
         setEditingGroup(record);
+        setLoadingSelectedFiles(true);
         form.setFieldsValue({
             id: (record as any).id ?? 0,
             path: (record as any).path ?? "",
@@ -194,6 +199,9 @@ export function FileGroups() {
                 .catch((err) => {
                     console.error("Failed to fetch group files:", err);
                     message.error(t("FileGroups.messages.fetchError", {defaultValue: "Failed to load file group details"}));
+                })
+                .finally(() => {
+                    setLoadingSelectedFiles(false);
                 });
         setIsModalOpen(true);
     }
@@ -593,37 +601,43 @@ export function FileGroups() {
                             </Button>
                         </Space>
 
-                        <Table<FileResponse>
-                                size="small"
-                                pagination={false}
-                                dataSource={selectedFiles.map(f => ({...f, key: (f as any).id}))}
-                                columns={[
-                                    filenameColumn<FileResponse>((record) => {
-                                        setSelectedFile(record);
-                                        setDetailsOpen(true);
-                                    }, t),
-                                    filePathColumn<FileResponse>(t),
-                                    fileSizeColumn<FileResponse>(t),
-                                    mimetypeColumn<FileResponse>(t),
-                                    {
-                                        title: t("FileGroups.modal.files.actions.title", {defaultValue: "Actions"}),
-                                        key: "actions",
-                                        width: 100,
-                                        render: (_: any, record: FileResponse) => (
-                                                <Popconfirm
-                                                        title={t("FileGroups.modal.files.remove.title", {defaultValue: "Remove file"})}
-                                                        description={t("FileGroups.modal.files.remove.description", {defaultValue: "Remove this file from the group?"})}
-                                                        okText={t("Common.popconfirm.yes", {defaultValue: "Yes"})}
-                                                        cancelText={t("Common.popconfirm.no", {defaultValue: "No"})}
-                                                        onConfirm={() => removeSelectedFile((record as any).id)}
-                                                >
-                                                    <Button danger icon={<DeleteOutlined/>}/>
-                                                </Popconfirm>
-                                        )
-                                    }
-                                ]}
-                                rowKey={(f) => (f as any).id}
-                        />
+                        <Spin spinning={loadingSelectedFiles}>
+                            <Table<FileResponse>
+                                    size="small"
+                                    pagination={{
+                                        pageSize: 10,
+                                        showSizeChanger: true,
+                                        pageSizeOptions: ['10', '20', '50'],
+                                    }}
+                                    dataSource={selectedFiles.map(f => ({...f, key: (f as any).id}))}
+                                    columns={[
+                                        filenameColumn<FileResponse>((record) => {
+                                            setSelectedFile(record);
+                                            setDetailsOpen(true);
+                                        }, t),
+                                        filePathColumn<FileResponse>(t),
+                                        fileSizeColumn<FileResponse>(t),
+                                        mimetypeColumn<FileResponse>(t),
+                                        {
+                                            title: t("FileGroups.modal.files.actions.title", {defaultValue: "Actions"}),
+                                            key: "actions",
+                                            width: 100,
+                                            render: (_: any, record: FileResponse) => (
+                                                    <Popconfirm
+                                                            title={t("FileGroups.modal.files.remove.title", {defaultValue: "Remove file"})}
+                                                            description={t("FileGroups.modal.files.remove.description", {defaultValue: "Remove this file from the group?"})}
+                                                            okText={t("Common.popconfirm.yes", {defaultValue: "Yes"})}
+                                                            cancelText={t("Common.popconfirm.no", {defaultValue: "No"})}
+                                                            onConfirm={() => removeSelectedFile((record as any).id)}
+                                                    >
+                                                        <Button danger icon={<DeleteOutlined/>}/>
+                                                    </Popconfirm>
+                                            )
+                                        }
+                                    ]}
+                                    rowKey={(f) => (f as any).id}
+                            />
+                        </Spin>
                     </Space>
                 </Modal>
 
