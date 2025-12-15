@@ -33,7 +33,7 @@ export function fileTypeEnum2Tag(value: FileTypeEnumType, t: TFunction, recordId
         case "ARCHIVE":
             color = "orange";
             break;
-        case "OTHER":
+        case "UNKNOWN":
             color = "default";
             break;
         default:

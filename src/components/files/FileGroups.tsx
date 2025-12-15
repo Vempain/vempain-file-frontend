@@ -289,6 +289,13 @@ export function FileGroups() {
             sortOrder: sortField === "path" ? sortOrder : undefined,
         },
         {
+            title: t("FileGroups.columns.path.gallery-id", {defaultValue: "Gallery ID"}),
+            dataIndex: "gallery_id",
+            key: "gallery-id",
+            sorter: true,
+            sortOrder: sortField === "gallery_id" ? sortOrder : undefined,
+        },
+        {
             title: t("FileGroups.columns.group_name.title", {defaultValue: "Group name"}),
             dataIndex: "group_name",
             key: "group_name",
