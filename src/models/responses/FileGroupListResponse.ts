@@ -4,4 +4,5 @@ export interface FileGroupListResponse {
     group_name: string;
     description: string;
     file_count: number;
+    gallery_id: number | null;
 }
