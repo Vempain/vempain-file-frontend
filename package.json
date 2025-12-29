@@ -22,8 +22,8 @@
   "dependencies" : {
     "@testing-library/jest-dom" : "^6.9.1",
     "@types/jest" : "^30.0.0",
-    "@vempain/vempain-auth-frontend" : "^0.9.30",
-    "antd" : "^6.1.1",
+    "@vempain/vempain-auth-frontend" : "^0.9.33",
+    "antd" : "^6.1.3",
     "axios" : "^1.13.2",
     "dayjs" : "^1.11.19",
     "env-cmd" : "^11.0.0",
@@ -52,7 +52,7 @@
     "translation-check" : "^1.1.1",
     "ts-jest" : "^29.4.6",
     "typescript" : "^5.9.3",
-    "typescript-eslint" : "^8.49.0",
+    "typescript-eslint" : "^8.50.1",
     "vite" : "^7.3.0",
     "vite-tsconfig-paths" : "^6.0.3"
   },
