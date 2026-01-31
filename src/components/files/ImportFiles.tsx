@@ -1,10 +1,9 @@
 import {AutoComplete, Button, Form, Space, Spin, Table} from "antd";
 import {type Key, useEffect, useState} from "react";
-import type {ExportFileResponse, FileResponse, ScanResponses} from "../../models/responses";
-import type {PathCompletionRequest, ScanRequest} from "../../models/requests";
+import type {ExportFileResponse, FileResponse, PathCompletionRequest, ScanRequest, ScanResponses} from "../../models";
+import {PathCompletionEnum} from "../../models";
 import {fileScannerAPI, pathCompletionAPI} from "../../services";
 import type {ColumnsType} from "antd/es/table";
-import {PathCompletionEnum} from "../../models";
 import dayjs from "dayjs";
 import {compareDayjsNullable, formatDayjsNullable} from "../../tools";
 import {useTranslation} from "react-i18next";
