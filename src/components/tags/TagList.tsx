@@ -1,9 +1,8 @@
 import {Button, Input, message, Space, Spin, Table} from "antd";
 import {useEffect, useState} from "react";
 import {tagsAPI} from "../../services";
-import type {TagResponse} from "../../models/responses";
-import {getPaginationConfig} from "../../tools/tablePaginationConfig.ts";
-import type {TagRequest} from "../../models/requests";
+import type {TagRequest, TagResponse} from "../../models";
+import {getPaginationConfig} from "../../tools";
 import {useTranslation} from "react-i18next";
 
 export function TagList() {

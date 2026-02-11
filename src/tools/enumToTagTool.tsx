@@ -1,7 +1,6 @@
 import {Tag} from "antd";
 import type {TFunction} from "i18next";
-import type {FileTypeEnum as FileTypeEnumType} from "../models/FileTypeEnum";
-import type {PathCompletionEnum as PathCompletionEnumType} from "../models/PathCompletionEnum";
+import type {FileTypeEnum as FileTypeEnumType, PathCompletionEnum as PathCompletionEnumType} from "../models";
 import type {JSX} from "react";
 
 export function fileTypeEnum2Tag(value: FileTypeEnumType, t: TFunction, recordId: number): JSX.Element {
