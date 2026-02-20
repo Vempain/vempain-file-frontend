@@ -10,6 +10,7 @@ import {CircleMarker, MapContainer, TileLayer, useMap, useMapEvents} from "react
 import "leaflet/dist/leaflet.css";
 import {LocationAPI} from "../../services/LocationAPI.ts";
 import {useTranslation} from "react-i18next";
+import {MAP_ATTRIBUTION, MAP_TILE_URL} from "../../tools";
 
 const {Title, Text} = Typography;
 
@@ -86,8 +87,8 @@ function MapPicker({
             <div style={{height, width: "100%", border: "1px solid #eee", borderRadius: 6, overflow: "hidden"}}>
                 <MapContainer center={center} zoom={value ? 12 : 10} style={{height: "100%", width: "100%"}}>
                     <TileLayer
-                            attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            attribution={MAP_ATTRIBUTION}
+                            url={MAP_TILE_URL}
                     />
                     <MapEffects activeDep={active} centerDep={center}/>
                     {value && typeof value.latitude === "number" && typeof value.longitude === "number" && (
