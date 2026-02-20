@@ -1,0 +1,182 @@
+Vempain File Frontend
+
+Overview
+--------
+Vempain File Frontend is a React/TypeScript single-page web application (SPA) that serves as
+the user-facing interface for the Vempain file service. It provides an authenticated, dark-themed
+UI for discovering, inspecting, organising, and managing files stored and managed by the Vempain
+backend API. The application supports multiple languages and offers geospatial context for files
+that carry GPS metadata.
+
+Key Features
+------------
+
+1. Authentication and access control
+   - Integrates with the Vempain authentication library (@vempain/vempain-auth-frontend) for
+     sign-in, sign-out, and session management.
+   - All API calls are protected by bearer-token authorisation headers.
+   - Role-based access is reflected via per-user permissions surfaced in the UI.
+
+2. Multi-type file management
+   The application can browse, inspect, and delete files across the following types, each with
+   type-specific metadata columns:
+   - Archives    — compression method, content count, encrypted flag, uncompressed size.
+   - Audio       — codec, bit rate, sample rate, channel count, duration.
+   - Documents   — format, page count.
+   - Images      — width, height, DPI, colour depth, group label.
+   - Vector      — width, height, layer count.
+   - Videos      — codec, frame rate, width, height, duration.
+   - Font, Icon  — additional specialised file types tracked by the backend.
+
+3. Rich file details
+   Every file exposes a detailed metadata view including: filename, file path, file size, MIME
+   type, SHA-256 checksum, creation/modification timestamps, creator name/email/country/URL,
+   rights holder, rights terms, rights URL, ACL list, GPS location ID and timestamp, original
+   document ID, and associated tags.
+
+4. File groups
+   Files can be organised into named groups. The UI lists groups, shows their contents, and
+   supports deleting groups.
+
+5. File import and directory scanning
+   - An import workflow lets operators scan original-file paths and export paths on the server.
+   - Scan results are presented in separate tables for original files, exported files, and
+     failed items, with full metadata previews before committing the import.
+   - Path auto-completion assists operators in entering server-side directory paths.
+
+6. Publishing
+   - Individual file groups or all file groups at once can be published (e.g. to a gallery).
+   - Publishing accepts a gallery short name and description.
+   - A progress view tracks the publish job in real time.
+
+7. Tag management
+   - Tags support multilingual names: English, Finnish, Swedish, German, and Spanish.
+   - Operators can create, edit, list, and search tags.
+   - Files can be filtered by tag from the tag list view.
+
+8. Location guards (geofencing)
+   - Administrators can define geographic regions that protect GPS-tagged files.
+   - Two guard shapes are supported: circle (centre + radius in metres) and square
+     (primary + secondary corner coordinates).
+   - Guards are created, edited, and deleted via an interactive Leaflet map embedded in the UI.
+
+9. Interactive map
+   - Files that contain GPS coordinates can be viewed in spatial context on a Leaflet map.
+   - The map tile URL and attribution string are runtime-configurable.
+
+10. Schedule management
+    - Three schedule areas are accessible from the UI: file imports, publishing jobs, and
+      system-level schedules.
+
+11. User and unit management
+    - Administrators can manage user accounts and organisational units directly in the app.
+    - File permission management provides fine-grained access control configuration.
+
+12. Internationalised user interface
+    - Translations are loaded at runtime via i18next-http-backend (no rebuild required to
+      add or update a language).
+    - Supported languages out of the box: English, Finnish, Swedish.
+    - The active language follows the authenticated user's session preference.
+
+13. Build information
+    - A pre-build script (generateBuildInfo.js) embeds the build timestamp and version into
+      the app, surfaced in the bottom footer.
+
+Technology Stack
+----------------
+- Framework:   React 19 with TypeScript
+- UI library:  Ant Design (antd) with a custom dark theme
+- Routing:     React Router
+- HTTP client: Axios
+- Maps:        Leaflet / React-Leaflet
+- i18n:        i18next + react-i18next + i18next-http-backend
+- Build tool:  Vite (with SWC)
+- Testing:     Jest + ts-jest + @testing-library/jest-dom
+- Linting:     ESLint with TypeScript and React-hooks plugins
+- Container:   Docker image based on nginx:alpine (serves on port 8080)
+
+Installation
+------------
+Prerequisites: Node.js (LTS), Yarn 4.
+
+  git clone https://github.com/Vempain/vempain-file-frontend.git
+  cd vempain-file-frontend
+  yarn install
+
+Development server:
+
+  # Copy .env to .env.local and set VITE_APP_API_URL to your backend
+  yarn start
+
+Production build:
+
+  # Configure .env.prod with production values
+  yarn build
+
+Run tests:
+
+  yarn test
+
+Build and run the Docker image:
+
+  docker build -t vempain-file-frontend .
+  docker run -p 8080:8080 vempain-file-frontend
+
+Runtime Configuration
+---------------------
+All runtime configuration is injected via environment variables (Vite VITE_ prefix).
+
+  VITE_APP_API_URL               Base URL of the Vempain backend API
+                                 (e.g. http://localhost:8080/api)
+  VITE_APP_VEMPAIN_PAGE_TITLE    Browser/tab page title shown in the app
+  VITE_APP_VEMPAIN_COPYRIGHT_FOOTER  Copyright text shown in the footer
+  VITE_APP_POWERED_BY_VEMPAIN    "Powered by" HTML fragment in the footer
+  VITE_I18N_DEFAULT_LANG         Default UI language (e.g. en)
+  VITE_I18N_SUPPORTED_LANGS      Comma-separated list of supported languages
+  VITE_MAP_TILE_URL              Leaflet tile URL template for the map
+  VITE_MAP_ATTRIBUTION           Map tile attribution string
+
+Environment files:
+  .env / .env.local  — development defaults
+  .env.prod          — production build overrides
+
+Architecture Overview
+---------------------
+  Browser (React SPA)
+    ├── Ant Design dark-theme layout (TopBar, Content, BottomFooter)
+    ├── React Router — page-level routing for all sections
+    ├── @vempain/vempain-auth-frontend — authentication, session, Login/Logout pages
+    ├── Service layer (src/services/) — typed Axios wrappers per resource
+    │     ArchiveFileAPI, AudioFileAPI, DocumentFileAPI, FontFileAPI,
+    │     IconFileAPI, ImageFileAPI, VectorFileAPI, VideoFileAPI,
+    │     FileGroupAPI, FileScannerAPI, LocationAPI, PathCompletionAPI,
+    │     PublishAPI, TagsAPI
+    ├── Models (src/models/) — TypeScript request/response types and enums
+    └── i18next — runtime translation loading from /public/locales/<lang>.json
+
+  Backend (separate service, not in this repository)
+    Provides a REST API consumed by the service layer above.
+
+Security Considerations
+-----------------------
+- All requests to the backend API carry a bearer token managed by the auth library.
+- Location guards can restrict access to geospatially sensitive files.
+- The Docker image is based on a minimal nginx:alpine image to reduce attack surface.
+- SHA-256 checksums are stored per file and exposed in the UI for integrity verification.
+- No secrets or credentials are embedded in the source; all sensitive values are passed
+  via environment variables at build/runtime.
+
+Contributing
+------------
+- Open issues and pull requests via the GitHub repository.
+- Run yarn test and yarn lint (ESLint) before submitting a pull request.
+- Follow the existing TypeScript and React code style used throughout src/.
+- Translation additions or fixes go in public/locales/<lang>.json.
+
+License
+-------
+This project is licensed under the GNU General Public License v2.0 (GPL-2.0).
+See the LICENSE file for full details.
+
+Project homepage: https://vempain.poltsi.fi
+Repository:       https://github.com/Vempain/vempain-file-frontend

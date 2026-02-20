@@ -2,6 +2,7 @@ import 'leaflet/dist/leaflet.css';
 import {CircleMarker, MapContainer, TileLayer, useMap} from 'react-leaflet';
 import type {LocationResponse} from "../../models";
 import {useEffect} from "react";
+import {MAP_ATTRIBUTION, MAP_TILE_URL} from "../../tools";
 
 type Props = {
     location: LocationResponse;
@@ -50,8 +51,8 @@ export function DisplayMap({location, heightPx = 240, zoom = 13, active = true}:
                         style={{width: '100%', height: '100%'}}
                 >
                     <TileLayer
-                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            attribution={MAP_ATTRIBUTION}
+                            url={MAP_TILE_URL}
                     />
                     <MapEffects center={[lat, lon]} active={!!active}/>
                     <CircleMarker center={[lat, lon]} radius={8} color="red" fillColor="red" fillOpacity={0.8}/>
