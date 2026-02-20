@@ -10,7 +10,7 @@ import {I18nextProvider} from "react-i18next";
 createRoot(document.getElementById('root')!).render(
         <StrictMode>
             <I18nextProvider i18n={i18n}>
-                <SessionProvider baseURL={`${import.meta.env.VITE_APP_API_URL}`}>
+                <SessionProvider baseURL={`${import.meta.env.VITE_APP_API_URL}`} loginPath="/login">
                     <BrowserRouter>
                         <App/>
                     </BrowserRouter>
