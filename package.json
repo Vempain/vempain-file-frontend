@@ -22,7 +22,7 @@
   "dependencies" : {
     "@testing-library/jest-dom" : "^6.9.1",
     "@types/jest" : "^30.0.0",
-    "@vempain/vempain-auth-frontend" : "^1.0.0",
+    "@vempain/vempain-auth-frontend" : "^1.0.2",
     "antd" : "^6.3.0",
     "axios" : "^1.13.5",
     "dayjs" : "^1.11.19",
