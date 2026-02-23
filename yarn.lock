@@ -2803,7 +2803,7 @@ __metadata:
     env-cmd: "npm:^11.0.0"
     eslint: "npm:^10.0.1"
     eslint-plugin-react-hooks: "npm:^7.0.1"
-    eslint-plugin-react-refresh: "npm:^0.5.0"
+    eslint-plugin-react-refresh: "npm:^0.5.1"
     globals: "npm:^17.3.0"
     i18next: "npm:^25.8.13"
     i18next-http-backend: "npm:^3.0.2"
@@ -3797,12 +3797,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react-refresh@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "eslint-plugin-react-refresh@npm:0.5.0"
+"eslint-plugin-react-refresh@npm:^0.5.1":
+  version: 0.5.1
+  resolution: "eslint-plugin-react-refresh@npm:0.5.1"
   peerDependencies:
-    eslint: ">=9"
-  checksum: 10c0/2c561ce28db5ee8aeffa9acd1908da4181198ff7c21dbd544c9ceff22acb7cfac5ccea61647eda0c8fef993892b030f83713138d0af205264f946c953305163d
+    eslint: ^9 || ^10
+  checksum: 10c0/e24f6beb18c858056da3209d25184df7b5791cd8a2581e73cad135a316d552e4fa550173b6fac9ee362ed181bf73ad39d04fd80e03c18d7e7fa8cbbb716e1f07
   languageName: node
   linkType: hard
 
