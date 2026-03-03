@@ -73,6 +73,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Vempain/vempain-auth-frontend.git"
+    "url": "git+https://github.com/Vempain/vempain-file-frontend.git"
   }
 }
