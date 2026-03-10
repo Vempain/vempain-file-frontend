@@ -56,9 +56,21 @@ export function FileGroups() {
     const [candidateHasMore, setCandidateHasMore] = useState<boolean>(true);
 
     // Helper: service per file type
-    const getServiceForType = (type: FileTypeEnum | undefined) => {
+    interface FilePageResponse {
+        content?: FileResponse[];
+        last?: boolean;
+        page?: number;
+        size?: number;
+        total_elements?: number;
+    }
+
+    interface FileAPIService {
+        findAllPageable: (page: number, size: number) => Promise<FilePageResponse>;
+    }
+
+    const getServiceForType = (type: FileTypeEnum | undefined): FileAPIService | undefined => {
         if (!type) return undefined;
-        const map: Record<FileTypeEnum, any> = {
+        const map: Partial<Record<FileTypeEnum, FileAPIService>> = {
             [FileTypeEnum.ARCHIVE]: archiveFileAPI,
             [FileTypeEnum.AUDIO]: audioFileAPI,
             [FileTypeEnum.DOCUMENT]: documentFileAPI,
@@ -66,15 +78,7 @@ export function FileGroups() {
             [FileTypeEnum.VECTOR]: vectorFileAPI,
             [FileTypeEnum.VIDEO]: videoFileAPI,
             // Types without dedicated listing are omitted on purpose:
-            [FileTypeEnum.BINARY]: undefined,
-            [FileTypeEnum.DATA]: undefined,
-            [FileTypeEnum.EXECUTABLE]: undefined,
-            [FileTypeEnum.FONT]: undefined,
-            [FileTypeEnum.ICON]: undefined,
-            [FileTypeEnum.INTERACTIVE]: undefined,
-            [FileTypeEnum.THUMB]: undefined,
-            [FileTypeEnum.UNKNOWN]: undefined,
-        } as any;
+        };
         return map[type];
     };
 
@@ -93,13 +97,13 @@ export function FileGroups() {
         if (!svc) return;
         setCandidatesLoading(true);
         svc.findAllPageable(page - 1, candidatePageSize)
-                .then((res: { content?: FileResponse[]; last?: boolean; page?: number }) => {
+                .then((res: FilePageResponse) => {
                     const list = res?.content ?? [];
                     setCandidates(prev => (page === 1 ? list : [...prev, ...list]));
-                    setCandidateHasMore(!(res?.last ?? true));
+                    setCandidateHasMore(!(res?.last ?? false));
                     setCandidatePage(page + 1);
                 })
-                .catch((err: any) => {
+                .catch((err: Error) => {
                     console.error("Failed to load files by type:", err);
                     message.error(t("FileGroups.messages.fetchError", {defaultValue: "Failed to load files"}));
                 })
@@ -118,15 +122,15 @@ export function FileGroups() {
 
     const addSelectedCandidates = () => {
         if (candidateSelectedIds.length === 0) return;
-        const toAdd = candidates.filter(f => candidateSelectedIds.includes((f as any).id));
-        const existingIds = new Set(selectedFiles.map(f => (f as any).id));
-        const merged = [...selectedFiles, ...toAdd.filter(f => !existingIds.has((f as any).id))];
+        const toAdd = candidates.filter(f => candidateSelectedIds.includes(f.id));
+        const existingIds = new Set(selectedFiles.map(f => f.id));
+        const merged = [...selectedFiles, ...toAdd.filter(f => !existingIds.has(f.id))];
         setSelectedFiles(merged);
         setCandidateSelectedIds([]);
     };
 
     const removeSelectedFile = (id: number) => {
-        setSelectedFiles(prev => prev.filter(f => (f as any).id !== id));
+        setSelectedFiles(prev => prev.filter(f => f.id !== id));
     };
 
     const fetchGroups = useCallback((page: number = currentPage, size: number = pageSize) => {
@@ -177,14 +181,14 @@ export function FileGroups() {
         setIsModalOpen(true);
     }
 
-    function openEditModal(record: FileGroupListResponse) {
+    const openEditModal = useCallback((record: FileGroupListResponse) => {
         setEditingGroup(record);
         setLoadingSelectedFiles(true);
         form.setFieldsValue({
-            id: (record as any).id ?? 0,
-            path: (record as any).path ?? "",
-            group_name: (record as any).group_name ?? "",
-            description: (record as any).description ?? "",
+            id: record.id ?? 0,
+            path: record.path ?? "",
+            group_name: record.group_name ?? "",
+            description: record.description ?? "",
             files: []
         } as unknown as FileGroupRequest);
         setSelectedFiles([]);
@@ -194,7 +198,7 @@ export function FileGroups() {
         setCandidateHasMore(true);
         setCandidatePage(1);
         // Load full group to preload files
-        fileGroupAPI.findById((record as any).id)
+        fileGroupAPI.findById(record.id)
                 .then((full: FileGroupResponse) => setSelectedFiles(full.files ?? []))
                 .catch((err) => {
                     console.error("Failed to fetch group files:", err);
@@ -204,7 +208,7 @@ export function FileGroups() {
                     setLoadingSelectedFiles(false);
                 });
         setIsModalOpen(true);
-    }
+    }, [form, t]);
 
     function handleSubmit() {
         form.validateFields()
@@ -214,12 +218,12 @@ export function FileGroups() {
                         path: values.path?.trim() ?? "",
                         group_name: values.group_name?.trim() ?? "",
                         description: values.description?.trim() ?? "",
-                        file_ids: selectedFiles.map(f => (f as any).id),
+                        file_ids: selectedFiles.map(f => f.id),
                     };
 
                     const op = editingGroup ? fileGroupAPI.update(payload) : fileGroupAPI.create(payload);
 
-                    return op.then(_res => {
+                    return op.then(() => {
                         message.success(
                                 editingGroup
                                         ? t("FileGroups.messages.updateSuccess", {defaultValue: "File group updated successfully"})
@@ -242,7 +246,7 @@ export function FileGroups() {
                 });
     }
 
-    function handleDelete(id: number) {
+    const handleDelete = useCallback((id: number) => {
         setLoading(true);
         fileGroupAPI.delete(id)
                 .then((ok) => {
@@ -258,10 +262,10 @@ export function FileGroups() {
                     message.error(t("FileGroups.messages.deleteError", {defaultValue: "Failed to delete file group"}));
                 })
                 .finally(() => setLoading(false));
-    }
+    }, [fetchGroups, t]);
 
     function onExpand(expanded: boolean, record: FileGroupListResponse) {
-        const id = (record as any).id as number;
+        const id = record.id;
         setExpandedKeys(prev =>
                 expanded ? Array.from(new Set([...prev, id])) : prev.filter(k => k !== id)
         );
@@ -279,6 +283,15 @@ export function FileGroups() {
                     });
         }
     }
+
+    const openPublishModal = useCallback((record: FileGroupListResponse) => {
+        setPublishingGroup(record);
+        publishForm.setFieldsValue({
+            gallery_name: record.group_name ?? "",
+            gallery_description: record.description ?? ""
+        });
+        setPublishModalOpen(true);
+    }, [publishForm]);
 
     const columns: ColumnsType<FileGroupListResponse> = useMemo(() => [
         {
@@ -315,14 +328,14 @@ export function FileGroups() {
             key: "file_count",
             sorter: true,
             sortOrder: sortField === "file_count" ? sortOrder : undefined,
-            render: (_: any, record) => (record as any).file_count ?? (record as any).files?.length ?? "",
+            render: (_: unknown, record: FileGroupListResponse) => record.file_count ?? "",
         },
         {
             title: t("FileGroups.columns.actions.title", {defaultValue: "Actions"}),
             key: "actions",
             width: 210,
-            render: (_: any, record: FileGroupListResponse) => {
-                const id = (record as any).id as number;
+            render: (_: unknown, record: FileGroupListResponse) => {
+                const id = record.id;
                 return (
                         <Space>
                             <Button icon={<EditOutlined/>} onClick={() => openEditModal(record)}/>
@@ -347,7 +360,7 @@ export function FileGroups() {
                 );
             }
         }
-    ], [sortField, sortOrder, t]);
+    ], [sortField, sortOrder, t, handleDelete, openEditModal, openPublishModal]);
 
     const fileColumns: ColumnsType<FileResponse> = useMemo(() => [
         filenameColumn<FileResponse>((record) => {
@@ -376,7 +389,7 @@ export function FileGroups() {
 
     function handleTableChange(
             pagination: { current?: number; pageSize?: number },
-            _filters: Record<string, any>,
+            _filters: Record<string, unknown>,
             sorter: SorterResult<FileGroupListResponse> | SorterResult<FileGroupListResponse>[]
     ) {
         const nextPage = pagination.current ?? 1;
@@ -403,14 +416,7 @@ export function FileGroups() {
         setCurrentPage(1);
     };
 
-    const openPublishModal = (record: FileGroupListResponse) => {
-        setPublishingGroup(record);
-        publishForm.setFieldsValue({
-            gallery_name: (record as any).group_name ?? "",
-            gallery_description: (record as any).description ?? ""
-        });
-        setPublishModalOpen(true);
-    };
+    // openPublishModal is declared above columns/useMemo to avoid use-before-declare in hook deps.
 
     const closePublishModal = () => {
         setPublishModalOpen(false);
@@ -424,7 +430,7 @@ export function FileGroups() {
                     if (!publishingGroup) return;
                     setPublishSubmitting(true);
                     const request: PublishFileGroupRequest = {
-                        file_group_id: (publishingGroup as any).id,
+                        file_group_id: publishingGroup.id,
                         gallery_name: values.gallery_name || null,
                         gallery_description: values.gallery_description || null
                     };
@@ -477,7 +483,7 @@ export function FileGroups() {
                 <Spin spinning={loading}>
                     <Table<FileGroupListResponse>
                             columns={columns}
-                            dataSource={groups.map(g => ({...g, key: (g as any).id}))}
+                            dataSource={groups.map(g => ({...g, key: g.id}))}
                             loading={loading}
                             pagination={{
                                 current: currentPage,
@@ -491,22 +497,22 @@ export function FileGroups() {
                                 expandedRowKeys: expandedKeys,
                                 onExpand,
                                 expandedRowRender: (record: FileGroupListResponse) => {
-                                    const id = (record as any).id as number;
+                                    const id = record.id;
                                     const state = groupFiles[id] ?? {loading: false, files: []};
                                     return (
                                             <Spin spinning={state.loading}>
                                                 <Table<FileResponse>
                                                         columns={fileColumns}
-                                                        dataSource={(state.files ?? []).map(f => ({...f, key: (f as any).id ?? f.external_file_id}))}
+                                                        dataSource={(state.files ?? []).map(f => ({...f, key: f.id ?? f.external_file_id}))}
                                                         pagination={false}
                                                         size="small"
-                                                        rowKey={(f) => (f as any).external_file_id}
+                                                        rowKey={(f) => f.external_file_id}
                                                 />
                                             </Spin>
                                     );
                                 }
                             }}
-                            rowKey={(r) => (r as any).id}  // FIX: return numeric id to match expandedRowKeys
+                            rowKey={(r) => r.id}  // FIX: return numeric id to match expandedRowKeys
                     />
                 </Spin>
 
@@ -579,8 +585,8 @@ export function FileGroups() {
                                     value={candidateSelectedIds}
                                     onChange={(vals: number[]) => setCandidateSelectedIds(vals)}
                                     options={(Array.isArray(candidates) ? candidates : []).map(f => ({
-                                        value: (f as any).id,
-                                        label: `${(f as any).filename} — ${(f as any).file_path}`,
+                                        value: f.id,
+                                        label: `${f.filename} — ${f.file_path}`,
                                     }))}
                                     optionFilterProp="label"
                                     maxTagCount="responsive"
@@ -616,7 +622,7 @@ export function FileGroups() {
                                         showSizeChanger: true,
                                         pageSizeOptions: ['10', '20', '50'],
                                     }}
-                                    dataSource={selectedFiles.map(f => ({...f, key: (f as any).id}))}
+                                    dataSource={selectedFiles.map(f => ({...f, key: f.id}))}
                                     columns={[
                                         filenameColumn<FileResponse>((record) => {
                                             setSelectedFile(record);
@@ -629,20 +635,20 @@ export function FileGroups() {
                                             title: t("FileGroups.modal.files.actions.title", {defaultValue: "Actions"}),
                                             key: "actions",
                                             width: 100,
-                                            render: (_: any, record: FileResponse) => (
+                                            render: (_: unknown, record: FileResponse) => (
                                                     <Popconfirm
                                                             title={t("FileGroups.modal.files.remove.title", {defaultValue: "Remove file"})}
                                                             description={t("FileGroups.modal.files.remove.description", {defaultValue: "Remove this file from the group?"})}
                                                             okText={t("Common.popconfirm.yes", {defaultValue: "Yes"})}
                                                             cancelText={t("Common.popconfirm.no", {defaultValue: "No"})}
-                                                            onConfirm={() => removeSelectedFile((record as any).id)}
+                                                            onConfirm={() => removeSelectedFile(record.id)}
                                                     >
                                                         <Button danger icon={<DeleteOutlined/>}/>
                                                     </Popconfirm>
                                             )
                                         }
                                     ]}
-                                    rowKey={(f) => (f as any).id}
+                                    rowKey={(f) => f.id}
                             />
                         </Spin>
                     </Space>

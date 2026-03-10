@@ -1,5 +1,5 @@
 import {Button, Drawer, Grid, Layout, Menu, type MenuProps, Tooltip} from "antd";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {
     AppstoreOutlined,
     ArrowsAltOutlined,
@@ -42,7 +42,9 @@ export function TopBar() {
     const [current, setCurrent] = useState("mail");
     const {userSession, getSessionLanguage, setSessionLanguage} = useSession();
     const {t} = useTranslation();
-    const [supportedLanguages, setSupportedLanguages] = useState<{ label: string; value: string }[]>([]);
+    const [supportedLanguages] = useState<{ label: string; value: string }[]>(
+            () => LanguageTool.getLanguages()
+    );
 
     const screens = useBreakpoint();
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -229,9 +231,6 @@ export function TopBar() {
     ];
 
 
-    useEffect(() => {
-        setSupportedLanguages(LanguageTool.getLanguages());
-    }, []);
     const onClick: MenuProps["onClick"] = (e) => {
         setCurrent(e.key);
     };

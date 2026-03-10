@@ -30,7 +30,7 @@ export function ShowFileGroup() {
                     message.error(t("ShowFileGroup.messages.fetchError"));
                 })
                 .finally(() => setLoading(false));
-    }, [id]);
+    }, [id, t]);
 
     const columns: ColumnsType<FileResponse> = [
         filenameColumn<FileResponse>((record) => {

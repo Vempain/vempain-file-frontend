@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import {Button, Col, Divider, Form, InputNumber, message, Modal, Popconfirm, Row, Select, Space, Table, Tag, Typography} from "antd";
 import type {ColumnsType} from "antd/es/table";
 import {locationAPI} from "../../services";
@@ -79,7 +79,7 @@ function MapPicker({
         }, [activeDep, map]);
         useEffect(() => {
             map.setView(centerDep);
-        }, [centerDep[0], centerDep[1], map]);
+        }, [centerDep, map]);
         return null;
     }
 
@@ -109,17 +109,18 @@ export function LocationGuards() {
     const [form] = Form.useForm<GuardFormValues>();
     const {t} = useTranslation();
 
-    const fetchGuards = () => {
+    const fetchGuards = useCallback(() => {
         setLoading(true);
         locationAPI
                 .findAllLocationGuards()
                 .then((res) => setGuards(res))
                 .catch(() => message.error(t("LocationGuards.messages.fetchError")))
                 .finally(() => setLoading(false));
-    };
+    }, [t]);
 
     useEffect(() => {
         fetchGuards();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const openCreate = () => {

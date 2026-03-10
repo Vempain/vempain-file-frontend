@@ -1,5 +1,5 @@
 import {Button, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
 import {documentFileAPI} from "../../services";
 import type {DocumentFileResponse} from "../../models";
@@ -19,7 +19,7 @@ export function DocumentFiles() {
     const [pageSize, setPageSize] = useState<number>(10);
     const [totalElements, setTotalElements] = useState<number>(0);
 
-    function fetchDocumentFiles(page: number = currentPage, size: number = pageSize) {
+    const fetchDocumentFiles = useCallback((page: number, size: number) => {
         setLoading(true);
         documentFileAPI.findAllPageable(page - 1, size)
                 .then(response => {
@@ -27,7 +27,7 @@ export function DocumentFiles() {
                         setDocumentFiles(response.content);
                     }
 
-                    setTotalElements(response.totalElements ?? 0);
+                    setTotalElements(response.total_elements ?? 0);
                     setCurrentPage(response.page + 1);
                     setPageSize(response.size);
                 })
@@ -38,18 +38,19 @@ export function DocumentFiles() {
                 .finally(() => {
                     setLoading(false);
                 });
-    }
+    }, [t]);
 
     useEffect(() => {
-        fetchDocumentFiles();
+        fetchDocumentFiles(1, pageSize);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     function handleDelete(id: number) {
         setLoading(true);
         documentFileAPI.delete(id)
-                .then(_ => {
+                .then(() => {
                     message.success(t("DocumentFiles.messages.deleteSuccess"));
-                    fetchDocumentFiles();
+                    fetchDocumentFiles(currentPage, pageSize);
                 })
                 .catch(err => {
                     console.error("Failed to delete document file:", err);

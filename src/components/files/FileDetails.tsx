@@ -55,7 +55,7 @@ export function FileDetails({file}: Props) {
         {key: "original_second_fraction", label: t("FileDetails.rows.original_second_fraction.label"), value: file.original_second_fraction ?? ""},
         {key: "original_document_id", label: t("FileDetails.rows.original_document_id.label"), value: file.original_document_id},
         {key: "description", label: t("FileDetails.rows.description.label"), value: file.description},
-        {key: "file_type", label: t("FileDetails.rows.file_type.label"), value: fileTypeEnum2Tag(file.file_type ?? FileTypeEnum.OTHER, t, 1)},
+        {key: "file_type", label: t("FileDetails.rows.file_type.label"), value: fileTypeEnum2Tag(file.file_type ?? FileTypeEnum.UNKNOWN, t, 1)},
         {key: "rights_holder", label: t("FileDetails.rows.rights_holder.label"), value: file.rights_holder},
         {key: "rights_terms", label: t("FileDetails.rows.rights_terms.label"), value: file.rights_terms},
         {key: "rights_url", label: t("FileDetails.rows.rights_url.label"), value: file.rights_url},
