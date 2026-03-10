@@ -1,5 +1,5 @@
 import {Button, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
 import {imageFileAPI} from "../../services";
 import type {ImageFileResponse} from "../../models";
@@ -19,7 +19,7 @@ export function ImageFiles() {
     const [pageSize, setPageSize] = useState<number>(10);
     const [totalElements, setTotalElements] = useState<number>(0);
 
-    function fetchImageFiles(page: number = currentPage, size: number = pageSize) {
+    const fetchImageFiles = useCallback((page: number, size: number) => {
         setLoading(true);
         imageFileAPI.findAllPageable(page - 1, size)
                 .then(response => {
@@ -27,7 +27,10 @@ export function ImageFiles() {
                         setImageFiles(response.content);
                     }
 
-                    setTotalElements(response.totalElements ?? 0);
+                    const total = "total_elements" in response
+                            ? response.total_elements
+                            : (response as { totalElements?: number }).totalElements;
+                    setTotalElements(total ?? 0);
                     setCurrentPage(response.page + 1);
                     setPageSize(response.size);
                 })
@@ -38,18 +41,19 @@ export function ImageFiles() {
                 .finally(() => {
                     setLoading(false);
                 });
-    }
+    }, [t]);
 
     useEffect(() => {
         fetchImageFiles(1, pageSize);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     function handleDelete(id: number) {
         setLoading(true);
         imageFileAPI.delete(id)
-                .then(_ => {
+                .then(() => {
                     message.success(t("ImageFiles.messages.deleteSuccess"));
-                    fetchImageFiles();
+                    fetchImageFiles(currentPage, pageSize);
                 })
                 .catch(err => {
                     console.error("Failed to delete image file:", err);

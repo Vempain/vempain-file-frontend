@@ -33,7 +33,7 @@ function MapEffects({center, active}: { center: [number, number]; active: boolea
 
     useEffect(() => {
         map.setView(center);
-    }, [center[0], center[1], map]);
+    }, [center, map]);
 
     return null;
 }

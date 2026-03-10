@@ -201,24 +201,6 @@ export function ImportFiles() {
         },
     ];
 
-    useEffect(() => {
-        // Load initial path suggestions when component mounts
-        setLoading(true);
-        Promise.all([
-            fetchPathCompletions(PathCompletionEnum.ORIGINAL, "/"),
-            fetchPathCompletions(PathCompletionEnum.EXPORTED, "/"),
-        ])
-                .then(() => {
-                    console.log("Initial path completions loaded");
-                })
-                .catch((err) => {
-                    console.error("Failed to load initial path completions:", err);
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-    }, []);
-
     async function fetchPathCompletions(directoryType: PathCompletionEnum, path: string) {
         setCompletionsLoading(true);
 
@@ -250,6 +232,24 @@ export function ImportFiles() {
                     setCompletionsLoading(false);
                 });
     }
+
+    useEffect(() => {
+        // Load initial path suggestions when component mounts
+        setLoading(true);
+        Promise.all([
+            fetchPathCompletions(PathCompletionEnum.ORIGINAL, "/"),
+            fetchPathCompletions(PathCompletionEnum.EXPORTED, "/"),
+        ])
+                .then(() => {
+                    console.log("Initial path completions loaded");
+                })
+                .catch((err) => {
+                    console.error("Failed to load initial path completions:", err);
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+    }, []);
 
     function handleSearch(directoryType: PathCompletionEnum, value: string) {
         console.log("Handling search for type " + directoryType + " path:", value);

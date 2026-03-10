@@ -1,5 +1,5 @@
 import {Button, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
 import {videoFileAPI} from "../../services";
 import type {VideoFileResponse} from "../../models";
@@ -19,7 +19,7 @@ export function VideoFiles() {
     const [pageSize, setPageSize] = useState<number>(10);
     const [totalElements, setTotalElements] = useState<number>(0);
 
-    function fetchVideoFiles(page: number = currentPage, size: number = pageSize) {
+    const fetchVideoFiles = useCallback((page: number, size: number) => {
         setLoading(true);
         videoFileAPI.findAllPageable(page - 1, size)
                 .then(response => {
@@ -27,7 +27,7 @@ export function VideoFiles() {
                         setVideoFiles(response.content);
                     }
 
-                    setTotalElements(response.totalElements ?? 0);
+                    setTotalElements(response.total_elements ?? 0);
                     setCurrentPage(response.page + 1);
                     setPageSize(response.size);
                 })
@@ -38,18 +38,19 @@ export function VideoFiles() {
                 .finally(() => {
                     setLoading(false);
                 });
-    }
+    }, [t]);
 
     useEffect(() => {
-        fetchVideoFiles();
+        fetchVideoFiles(1, pageSize);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     function handleDelete(id: number) {
         setLoading(true);
         videoFileAPI.delete(id)
-                .then(_ => {
+                .then(() => {
                     message.success(t("VideoFiles.messages.deleteSuccess"));
-                    fetchVideoFiles();
+                    fetchVideoFiles(currentPage, pageSize);
                 })
                 .catch(err => {
                     console.error("Failed to delete video file:", err);
