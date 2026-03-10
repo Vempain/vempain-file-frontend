@@ -18,22 +18,22 @@ function toSignedCoord(value: number, ref: 'N' | 'S' | 'E' | 'W'): number {
 }
 
 // Re-invalidate map size after becoming visible and recenter on coord changes
-function MapEffects({center, active}: { center: [number, number]; active: boolean }) {
+function MapEffects({lat, lon, active}: { lat: number; lon: number; active: boolean }) {
     const map = useMap();
 
     useEffect(() => {
         if (active) {
             const t = setTimeout(() => {
                 map.invalidateSize();
-                map.setView(center);
+                map.setView([lat, lon]);
             }, 80);
             return () => clearTimeout(t);
         }
-    }, [active, map, center]);
+    }, [active, map, lat, lon]);
 
     useEffect(() => {
-        map.setView(center);
-    }, [center, map]);
+        map.setView([lat, lon]);
+    }, [lat, lon, map]);
 
     return null;
 }
@@ -54,7 +54,7 @@ export function DisplayMap({location, heightPx = 240, zoom = 13, active = true}:
                             attribution={MAP_ATTRIBUTION}
                             url={MAP_TILE_URL}
                     />
-                    <MapEffects center={[lat, lon]} active={!!active}/>
+                    <MapEffects lat={lat} lon={lon} active={!!active}/>
                     <CircleMarker center={[lat, lon]} radius={8} color="red" fillColor="red" fillOpacity={0.8}/>
                 </MapContainer>
             </div>

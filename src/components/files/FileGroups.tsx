@@ -100,7 +100,7 @@ export function FileGroups() {
                 .then((res: FilePageResponse) => {
                     const list = res?.content ?? [];
                     setCandidates(prev => (page === 1 ? list : [...prev, ...list]));
-                    setCandidateHasMore(!(res?.last ?? true));
+                    setCandidateHasMore(!(res?.last ?? false));
                     setCandidatePage(page + 1);
                 })
                 .catch((err: Error) => {

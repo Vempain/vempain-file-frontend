@@ -143,7 +143,7 @@ export function ArchiveFiles() {
                         afterClose={() => setSelectedFile(null)}
                         footer={null}
                         destroyOnHidden
-                        mask={true}
+                        maskClosable
                         title={selectedFile?.filename || t("Common.modal.fileDetailsTitle")}
                         width={720}
                 >
