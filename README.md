@@ -70,3 +70,5 @@ Environment files:
 ## License
 
 This project is licensed under the GPL-2.0 license. See the [LICENSE](./LICENSE) file for details.
+
+[AGENTS.md](docs/AGENTS.md) has more detailed orientation and workflow guidance for agents working in this codebase.
