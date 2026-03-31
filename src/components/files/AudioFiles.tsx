@@ -1,6 +1,7 @@
 import {Button, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
 import {useCallback, useEffect, useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
+import type {PagedRequest} from "@vempain/vempain-auth-frontend";
 import {audioFileAPI} from "../../services";
 import type {AudioFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
@@ -21,7 +22,12 @@ export function AudioFiles() {
 
     const fetchAudioFiles = useCallback((page: number, size: number) => {
         setLoading(true);
-        audioFileAPI.findAllPageable(page - 1, size)
+        const pagedRequest: PagedRequest = {
+            page: page - 1,
+            size,
+        };
+
+        audioFileAPI.findAllPageable(pagedRequest)
                 .then(response => {
                     if (response && response.content) {
                         setAudioFiles(response.content);

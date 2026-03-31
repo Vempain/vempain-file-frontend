@@ -1,73 +1,73 @@
 {
-  "name": "@vempain/vempain-file-frontend",
-  "type": "module",
-  "version": "0.9.0",
-  "description": "Vempain File frontend",
-  "author": "Paul-Erik Törrönen",
-  "homepage": "https://vempain.poltsi.fi",
-  "license": "GPL-2.0",
+  "name" : "@vempain/vempain-file-frontend",
+  "type" : "module",
+  "version" : "0.9.0",
+  "description" : "Vempain File frontend",
+  "author" : "Paul-Erik Törrönen",
+  "homepage" : "https://vempain.poltsi.fi",
+  "license" : "GPL-2.0",
   "packageManager" : "yarn@4.13.0",
-  "scripts": {
-    "prebuild": "node generateBuildInfo.js",
-    "prestart": "node generateBuildInfo.js",
-    "start": "env-cmd -f .env.local vite",
-    "build": "yarn prebuild && tsc && env-cmd -f .env.prod vite build",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage .",
-    "test:debug": "jest --inspect-brk --runInBand --no-cache",
-    "preview": "vite preview",
+  "scripts" : {
+    "prebuild" : "node generateBuildInfo.js",
+    "prestart" : "node generateBuildInfo.js",
+    "start" : "env-cmd -f .env.local vite",
+    "build" : "yarn prebuild && tsc && env-cmd -f .env.prod vite build",
+    "test" : "jest",
+    "test:watch" : "jest --watch",
+    "test:coverage" : "jest --coverage .",
+    "test:debug" : "jest --inspect-brk --runInBand --no-cache",
+    "preview" : "vite preview",
     "build:production" : "yarn prebuild && env-cmd -f .env.prod vite build",
     "lint" : "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix" : "eslint . --ext ts,tsx --fix"
   },
-  "dependencies": {
-    "@testing-library/jest-dom": "^6.9.1",
-    "@types/jest": "^30.0.0",
+  "dependencies" : {
+    "@testing-library/jest-dom" : "^6.9.1",
+    "@types/jest" : "^30.0.0",
     "@vempain/vempain-auth-frontend" : "^1.0.5",
     "antd" : "^6.3.4",
     "axios" : "^1.14.0",
-    "dayjs": "^1.11.20",
-    "env-cmd": "^11.0.0",
+    "dayjs" : "^1.11.20",
+    "env-cmd" : "^11.0.0",
     "i18next" : "^26.0.1",
-    "i18next-http-backend": "^3.0.2",
-    "leaflet": "^1.9.4",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
+    "i18next-http-backend" : "^3.0.2",
+    "leaflet" : "^1.9.4",
+    "react" : "^19.2.4",
+    "react-dom" : "^19.2.4",
     "react-i18next" : "^17.0.1",
     "react-leaflet" : "5.0.0",
     "react-router-dom" : "^7.13.2"
   },
-  "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@types/jest": "^30.0.0",
-    "@types/leaflet": "^1.9.21",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react-swc": "^4.3.0",
-    "eslint": "^10.1.0",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.5.2",
-    "globals": "^17.4.0",
+  "devDependencies" : {
+    "@eslint/js" : "^10.0.1",
+    "@testing-library/jest-dom" : "^6.9.1",
+    "@types/jest" : "^30.0.0",
+    "@types/leaflet" : "^1.9.21",
+    "@types/react" : "^19.2.14",
+    "@types/react-dom" : "^19.2.3",
+    "@vitejs/plugin-react-swc" : "^4.3.0",
+    "eslint" : "^10.1.0",
+    "eslint-plugin-react-hooks" : "^7.0.1",
+    "eslint-plugin-react-refresh" : "^0.5.2",
+    "globals" : "^17.4.0",
     "jest" : "^30.3.0",
     "jest-environment-jsdom" : "^30.3.0",
-    "translation-check": "^1.1.1",
-    "ts-jest": "^29.4.6",
-    "typescript": "^5.9.3",
+    "translation-check" : "^1.1.1",
+    "ts-jest" : "^29.4.6",
+    "typescript" : "^5.9.3",
     "typescript-eslint" : "^8.57.2",
     "vite" : "^8.0.3",
-    "vite-tsconfig-paths": "^6.1.1"
+    "vite-tsconfig-paths" : "^6.1.1"
   },
-  "eslintConfig": {
-    "extends": [
+  "eslintConfig" : {
+    "extends" : [
       "react-app",
       "react-app/jest"
     ]
   },
-  "jest": {
-    "preset": "ts-jest/presets/js-with-ts",
-    "testEnvironment": "jest-environment-jsdom",
+  "jest" : {
+    "preset" : "ts-jest/presets/js-with-ts",
+    "testEnvironment" : "jest-environment-jsdom",
     "transform" : {
       "^.+\\.[tj]sx?$" : [
         "ts-jest",
@@ -76,13 +76,13 @@
         }
       ]
     },
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
-      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+    "moduleNameMapper" : {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$" : "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$" : "<rootDir>/__mocks__/styleMock.js"
     }
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Vempain/vempain-file-frontend.git"
+  "repository" : {
+    "type" : "git",
+    "url" : "git+https://github.com/Vempain/vempain-file-frontend.git"
   }
 }

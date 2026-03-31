@@ -1,6 +1,7 @@
 import {Button, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
 import {useCallback, useEffect, useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
+import type {PagedRequest} from "@vempain/vempain-auth-frontend";
 import {vectorFileAPI} from "../../services";
 import type {VectorFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
@@ -21,7 +22,12 @@ export function VectorFiles() {
 
     const fetchVectorFiles = useCallback((page: number, size: number) => {
         setLoading(true);
-        vectorFileAPI.findAllPageable(page - 1, size)
+        const pagedRequest: PagedRequest = {
+            page: page - 1,
+            size,
+        };
+
+        vectorFileAPI.findAllPageable(pagedRequest)
                 .then(response => {
                     if (response && response.content) {
                         setVectorFiles(response.content);

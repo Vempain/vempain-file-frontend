@@ -9,7 +9,7 @@ import {FileTypeEnum} from "../../models";
 import {FileDetails} from "./FileDetails";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
 import {useTranslation} from "react-i18next";
-import type {PagedRequest} from "@vempain/vempain-auth-frontend";
+import type {PagedRequest, PagedResponse} from "@vempain/vempain-auth-frontend";
 
 export function FileGroups() {
     const {t} = useTranslation();
@@ -56,16 +56,8 @@ export function FileGroups() {
     const [candidateHasMore, setCandidateHasMore] = useState<boolean>(true);
 
     // Helper: service per file type
-    interface FilePageResponse {
-        content?: FileResponse[];
-        last?: boolean;
-        page?: number;
-        size?: number;
-        total_elements?: number;
-    }
-
     interface FileAPIService {
-        findAllPageable: (page: number, size: number) => Promise<FilePageResponse>;
+        findAllPageable: (pagedRequest: PagedRequest) => Promise<PagedResponse<FileResponse>>;
     }
 
     const getServiceForType = (type: FileTypeEnum | undefined): FileAPIService | undefined => {
@@ -96,8 +88,13 @@ export function FileGroups() {
         const svc = getServiceForType(type);
         if (!svc) return;
         setCandidatesLoading(true);
-        svc.findAllPageable(page - 1, candidatePageSize)
-                .then((res: FilePageResponse) => {
+        const pagedRequest: PagedRequest = {
+            page: page - 1,
+            size: candidatePageSize,
+        };
+
+        svc.findAllPageable(pagedRequest)
+                .then((res) => {
                     const list = res?.content ?? [];
                     setCandidates(prev => (page === 1 ? list : [...prev, ...list]));
                     setCandidateHasMore(!(res?.last ?? false));

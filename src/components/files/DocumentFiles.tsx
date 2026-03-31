@@ -1,6 +1,7 @@
 import {Button, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
 import {useCallback, useEffect, useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
+import type {PagedRequest} from "@vempain/vempain-auth-frontend";
 import {documentFileAPI} from "../../services";
 import type {DocumentFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
@@ -21,7 +22,12 @@ export function DocumentFiles() {
 
     const fetchDocumentFiles = useCallback((page: number, size: number) => {
         setLoading(true);
-        documentFileAPI.findAllPageable(page - 1, size)
+        const pagedRequest: PagedRequest = {
+            page: page - 1,
+            size,
+        };
+
+        documentFileAPI.findAllPageable(pagedRequest)
                 .then(response => {
                     if (response && response.content) {
                         setDocumentFiles(response.content);
