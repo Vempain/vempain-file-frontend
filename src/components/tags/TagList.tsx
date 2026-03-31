@@ -37,7 +37,7 @@ export function TagList() {
         setEditedRow({});
     };
 
-    const saveEdit = async (id: number) => {
+    const saveEdit = (id: number) => {
         setLoading(true);
         if (!editedRow) {
             message.error(t("TagList.messages.noChanges"));
@@ -59,29 +59,23 @@ export function TagList() {
             tag_name_es: editedRow.tag_name_es || "",
             tag_name_fi: editedRow.tag_name_fi || "",
             tag_name_sv: editedRow.tag_name_sv || ""
-        }
-        try {
-            tagsAPI.update(requestPayload)
-                    .then(() => {
-                        message.success(t("TagList.messages.updateSuccess"));
-                        setTags(tags =>
-                                tags.map(tag => tag.id === id ? {...tag, ...editedRow} : tag)
-                        );
-                    })
-                    .catch((error: unknown) => {
-                        message.error(t("TagList.messages.updateFailedWithReason", {error: String(error)}));
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                    });
-            message.success(t("TagList.messages.updated"));
-        } catch {
-            message.error(t("TagList.messages.updateFailed"));
-        } finally {
-            setEditingRowId(null);
-            setEditedRow({});
-            setLoading(false);
-        }
+        };
+
+        tagsAPI.update(requestPayload)
+                .then(() => {
+                    message.success(t("TagList.messages.updateSuccess"));
+                    setTags(currentTags =>
+                            currentTags.map(tag => tag.id === id ? {...tag, ...editedRow} : tag)
+                    );
+                })
+                .catch((error: unknown) => {
+                    message.error(t("TagList.messages.updateFailedWithReason", {error: String(error)}));
+                })
+                .finally(() => {
+                    setEditingRowId(null);
+                    setEditedRow({});
+                    setLoading(false);
+                });
     };
 
     const isRowChanged = (record: TagResponse) => {
