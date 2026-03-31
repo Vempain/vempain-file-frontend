@@ -1,9 +1,10 @@
 {
   "extends" : "./tsconfig.app.json",
   "compilerOptions" : {
-    "module" : "commonjs",
-    "moduleResolution" : "node",
+    "module" : "ESNext",
+    "moduleResolution" : "bundler",
     "verbatimModuleSyntax" : false,
+    "ignoreDeprecations" : "6.0",
     "types" : [
       "jest",
       "node"
@@ -11,7 +12,9 @@
     "esModuleInterop" : true
   },
   "include" : [
-    "src"
-  ]
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "exclude" : []
 }
 

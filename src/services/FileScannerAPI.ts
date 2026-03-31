@@ -1,7 +1,7 @@
 import type {ScanRequest, ScanResponses} from "../models";
 import {AbstractAPI} from "@vempain/vempain-auth-frontend";
 
-class FileScannerAPI extends AbstractAPI<ScanRequest, ScanResponses> {
+export class FileScannerAPI extends AbstractAPI<ScanRequest, ScanResponses> {
     public async scanDirectory(scanRequest: ScanRequest): Promise<ScanResponses> {
         this.setAuthorizationHeader();
         this.axiosInstance.defaults.headers.put['Content-Type'] = 'application/json;charset=utf-8';
@@ -9,5 +9,3 @@ class FileScannerAPI extends AbstractAPI<ScanRequest, ScanResponses> {
         return response.data;
     }
 }
-
-export const fileScannerAPI = new FileScannerAPI(import.meta.env.VITE_APP_API_URL, "/scan-files");

@@ -9,5 +9,3 @@ export class PathCompletionAPI extends AbstractAPI<PathCompletionRequest, PathCo
         return response.data;
     }
 }
-
-export const pathCompletionAPI = new PathCompletionAPI(import.meta.env.VITE_APP_API_URL, "/path-completion");
