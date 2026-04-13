@@ -1,7 +1,6 @@
 name: CI
 permissions:
   contents: read
-  packages: write
 on:
   pull_request:
   push:
@@ -18,6 +17,9 @@ concurrency: build
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
     steps:
       - name: Check out code
         uses: actions/checkout@v6
@@ -26,8 +28,18 @@ jobs:
         uses: actions/setup-node@v6.3.0
         with:
           node-version: '24'
-        env:
-          VEMPAIN_ACTION_TOKEN: ${{ secrets.VEMPAIN_ACTION_TOKEN }}
+
+      - name: Resolve package token
+        shell: bash
+        run: |
+          if [ -n "${{ secrets.VEMPAIN_ACTION_TOKEN }}" ]; then
+            echo "VEMPAIN_ACTION_TOKEN=${{ secrets.VEMPAIN_ACTION_TOKEN }}" >> $GITHUB_ENV
+          else
+            echo "VEMPAIN_ACTION_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+          fi
+          if [ -z "${VEMPAIN_ACTION_TOKEN}" ]; then
+            echo "Package token is not available"
+          fi
 
       - name: Test
         run: |
@@ -47,15 +59,26 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Check out code
         uses: actions/checkout@v6
+
       - name: Set up NodeJS
         uses: actions/setup-node@v6.3.0
         with:
           node-version: '24'
-        env:
-          VEMPAIN_ACTION_TOKEN: ${{ secrets.VEMPAIN_ACTION_TOKEN }}
+
+      - name: Resolve package token
+        shell: bash
+        run: |
+          if [ -n "${{ secrets.VEMPAIN_ACTION_TOKEN }}" ]; then
+            echo "VEMPAIN_ACTION_TOKEN=${{ secrets.VEMPAIN_ACTION_TOKEN }}" >> $GITHUB_ENV
+          else
+            echo "VEMPAIN_ACTION_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+          fi
 
       - name: Get main and base version
         id: basemain
