@@ -9,17 +9,15 @@ import {axiosMock, constructorSpy, resetServiceMockState, setAuthorizationHeader
 import {PublishAPI} from "../../services";
 
 describe("PublishAPI", () => {
-    const publishAPI = new PublishAPI("http://localhost:8080/api", "/publish");
-
+    let publishAPI: PublishAPI;
 
     beforeEach(() => {
         resetServiceMockState();
+        publishAPI = new PublishAPI("http://localhost:8080/api", "/publish");
     });
 
     it("is instantiated with /publish member path", () => {
-        expect(constructorSpy.mock.calls).toEqual(expect.arrayContaining([
-            [expect.anything(), "/publish"],
-        ]));
+        expect(constructorSpy).toHaveBeenCalledWith(expect.anything(), "/publish");
     });
 
     it("publishFileGroup POSTs /file-group and returns PublishFileGroupResponse[]", async () => {

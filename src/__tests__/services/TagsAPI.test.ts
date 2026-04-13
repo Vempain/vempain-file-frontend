@@ -3,7 +3,7 @@ import {axiosMock, constructorSpy, resetServiceMockState, setAuthorizationHeader
 import {TagsAPI} from "../../services";
 
 describe("TagsAPI", () => {
-    const tagsAPI = new TagsAPI("http://localhost:8080/api", "/tags");
+    let tagsAPI: TagsAPI;
 
     const tagRequest: TagRequest = {
         id: 10,
@@ -19,12 +19,11 @@ describe("TagsAPI", () => {
 
     beforeEach(() => {
         resetServiceMockState();
+        tagsAPI = new TagsAPI("http://localhost:8080/api", "/tags");
     });
 
     it("is instantiated with /tags member path", () => {
-        expect(constructorSpy.mock.calls).toEqual(expect.arrayContaining([
-            [expect.anything(), "/tags"],
-        ]));
+        expect(constructorSpy).toHaveBeenCalledWith(expect.anything(), "/tags");
     });
 
     it("findAll returns TagResponse[]", async () => {

@@ -3,7 +3,7 @@ import {axiosMock, constructorSpy, resetServiceMockState, setAuthorizationHeader
 import {LocationAPI} from "../../services";
 
 describe("LocationAPI", () => {
-    const locationAPI = new LocationAPI("http://localhost:8080/api", "/location");
+    let locationAPI: LocationAPI;
 
     const guardRequest: LocationGuardRequest = {
         id: 1,
@@ -21,12 +21,11 @@ describe("LocationAPI", () => {
 
     beforeEach(() => {
         resetServiceMockState();
+        locationAPI = new LocationAPI("http://localhost:8080/api", "/location");
     });
 
     it("is instantiated with /location member path", () => {
-        expect(constructorSpy.mock.calls).toEqual(expect.arrayContaining([
-            [expect.anything(), "/location"],
-        ]));
+        expect(constructorSpy).toHaveBeenCalledWith(expect.anything(), "/location");
     });
 
     it("round5 returns rounded coordinates or null for invalid values", () => {

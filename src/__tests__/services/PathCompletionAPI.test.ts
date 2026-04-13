@@ -3,17 +3,15 @@ import {axiosMock, constructorSpy, resetServiceMockState, setAuthorizationHeader
 import {PathCompletionAPI} from "../../services";
 
 describe("PathCompletionAPI", () => {
-    const pathCompletionAPI = new PathCompletionAPI("http://localhost:8080/api", "/path-completion");
-
+    let pathCompletionAPI: PathCompletionAPI;
 
     beforeEach(() => {
         resetServiceMockState();
+        pathCompletionAPI = new PathCompletionAPI("http://localhost:8080/api", "/path-completion");
     });
 
     it("is instantiated with /path-completion member path", () => {
-        expect(constructorSpy.mock.calls).toEqual(expect.arrayContaining([
-            [expect.anything(), "/path-completion"],
-        ]));
+        expect(constructorSpy).toHaveBeenCalledWith(expect.anything(), "/path-completion");
     });
 
     it("completePath POSTs request payload and returns PathCompletionResponse", async () => {
