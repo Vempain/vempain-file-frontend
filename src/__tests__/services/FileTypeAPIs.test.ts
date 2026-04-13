@@ -27,18 +27,26 @@ function createPagedResponse<T>(item: T): PagedResponse<T> {
 
 describe("file type API services", () => {
     const pagedRequest: PagedRequest = {page: 0, size: 10};
-    const archiveFileAPI = new ArchiveFileAPI("http://localhost:8080/api", "/files/archive");
-    const audioFileAPI = new AudioFileAPI("http://localhost:8080/api", "/files/audio");
-    const documentFileAPI = new DocumentFileAPI("http://localhost:8080/api", "/files/document");
-    const fontFileAPI = new FontFileAPI("http://localhost:8080/api", "/files/font");
-    const iconFileAPI = new IconFileAPI("http://localhost:8080/api", "/files/icon");
-    const imageFileAPI = new ImageFileAPI("http://localhost:8080/api", "/files/image");
-    const vectorFileAPI = new VectorFileAPI("http://localhost:8080/api", "/files/vector");
-    const videoFileAPI = new VideoFileAPI("http://localhost:8080/api", "/files/video");
+    let archiveFileAPI: ArchiveFileAPI;
+    let audioFileAPI: AudioFileAPI;
+    let documentFileAPI: DocumentFileAPI;
+    let fontFileAPI: FontFileAPI;
+    let iconFileAPI: IconFileAPI;
+    let imageFileAPI: ImageFileAPI;
+    let vectorFileAPI: VectorFileAPI;
+    let videoFileAPI: VideoFileAPI;
 
 
     beforeEach(() => {
         resetServiceMockState();
+        archiveFileAPI = new ArchiveFileAPI("http://localhost:8080/api", "/files/archive");
+        audioFileAPI = new AudioFileAPI("http://localhost:8080/api", "/files/audio");
+        documentFileAPI = new DocumentFileAPI("http://localhost:8080/api", "/files/document");
+        fontFileAPI = new FontFileAPI("http://localhost:8080/api", "/files/font");
+        iconFileAPI = new IconFileAPI("http://localhost:8080/api", "/files/icon");
+        imageFileAPI = new ImageFileAPI("http://localhost:8080/api", "/files/image");
+        vectorFileAPI = new VectorFileAPI("http://localhost:8080/api", "/files/vector");
+        videoFileAPI = new VideoFileAPI("http://localhost:8080/api", "/files/video");
     });
 
     it("wires each API class to the expected backend member path", () => {

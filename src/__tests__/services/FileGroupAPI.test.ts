@@ -4,17 +4,15 @@ import {axiosMock, constructorSpy, resetServiceMockState, setAuthorizationHeader
 import {FileGroupAPI} from "../../services";
 
 describe("FileGroupAPI", () => {
-    const fileGroupAPI = new FileGroupAPI("http://localhost:8080/api", "/file-groups");
-
+    let fileGroupAPI: FileGroupAPI;
 
     beforeEach(() => {
         resetServiceMockState();
+        fileGroupAPI = new FileGroupAPI("http://localhost:8080/api", "/file-groups");
     });
 
     it("is instantiated with /file-groups member path", () => {
-        expect(constructorSpy.mock.calls).toEqual(expect.arrayContaining([
-            [expect.anything(), "/file-groups"],
-        ]));
+        expect(constructorSpy).toHaveBeenCalledWith(expect.anything(), "/file-groups");
     });
 
     it("findById GETs /{id} and returns FileGroupResponse", async () => {

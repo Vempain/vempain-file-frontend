@@ -43,6 +43,7 @@ export const constructorSpy = jest.fn<void, [string, string]>();
 export const setAuthorizationHeaderSpy = jest.fn<void, []>();
 
 export function resetServiceMockState(): void {
+    constructorSpy.mockClear();
     setAuthorizationHeaderSpy.mockClear();
 
     axiosMock.get.mockReset();

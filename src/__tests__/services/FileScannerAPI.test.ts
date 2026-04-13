@@ -3,17 +3,15 @@ import {axiosMock, constructorSpy, resetServiceMockState, setAuthorizationHeader
 import {FileScannerAPI} from "../../services";
 
 describe("FileScannerAPI", () => {
-    const fileScannerAPI = new FileScannerAPI("http://localhost:8080/api", "/scan-files");
-
+    let fileScannerAPI: FileScannerAPI;
 
     beforeEach(() => {
         resetServiceMockState();
+        fileScannerAPI = new FileScannerAPI("http://localhost:8080/api", "/scan-files");
     });
 
     it("is instantiated with /scan-files member path", () => {
-        expect(constructorSpy.mock.calls).toEqual(expect.arrayContaining([
-            [expect.anything(), "/scan-files"],
-        ]));
+        expect(constructorSpy).toHaveBeenCalledWith(expect.anything(), "/scan-files");
     });
 
     it("scanDirectory POSTs request body to base endpoint and returns ScanResponses", async () => {
@@ -45,7 +43,7 @@ describe("FileScannerAPI", () => {
         const response = await fileScannerAPI.scanDirectory(request);
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
-        expect(axiosMock.defaults.headers.put["Content-Type"]).toBe("application/json;charset=utf-8");
+        expect(axiosMock.defaults.headers.post["Content-Type"]).toBe("application/json;charset=utf-8");
         expect(axiosMock.post).toHaveBeenCalledWith("", request);
         expect(response).toEqual(responseData);
     });
