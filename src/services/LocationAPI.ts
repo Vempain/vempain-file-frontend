@@ -67,5 +67,3 @@ export class LocationAPI extends AbstractAPI<LocationRequest, LocationResponse> 
         await this.axiosInstance.delete<void>(`/guard/${id}`);
     }
 }
-
-export const locationAPI = new LocationAPI(import.meta.env.VITE_APP_API_URL, "/location");

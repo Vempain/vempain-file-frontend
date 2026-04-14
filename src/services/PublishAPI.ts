@@ -1,7 +1,7 @@
 import {AbstractAPI} from "@vempain/vempain-auth-frontend";
 import type {PublishAllFileGroupsResponse, PublishFileGroupRequest, PublishFileGroupResponse, PublishProgressResponse} from "../models";
 
-class PublishAPI extends AbstractAPI<PublishFileGroupRequest, PublishFileGroupResponse[]> {
+export class PublishAPI extends AbstractAPI<PublishFileGroupRequest, PublishFileGroupResponse[]> {
     public async publishFileGroup(publishFileGroupRequest: PublishFileGroupRequest): Promise<PublishFileGroupResponse[]> {
         this.setAuthorizationHeader();
         this.axiosInstance.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
@@ -24,4 +24,3 @@ class PublishAPI extends AbstractAPI<PublishFileGroupRequest, PublishFileGroupRe
     }
 }
 
-export const publishAPI = new PublishAPI(import.meta.env.VITE_APP_API_URL, "/publish");

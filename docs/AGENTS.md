@@ -14,6 +14,7 @@
 - Examples: `src/services/TagsAPI.ts` extends `AbstractAPI`; `src/services/ImageFileAPI.ts` extends `AbstractFileAPI`.
 - Service instances are created with `import.meta.env.VITE_APP_API_URL` plus a resource path, e.g. `new FileScannerAPI(..., "/scan-files")`.
 - Auth/session expiry handling now lives in the shared auth library interceptor; keep using these base classes so 401 responses trigger logout correctly.
+- For frontend API invocations in components, use Promise chaining (`.then().catch().finally()`) consistently instead of wrapping API calls in `try/catch`.
 
 ## Data contract conventions
 
@@ -65,4 +66,3 @@
   state, then fetch in a `useCallback` + `useEffect` pair.
 - When adding routes, check for matching `NavLink`s in `TopBar.tsx`; the menu is conditional on `userSession`.
 - Footer/version text comes from `src/buildInfo.json` plus `VITE_APP_VEMPAIN_*` env vars in `src/main/BottomFooter.tsx`.
-

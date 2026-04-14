@@ -6,7 +6,7 @@
   "author": "Paul-Erik Törrönen",
   "homepage": "https://vempain.poltsi.fi",
   "license": "GPL-2.0",
-  "packageManager" : "yarn@4.13.0",
+  "packageManager": "yarn@4.13.0",
   "scripts": {
     "prebuild": "node generateBuildInfo.js",
     "prestart": "node generateBuildInfo.js",
@@ -17,26 +17,26 @@
     "test:coverage": "jest --coverage .",
     "test:debug": "jest --inspect-brk --runInBand --no-cache",
     "preview": "vite preview",
-    "build:production" : "yarn prebuild && env-cmd -f .env.prod vite build",
-    "lint" : "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "lint:fix" : "eslint . --ext ts,tsx --fix"
+    "build:production": "yarn prebuild && env-cmd -f .env.prod vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --ext ts,tsx --fix"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^6.9.1",
     "@types/jest": "^30.0.0",
-    "@vempain/vempain-auth-frontend" : "^1.0.5",
-    "antd" : "^6.3.4",
-    "axios" : "^1.14.0",
+    "@vempain/vempain-auth-frontend": "^1.0.6",
+    "antd": "^6.3.5",
+    "axios": "^1.15.0",
     "dayjs": "^1.11.20",
     "env-cmd": "^11.0.0",
-    "i18next" : "^26.0.1",
-    "i18next-http-backend": "^3.0.2",
+    "i18next": "^26.0.4",
+    "i18next-http-backend": "^3.0.4",
     "leaflet": "^1.9.4",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "react-i18next" : "^17.0.1",
-    "react-leaflet" : "5.0.0",
-    "react-router-dom" : "^7.13.2"
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-i18next": "^17.0.2",
+    "react-leaflet": "5.0.0",
+    "react-router-dom": "^7.14.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -46,17 +46,17 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react-swc": "^4.3.0",
-    "eslint": "^10.1.0",
+    "eslint": "^10.2.0",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
-    "globals": "^17.4.0",
-    "jest" : "^30.3.0",
-    "jest-environment-jsdom" : "^30.3.0",
+    "globals": "^17.5.0",
+    "jest": "^30.3.0",
+    "jest-environment-jsdom": "^30.3.0",
     "translation-check": "^1.1.1",
-    "ts-jest": "^29.4.6",
-    "typescript": "^5.9.3",
-    "typescript-eslint" : "^8.57.2",
-    "vite" : "^8.0.3",
+    "ts-jest": "^29.4.9",
+    "typescript": "^6.0.2",
+    "typescript-eslint": "^8.58.2",
+    "vite": "^8.0.8",
     "vite-tsconfig-paths": "^6.1.1"
   },
   "eslintConfig": {
@@ -66,13 +66,18 @@
     ]
   },
   "jest": {
-    "preset": "ts-jest/presets/js-with-ts",
+    "preset": "ts-jest/presets/default-esm",
     "testEnvironment": "jest-environment-jsdom",
-    "transform" : {
-      "^.+\\.[tj]sx?$" : [
+    "extensionsToTreatAsEsm": [
+      ".ts",
+      ".tsx"
+    ],
+    "transform": {
+      "^.+\\.[tj]sx?$": [
         "ts-jest",
         {
-          "tsconfig" : "tsconfig.test.json"
+          "tsconfig": "tsconfig.test.json",
+          "useESM": true
         }
       ]
     },

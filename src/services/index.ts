@@ -1,15 +1,68 @@
 export {AbstractFileAPI} from './AbstractFileAPI';
-export {archiveFileAPI} from './ArchiveFileAPI';
-export {audioFileAPI} from './AudioFileAPI';
-export {documentFileAPI} from './DocumentFileAPI';
-export {fileGroupAPI} from './FileGroupAPI';
-export {fileScannerAPI} from './FileScannerAPI';
-export {fontFileAPI} from './FontFileAPI';
-export {iconFileAPI} from './IconFileAPI';
-export {imageFileAPI} from './ImageFileAPI';
-export {locationAPI} from './LocationAPI';
-export {pathCompletionAPI} from './PathCompletionAPI';
-export {publishAPI} from './PublishAPI';
-export {tagsAPI} from './TagsAPI';
-export {vectorFileAPI} from './VectorFileAPI';
-export {videoFileAPI} from './VideoFileAPI';
+import {ArchiveFileAPI} from './ArchiveFileAPI';
+import {AudioFileAPI} from './AudioFileAPI';
+import {DocumentFileAPI} from './DocumentFileAPI';
+import {FileGroupAPI} from './FileGroupAPI';
+import {FileScannerAPI} from './FileScannerAPI';
+import {FontFileAPI} from './FontFileAPI';
+import {IconFileAPI} from './IconFileAPI';
+import {ImageFileAPI} from './ImageFileAPI';
+import {LocationAPI} from './LocationAPI';
+import {PathCompletionAPI} from './PathCompletionAPI';
+import {PublishAPI} from './PublishAPI';
+import {TagsAPI} from './TagsAPI';
+import {VectorFileAPI} from './VectorFileAPI';
+import {VideoFileAPI} from './VideoFileAPI';
+
+export {ArchiveFileAPI} from './ArchiveFileAPI';
+export {AudioFileAPI} from './AudioFileAPI';
+export {DocumentFileAPI} from './DocumentFileAPI';
+export {FileGroupAPI} from './FileGroupAPI';
+export {FileScannerAPI} from './FileScannerAPI';
+export {FontFileAPI} from './FontFileAPI';
+export {IconFileAPI} from './IconFileAPI';
+export {ImageFileAPI} from './ImageFileAPI';
+export {LocationAPI} from './LocationAPI';
+export {PathCompletionAPI} from './PathCompletionAPI';
+export {PublishAPI} from './PublishAPI';
+export {TagsAPI} from './TagsAPI';
+export {VectorFileAPI} from './VectorFileAPI';
+export {VideoFileAPI} from './VideoFileAPI';
+
+function resolveApiUrl(): string {
+    const processApiUrl = (globalThis as {
+        process?: { env?: Record<string, string | undefined> };
+    }).process?.env?.VITE_APP_API_URL;
+    if (processApiUrl) {
+        return processApiUrl;
+    }
+
+    try {
+        // Keep tests/CJS transpilation compatible by avoiding direct import.meta syntax.
+        const meta = (0, eval)("import.meta") as { env?: { VITE_APP_API_URL?: string } } | undefined;
+        if (meta?.env?.VITE_APP_API_URL) {
+            return meta.env.VITE_APP_API_URL;
+        }
+    } catch {
+        // Ignore when import.meta is unavailable (e.g. Jest transpilation/runtime).
+    }
+
+    return "";
+}
+
+const apiUrl = resolveApiUrl();
+
+export const archiveFileAPI = new ArchiveFileAPI(apiUrl, '/files/archive');
+export const audioFileAPI = new AudioFileAPI(apiUrl, '/files/audio');
+export const documentFileAPI = new DocumentFileAPI(apiUrl, '/files/document');
+export const fileGroupAPI = new FileGroupAPI(apiUrl, '/file-groups');
+export const fileScannerAPI = new FileScannerAPI(apiUrl, '/scan-files');
+export const fontFileAPI = new FontFileAPI(apiUrl, '/files/font');
+export const iconFileAPI = new IconFileAPI(apiUrl, '/files/icon');
+export const imageFileAPI = new ImageFileAPI(apiUrl, '/files/image');
+export const locationAPI = new LocationAPI(apiUrl, '/location');
+export const pathCompletionAPI = new PathCompletionAPI(apiUrl, '/path-completion');
+export const publishAPI = new PublishAPI(apiUrl, '/publish');
+export const tagsAPI = new TagsAPI(apiUrl, '/tags');
+export const vectorFileAPI = new VectorFileAPI(apiUrl, '/files/vector');
+export const videoFileAPI = new VideoFileAPI(apiUrl, '/files/video');
