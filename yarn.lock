@@ -2602,14 +2602,14 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^7.0.1"
     eslint-plugin-react-refresh: "npm:^0.5.2"
     globals: "npm:^17.5.0"
-    i18next: "npm:^26.0.4"
+    i18next: "npm:^26.0.5"
     i18next-http-backend: "npm:^3.0.4"
     jest: "npm:^30.3.0"
     jest-environment-jsdom: "npm:^30.3.0"
     leaflet: "npm:^1.9.4"
     react: "npm:^19.2.5"
     react-dom: "npm:^19.2.5"
-    react-i18next: "npm:^17.0.2"
+    react-i18next: "npm:^17.0.3"
     react-leaflet: "npm:5.0.0"
     react-router-dom: "npm:^7.14.1"
     translation-check: "npm:^1.1.1"
@@ -4115,9 +4115,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^26.0.4":
-  version: 26.0.4
-  resolution: "i18next@npm:26.0.4"
+"i18next@npm:^26.0.5":
+  version: 26.0.5
+  resolution: "i18next@npm:26.0.5"
   dependencies:
     "@babel/runtime": "npm:^7.29.2"
   peerDependencies:
@@ -4125,7 +4125,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/987046f1eb5670824a25f665ca963633434005e0d93b1da9f7b4cf310771c43d08359a6faa1971c4ee8eff1cdfd36cc833a0d5376f04f75c50d31fc49fbaad91
+  checksum: 10c0/4e4f7801c4caff597a2c454c3405f3e151a64bcd22424d5671041eaebeaaa8c964804aa5ea36eb512c616f6334d6e671b02174c7abefebbe31487b0fc3d07244
   languageName: node
   linkType: hard
 
@@ -5787,9 +5787,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^17.0.2":
-  version: 17.0.2
-  resolution: "react-i18next@npm:17.0.2"
+"react-i18next@npm:^17.0.3":
+  version: 17.0.3
+  resolution: "react-i18next@npm:17.0.3"
   dependencies:
     "@babel/runtime": "npm:^7.29.2"
     html-parse-stringify: "npm:^3.0.1"
@@ -5805,7 +5805,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/6bbaeccb919726a7f4fda1e547fa58936f1004e122b99234ac1a65d35077563864af7062c51ab9b8b0190be4cb384cd2ed7aeaa895d2785c1783c39cdae64ecd
+  checksum: 10c0/e625f4d89148e2e345d0348d1b910c7e056da45676ca226a829029cf9867258fc4c0a77b1111305308db041d996f1bca031b744991857124865f3b903fb2e254
   languageName: node
   linkType: hard
 
