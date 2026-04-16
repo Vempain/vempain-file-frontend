@@ -69,7 +69,7 @@ describe("file type API services", () => {
         const response = await archiveFileAPI.findAllPageable(pagedRequest);
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
-        expect(axiosMock.post).toHaveBeenCalledWith("/paged", pagedRequest);
+        expect(axiosMock.post).toHaveBeenCalledWith("paged", pagedRequest);
         expect(response).toEqual(responseData);
     });
 
@@ -80,7 +80,7 @@ describe("file type API services", () => {
         const response = await audioFileAPI.findAllPageable(pagedRequest);
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
-        expect(axiosMock.post).toHaveBeenCalledWith("/paged", pagedRequest);
+        expect(axiosMock.post).toHaveBeenCalledWith("paged", pagedRequest);
         expect(response).toEqual(responseData);
     });
 
@@ -91,7 +91,7 @@ describe("file type API services", () => {
         const response = await documentFileAPI.findAllPageable(pagedRequest);
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
-        expect(axiosMock.post).toHaveBeenCalledWith("/paged", pagedRequest);
+        expect(axiosMock.post).toHaveBeenCalledWith("paged", pagedRequest);
         expect(response).toEqual(responseData);
     });
 
@@ -102,7 +102,7 @@ describe("file type API services", () => {
         const response = await fontFileAPI.findAllPageable(pagedRequest);
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
-        expect(axiosMock.post).toHaveBeenCalledWith("/paged", pagedRequest);
+        expect(axiosMock.post).toHaveBeenCalledWith("paged", pagedRequest);
         expect(response).toEqual(responseData);
     });
 
@@ -113,7 +113,7 @@ describe("file type API services", () => {
         const response = await iconFileAPI.findAllPageable(pagedRequest);
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
-        expect(axiosMock.post).toHaveBeenCalledWith("/paged", pagedRequest);
+        expect(axiosMock.post).toHaveBeenCalledWith("paged", pagedRequest);
         expect(response).toEqual(responseData);
     });
 
@@ -124,7 +124,7 @@ describe("file type API services", () => {
         const response = await imageFileAPI.findAllPageable(pagedRequest);
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
-        expect(axiosMock.post).toHaveBeenCalledWith("/paged", pagedRequest);
+        expect(axiosMock.post).toHaveBeenCalledWith("paged", pagedRequest);
         expect(response).toEqual(responseData);
     });
 
@@ -135,7 +135,7 @@ describe("file type API services", () => {
         const response = await vectorFileAPI.findAllPageable(pagedRequest);
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
-        expect(axiosMock.post).toHaveBeenCalledWith("/paged", pagedRequest);
+        expect(axiosMock.post).toHaveBeenCalledWith("paged", pagedRequest);
         expect(response).toEqual(responseData);
     });
 
@@ -146,7 +146,7 @@ describe("file type API services", () => {
         const response = await videoFileAPI.findAllPageable(pagedRequest);
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
-        expect(axiosMock.post).toHaveBeenCalledWith("/paged", pagedRequest);
+        expect(axiosMock.post).toHaveBeenCalledWith("paged", pagedRequest);
         expect(response).toEqual(responseData);
     });
 });

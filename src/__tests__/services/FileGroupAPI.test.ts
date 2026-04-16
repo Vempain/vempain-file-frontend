@@ -33,7 +33,7 @@ describe("FileGroupAPI", () => {
         expect(response).toEqual(responseData);
     });
 
-    it("getFileGroups POSTs PagedRequest to /paged and returns PagedResponse<FileGroupListResponse>", async () => {
+    it("getFileGroups POSTs PagedRequest to relative paged endpoint and returns PagedResponse<FileGroupListResponse>", async () => {
         const pagedRequest: PagedRequest = {
             page: 0,
             size: 50,
@@ -64,7 +64,7 @@ describe("FileGroupAPI", () => {
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
         expect(axiosMock.defaults.headers.post["Content-Type"]).toBe("application/json;charset=utf-8");
-        expect(axiosMock.post).toHaveBeenCalledWith("/paged", pagedRequest);
+        expect(axiosMock.post).toHaveBeenCalledWith("paged", pagedRequest);
         expect(response).toEqual(responseData);
     });
 });
