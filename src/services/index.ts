@@ -13,6 +13,9 @@ import {PublishAPI} from './PublishAPI';
 import {TagsAPI} from './TagsAPI';
 import {VectorFileAPI} from './VectorFileAPI';
 import {VideoFileAPI} from './VideoFileAPI';
+// Resolve API URL: Vite replaces import.meta.env at build/dev time; Jest uses process.env.
+// We use a helper to avoid import.meta in this file (ts-jest cannot compile it).
+import {resolveApiUrl} from "./resolveApiUrl";
 
 export {ArchiveFileAPI} from './ArchiveFileAPI';
 export {AudioFileAPI} from './AudioFileAPI';
@@ -29,28 +32,7 @@ export {TagsAPI} from './TagsAPI';
 export {VectorFileAPI} from './VectorFileAPI';
 export {VideoFileAPI} from './VideoFileAPI';
 
-function resolveApiUrl(): string {
-    const processApiUrl = (globalThis as {
-        process?: { env?: Record<string, string | undefined> };
-    }).process?.env?.VITE_APP_API_URL;
-    if (processApiUrl) {
-        return processApiUrl;
-    }
-
-    try {
-        // Keep tests/CJS transpilation compatible by avoiding direct import.meta syntax.
-        const meta = (0, eval)("import.meta") as { env?: { VITE_APP_API_URL?: string } } | undefined;
-        if (meta?.env?.VITE_APP_API_URL) {
-            return meta.env.VITE_APP_API_URL;
-        }
-    } catch {
-        // Ignore when import.meta is unavailable (e.g. Jest transpilation/runtime).
-    }
-
-    return "";
-}
-
-const apiUrl = resolveApiUrl();
+export const apiUrl: string = resolveApiUrl();
 
 export const archiveFileAPI = new ArchiveFileAPI(apiUrl, '/files/archive');
 export const audioFileAPI = new AudioFileAPI(apiUrl, '/files/audio');

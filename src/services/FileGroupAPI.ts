@@ -13,7 +13,7 @@ export class FileGroupAPI extends AbstractAPI<FileGroupRequest, FileGroupRespons
         this.setAuthorizationHeader();
         this.axiosInstance.defaults.headers.post["Content-Type"] = "application/json;charset=utf-8";
 
-        const response = await this.axiosInstance.post<PagedResponse<FileGroupListResponse>>("/paged", pagedRequest);
+        const response = await this.axiosInstance.post<PagedResponse<FileGroupListResponse>>("paged", pagedRequest);
 
         return response.data;
     }

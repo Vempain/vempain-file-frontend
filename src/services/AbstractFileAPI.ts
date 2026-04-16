@@ -5,7 +5,7 @@ export abstract class AbstractFileAPI<REQUEST, RESPONSE> extends AbstractAPI<REQ
         this.setAuthorizationHeader();
         this.axiosInstance.defaults.headers.post["Content-Type"] = "application/json;charset=utf-8";
 
-        const response = await this.axiosInstance.post<PagedResponse<RESPONSE>>("/paged", pagedRequest);
+        const response = await this.axiosInstance.post<PagedResponse<RESPONSE>>("paged", pagedRequest);
 
         return response.data;
     }

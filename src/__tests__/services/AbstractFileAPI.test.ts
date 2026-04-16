@@ -16,7 +16,7 @@ describe("AbstractFileAPI", () => {
         resetServiceMockState();
     });
 
-    it("posts PagedRequest to /paged and returns typed PagedResponse", async () => {
+    it("posts PagedRequest to relative paged endpoint and returns typed PagedResponse", async () => {
 
         class TestFileAPI extends AbstractFileAPI<TestRequest, TestResponse> {
         }
@@ -50,7 +50,8 @@ describe("AbstractFileAPI", () => {
         expect(constructorSpy).toHaveBeenCalledWith("http://localhost:8080/api", "/files/test");
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
         expect(axiosMock.defaults.headers.post["Content-Type"]).toBe("application/json;charset=utf-8");
-        expect(axiosMock.post).toHaveBeenCalledWith("/paged", pagedRequest);
+        expect(axiosMock.post).toHaveBeenCalledWith("paged", pagedRequest);
+        expect((axiosMock.post.mock.calls[0]?.[0] as string).startsWith("/")).toBe(false);
         expect(response).toEqual(responseData);
     });
 });
