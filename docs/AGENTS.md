@@ -48,7 +48,7 @@
 - Runtime translation loading is configured in `src/i18n.ts`; no rebuild is needed for locale JSON changes.
 - It is normal here to provide `defaultValue` in some `t(...)` calls for new/incomplete translation coverage.
 - Session language comes from the auth session; `App.tsx` syncs it into i18next.
-- Every time translation files are updated, the parity in the language files chould be checked by running the following command in the project root:
+- Every time translation files are updated, the parity in the language files should be checked by running the following command in the project root:
 
 ```bash
  node tools/verifyTranslationParity.cjs
