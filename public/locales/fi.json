@@ -27,7 +27,8 @@
     "messages" : {
       "deleteError" : "Arkistotiedoston poistaminen epäonnistui",
       "deleteSuccess" : "Arkistotiedosto poistettu onnistuneesti",
-      "fetchError" : "Arkistotiedostojen lataaminen epäonnistui"
+      "fetchError" : "Arkistotiedostojen lataaminen epäonnistui",
+      "noFiles" : "Arkistotiedostoja ei löytynyt"
     },
     "popconfirm" : {
       "delete" : {
@@ -60,7 +61,8 @@
     "messages" : {
       "deleteError" : "Äänitiedoston poistaminen epäonnistui",
       "deleteSuccess" : "Äänitiedosto poistettu onnistuneesti",
-      "fetchError" : "Äänitiedostojen lataaminen epäonnistui"
+      "fetchError" : "Äänitiedostojen lataaminen epäonnistui",
+      "noFiles" : "Äänitiedostoja ei löytynyt"
     },
     "popconfirm" : {
       "delete" : {
@@ -88,7 +90,10 @@
       "yes" : "Kyllä"
     },
     "modal" : {
-      "fileDetailsTitle" : "Tiedoston tiedot"
+      "cancel" : "Peruuta",
+      "create" : "Luo",
+      "fileDetailsTitle" : "Tiedoston tiedot",
+      "save" : "Tallenna"
     },
     "popconfirm" : {
       "no" : "Ei",
@@ -132,7 +137,8 @@
     "messages" : {
       "deleteError" : "Dokumenttitiedoston poistaminen epäonnistui",
       "deleteSuccess" : "Dokumenttitiedosto poistettu onnistuneesti",
-      "fetchError" : "Dokumenttitiedostojen lataaminen epäonnistui"
+      "fetchError" : "Dokumenttitiedostojen lataaminen epäonnistui",
+      "noFiles" : "Asiakirjatiedostoja ei löytynyt"
     },
     "popconfirm" : {
       "delete" : {
@@ -234,9 +240,16 @@
     }
   },
   "FileGroups" : {
+    "actions" : {
+      "new" : "Uusi tiedostoryhmä",
+      "publish" : "Julkaise"
+    },
     "columns" : {
       "actions" : {
         "title" : "Toiminnot"
+      },
+      "description" : {
+        "title" : "Kuvaus"
       },
       "file_count" : {
         "title" : "Tiedostojen määrä"
@@ -245,8 +258,73 @@
         "title" : "Ryhmän nimi"
       },
       "path" : {
+        "gallery-id" : "Gallerian tunnus",
         "title" : "Polku"
       }
+    },
+    "messages" : {
+      "createError" : "Tiedostoryhmän luonti epäonnistui",
+      "createSuccess" : "Tiedostoryhmä luotu onnistuneesti",
+      "deleteError" : "Tiedostoryhmän poisto epäonnistui",
+      "deleteSuccess" : "Tiedostoryhmä poistettu onnistuneesti",
+      "fetchError" : "Tiedostoryhmien lataus epäonnistui",
+      "updateError" : "Tiedostoryhmän päivitys epäonnistui",
+      "updateSuccess" : "Tiedostoryhmä päivitetty onnistuneesti"
+    },
+    "modal" : {
+      "create" : {
+        "title" : "Luo tiedostoryhmä"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "placeholder" : "Syötä tiedostoryhmän kuvaus"
+      },
+      "edit" : {
+        "title" : "Muokkaa tiedostoryhmää"
+      },
+      "files" : {
+        "actions" : {
+          "title" : "Toiminnot"
+        },
+        "add" : "Lisää tiedosto",
+        "loadMore" : "Lataa lisää",
+        "noMore" : "Ei enempää tiedostoja",
+        "remove" : {
+          "description" : "Haluatko varmasti poistaa tämän tiedoston?",
+          "title" : "Poista tiedosto"
+        },
+        "select" : {
+          "placeholder" : "Valitse tiedosto"
+        },
+        "title" : "Tiedostot",
+        "type" : {
+          "placeholder" : "Valitse tiedostotyyppi"
+        }
+      },
+      "group_name" : {
+        "label" : "Ryhmän nimi",
+        "placeholder" : "Syötä ryhmän nimi",
+        "validation" : {
+          "required" : "Ryhmän nimi on pakollinen"
+        }
+      },
+      "path" : {
+        "label" : "Polku",
+        "placeholder" : "Syötä polku",
+        "validation" : {
+          "required" : "Polku on pakollinen"
+        }
+      }
+    },
+    "popconfirm" : {
+      "delete" : {
+        "description" : "Haluatko varmasti poistaa tämän tiedostoryhmän?",
+        "title" : "Poista tiedostoryhmä"
+      }
+    },
+    "search" : {
+      "caseSensitive" : "Kirjainkoosta riippuva",
+      "placeholder" : "Hae tiedostoryhmiä"
     }
   },
   "FileImports" : {
@@ -301,7 +379,8 @@
     "messages" : {
       "deleteError" : "Kuvatiedoston poistaminen epäonnistui",
       "deleteSuccess" : "Kuvatiedosto poistettu onnistuneesti",
-      "fetchError" : "Kuvatiedostojen lataaminen epäonnistui"
+      "fetchError" : "Kuvatiedostojen lataaminen epäonnistui",
+      "noFiles" : "Kuvatiedostoja ei löytynyt"
     },
     "popconfirm" : {
       "delete" : {
@@ -683,11 +762,6 @@
         "login" : "Kirjaudu sisään",
         "register" : "Rekisteröidy"
       },
-      "security-management" : {
-        "fileGroup" : "Tiedostoryhmä",
-        "location-guards" : "Sijaintisuojat",
-        "title" : "Turvallisuus"
-      },
       "fileManagement" : {
         "archive" : "Arkisto",
         "audio" : "Ääni",
@@ -711,6 +785,11 @@
         "publishing" : "Julkaisu",
         "systemSchedules" : "Järjestelmän aikataulut",
         "title" : "Aikataulujen hallinta"
+      },
+      "security-management" : {
+        "fileGroup" : "Tiedostoryhmä",
+        "location-guards" : "Sijaintisuojat",
+        "title" : "Turvallisuus"
       },
       "tagManagement" : {
         "newTag" : "Uusi tunniste",
@@ -760,7 +839,8 @@
     "messages" : {
       "deleteError" : "Vektoritiedoston poistaminen epäonnistui",
       "deleteSuccess" : "Vektoritiedosto poistettu onnistuneesti",
-      "fetchError" : "Vektoritiedostojen lataaminen epäonnistui"
+      "fetchError" : "Vektoritiedostojen lataaminen epäonnistui",
+      "noFiles" : "Vektoritiedostoja ei löytynyt"
     },
     "popconfirm" : {
       "delete" : {
@@ -793,7 +873,8 @@
     "messages" : {
       "deleteError" : "Videotiedoston poistaminen epäonnistui",
       "deleteSuccess" : "Videotiedosto poistettu onnistuneesti",
-      "fetchError" : "Videotiedostojen lataaminen epäonnistui"
+      "fetchError" : "Videotiedostojen lataaminen epäonnistui",
+      "noFiles" : "Videotiedostoja ei löytynyt"
     },
     "popconfirm" : {
       "delete" : {

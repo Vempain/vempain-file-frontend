@@ -27,7 +27,8 @@
     "messages" : {
       "deleteError" : "Misslyckades att ta bort arkivfil",
       "deleteSuccess" : "Arkivfil borttagen",
-      "fetchError" : "Misslyckades att ladda arkivfiler"
+      "fetchError" : "Misslyckades att ladda arkivfiler",
+      "noFiles" : "Inga arkivfiler hittades"
     },
     "popconfirm" : {
       "delete" : {
@@ -60,7 +61,8 @@
     "messages" : {
       "deleteError" : "Misslyckades att ta bort ljudfil",
       "deleteSuccess" : "Ljudfil borttagen",
-      "fetchError" : "Misslyckades att ladda ljudfiler"
+      "fetchError" : "Misslyckades att ladda ljudfiler",
+      "noFiles" : "Inga ljudfiler hittades"
     },
     "popconfirm" : {
       "delete" : {
@@ -88,7 +90,10 @@
       "yes" : "Ja"
     },
     "modal" : {
-      "fileDetailsTitle" : "Fildetaljer"
+      "cancel" : "Avbryt",
+      "create" : "Skapa",
+      "fileDetailsTitle" : "Fildetaljer",
+      "save" : "Spara"
     },
     "popconfirm" : {
       "no" : "Nej",
@@ -132,7 +137,8 @@
     "messages" : {
       "deleteError" : "Misslyckades att ta bort dokumentfil",
       "deleteSuccess" : "Dokumentfil borttagen",
-      "fetchError" : "Misslyckades att ladda dokumentfiler"
+      "fetchError" : "Misslyckades att ladda dokumentfiler",
+      "noFiles" : "Inga dokumentfiler hittades"
     },
     "popconfirm" : {
       "delete" : {
@@ -234,9 +240,16 @@
     }
   },
   "FileGroups" : {
+    "actions" : {
+      "new" : "Ny filgrupp",
+      "publish" : "Publicera"
+    },
     "columns" : {
       "actions" : {
         "title" : "Åtgärder"
+      },
+      "description" : {
+        "title" : "Beskrivning"
       },
       "file_count" : {
         "title" : "Antal filer"
@@ -245,8 +258,73 @@
         "title" : "Gruppnamn"
       },
       "path" : {
+        "gallery-id" : "Galleri-ID",
         "title" : "Sökväg"
       }
+    },
+    "messages" : {
+      "createError" : "Misslyckades med att skapa filgrupp",
+      "createSuccess" : "Filgrupp skapad",
+      "deleteError" : "Misslyckades med att radera filgrupp",
+      "deleteSuccess" : "Filgrupp raderad",
+      "fetchError" : "Misslyckades med att ladda filgrupper",
+      "updateError" : "Misslyckades med att uppdatera filgrupp",
+      "updateSuccess" : "Filgrupp uppdaterad"
+    },
+    "modal" : {
+      "create" : {
+        "title" : "Skapa filgrupp"
+      },
+      "description" : {
+        "label" : "Beskrivning",
+        "placeholder" : "Ange beskrivning för filgruppen"
+      },
+      "edit" : {
+        "title" : "Redigera filgrupp"
+      },
+      "files" : {
+        "actions" : {
+          "title" : "Åtgärder"
+        },
+        "add" : "Lägg till fil",
+        "loadMore" : "Ladda fler",
+        "noMore" : "Inga fler filer",
+        "remove" : {
+          "description" : "Är du säker på att du vill ta bort denna fil?",
+          "title" : "Ta bort fil"
+        },
+        "select" : {
+          "placeholder" : "Välj en fil"
+        },
+        "title" : "Filer",
+        "type" : {
+          "placeholder" : "Välj filtyp"
+        }
+      },
+      "group_name" : {
+        "label" : "Gruppnamn",
+        "placeholder" : "Ange gruppnamn",
+        "validation" : {
+          "required" : "Gruppnamn krävs"
+        }
+      },
+      "path" : {
+        "label" : "Sökväg",
+        "placeholder" : "Ange sökväg",
+        "validation" : {
+          "required" : "Sökväg krävs"
+        }
+      }
+    },
+    "popconfirm" : {
+      "delete" : {
+        "description" : "Är du säker på att du vill radera denna filgrupp?",
+        "title" : "Radera filgrupp"
+      }
+    },
+    "search" : {
+      "caseSensitive" : "Skiftlägeskänslig",
+      "placeholder" : "Sök filgrupper"
     }
   },
   "FileImports" : {
@@ -301,7 +379,8 @@
     "messages" : {
       "deleteError" : "Misslyckades att ta bort bildfil",
       "deleteSuccess" : "Bildfil borttagen",
-      "fetchError" : "Misslyckades att ladda bildfiler"
+      "fetchError" : "Misslyckades att ladda bildfiler",
+      "noFiles" : "Inga bildfiler hittades"
     },
     "popconfirm" : {
       "delete" : {
@@ -683,11 +762,6 @@
         "login" : "Logga in",
         "register" : "Registrera"
       },
-      "security-management" : {
-        "fileGroup" : "Filgrupp",
-        "location-guards" : "Platsskydd",
-        "title" : "Säkerhet"
-      },
       "fileManagement" : {
         "archive" : "Arkiv",
         "audio" : "Ljud",
@@ -711,6 +785,11 @@
         "publishing" : "Publicering",
         "systemSchedules" : "Systemscheman",
         "title" : "Schemaläggning"
+      },
+      "security-management" : {
+        "fileGroup" : "Filgrupp",
+        "location-guards" : "Platsskydd",
+        "title" : "Säkerhet"
       },
       "tagManagement" : {
         "newTag" : "Ny tagg",
@@ -760,7 +839,8 @@
     "messages" : {
       "deleteError" : "Misslyckades att ta bort vektorfil",
       "deleteSuccess" : "Vektorfil borttagen",
-      "fetchError" : "Misslyckades att ladda vektorfiler"
+      "fetchError" : "Misslyckades att ladda vektorfiler",
+      "noFiles" : "Inga vektorfiler hittades"
     },
     "popconfirm" : {
       "delete" : {
@@ -793,7 +873,8 @@
     "messages" : {
       "deleteError" : "Misslyckades att ta bort videofil",
       "deleteSuccess" : "Videofil borttagen",
-      "fetchError" : "Misslyckades att ladda videofiler"
+      "fetchError" : "Misslyckades att ladda videofiler",
+      "noFiles" : "Inga videofiler hittades"
     },
     "popconfirm" : {
       "delete" : {
