@@ -27,7 +27,8 @@
     "messages" : {
       "deleteError" : "Failed to delete archive file",
       "deleteSuccess" : "Archive file deleted successfully",
-      "fetchError" : "Failed to load archive files"
+      "fetchError" : "Failed to load archive files",
+      "noFiles" : "No archive files found"
     },
     "popconfirm" : {
       "delete" : {
@@ -60,7 +61,8 @@
     "messages" : {
       "deleteError" : "Failed to delete audio file",
       "deleteSuccess" : "Audio file deleted successfully",
-      "fetchError" : "Failed to load audio files"
+      "fetchError" : "Failed to load audio files",
+      "noFiles" : "No audio files found"
     },
     "popconfirm" : {
       "delete" : {
@@ -88,7 +90,10 @@
       "yes" : "Yes"
     },
     "modal" : {
-      "fileDetailsTitle" : "File details"
+      "cancel" : "Cancel",
+      "create" : "Create",
+      "fileDetailsTitle" : "File details",
+      "save" : "Save"
     },
     "popconfirm" : {
       "no" : "No",
@@ -132,7 +137,8 @@
     "messages" : {
       "deleteError" : "Failed to delete document file",
       "deleteSuccess" : "Document file deleted successfully",
-      "fetchError" : "Failed to load document files"
+      "fetchError" : "Failed to load document files",
+      "noFiles" : "No document files found"
     },
     "popconfirm" : {
       "delete" : {
@@ -234,9 +240,16 @@
     }
   },
   "FileGroups" : {
+    "actions" : {
+      "new" : "New file group",
+      "publish" : "Publish"
+    },
     "columns" : {
       "actions" : {
         "title" : "Actions"
+      },
+      "description" : {
+        "title" : "Description"
       },
       "file_count" : {
         "title" : "File count"
@@ -245,8 +258,73 @@
         "title" : "Group name"
       },
       "path" : {
+        "gallery-id" : "Gallery ID",
         "title" : "Path"
       }
+    },
+    "messages" : {
+      "createError" : "Failed to create file group",
+      "createSuccess" : "File group created successfully",
+      "deleteError" : "Failed to delete file group",
+      "deleteSuccess" : "File group deleted successfully",
+      "fetchError" : "Failed to load file groups",
+      "updateError" : "Failed to update file group",
+      "updateSuccess" : "File group updated successfully"
+    },
+    "modal" : {
+      "create" : {
+        "title" : "Create File Group"
+      },
+      "description" : {
+        "label" : "Description",
+        "placeholder" : "Enter file group description"
+      },
+      "edit" : {
+        "title" : "Edit File Group"
+      },
+      "files" : {
+        "actions" : {
+          "title" : "Actions"
+        },
+        "add" : "Add file",
+        "loadMore" : "Load more",
+        "noMore" : "No more files",
+        "remove" : {
+          "description" : "Are you sure you want to remove this file?",
+          "title" : "Remove file"
+        },
+        "select" : {
+          "placeholder" : "Select a file"
+        },
+        "title" : "Files",
+        "type" : {
+          "placeholder" : "Select file type"
+        }
+      },
+      "group_name" : {
+        "label" : "Group name",
+        "placeholder" : "Enter group name",
+        "validation" : {
+          "required" : "Group name is required"
+        }
+      },
+      "path" : {
+        "label" : "Path",
+        "placeholder" : "Enter path",
+        "validation" : {
+          "required" : "Path is required"
+        }
+      }
+    },
+    "popconfirm" : {
+      "delete" : {
+        "description" : "Are you sure you want to delete this file group?",
+        "title" : "Delete this file group"
+      }
+    },
+    "search" : {
+      "caseSensitive" : "Case sensitive",
+      "placeholder" : "Search file groups"
     }
   },
   "FileImports" : {
@@ -301,7 +379,8 @@
     "messages" : {
       "deleteError" : "Failed to delete image file",
       "deleteSuccess" : "Image file deleted successfully",
-      "fetchError" : "Failed to load image files"
+      "fetchError" : "Failed to load image files",
+      "noFiles" : "No image files found"
     },
     "popconfirm" : {
       "delete" : {
@@ -683,11 +762,6 @@
         "login" : "Login",
         "register" : "Register"
       },
-      "security-management" : {
-        "fileGroup" : "File group",
-        "location-guards" : "Location guards",
-        "title" : "Security"
-      },
       "fileManagement" : {
         "archive" : "Archive",
         "audio" : "Audio",
@@ -711,6 +785,11 @@
         "publishing" : "Publishing",
         "systemSchedules" : "System schedules",
         "title" : "Schedule Management"
+      },
+      "security-management" : {
+        "fileGroup" : "File group",
+        "location-guards" : "Location guards",
+        "title" : "Security"
       },
       "tagManagement" : {
         "newTag" : "New tag",
@@ -760,7 +839,8 @@
     "messages" : {
       "deleteError" : "Failed to delete vector file",
       "deleteSuccess" : "Vector file deleted successfully",
-      "fetchError" : "Failed to load vector files"
+      "fetchError" : "Failed to load vector files",
+      "noFiles" : "No vector files found"
     },
     "popconfirm" : {
       "delete" : {
@@ -793,7 +873,8 @@
     "messages" : {
       "deleteError" : "Failed to delete video file",
       "deleteSuccess" : "Video file deleted successfully",
-      "fetchError" : "Failed to load video files"
+      "fetchError" : "Failed to load video files",
+      "noFiles" : "No video files found"
     },
     "popconfirm" : {
       "delete" : {
