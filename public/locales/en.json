@@ -663,6 +663,47 @@
       "returnButton" : "Return to front page"
     }
   },
+  "PublishGpsTimeSeries" : {
+    "actions" : {
+      "publish" : "Publish GPS time series"
+    },
+    "fields" : {
+      "derivedIdentifier" : "Data set identifier"
+    },
+    "header" : {
+      "title" : "Publish GPS Time Series"
+    },
+    "messages" : {
+      "fetchGroupsError" : "Failed to load image file groups",
+      "publishError" : "Failed to publish GPS time series",
+      "publishSuccess" : "GPS time series published successfully",
+      "selectWarning" : "Please select an image file group"
+    },
+    "select" : {
+      "label" : "Select image file group",
+      "placeholder" : "Select a file group"
+    }
+  },
+  "PublishMusicData" : {
+    "actions" : {
+      "publish" : "Publish music data"
+    },
+    "fields" : {
+      "description" : "Description",
+      "identifier" : "Identifier",
+      "type" : "Type",
+      "updatedAt" : "Last updated"
+    },
+    "header" : {
+      "title" : "Publish Music Data"
+    },
+    "messages" : {
+      "fetchError" : "Failed to load music data set",
+      "notFound" : "Music data set not found",
+      "publishError" : "Failed to publish music data",
+      "publishSuccess" : "Music data published successfully"
+    }
+  },
   "SearchFiles" : {
     "alert" : {
       "description" : "This is the Search Files page.",
@@ -761,6 +802,11 @@
       "auth" : {
         "login" : "Login",
         "register" : "Register"
+      },
+      "dataManagement" : {
+        "publishGpsTimeSeries" : "Publish GPS time series",
+        "publishMusic" : "Publish music",
+        "title" : "Data Management"
       },
       "fileManagement" : {
         "archive" : "Archive",
