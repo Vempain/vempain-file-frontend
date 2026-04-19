@@ -1,7 +1,7 @@
 import {Button, message, Space, Spin, Typography} from "antd";
 import {useCallback, useEffect, useState} from "react";
 import {dataAPI} from "../../services";
-import type {DataSummaryResponse} from "../../models";
+import type {DataResponse} from "../../models";
 import {useTranslation} from "react-i18next";
 
 const {Title, Text} = Typography;
@@ -12,7 +12,7 @@ export function PublishMusicData() {
     const {t} = useTranslation();
     const [loading, setLoading] = useState<boolean>(true);
     const [publishing, setPublishing] = useState<boolean>(false);
-    const [musicDataSet, setMusicDataSet] = useState<DataSummaryResponse | null>(null);
+    const [musicDataSet, setMusicDataSet] = useState<DataResponse | null>(null);
 
     const fetchMusicDataSet = useCallback(() => {
         setLoading(true);

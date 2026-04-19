@@ -1,4 +1,4 @@
-import {fileGroupPathToIdentifier} from "../../components/data/PublishGpsTimeSeries";
+import {fileGroupPathToIdentifier} from "../tools/dataTools";
 
 describe("fileGroupPathToIdentifier", () => {
     it("converts a simple path with subdirectories to a valid identifier", () => {

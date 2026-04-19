@@ -4,18 +4,10 @@ import {dataAPI, fileGroupAPI} from "../../services";
 import type {FileGroupListResponse} from "../../models";
 import {useTranslation} from "react-i18next";
 import type {PagedRequest} from "@vempain/vempain-auth-frontend";
+import {fileGroupPathToIdentifier} from "../../tools";
 
 const {Title, Text} = Typography;
 const {Option} = Select;
-
-export function fileGroupPathToIdentifier(path: string): string {
-    return path
-            .replace(/^\//, "")
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "_")
-            .replace(/^_+|_+$/g, "")
-            || "gps_time_series";
-}
 
 export function PublishGpsTimeSeries() {
     const {t} = useTranslation();
