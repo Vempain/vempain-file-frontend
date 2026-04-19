@@ -663,6 +663,47 @@
       "returnButton" : "Palaa etusivulle"
     }
   },
+  "PublishGpsTimeSeries" : {
+    "actions" : {
+      "publish" : "Julkaise GPS-aikasarja"
+    },
+    "fields" : {
+      "derivedIdentifier" : "Tietojoukon tunniste"
+    },
+    "header" : {
+      "title" : "Julkaise GPS-aikasarja"
+    },
+    "messages" : {
+      "fetchGroupsError" : "Kuvatiedostoryhmien lataaminen epäonnistui",
+      "publishError" : "GPS-aikasarjan julkaisu epäonnistui",
+      "publishSuccess" : "GPS-aikasarja julkaistu onnistuneesti",
+      "selectWarning" : "Valitse kuvatiedostoryhmä"
+    },
+    "select" : {
+      "label" : "Valitse kuvatiedostoryhmä",
+      "placeholder" : "Valitse tiedostoryhmä"
+    }
+  },
+  "PublishMusicData" : {
+    "actions" : {
+      "publish" : "Julkaise musiikkidata"
+    },
+    "fields" : {
+      "description" : "Kuvaus",
+      "identifier" : "Tunniste",
+      "type" : "Tyyppi",
+      "updatedAt" : "Päivitetty viimeksi"
+    },
+    "header" : {
+      "title" : "Julkaise musiikkidata"
+    },
+    "messages" : {
+      "fetchError" : "Musiikkitietojoukon lataaminen epäonnistui",
+      "notFound" : "Musiikkitietojoukkoa ei löydy",
+      "publishError" : "Musiikkidatan julkaisu epäonnistui",
+      "publishSuccess" : "Musiikkidata julkaistu onnistuneesti"
+    }
+  },
   "SearchFiles" : {
     "alert" : {
       "description" : "Tämä on Hae tiedostoja -sivu.",
@@ -761,6 +802,11 @@
       "auth" : {
         "login" : "Kirjaudu sisään",
         "register" : "Rekisteröidy"
+      },
+      "dataManagement" : {
+        "publishGpsTimeSeries" : "Julkaise GPS-aikasarja",
+        "publishMusic" : "Julkaise musiikki",
+        "title" : "Datahallinta"
       },
       "fileManagement" : {
         "archive" : "Arkisto",

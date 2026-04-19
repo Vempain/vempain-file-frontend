@@ -16,6 +16,8 @@ import {
     ImageFiles,
     ImportFiles,
     LocationGuards,
+    PublishGpsTimeSeries,
+    PublishMusicData,
     Publishing,
     SearchFiles,
     SystemSchedules,
@@ -65,6 +67,8 @@ export default function App() {
                             <Route path={"/"} element={<Home/>}/>
                             <Route path={"/login"} element={<Login/>}/>
                             <Route path={"/logout"} element={<Logout/>}/>
+                            <Route path={"/data/music"} element={<PublishMusicData/>}/>
+                            <Route path={"/data/gps-time-series"} element={<PublishGpsTimeSeries/>}/>
                             <Route path={"/files/archives"} element={<ArchiveFiles/>}/>
                             <Route path={"/files/audios"} element={<AudioFiles/>}/>
                             <Route path={"/files/documents"} element={<DocumentFiles/>}/>
