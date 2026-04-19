@@ -1,8 +1,8 @@
 /**
  * Converts a file group path to a valid data set identifier.
- *
- * Rules: lowercase, alphanumeric and underscores only, starts with letter (or digit),
- * no leading/trailing underscores. Falls back to "gps_time_series" for empty/invalid paths.
+ * The result is lowercase, contains only alphanumeric characters and underscores,
+ * has no leading or trailing underscores, and falls back to "gps_time_series" for
+ * empty or non-alphanumeric paths.
  */
 export function fileGroupPathToIdentifier(path: string): string {
     return path
