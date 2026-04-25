@@ -1,41 +1,17 @@
 import {Button, message, Space, Spin, Typography} from "antd";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useState} from "react";
 import {dataAPI} from "../../services";
-import type {DataResponse} from "../../models";
 import {useTranslation} from "react-i18next";
 
-const {Title, Text} = Typography;
-
-const MUSIC_IDENTIFIER = "music";
+const {Title} = Typography;
 
 export function PublishMusicData() {
     const {t} = useTranslation();
-    const [loading, setLoading] = useState<boolean>(true);
     const [publishing, setPublishing] = useState<boolean>(false);
-    const [musicDataSet, setMusicDataSet] = useState<DataResponse | null>(null);
-
-    const fetchMusicDataSet = useCallback(() => {
-        setLoading(true);
-        dataAPI.getDataSetByIdentifier(MUSIC_IDENTIFIER)
-                .then((data) => {
-                    setMusicDataSet(data);
-                })
-                .catch(() => {
-                    setMusicDataSet(null);
-                    message.error(t("PublishMusicData.messages.fetchError"));
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-    }, [t]);
-
-    useEffect(() => {
-        fetchMusicDataSet();
-    }, [fetchMusicDataSet]);
 
     const handlePublish = useCallback(() => {
         setPublishing(true);
-        dataAPI.publishDataSet(MUSIC_IDENTIFIER)
+        dataAPI.publishMusic()
                 .then(() => {
                     message.success(t("PublishMusicData.messages.publishSuccess"));
                 })
@@ -50,26 +26,14 @@ export function PublishMusicData() {
     return (
             <Space direction="vertical" style={{width: "100%", padding: 24}}>
                 <Title level={3}>{t("PublishMusicData.header.title")}</Title>
-                <Spin spinning={loading}>
-                    {musicDataSet ? (
-                            <Space direction="vertical">
-                                <Text><strong>{t("PublishMusicData.fields.identifier")}:</strong> {musicDataSet.identifier}</Text>
-                                <Text><strong>{t("PublishMusicData.fields.type")}:</strong> {musicDataSet.type}</Text>
-                                {musicDataSet.description && (
-                                        <Text><strong>{t("PublishMusicData.fields.description")}:</strong> {musicDataSet.description}</Text>
-                                )}
-                                <Text><strong>{t("PublishMusicData.fields.updatedAt")}:</strong> {musicDataSet.updated_at}</Text>
-                                <Button
-                                        type="primary"
-                                        loading={publishing}
-                                        onClick={handlePublish}
-                                >
-                                    {t("PublishMusicData.actions.publish")}
-                                </Button>
-                            </Space>
-                    ) : (
-                            !loading && <Text type="warning">{t("PublishMusicData.messages.notFound")}</Text>
-                    )}
+                <Spin spinning={publishing}>
+                    <Button
+                            type="primary"
+                            loading={publishing}
+                            onClick={handlePublish}
+                    >
+                        {t("PublishMusicData.actions.publish")}
+                    </Button>
                 </Spin>
             </Space>
     );

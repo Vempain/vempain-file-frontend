@@ -49,7 +49,7 @@ export function PublishGpsTimeSeries() {
             return;
         }
         setPublishing(true);
-        dataAPI.publishDataSet(identifier)
+        dataAPI.publishGpsTimeSeries(identifier)
                 .then(() => {
                     message.success(t("PublishGpsTimeSeries.messages.publishSuccess"));
                 })

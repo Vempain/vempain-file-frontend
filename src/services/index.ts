@@ -38,7 +38,7 @@ export const apiUrl: string = resolveApiUrl();
 
 export const archiveFileAPI = new ArchiveFileAPI(apiUrl, '/files/archive');
 export const audioFileAPI = new AudioFileAPI(apiUrl, '/files/audio');
-export const dataAPI = new DataAPI(apiUrl, '/content-management/data');
+export const dataAPI = new DataAPI(apiUrl, '/data-publish');
 export const documentFileAPI = new DocumentFileAPI(apiUrl, '/files/document');
 export const fileGroupAPI = new FileGroupAPI(apiUrl, '/file-groups');
 export const fileScannerAPI = new FileScannerAPI(apiUrl, '/scan-files');
