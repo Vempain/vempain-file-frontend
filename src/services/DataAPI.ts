@@ -1,5 +1,5 @@
 import {AbstractAPI} from "@vempain/vempain-auth-frontend";
-import type {DataResponse} from "../models";
+import type {CreateGpsTimeSeriesRequest, DataResponse} from "../models";
 
 /**
  * DataAPI provides access to the /data-publish endpoints.
@@ -36,17 +36,21 @@ export class DataAPI extends AbstractAPI<unknown, DataResponse> {
     public async publishMusic(): Promise<DataResponse> {
         this.setAuthorizationHeader();
         this.axiosInstance.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
-        const response = await this.axiosInstance.get<DataResponse>("/music");
+        const response = await this.axiosInstance.post<DataResponse>("/music", null);
         return response.data;
     }
 
     /**
-     * POST /data-publish/gps-timeseries/{directoryPath}
+     * POST /data-publish/gps-timeseries
      */
-    public async publishGpsTimeSeries(directoryPath: string): Promise<DataResponse> {
+    public async publishGpsTimeSeries(fileGroupId: number, timeSeriesName: string): Promise<DataResponse> {
         this.setAuthorizationHeader();
         this.axiosInstance.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
-        const response = await this.axiosInstance.get<DataResponse>(`/gps-timeseries/${directoryPath}`);
+        const request: CreateGpsTimeSeriesRequest = {
+            file_group_id: fileGroupId,
+            time_series_name: timeSeriesName,
+        };
+        const response = await this.axiosInstance.post<DataResponse>("/gps-timeseries", request);
         return response.data;
     }
 }

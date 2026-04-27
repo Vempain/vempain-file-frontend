@@ -38,7 +38,7 @@ describe("DataAPI", () => {
         expect(response).toEqual(responseData);
     });
 
-    it("publishGpsTimeSeries POSTs /gps-timeseries/{directoryPath} with null body and returns DataResponse", async () => {
+    it("publishGpsTimeSeries POSTs /gps-timeseries with filegroup ID and time series name and returns DataResponse", async () => {
         const responseData: DataResponse = {
             id: 2,
             identifier: "holidays_2024",
@@ -53,11 +53,14 @@ describe("DataAPI", () => {
         };
         axiosMock.post.mockResolvedValueOnce({data: responseData});
 
-        const response = await dataAPI.publishGpsTimeSeries("holidays_2024");
+        const response = await dataAPI.publishGpsTimeSeries(42, "holidays_2024");
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
         expect(axiosMock.defaults.headers.post["Content-Type"]).toBe("application/json;charset=utf-8");
-        expect(axiosMock.post).toHaveBeenCalledWith("/gps-timeseries/holidays_2024", null);
+        expect(axiosMock.post).toHaveBeenCalledWith("/gps-timeseries", {
+            file_group_id: 42,
+            time_series_name: "holidays_2024",
+        });
         expect(response).toEqual(responseData);
     });
 });

@@ -1,4 +1,4 @@
-import {fileGroupPathToIdentifier} from "../tools/dataTools";
+import {fileGroupDatasetToIdentifier, fileGroupPathToIdentifier} from "../tools/dataTools";
 
 describe("fileGroupPathToIdentifier", () => {
     it("converts a simple path with subdirectories to a valid identifier", () => {
@@ -41,3 +41,20 @@ describe("fileGroupPathToIdentifier", () => {
         expect(fileGroupPathToIdentifier("/2024/01/Paris")).toBe("2024_01_paris");
     });
 });
+
+describe("fileGroupDatasetToIdentifier", () => {
+    it("uses both path and group name to create unique identifiers", () => {
+        expect(fileGroupDatasetToIdentifier("Matkailu", "Balttia-2014")).toBe("matkailu-balttia-2014");
+        expect(fileGroupDatasetToIdentifier("Matkailu", "Etiopia-2016")).toBe("matkailu-etiopia-2016");
+    });
+
+    it("replaces slash, backslash and whitespace with underscores", () => {
+        expect(fileGroupDatasetToIdentifier("/Trips/Europe", "Baltic Summer 2014")).toBe("trips_europe-baltic_summer_2014");
+        expect(fileGroupDatasetToIdentifier("Trips\\Africa", "Ethiopia 2016")).toBe("trips_africa-ethiopia_2016");
+    });
+
+    it("falls back to path-only identifier when group name is missing", () => {
+        expect(fileGroupDatasetToIdentifier("/Photos/2025")).toBe("photos_2025");
+    });
+});
+

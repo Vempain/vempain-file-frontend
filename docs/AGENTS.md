@@ -41,6 +41,8 @@
 - `src/components/files/ImportFiles.tsx` shows the expected path-autocomplete pattern: two `AutoComplete` inputs, backend completion requests, then result
   tables.
 - `src/components/management/LocationGuards.tsx` is the best reference for form + modal + map integration.
+- `src/components/data/PublishGpsTimeSeries.tsx` is the reference flow for creating GPS datasets from file groups. It sends `file_group_id` + `time_series_name`
+  to the backend, while the backend remains the source of truth for final Admin identifier normalization.
 
 ## i18n and text
 
