@@ -24,7 +24,7 @@ export function PublishMusicData() {
     }, [t]);
 
     return (
-            <Space direction="vertical" style={{width: "100%", padding: 24}}>
+            <Space orientation={"vertical"} style={{width: "95%", padding: 24}}>
                 <Title level={3}>{t("PublishMusicData.header.title")}</Title>
                 <Spin spinning={publishing}>
                     <Button

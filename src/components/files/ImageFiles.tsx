@@ -132,7 +132,7 @@ export function ImageFiles() {
     }
 
     return (
-            <Space vertical={true} style={{width: "100%", margin: 30}} size="large">
+            <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
                 <Spin spinning={loading}>
                     {imageFiles.length > 0 && <Table
                             columns={columns}

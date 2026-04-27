@@ -94,7 +94,7 @@ export function FileDetails({file}: Props) {
 
     return (
 
-            <Space vertical={true} style={{width: "100%"}}>
+            <Space vertical={true} style={{width: "95%"}}>
                 <Table
                         columns={columns}
                         dataSource={rows}
