@@ -7,7 +7,7 @@ export function Users() {
     const {t} = useTranslation();
 
     return (
-            <Space vertical={true} style={{width: "100%", margin: 30}} align="center" size="large">
+            <Space vertical={true} style={{width: "95%", margin: 30}} align="center" size="large">
                 <Alert
                         type="info"
                         title={t("Users.alert.message")}

@@ -5,6 +5,7 @@ import {
     ArrowsAltOutlined,
     AudioOutlined,
     ClockCircleOutlined,
+    DatabaseOutlined,
     FieldTimeOutlined,
     FileImageOutlined,
     FileOutlined,
@@ -123,6 +124,23 @@ export function TopBar() {
                                 label: (<NavLink to={"/files/search"}>{t("TopBar.menu.fileManagement.searchFiles")}</NavLink>),
                                 key: "file-searchFiles",
                                 icon: <FileSearchOutlined/>
+                            },
+                        ],
+                    },
+                    {
+                        label: t("TopBar.menu.dataManagement.title"),
+                        key: "dataManagement",
+                        icon: <DatabaseOutlined/>,
+                        children: [
+                            {
+                                label: (<NavLink to={"/data/music"}>{t("TopBar.menu.dataManagement.publishMusic")}</NavLink>),
+                                key: "data-publishMusic",
+                                icon: <UploadOutlined/>
+                            },
+                            {
+                                label: (<NavLink to={"/data/gps-time-series"}>{t("TopBar.menu.dataManagement.publishGpsTimeSeries")}</NavLink>),
+                                key: "data-publishGpsTimeSeries",
+                                icon: <FieldTimeOutlined/>
                             },
                         ],
                     },

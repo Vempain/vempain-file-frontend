@@ -663,6 +663,47 @@
       "returnButton" : "Till startsidan"
     }
   },
+  "PublishGpsTimeSeries" : {
+    "actions" : {
+      "publish" : "Publicera GPS-tidsserie"
+    },
+    "fields" : {
+      "derivedIdentifier" : "Datasetidentifierare"
+    },
+    "header" : {
+      "title" : "Publicera GPS-tidsserie"
+    },
+    "messages" : {
+      "fetchGroupsError" : "Misslyckades att ladda bildfilgrupper",
+      "publishError" : "Misslyckades att publicera GPS-tidsserie",
+      "publishSuccess" : "GPS-tidsserie publicerades",
+      "selectWarning" : "Välj en bildfilgrupp"
+    },
+    "select" : {
+      "label" : "Välj bildfilgrupp",
+      "placeholder" : "Välj en filgrupp"
+    }
+  },
+  "PublishMusicData" : {
+    "actions" : {
+      "publish" : "Publicera musikdata"
+    },
+    "fields" : {
+      "description" : "Beskrivning",
+      "identifier" : "Identifierare",
+      "type" : "Typ",
+      "updatedAt" : "Senast uppdaterad"
+    },
+    "header" : {
+      "title" : "Publicera musikdata"
+    },
+    "messages" : {
+      "fetchError" : "Misslyckades att ladda musikdatasetet",
+      "notFound" : "Musikdatasetet hittades inte",
+      "publishError" : "Misslyckades att publicera musikdata",
+      "publishSuccess" : "Musikdata publicerades"
+    }
+  },
   "SearchFiles" : {
     "alert" : {
       "description" : "Detta är sidan Sök filer.",
@@ -761,6 +802,11 @@
       "auth" : {
         "login" : "Logga in",
         "register" : "Registrera"
+      },
+      "dataManagement" : {
+        "publishGpsTimeSeries" : "Publicera GPS-tidsserie",
+        "publishMusic" : "Publicera musik",
+        "title" : "Datahantering"
       },
       "fileManagement" : {
         "archive" : "Arkiv",

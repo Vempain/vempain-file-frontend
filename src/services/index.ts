@@ -1,6 +1,7 @@
 export {AbstractFileAPI} from './AbstractFileAPI';
 import {ArchiveFileAPI} from './ArchiveFileAPI';
 import {AudioFileAPI} from './AudioFileAPI';
+import {DataAPI} from './DataAPI';
 import {DocumentFileAPI} from './DocumentFileAPI';
 import {FileGroupAPI} from './FileGroupAPI';
 import {FileScannerAPI} from './FileScannerAPI';
@@ -19,6 +20,7 @@ import {resolveApiUrl} from "./resolveApiUrl";
 
 export {ArchiveFileAPI} from './ArchiveFileAPI';
 export {AudioFileAPI} from './AudioFileAPI';
+export {DataAPI} from './DataAPI';
 export {DocumentFileAPI} from './DocumentFileAPI';
 export {FileGroupAPI} from './FileGroupAPI';
 export {FileScannerAPI} from './FileScannerAPI';
@@ -36,6 +38,7 @@ export const apiUrl: string = resolveApiUrl();
 
 export const archiveFileAPI = new ArchiveFileAPI(apiUrl, '/files/archive');
 export const audioFileAPI = new AudioFileAPI(apiUrl, '/files/audio');
+export const dataAPI = new DataAPI(apiUrl, '/data-publish');
 export const documentFileAPI = new DocumentFileAPI(apiUrl, '/files/document');
 export const fileGroupAPI = new FileGroupAPI(apiUrl, '/file-groups');
 export const fileScannerAPI = new FileScannerAPI(apiUrl, '/scan-files');

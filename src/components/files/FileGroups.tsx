@@ -457,7 +457,7 @@ export function FileGroups() {
 
     return (
             <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
-                <Space style={{width: "100%", justifyContent: "space-between"}}>
+                <Space style={{width: "95%", justifyContent: "space-between"}}>
                     <Space align="center" size={16}>
                         <Input.Search
                                 placeholder={t("FileGroups.search.placeholder", {defaultValue: "Search file groups"})}
@@ -564,7 +564,7 @@ export function FileGroups() {
                         {t("FileGroups.modal.files.title", {defaultValue: "Files in group"})}
                     </Typography.Title>
 
-                    <Space vertical={true} style={{width: "100%"}} size="middle">
+                    <Space vertical={true} style={{width: "95%"}} size="middle">
                         <Space wrap>
                             <Select
                                     style={{minWidth: 220}}

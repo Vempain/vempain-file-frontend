@@ -1,5 +1,7 @@
 export type {ArchiveFileResponse} from "./ArchiveFileResponse";
 export type {AudioFileResponse} from "./AudioFileResponse";
+export type {DataResponse} from "./DataResponse";
+export type {DataSummaryResponse} from "./DataSummaryResponse";
 export type {DocumentFileResponse} from "./DocumentFileResponse";
 export type {ExportFileResponse} from "./ExportFileResponse";
 export type {ExportScanResponse} from "./ExportScanResponse";
