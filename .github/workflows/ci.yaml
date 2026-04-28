@@ -28,6 +28,10 @@ jobs:
         uses: actions/setup-node@v6.3.0
         with:
           node-version: '24'
+          cache: yarn
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@vempain'
+          always-auth: true
 
       - name: Resolve package token
         shell: bash
@@ -40,20 +44,24 @@ jobs:
             VEMPAIN_ACTION_TOKEN="${{ secrets.GITHUB_TOKEN }}"
           fi
           echo "VEMPAIN_ACTION_TOKEN=${VEMPAIN_ACTION_TOKEN}" >> $GITHUB_ENV
+          echo "NODE_AUTH_TOKEN=${VEMPAIN_ACTION_TOKEN}" >> $GITHUB_ENV
 
       - name: Test
         run: |
-          yarn install
+          yarn install --immutable
           yarn build
           yarn test --passWithNoTests --watchAll=false
         env:
           VEMPAIN_ACTION_TOKEN: ${{ env.VEMPAIN_ACTION_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ env.NODE_AUTH_TOKEN }}
+          YARN_ENABLE_HARDENED_MODE: false
 
       - name: Coverage
         run: |
           yarn test:coverage
         env:
           VEMPAIN_ACTION_TOKEN: ${{ env.VEMPAIN_ACTION_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ env.NODE_AUTH_TOKEN }}
 
   version-and-upload:
     runs-on: ubuntu-latest
@@ -70,6 +78,10 @@ jobs:
         uses: actions/setup-node@v6.3.0
         with:
           node-version: '24'
+          cache: yarn
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@vempain'
+          always-auth: true
 
       - name: Resolve package token
         shell: bash
@@ -82,6 +94,7 @@ jobs:
             VEMPAIN_ACTION_TOKEN="${{ secrets.GITHUB_TOKEN }}"
           fi
           echo "VEMPAIN_ACTION_TOKEN=${VEMPAIN_ACTION_TOKEN}" >> $GITHUB_ENV
+          echo "NODE_AUTH_TOKEN=${VEMPAIN_ACTION_TOKEN}" >> $GITHUB_ENV
 
       - name: Get main and base version
         id: basemain
@@ -118,13 +131,16 @@ jobs:
         env:
           newVersion: ${{ steps.newVer.outputs.newVersion }}
           VEMPAIN_ACTION_TOKEN: ${{ env.VEMPAIN_ACTION_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ env.NODE_AUTH_TOKEN }}
 
       - name: Build production package
         run: |
-          yarn install
+          yarn install --immutable
           yarn build:production
         env:
           VEMPAIN_ACTION_TOKEN: ${{ env.VEMPAIN_ACTION_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ env.NODE_AUTH_TOKEN }}
+          YARN_ENABLE_HARDENED_MODE: false
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
