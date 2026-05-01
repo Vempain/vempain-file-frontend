@@ -1,14 +1,13 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
 import {Button, Col, Divider, Form, InputNumber, message, Modal, Popconfirm, Row, Select, Space, Table, Tag, Typography} from "antd";
 import type {ColumnsType} from "antd/es/table";
-import {locationAPI} from "../../services";
+import {locationAPI, LocationAPI} from "../../services";
 import type {GeoCoordinate, LocationGuardRequest, LocationGuardResponse} from "../../models";
 import {GuardTypeEnum} from "../../models";
 
 // react-leaflet map picker
 import {CircleMarker, MapContainer, TileLayer, useMap, useMapEvents} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import {LocationAPI} from "../../services/LocationAPI.ts";
 import {useTranslation} from "react-i18next";
 import {MAP_ATTRIBUTION, MAP_TILE_URL} from "../../tools";
 
@@ -46,6 +45,21 @@ function ClickHandler({onSelect}: { onSelect: (coord: GeoCoordinate) => void }) 
     return null;
 }
 
+function MapEffects({activeDep, centerDep}: { activeDep: boolean; centerDep: [number, number] }) {
+    const map = useMap();
+    useEffect(() => {
+        if (activeDep) {
+            // Delay to allow modal animation/layout to finish
+            const t = setTimeout(() => map.invalidateSize(), 80);
+            return () => clearTimeout(t);
+        }
+    }, [activeDep, map]);
+    useEffect(() => {
+        map.setView(centerDep);
+    }, [centerDep, map]);
+    return null;
+}
+
 function MapPicker({
                        value,
                        onChange,
@@ -67,21 +81,6 @@ function MapPicker({
         return [60.1699, 24.9384];
     }, [value]);
 
-    // Helper to invalidate size after modal open and recenter on coord change
-    function MapEffects({activeDep, centerDep}: { activeDep: boolean; centerDep: [number, number] }) {
-        const map = useMap();
-        useEffect(() => {
-            if (activeDep) {
-                // Delay to allow modal animation/layout to finish
-                const t = setTimeout(() => map.invalidateSize(), 80);
-                return () => clearTimeout(t);
-            }
-        }, [activeDep, map]);
-        useEffect(() => {
-            map.setView(centerDep);
-        }, [centerDep, map]);
-        return null;
-    }
 
     return (
             <div style={{height, width: "100%", border: "1px solid #eee", borderRadius: 6, overflow: "hidden"}}>
