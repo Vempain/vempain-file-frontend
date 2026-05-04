@@ -2417,15 +2417,15 @@ __metadata:
     "@vempain/vempain-auth-frontend": "npm:^1.0.9"
     "@vitejs/plugin-react": "npm:^6.0.1"
     antd: "npm:^6.3.7"
-    axios: "npm:^1.15.2"
+    axios: "npm:^1.16.0"
     dayjs: "npm:^1.11.20"
     env-cmd: "npm:^11.0.0"
-    eslint: "npm:^10.2.1"
+    eslint: "npm:^10.3.0"
     eslint-plugin-react-hooks: "npm:^7.1.1"
     eslint-plugin-react-refresh: "npm:^0.5.2"
-    globals: "npm:^17.5.0"
+    globals: "npm:^17.6.0"
     i18next: "npm:^26.0.8"
-    i18next-http-backend: "npm:^3.0.6"
+    i18next-http-backend: "npm:^4.0.0"
     jest: "npm:^30.3.0"
     jest-environment-jsdom: "npm:^30.3.0"
     leaflet: "npm:^1.9.4"
@@ -2656,14 +2656,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.15.2":
-  version: 1.15.2
-  resolution: "axios@npm:1.15.2"
+"axios@npm:^1.16.0":
+  version: 1.16.0
+  resolution: "axios@npm:1.16.0"
   dependencies:
-    follow-redirects: "npm:^1.15.11"
+    follow-redirects: "npm:^1.16.0"
     form-data: "npm:^4.0.5"
     proxy-from-env: "npm:^2.1.0"
-  checksum: 10c0/4eeae0feeaa7fdc1ef24f81f8b378fdadedf4aebdd6bf224484675160f8744cf17b9b0d1c215279979940f7e8ce463beffa2f713099612e428eac238515c81d5
+  checksum: 10c0/1c91a5221b77b76072026b4cc95ecdf38f7c3e33e63423abec09a85e6e9a12279637dcc9ac2ba1fc333e0c447fb3b0f46d7965acb5d7cea02d188e9c6d425c0b
   languageName: node
   linkType: hard
 
@@ -3009,15 +3009,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-fetch@npm:4.1.0":
-  version: 4.1.0
-  resolution: "cross-fetch@npm:4.1.0"
-  dependencies:
-    node-fetch: "npm:^2.7.0"
-  checksum: 10c0/628b134ea27cfcada67025afe6ef1419813fffc5d63d175553efa75a2334522d450300a0f3f0719029700da80e96327930709d5551cf6deb39bb62f1d536642e
-  languageName: node
-  linkType: hard
-
 "cross-spawn@npm:^7.0.3, cross-spawn@npm:^7.0.6":
   version: 7.0.6
   resolution: "cross-spawn@npm:7.0.6"
@@ -3340,9 +3331,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^10.2.1":
-  version: 10.2.1
-  resolution: "eslint@npm:10.2.1"
+"eslint@npm:^10.3.0":
+  version: 10.3.0
+  resolution: "eslint@npm:10.3.0"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.8.0"
     "@eslint-community/regexpp": "npm:^4.12.2"
@@ -3381,7 +3372,7 @@ __metadata:
       optional: true
   bin:
     eslint: bin/eslint.js
-  checksum: 10c0/176795a3794a785502fa5cd14a9609264c2be5405552d20fed3e499bd465c29639c91ac44619ae66787b0fb7494e72d112550a2136a735d92a26bc6a7af4915c
+  checksum: 10c0/81e3ceba949f62d1b530660279db86cf814f5dc43d7cc3759a8008fe4fc679d46568279fe1cceb7ddbbc98ab57a96ae524f6e811ffc6897b49b90ea08aa785e5
   languageName: node
   linkType: hard
 
@@ -3571,7 +3562,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.15.11":
+"follow-redirects@npm:^1.16.0":
   version: 1.16.0
   resolution: "follow-redirects@npm:1.16.0"
   peerDependenciesMeta:
@@ -3742,10 +3733,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals@npm:^17.5.0":
-  version: 17.5.0
-  resolution: "globals@npm:17.5.0"
-  checksum: 10c0/92828102ed2f5637907725f0478038bed02fc83e9fc89300bb753639ba7c022b6c02576fc772117302b431b204591db1f2fa909d26f3f0a9852cc856a941df3f
+"globals@npm:^17.6.0":
+  version: 17.6.0
+  resolution: "globals@npm:17.6.0"
+  checksum: 10c0/cf94fb4329cc5c68cf81018fd68324f413181ee169f0235b0b33b82bc93fe7825a21beea951f83a80e8e4bbdad9c0c80515a145b5fd4b5cb52f2a80db899a93f
   languageName: node
   linkType: hard
 
@@ -3881,12 +3872,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-http-backend@npm:^3.0.6":
-  version: 3.0.6
-  resolution: "i18next-http-backend@npm:3.0.6"
-  dependencies:
-    cross-fetch: "npm:4.1.0"
-  checksum: 10c0/b799c4c49943cca5f215d8a7b563785e194e9061724213d5942c049855ed00a340a2478a305dd66cac59cf5fc32c90cbfe3d62c7063a59ad4401948196d430a5
+"i18next-http-backend@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "i18next-http-backend@npm:4.0.0"
+  checksum: 10c0/7342016415d128d7077da659804f277f10e2d1b943cf9c43926faaf71290e0b49a6a1facc90fe7b1b8a54d05e5d91170ab95bcc4773749858c5a50efce5fcbef
   languageName: node
   linkType: hard
 
@@ -5112,20 +5101,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^2.7.0":
-  version: 2.7.0
-  resolution: "node-fetch@npm:2.7.0"
-  dependencies:
-    whatwg-url: "npm:^5.0.0"
-  peerDependencies:
-    encoding: ^0.1.0
-  peerDependenciesMeta:
-    encoding:
-      optional: true
-  checksum: 10c0/b55786b6028208e6fbe594ccccc213cab67a72899c9234eb59dba51062a299ea853210fcf526998eaa2867b0963ad72338824450905679ff0fa304b8c5093ae8
-  languageName: node
-  linkType: hard
-
 "node-gyp@npm:latest":
   version: 12.3.0
   resolution: "node-gyp@npm:12.3.0"
@@ -5968,13 +5943,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tr46@npm:~0.0.3":
-  version: 0.0.3
-  resolution: "tr46@npm:0.0.3"
-  checksum: 10c0/047cb209a6b60c742f05c9d3ace8fa510bff609995c129a37ace03476a9b12db4dbf975e74600830ef0796e18882b2381fb5fb1f6b4f96b832c374de3ab91a11
-  languageName: node
-  linkType: hard
-
 "translation-check@npm:^1.1.1":
   version: 1.1.1
   resolution: "translation-check@npm:1.1.1"
@@ -6320,13 +6288,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webidl-conversions@npm:^3.0.0":
-  version: 3.0.1
-  resolution: "webidl-conversions@npm:3.0.1"
-  checksum: 10c0/5612d5f3e54760a797052eb4927f0ddc01383550f542ccd33d5238cfd65aeed392a45ad38364970d0a0f4fea32e1f4d231b3d8dac4a3bdd385e5cf802ae097db
-  languageName: node
-  linkType: hard
-
 "webidl-conversions@npm:^7.0.0":
   version: 7.0.0
   resolution: "webidl-conversions@npm:7.0.0"
@@ -6357,16 +6318,6 @@ __metadata:
     tr46: "npm:^5.1.0"
     webidl-conversions: "npm:^7.0.0"
   checksum: 10c0/f746fc2f4c906607d09537de1227b13f9494c171141e5427ed7d2c0dd0b6a48b43d8e71abaae57d368d0c06b673fd8ec63550b32ad5ed64990c7b0266c2b4272
-  languageName: node
-  linkType: hard
-
-"whatwg-url@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "whatwg-url@npm:5.0.0"
-  dependencies:
-    tr46: "npm:~0.0.3"
-    webidl-conversions: "npm:^3.0.0"
-  checksum: 10c0/1588bed84d10b72d5eec1d0faa0722ba1962f1821e7539c535558fb5398d223b0c50d8acab950b8c488b4ba69043fd833cc2697056b167d8ad46fac3995a55d5
   languageName: node
   linkType: hard
 
