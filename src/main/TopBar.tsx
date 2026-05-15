@@ -91,13 +91,55 @@ export function TopBar() {
                                 icon: <AudioOutlined/>
                             },
                             {
+                                label: (<NavLink to={"/files/binaries"}>{t("TopBar.menu.fileManagement.binary", {defaultValue: "Binary"})}</NavLink>),
+                                key: "file-binaryFiles",
+                                icon: <FileOutlined/>
+                            },
+                            {
+                                label: (<NavLink to={"/files/data"}>{t("TopBar.menu.fileManagement.data", {defaultValue: "Data"})}</NavLink>),
+                                key: "file-dataFiles",
+                                icon: <DatabaseOutlined/>
+                            },
+                            {
                                 label: (<NavLink to={"/files/documents"}>{t("TopBar.menu.fileManagement.document")}</NavLink>),
                                 key: "file-documentFiles",
                                 icon: <FileUnknownOutlined/>
                             },
                             {
+                                label: (<NavLink
+                                        to={"/files/executables"}>{t("TopBar.menu.fileManagement.executable", {defaultValue: "Executable"})}</NavLink>),
+                                key: "file-executableFiles",
+                                icon: <SettingFilled/>
+                            },
+                            {
                                 label: (<NavLink to={"/files/images"}>{t("TopBar.menu.fileManagement.image")}</NavLink>),
                                 key: "file-imageFiles",
+                                icon: <FileImageOutlined/>
+                            },
+                            {
+                                label: (<NavLink to={"/files/fonts"}>{t("TopBar.menu.fileManagement.font", {defaultValue: "Font"})}</NavLink>),
+                                key: "file-fontFiles",
+                                icon: <SnippetsOutlined/>
+                            },
+                            {
+                                label: (<NavLink to={"/files/icons"}>{t("TopBar.menu.fileManagement.icon", {defaultValue: "Icon"})}</NavLink>),
+                                key: "file-iconFiles",
+                                icon: <AppstoreOutlined/>
+                            },
+                            {
+                                label: (<NavLink
+                                        to={"/files/interactives"}>{t("TopBar.menu.fileManagement.interactive", {defaultValue: "Interactive"})}</NavLink>),
+                                key: "file-interactiveFiles",
+                                icon: <SwapOutlined/>
+                            },
+                            {
+                                label: (<NavLink to={"/files/music"}>{t("TopBar.menu.fileManagement.music", {defaultValue: "Music"})}</NavLink>),
+                                key: "file-musicFiles",
+                                icon: <AudioOutlined/>
+                            },
+                            {
+                                label: (<NavLink to={"/files/thumbs"}>{t("TopBar.menu.fileManagement.thumb", {defaultValue: "Thumb"})}</NavLink>),
+                                key: "file-thumbFiles",
                                 icon: <FileImageOutlined/>
                             },
                             {

@@ -20,6 +20,7 @@
 
 - Backend DTO naming is preserved in the frontend. Use snake_case fields like `group_name`, `file_path`, `scan_original_response`, `total_elements` exactly as
   returned by the backend.
+- Snake_case is mandatory for all JSON payload keys in Vempain APIs; do not add camelCase request/response keys when creating frontend models or serializers.
 - Do **not** “React-ify” API models into camelCase inside components unless you are intentionally mapping them.
 - File-group and pageable APIs are server-driven: Ant Design tables stay 1-based, backend requests are 0-based (`page: currentPage - 1`). See
   `src/components/files/FileGroups.tsx` and `src/components/files/ImageFiles.tsx`.

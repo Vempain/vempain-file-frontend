@@ -8,22 +8,30 @@ import {
     Account,
     ArchiveFiles,
     AudioFiles,
+    BinaryFiles,
     ChangePassword,
+    DataFiles,
     DocumentFiles,
+    ExecutableFiles,
     FileGroups,
     FileImports,
     FilePermissions,
+    FontFiles,
+    IconFiles,
     ImageFiles,
     ImportFiles,
+    InteractiveFiles,
     LocationGuards,
+    MusicFiles,
     PublishGpsTimeSeries,
-    PublishMusicData,
     Publishing,
+    PublishMusicData,
     SearchFiles,
     SystemSchedules,
     TagCreate,
     TagList,
     TagSearch,
+    ThumbFiles,
     Units,
     Users,
     VectorFiles,
@@ -71,11 +79,19 @@ export default function App() {
                             <Route path={"/data/gps-time-series"} element={<PublishGpsTimeSeries/>}/>
                             <Route path={"/files/archives"} element={<ArchiveFiles/>}/>
                             <Route path={"/files/audios"} element={<AudioFiles/>}/>
+                            <Route path={"/files/binaries"} element={<BinaryFiles/>}/>
+                            <Route path={"/files/data"} element={<DataFiles/>}/>
                             <Route path={"/files/documents"} element={<DocumentFiles/>}/>
+                            <Route path={"/files/executables"} element={<ExecutableFiles/>}/>
                             <Route path={"/files/file-groups"} element={<FileGroups/>}/>
+                            <Route path={"/files/fonts"} element={<FontFiles/>}/>
+                            <Route path={"/files/icons"} element={<IconFiles/>}/>
                             <Route path={"/files/images"} element={<ImageFiles/>}/>
                             <Route path={"/files/import"} element={<ImportFiles/>}/>
+                            <Route path={"/files/interactives"} element={<InteractiveFiles/>}/>
+                            <Route path={"/files/music"} element={<MusicFiles/>}/>
                             <Route path={"/files/search"} element={<SearchFiles/>}/>
+                            <Route path={"/files/thumbs"} element={<ThumbFiles/>}/>
                             <Route path={"/files/vectors"} element={<VectorFiles/>}/>
                             <Route path={"/files/videos"} element={<VideoFiles/>}/>
                             <Route path={"/management/permissions"} element={<FilePermissions/>}/>

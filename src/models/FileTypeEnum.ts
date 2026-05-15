@@ -2,6 +2,7 @@ export const FileTypeEnum = {
     ARCHIVE: 'ARCHIVE',
     AUDIO: 'AUDIO',
     BINARY: 'BINARY',
+    MUSIC: 'MUSIC',
     DATA: 'DATA',
     DOCUMENT: 'DOCUMENT',
     EXECUTABLE: 'EXECUTABLE',
