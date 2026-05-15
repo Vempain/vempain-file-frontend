@@ -3,7 +3,24 @@ import {DeleteOutlined, EditOutlined, PlusOutlined, UploadOutlined} from "@ant-d
 import {useCallback, useEffect, useMemo, useState} from "react";
 import type {ColumnsType} from "antd/es/table";
 import type {SorterResult, SortOrder} from "antd/es/table/interface";
-import {archiveFileAPI, audioFileAPI, documentFileAPI, fileGroupAPI, imageFileAPI, publishAPI, vectorFileAPI, videoFileAPI} from "../../services";
+import {
+    archiveFileAPI,
+    audioFileAPI,
+    binaryFileAPI,
+    dataFileAPI,
+    documentFileAPI,
+    executableFileAPI,
+    fileGroupAPI,
+    fontFileAPI,
+    iconFileAPI,
+    imageFileAPI,
+    interactiveFileAPI,
+    musicFileAPI,
+    publishAPI,
+    thumbFileAPI,
+    vectorFileAPI,
+    videoFileAPI
+} from "../../services";
 import type {FileGroupListResponse, FileGroupRequest, FileGroupResponse, FileResponse, PublishFileGroupRequest, PublishFileGroupResponse} from "../../models";
 import {FileTypeEnum} from "../../models";
 import {FileDetails} from "./FileDetails";
@@ -65,11 +82,18 @@ export function FileGroups() {
         const map: Partial<Record<FileTypeEnum, FileAPIService>> = {
             [FileTypeEnum.ARCHIVE]: archiveFileAPI,
             [FileTypeEnum.AUDIO]: audioFileAPI,
+            [FileTypeEnum.BINARY]: binaryFileAPI,
+            [FileTypeEnum.DATA]: dataFileAPI,
             [FileTypeEnum.DOCUMENT]: documentFileAPI,
+            [FileTypeEnum.EXECUTABLE]: executableFileAPI,
+            [FileTypeEnum.FONT]: fontFileAPI,
+            [FileTypeEnum.ICON]: iconFileAPI,
             [FileTypeEnum.IMAGE]: imageFileAPI,
+            [FileTypeEnum.INTERACTIVE]: interactiveFileAPI,
+            [FileTypeEnum.MUSIC]: musicFileAPI,
+            [FileTypeEnum.THUMB]: thumbFileAPI,
             [FileTypeEnum.VECTOR]: vectorFileAPI,
             [FileTypeEnum.VIDEO]: videoFileAPI,
-            // Types without dedicated listing are omitted on purpose:
         };
         return map[type];
     };
@@ -77,8 +101,16 @@ export function FileGroups() {
     const typeOptions = [
         FileTypeEnum.ARCHIVE,
         FileTypeEnum.AUDIO,
+        FileTypeEnum.BINARY,
+        FileTypeEnum.DATA,
         FileTypeEnum.DOCUMENT,
+        FileTypeEnum.EXECUTABLE,
+        FileTypeEnum.FONT,
+        FileTypeEnum.ICON,
         FileTypeEnum.IMAGE,
+        FileTypeEnum.INTERACTIVE,
+        FileTypeEnum.MUSIC,
+        FileTypeEnum.THUMB,
         FileTypeEnum.VECTOR,
         FileTypeEnum.VIDEO,
     ].map(v => ({value: v, label: t(`FileTypeEnum.${v.toLowerCase()}`, {defaultValue: v})}));
