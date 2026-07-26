@@ -6,28 +6,29 @@
 
 # Vempain File Frontend
 
-
-Vempain File Frontend is the user-facing web application for interacting with Vempain’s file service. It provides an authenticated interface to discover, inspect, and retrieve files exposed by the backend API. The UI supports multiple languages and can present geospatial context for files that include location metadata.
+Vempain File Frontend is the user-facing web application for interacting with Vempain’s file service. It provides an authenticated interface to discover,
+inspect, and retrieve files exposed by the backend API. The UI supports multiple languages and can present geospatial context for files that include location
+metadata.
 
 ## What the frontend does
 
 - Authentication and access control
-  - Integrates with Vempain’s authentication flow to sign users in and gate file access.
+    - Integrates with Vempain’s authentication flow to sign users in and gate file access.
 
 - File discovery and navigation
-  - Lists the files made available by the backend.
-  - Supports searching and browsing so users can quickly find relevant items.
+    - Lists the files made available by the backend.
+    - Supports searching and browsing so users can quickly find relevant items.
 
 - File details and actions
-  - Shows key metadata provided by the API (for example: name, size, timestamps, and similar attributes).
-  - Initiates downloads via the backend.
-  - Surfaces additional server-side actions when exposed by the API.
+    - Shows key metadata provided by the API (for example: name, size, timestamps, and similar attributes).
+    - Initiates downloads via the backend.
+    - Surfaces additional server-side actions when exposed by the API.
 
 - Map-based context (when available)
-  - If files contain geospatial metadata, the app can display their locations on an interactive map to give visual context.
+    - If files contain geospatial metadata, the app can display their locations on an interactive map to give visual context.
 
 - Internationalized user interface
-  - The interface loads translations at runtime so users can switch language without rebuilding the app.
+    - The interface loads translations at runtime so users can switch language without rebuilding the app.
 
 ## Typical user workflows
 
@@ -52,13 +53,14 @@ The application reads its runtime configuration from environment variables (expo
 
 - `VITE_API_BASE_URL` — Base URL of the backend file API.
 - i18n:
-  - `VITE_I18N_DEFAULT_LANG` — Default language (e.g., `en`).
-  - `VITE_I18N_SUPPORTED_LANGS` — Comma-separated list of languages (e.g., `en,fi`).
+    - `VITE_I18N_DEFAULT_LANG` — Default language (e.g., `en`).
+    - `VITE_I18N_SUPPORTED_LANGS` — Comma-separated list of languages (e.g., `en,fi`).
 - Map tiles (if applicable):
-  - `VITE_MAP_TILE_URL` — Tile URL template for the map.
-  - `VITE_MAP_ATTRIBUTION` — Attribution string for the tile provider.
+    - `VITE_MAP_TILE_URL` — Tile URL template for the map.
+    - `VITE_MAP_ATTRIBUTION` — Attribution string for the tile provider.
 
 Environment files:
+
 - Development: `.env` / `.env.local`
 - Production build: `.env.prod`
 
