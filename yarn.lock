@@ -1907,9 +1907,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:^6.9.1":
-  version: 6.9.1
-  resolution: "@testing-library/jest-dom@npm:6.9.1"
+"@testing-library/jest-dom@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "@testing-library/jest-dom@npm:7.0.0"
   dependencies:
     "@adobe/css-tools": "npm:^4.4.0"
     aria-query: "npm:^5.0.0"
@@ -1917,7 +1917,9 @@ __metadata:
     dom-accessibility-api: "npm:^0.6.3"
     picocolors: "npm:^1.1.1"
     redent: "npm:^3.0.0"
-  checksum: 10c0/4291ebd2f0f38d14cefac142c56c337941775a5807e2a3d6f1a14c2fbd6be76a18e498ed189e95bedc97d9e8cf1738049bc76c85b5bc5e23fae7c9e10f7b3a12
+  peerDependencies:
+    "@testing-library/dom": ">=10 <11"
+  checksum: 10c0/f5ecf821ed098438a5e9ce993d431505f0a1af43edb05e423c6ab7becf9d7dbe46385fc93e0e460a4c7996f4513cad72b8967dd8e98c75bc7ea6733ff7efcf4e
   languageName: node
   linkType: hard
 
@@ -2431,7 +2433,7 @@ __metadata:
   resolution: "@vempain/vempain-file-frontend@workspace:."
   dependencies:
     "@eslint/js": "npm:^10.0.1"
-    "@testing-library/jest-dom": "npm:^6.9.1"
+    "@testing-library/jest-dom": "npm:^7.0.0"
     "@types/jest": "npm:^30.0.0"
     "@types/leaflet": "npm:^1.9.21"
     "@types/react": "npm:^19.2.17"
@@ -2789,11 +2791,11 @@ __metadata:
   linkType: hard
 
 "baseline-browser-mapping@npm:^2.10.44":
-  version: 2.11.7
-  resolution: "baseline-browser-mapping@npm:2.11.7"
+  version: 2.11.8
+  resolution: "baseline-browser-mapping@npm:2.11.8"
   bin:
     baseline-browser-mapping: dist/cli.cjs
-  checksum: 10c0/2bf9057cfd2e47a1c2f00f624168e2d648e21c58f5c12229ff0b6f648d4f00c1e8a235715f6fa62cba9ab754eb366b3c85d8b12332f4700697f899b3aec2cb88
+  checksum: 10c0/4fd0ba04e96d9139827eb0aed4b086c789ca9062877a17946b7b51a5be5959412c4919d6c017ad8d233445cbef48716e409e0256326b789a435c699e4c5c7a49
   languageName: node
   linkType: hard
 
