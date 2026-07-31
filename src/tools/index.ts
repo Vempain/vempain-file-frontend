@@ -1,3 +1,4 @@
+export {formatByteSize} from './byteSizeTool';
 export {compareDayjsNullable, formatDayjsNullable, formatDateWithTimeZone} from './dateTimeTool';
 export {fileGroupDatasetToIdentifier, fileGroupPathToIdentifier} from './dataTools';
 export {fileTypeEnum2Tag, pathCompletionEnum2Tag} from './enumToTagTool';

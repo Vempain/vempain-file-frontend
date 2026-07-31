@@ -17,4 +17,4 @@ export {ShowFileGroup} from "./ShowFileGroup";
 export {ThumbFiles} from "./ThumbFiles";
 export {VectorFiles} from "./VectorFiles";
 export {VideoFiles} from "./VideoFiles";
-export {formatSizeKB, filenameColumn, createdColumn, modifiedColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
+export {filenameColumn, createdColumn, modifiedColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
