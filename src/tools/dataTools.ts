@@ -1,6 +1,6 @@
 /**
  * Converts a file group path to a valid data set identifier.
- * The result is lowercase, contains only alphanumeric characters and underscores,
+ * The result is a lowercase string, contains only alphanumeric characters and underscores,
  * has no leading or trailing underscores, and falls back to "gps_time_series" for
  * empty or non-alphanumeric paths.
  */

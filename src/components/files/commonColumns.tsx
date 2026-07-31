@@ -1,13 +1,8 @@
 import {Button} from "antd";
 import type {ColumnType} from "antd/es/table";
 import type {FileResponse} from "../../models";
-import {formatDateWithTimeZone} from "../../tools";
+import {formatByteSize, formatDateWithTimeZone} from "../../tools";
 import type {TFunction} from "i18next";
-
-export function formatSizeKB(size?: number): string {
-    if (size == null) return "";
-    return `${(size / 1024).toFixed(2)} KB`;
-}
 
 // Filename column with modal trigger
 export function filenameColumn<T extends FileResponse>(
@@ -44,7 +39,7 @@ export function fileSizeColumn<T extends FileResponse>(t: TFunction): ColumnType
         dataIndex: "filesize",
         key: "filesize",
         sorter: (a: T, b: T) => a.filesize - b.filesize,
-        render: (size: number) => formatSizeKB(size),
+        render: (size: number) => formatByteSize(size),
     };
 }
 

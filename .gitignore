@@ -1,5 +1,6 @@
 # Ignore Gradle build output directory
 .idea/
+.junie
 
 package-lock.json
 node_modules
