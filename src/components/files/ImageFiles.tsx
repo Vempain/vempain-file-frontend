@@ -6,7 +6,7 @@ import {imageFileAPI} from "../../services";
 import type {ImageFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
 import {FileDetails} from "./FileDetails";
-import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
+import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn, thumbnailColumn} from "./commonColumns";
 import {useTranslation} from "react-i18next";
 
 export function ImageFiles() {
@@ -75,6 +75,7 @@ export function ImageFiles() {
             setSelectedFile(record);
             setDetailsOpen(true);
         }, t),
+        thumbnailColumn<ImageFileResponse>(t),
         filePathColumn<ImageFileResponse>(t),
         fileSizeColumn<ImageFileResponse>(t),
         mimetypeColumn<ImageFileResponse>(t),

@@ -3,6 +3,8 @@ import type {ColumnType} from "antd/es/table";
 import type {FileResponse} from "../../models";
 import {formatByteSize, formatDateWithTimeZone} from "../../tools";
 import type {TFunction} from "i18next";
+import {FileDisplay} from "./FileDisplay";
+import {ThumbnailPopup} from "./ThumbnailPopup.tsx";
 
 // Filename column with modal trigger
 export function filenameColumn<T extends FileResponse>(
@@ -50,6 +52,19 @@ export function mimetypeColumn<T extends FileResponse>(t: TFunction): ColumnType
         dataIndex: "mimetype",
         key: "mimetype",
         sorter: (a: T, b: T) => a.mimetype.localeCompare(b.mimetype),
+    };
+}
+
+// Thumbnail preview
+export function thumbnailColumn<T extends FileResponse>(t: TFunction): ColumnType<T> {
+    return {
+        title: t("CommonColumns.columns.thumb.title"),
+        dataIndex: "thumbnail_id",
+        key: "thumbnail_id",
+        render: (_thumbnailId: number | null, record: T) => record.thumbnail_id != null
+                ? <ThumbnailPopup id={record.thumbnail_id}
+                                  maxSize={500}> <FileDisplay id={record.thumbnail_id} maxSize={150}/></ThumbnailPopup>
+                : t("CommonColumns.columns.thumb.no_thumb"),
     };
 }
 

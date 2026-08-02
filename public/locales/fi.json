@@ -119,6 +119,10 @@
       },
       "modified" : {
         "title" : "Muokattu"
+      },
+      "thumb" : {
+        "no_thumb" : "Ei peukalokuvaa",
+        "title" : "Peukalokuva"
       }
     }
   },

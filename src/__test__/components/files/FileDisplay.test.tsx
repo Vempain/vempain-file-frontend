@@ -2,7 +2,7 @@ import type {CSSProperties, ReactNode} from "react";
 import {act} from "react";
 import {createRoot, type Root} from "react-dom/client";
 import {fileContentAPI} from "../../../services";
-import {FileDisplay} from "../../../components";
+import {FileDisplay} from "../../../components/files/FileDisplay";
 
 const getFileContent = jest.mocked(fileContentAPI.getFileContent);
 

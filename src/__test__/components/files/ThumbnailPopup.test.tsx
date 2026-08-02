@@ -1,7 +1,7 @@
 import type {ReactNode} from "react";
 import {act} from "react";
 import {createRoot, type Root} from "react-dom/client";
-import {ThumbnailPopup} from "../../../components";
+import {ThumbnailPopup} from "../../../components/files/ThumbnailPopup";
 
 jest.mock("antd", () => ({
     Popover: ({children, content, trigger}: { children: ReactNode; content: ReactNode; trigger: string }) => (

@@ -119,6 +119,10 @@
       },
       "modified" : {
         "title" : "Modified"
+      },
+      "thumb" : {
+        "no_thumb" : "No thumb",
+        "title" : "Thumb"
       }
     }
   },
