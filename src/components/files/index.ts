@@ -19,4 +19,4 @@ export {ThumbFiles} from "./ThumbFiles";
 export {ThumbnailPopup} from "./ThumbnailPopup";
 export {VectorFiles} from "./VectorFiles";
 export {VideoFiles} from "./VideoFiles";
-export {filenameColumn, createdColumn, modifiedColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
+export {filenameColumn, createdColumn, modifiedColumn, filePathColumn, fileSizeColumn, mimetypeColumn, thumbnailColumn} from "./commonColumns";
