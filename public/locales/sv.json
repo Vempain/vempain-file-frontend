@@ -119,6 +119,10 @@
       },
       "modified" : {
         "title" : "Ändrad"
+      },
+      "thumb" : {
+        "no_thumb" : "Ingen miniatyr",
+        "title" : "Miniatyr"
       }
     }
   },

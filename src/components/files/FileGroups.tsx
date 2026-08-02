@@ -24,7 +24,7 @@ import {
 import type {FileGroupListResponse, FileGroupRequest, FileGroupResponse, FileResponse, PublishFileGroupRequest, PublishFileGroupResponse} from "../../models";
 import {FileTypeEnum} from "../../models";
 import {FileDetails} from "./FileDetails";
-import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
+import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn, thumbnailColumn} from "./commonColumns";
 import {useTranslation} from "react-i18next";
 import type {PagedRequest, PagedResponse} from "@vempain/vempain-auth-frontend";
 
@@ -117,15 +117,15 @@ export function FileGroups() {
 
     // NEW: load candidates by page using pageable API
     const loadCandidatesPage = (type: FileTypeEnum, page: number) => {
-        const svc = getServiceForType(type);
-        if (!svc) return;
+        const filetypeAPI = getServiceForType(type);
+        if (!filetypeAPI) return;
         setCandidatesLoading(true);
         const pagedRequest: PagedRequest = {
             page: page - 1,
             size: candidatePageSize,
         };
 
-        svc.findAllPageable(pagedRequest)
+        filetypeAPI.findAllPageable(pagedRequest)
                 .then((res) => {
                     const list = res?.content ?? [];
                     setCandidates(prev => (page === 1 ? list : [...prev, ...list]));
@@ -396,6 +396,7 @@ export function FileGroups() {
             setSelectedFile(record);
             setDetailsOpen(true);
         }, t),
+        thumbnailColumn<FileResponse>(t),
         filePathColumn<FileResponse>(t),
         fileSizeColumn<FileResponse>(t),
         mimetypeColumn<FileResponse>(t),

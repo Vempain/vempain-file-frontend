@@ -6,6 +6,7 @@ import type {LocationResponse} from "./LocationsResponse.ts";
 export interface FileResponse extends AbstractResponse {
     filename: string;
     file_path: string;
+    thumbnail_id: number | null;
     external_file_id: string;
     mimetype: string;
     filesize: number;
