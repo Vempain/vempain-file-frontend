@@ -1,7 +1,7 @@
 import type {TFunction} from "i18next";
 import {Children, isValidElement, type ReactElement, type ReactNode} from "react";
 import type {FileResponse} from "../../../models";
-import {thumbnailColumn} from "../../../components";
+import {thumbnailColumn} from "../../../components/files/commonColumns";
 
 jest.mock("../../../tools", () => ({
     formatByteSize: jest.fn(),
@@ -15,7 +15,7 @@ jest.mock("../../../components/files/FileDisplay", () => ({
 }));
 
 jest.mock("../../../components/files/ThumbnailPopup", () => ({
-    ThumbnailPopup: ({children, id, maxSize}: { children: React.ReactNode; id: number; maxSize: number }) => (
+    ThumbnailPopup: ({children, id, maxSize}: { children: ReactNode; id: number; maxSize: number }) => (
             <div data-file-id={id} data-max-size={maxSize}>{children}</div>
     ),
 }));
