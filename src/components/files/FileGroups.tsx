@@ -396,7 +396,8 @@ export function FileGroups() {
             title: t("FileGroups.columns.file_count.title", {defaultValue: "Files"}),
             dataIndex: "file_count",
             key: "file_count",
-            sorter: false,
+            sorter: true,
+            sortOrder: pagedRequest.sort_by === "file_count" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
             render: (_: unknown, record: FileGroupListResponse) => record.file_count ?? "",
         },
         {

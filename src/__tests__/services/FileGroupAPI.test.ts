@@ -37,7 +37,7 @@ describe("FileGroupAPI", () => {
         const pagedRequest: PagedRequest = {
             page: 0,
             size: 50,
-            sort_by: "path",
+            sort_by: "file_count",
             direction: "ASC",
         };
 
