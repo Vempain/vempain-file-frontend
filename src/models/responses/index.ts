@@ -11,6 +11,7 @@ export type {ExportScanResponse} from "./ExportScanResponse";
 export type {FileGroupListResponse} from "./FileGroupListResponse";
 export type {FileGroupResponse} from "./FileGroupResponse";
 export type {FileResponse} from "./FileResponse";
+export type {FileStatisticsResponse} from "./FileStatisticsResponse";
 export type {FontFileResponse} from "./FontFileResponse";
 export type {IconFileResponse} from "./IconFileResponse";
 export type {ImageFileResponse} from "./ImageFileResponse";

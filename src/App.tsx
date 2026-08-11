@@ -27,6 +27,7 @@ import {
     Publishing,
     PublishMusicData,
     SearchFiles,
+    Statistics,
     SystemSchedules,
     TagCreate,
     TagList,
@@ -91,6 +92,7 @@ export default function App() {
                             <Route path={"/files/interactives"} element={<InteractiveFiles/>}/>
                             <Route path={"/files/music"} element={<MusicFiles/>}/>
                             <Route path={"/files/search"} element={<SearchFiles/>}/>
+                            <Route path={"/data/statistics"} element={<Statistics/>}/>
                             <Route path={"/files/thumbs"} element={<ThumbFiles/>}/>
                             <Route path={"/files/vectors"} element={<VectorFiles/>}/>
                             <Route path={"/files/videos"} element={<VideoFiles/>}/>
