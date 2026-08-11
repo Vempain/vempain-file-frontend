@@ -75,8 +75,8 @@ jest.mock("@vempain/vempain-auth-frontend", () => {
 
         public async findPageable(params?: Record<string, unknown>) {
             this.setAuthorizationHeader();
-            this.axiosInstance.defaults.headers.get["Content-Type"] = "application/json;charset=utf-8";
-            const response = await this.axiosInstance.get("", {params});
+            this.axiosInstance.defaults.headers.post["Content-Type"] = "application/json;charset=utf-8";
+            const response = await this.axiosInstance.post("paged", params);
             return response.data;
         }
 
@@ -118,5 +118,4 @@ jest.mock("@vempain/vempain-auth-frontend", () => {
         AbstractAPI: MockAbstractAPI,
     };
 }, {virtual: true});
-
 

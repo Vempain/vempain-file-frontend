@@ -33,7 +33,7 @@ export function PublishGpsTimeSeries() {
             search: search.trim() === "" ? undefined : search,
             case_sensitive: false,
         };
-        fileGroupAPI.getFileGroups(pagedRequest)
+        fileGroupAPI.findPageable(pagedRequest)
                 .then((data) => {
                     if (requestId !== requestIdRef.current) {
                         return;

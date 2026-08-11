@@ -5,5 +5,5 @@ export interface FileGroupResponse {
     path: string;
     group_name: string;
     description: string;
-    files: FileResponse[]
+    files?: FileResponse[]
 }
