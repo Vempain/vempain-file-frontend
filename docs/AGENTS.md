@@ -22,8 +22,9 @@
   returned by the backend.
 - Snake_case is mandatory for all JSON payload keys in Vempain APIs; do not add camelCase request/response keys when creating frontend models or serializers.
 - Do **not** “React-ify” API models into camelCase inside components unless you are intentionally mapping them.
-- File-group and pageable APIs are server-driven: Ant Design tables stay 1-based, backend requests are 0-based (`page: currentPage - 1`). See
-  `src/components/files/FileGroups.tsx` and `src/components/files/ImageFiles.tsx`.
+- File-group and pageable APIs are server-driven: Ant Design tables stay 1-based, backend requests are 0-based (`page: tablePage - 1`). Send one snake_case
+  `PagedRequest` body to `POST /file-groups/paged`; use the shared `findPageable()` client method. Table pagination, sorting, and column filter changes update
+  that request object and trigger a new fetch.
 
 ## TypeScript constraints specific to this repo
 
@@ -70,7 +71,7 @@
 ## Practical gotchas for agents
 
 - When adding a new list screen, prefer reusing `commonColumns.tsx` and `FileDetails` before inventing new table column renderers.
-- When adding sorting/search to Ant Design tables backed by the server, copy the `FileGroups.tsx` pattern: local `sortField/sortOrder/searchTerm/caseSensitive`
-  state, then fetch in a `useCallback` + `useEffect` pair.
+- When adding sorting/search to Ant Design tables backed by the server, keep the request state in one `PagedRequest` object and fetch it in a
+  `useCallback` + `useEffect` pair. Do not fetch an unpaged list and filter it in the browser.
 - When adding routes, check for matching `NavLink`s in `TopBar.tsx`; the menu is conditional on `userSession`.
 - Footer/version text comes from `src/buildInfo.json` plus `VITE_APP_VEMPAIN_*` env vars in `src/main/BottomFooter.tsx`.

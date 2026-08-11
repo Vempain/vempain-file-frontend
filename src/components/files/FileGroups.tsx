@@ -1,8 +1,8 @@
-import {Button, Form, Input, message, Modal, Popconfirm, Select, Space, Spin, Switch, Table, Typography} from "antd";
-import {DeleteOutlined, EditOutlined, PlusOutlined, UploadOutlined} from "@ant-design/icons";
-import {useCallback, useEffect, useMemo, useState} from "react";
+import {Button, Form, Input, type InputRef, message, Modal, Popconfirm, Select, Space, Spin, Table, Typography} from "antd";
+import {DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined, UploadOutlined} from "@ant-design/icons";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import type {ColumnsType} from "antd/es/table";
-import type {SorterResult, SortOrder} from "antd/es/table/interface";
+import type {FilterDropdownProps, FilterValue, SorterResult, TableColumnType} from "antd/es/table/interface";
 import {
     archiveFileAPI,
     audioFileAPI,
@@ -34,14 +34,15 @@ export function FileGroups() {
     // Table state
     const [loading, setLoading] = useState<boolean>(true);
     const [groups, setGroups] = useState<FileGroupListResponse[]>([]);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(10);
+    const [pagedRequest, setPagedRequest] = useState<PagedRequest>({
+        page: 0,
+        size: 10,
+        sort_by: "path",
+        direction: "ASC",
+        case_sensitive: false
+    });
     const [totalElements, setTotalElements] = useState<number>(0);
-    const [sortField, setSortField] = useState<string>("path");
-    const [sortOrder, setSortOrder] = useState<SortOrder>("ascend");
-    const [searchInput, setSearchInput] = useState<string>("");
-    const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
-    const [caseSensitive, setCaseSensitive] = useState<boolean>(false);
+    const searchInput = useRef<InputRef>(null);
 
     // Edit/Create modal state
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -162,30 +163,33 @@ export function FileGroups() {
         setSelectedFiles(prev => prev.filter(f => f.id !== id));
     };
 
-    const fetchGroups = useCallback((page: number = currentPage, size: number = pageSize) => {
+    const fetchGroups = useCallback((request: PagedRequest = pagedRequest) => {
         setLoading(true);
-
-        const pagedRequest: PagedRequest = {
-            page: page - 1,
-            size: size,
-            sort_by: sortField,
-            direction: sortOrder === "descend" ? "DESC" : "ASC",
-            search: searchTerm,
-            case_sensitive: caseSensitive
-        };
-        fileGroupAPI.getFileGroups(pagedRequest)
+        fileGroupAPI.findPageable(request)
                 .then((res) => {
                     setGroups(res.content ?? []);
                     setTotalElements(res.total_elements ?? 0);
-                    setCurrentPage((res.page ?? (page - 1)) + 1);
-                    setPageSize(res.size ?? size);
+                    setPagedRequest(previous => {
+                        const responsePage = res.page ?? request.page;
+                        const responseSize = res.size ?? request.size;
+
+                        if (previous.page === responsePage && previous.size === responseSize) {
+                            return previous;
+                        }
+
+                        return {
+                            ...previous,
+                            page: responsePage,
+                            size: responseSize
+                        };
+                    });
                 })
                 .catch((err) => {
                     console.error("Failed to fetch file groups:", err);
                     message.error(t("FileGroups.messages.fetchError", {defaultValue: "Failed to load file groups"}));
                 })
                 .finally(() => setLoading(false));
-    }, [caseSensitive, currentPage, pageSize, searchTerm, sortField, sortOrder, t]);
+    }, [pagedRequest, t]);
 
     useEffect(() => {
         fetchGroups();
@@ -322,41 +326,77 @@ export function FileGroups() {
         setPublishModalOpen(true);
     }, [publishForm]);
 
+    const getColumnSearchProps = useCallback((dataIndex: "path" | "group_name" | "description"): TableColumnType<FileGroupListResponse> => ({
+        filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters, close}: FilterDropdownProps) => (
+                <div style={{padding: 8}} onKeyDown={(event) => event.stopPropagation()}>
+                    <Input
+                            ref={searchInput}
+                            value={selectedKeys[0]}
+                            onChange={(event) => setSelectedKeys(event.target.value ? [event.target.value] : [])}
+                            onPressEnter={() => confirm()}
+                            style={{marginBottom: 8, display: "block"}}
+                    />
+                    <Space>
+                        <Button type="primary" size="small" icon={<SearchOutlined/>} onClick={() => confirm()}>
+                            {t("Common.search", {defaultValue: "Search"})}
+                        </Button>
+                        <Button size="small" onClick={() => {
+                            clearFilters?.();
+                            confirm();
+                            close();
+                        }}>
+                            {t("Common.reset", {defaultValue: "Reset"})}
+                        </Button>
+                    </Space>
+                </div>
+        ),
+        filterIcon: (filtered: boolean) => <SearchOutlined style={{color: filtered ? "#1677ff" : undefined}}/>,
+        filterDropdownProps: {
+            onOpenChange: (visible: boolean) => {
+                if (visible) {
+                    setTimeout(() => searchInput.current?.select(), 100);
+                }
+            }
+        },
+        dataIndex
+    }), [t]);
+
     const columns: ColumnsType<FileGroupListResponse> = useMemo(() => [
         {
             title: t("FileGroups.columns.path.title", {defaultValue: "Path"}),
             dataIndex: "path",
             key: "path",
             sorter: true,
-            sortOrder: sortField === "path" ? sortOrder : undefined,
+            sortOrder: pagedRequest.sort_by === "path" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
+            ...getColumnSearchProps("path"),
         },
         {
             title: t("FileGroups.columns.path.gallery-id", {defaultValue: "Gallery ID"}),
             dataIndex: "gallery_id",
             key: "gallery-id",
-            sorter: true,
-            sortOrder: sortField === "gallery_id" ? sortOrder : undefined,
+            sorter: false,
         },
         {
             title: t("FileGroups.columns.group_name.title", {defaultValue: "Group name"}),
             dataIndex: "group_name",
             key: "group_name",
             sorter: true,
-            sortOrder: sortField === "group_name" ? sortOrder : undefined,
+            sortOrder: pagedRequest.sort_by === "group_name" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
+            ...getColumnSearchProps("group_name"),
         },
         {
             title: t("FileGroups.columns.description.title", {defaultValue: "Description"}),
             dataIndex: "description",
             key: "description",
             sorter: true,
-            sortOrder: sortField === "description" ? sortOrder : undefined,
+            sortOrder: pagedRequest.sort_by === "description" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
+            ...getColumnSearchProps("description"),
         },
         {
             title: t("FileGroups.columns.file_count.title", {defaultValue: "Files"}),
             dataIndex: "file_count",
             key: "file_count",
-            sorter: true,
-            sortOrder: sortField === "file_count" ? sortOrder : undefined,
+            sorter: false,
             render: (_: unknown, record: FileGroupListResponse) => record.file_count ?? "",
         },
         {
@@ -389,7 +429,7 @@ export function FileGroups() {
                 );
             }
         }
-    ], [sortField, sortOrder, t, handleDelete, openEditModal, openPublishModal]);
+    ], [getColumnSearchProps, pagedRequest, t, handleDelete, openEditModal, openPublishModal]);
 
     const fileColumns: ColumnsType<FileResponse> = useMemo(() => [
         filenameColumn<FileResponse>((record) => {
@@ -419,31 +459,21 @@ export function FileGroups() {
 
     function handleTableChange(
             pagination: { current?: number; pageSize?: number },
-            _filters: Record<string, unknown>,
+            filters: Record<string, FilterValue | null>,
             sorter: SorterResult<FileGroupListResponse> | SorterResult<FileGroupListResponse>[]
     ) {
-        const nextPage = pagination.current ?? 1;
-        const nextSize = pagination.pageSize ?? pageSize;
-        setCurrentPage(nextPage);
-        setPageSize(nextSize);
-        if (!Array.isArray(sorter) && sorter.field) {
-            setSortField(toBackendSortField(sorter.field as string));
-            setSortOrder(sorter.order ?? "ascend");
-        } else {
-            setSortField("path");
-            setSortOrder("ascend");
-        }
-    }
-
-    const handleSearch = (value: string) => {
-        setSearchInput(value);
-        setSearchTerm(value || undefined);
-        setCurrentPage(1);
-    };
-
-    const handleCaseSensitiveChange = (checked: boolean) => {
-        setCaseSensitive(checked);
-        setCurrentPage(1);
+        const search = Object.values(filters)
+                .flatMap(value => value ?? [])
+                .find(value => typeof value === "string" && value.length > 0);
+        const nextSorter = !Array.isArray(sorter) && sorter.field ? sorter : undefined;
+        setPagedRequest(previous => ({
+            ...previous,
+            page: (pagination.current ?? 1) - 1,
+            size: pagination.pageSize ?? previous.size,
+            sort_by: toBackendSortField(nextSorter?.field as string | undefined),
+            direction: nextSorter?.order === "descend" ? "DESC" : "ASC",
+            search: typeof search === "string" ? search : undefined
+        }));
     };
 
     // openPublishModal is declared above columns/useMemo to avoid use-before-declare in hook deps.
@@ -491,20 +521,9 @@ export function FileGroups() {
     return (
             <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
                 <Space style={{width: "95%", justifyContent: "space-between"}}>
-                    <Space align="center" size={16}>
-                        <Input.Search
-                                placeholder={t("FileGroups.search.placeholder", {defaultValue: "Search file groups"})}
-                                allowClear
-                                value={searchInput}
-                                onChange={(event) => setSearchInput(event.target.value)}
-                                onSearch={handleSearch}
-                                style={{minWidth: 260}}
-                        />
-                        <Space align="center">
-                            {t("FileGroups.search.caseSensitive", {defaultValue: "Case sensitive"})}
-                            <Switch size="small" checked={caseSensitive} onChange={handleCaseSensitiveChange}/>
-                        </Space>
-                    </Space>
+                    <Typography.Text type="secondary">
+                        {t("FileGroups.search.description", {defaultValue: "Use the column filters to search file groups."})}
+                    </Typography.Text>
                     <Button type="primary" icon={<PlusOutlined/>} onClick={openCreateModal}>
                         {t("FileGroups.actions.new", {defaultValue: "New group"})}
                     </Button>
@@ -516,8 +535,8 @@ export function FileGroups() {
                             dataSource={groups.map(g => ({...g, key: g.id}))}
                             loading={loading}
                             pagination={{
-                                current: currentPage,
-                                pageSize: pageSize,
+                                current: pagedRequest.page + 1,
+                                pageSize: pagedRequest.size,
                                 total: totalElements,
                                 showSizeChanger: true,
                                 pageSizeOptions: ['10', '20', '50', '100'],
