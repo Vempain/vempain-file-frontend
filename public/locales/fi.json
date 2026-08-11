@@ -802,6 +802,49 @@
       "returnButton" : "Palaa etusivulle"
     }
   },
+  "Statistics" : {
+    "title" : "Tietokannan tilastot",
+    "description" : "Yhteenveto tiedostotietokannan tiedostoista, metatiedoista, ryhmistä ja tallennustilasta.",
+    "messages" : {
+      "fetchError" : "Tilastojen lataaminen epäonnistui"
+    },
+    "sections" : {
+      "overview" : {
+        "title" : "Yleiskatsaus",
+        "description" : "Tietokantaan luettujen tiedostojen määrät ja tallennustilan kokonaismäärät."
+      },
+      "types" : {
+        "title" : "Tiedostot tyypeittäin",
+        "description" : "Tiedostojen määrä- ja kokojakauma tiedostotyypeittäin."
+      },
+      "years" : {
+        "title" : "Tiedostot tyypeittäin ja luomisvuosittain",
+        "description" : "Tiedostomäärät ryhmiteltynä tiedostotyypin ja alkuperäisen luomisvuoden mukaan, kun vuosi on saatavilla."
+      },
+      "metadata" : {
+        "title" : "Metatiedot ja ryhmät",
+        "description" : "Tunnisteiden, sijaintien ja tiedostoryhmien tiedostojakaumat."
+      }
+    },
+    "columns" : {
+      "fileType" : "Tiedostotyyppi",
+      "fileCount" : "Tiedostot",
+      "largestFile" : "Suurin tiedosto",
+      "averageFile" : "Keskimääräinen tiedosto",
+      "creationYear" : "Luomisvuosi"
+    },
+    "totalFiles" : "Tiedostoja yhteensä",
+    "totalFileSize" : "Tiedostojen koko yhteensä",
+    "largestFileSize" : "Suurin tiedosto",
+    "averageFileSize" : "Tiedoston keskikoko",
+    "totalTags" : "Tunnisteet",
+    "totalGpsLocations" : "GPS-sijainnit",
+    "filesWithGps" : "GPS-tiedostoja",
+    "filesWithTags" : "Tunnisteellisia tiedostoja",
+    "largestGroup" : "Suurin ryhmä",
+    "smallestGroup" : "Pienin ryhmä",
+    "averageGroup" : "Ryhmän keskikoko"
+  },
   "TopBar" : {
     "a11y" : {
       "openMenu" : "Avaa valikko"
@@ -817,6 +860,7 @@
       "dataManagement" : {
         "publishGpsTimeSeries" : "Julkaise GPS-aikasarja",
         "publishMusic" : "Julkaise musiikki",
+        "statistics" : "Tilastot",
         "title" : "Datahallinta"
       },
       "fileManagement" : {

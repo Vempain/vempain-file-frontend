@@ -184,6 +184,11 @@ export function TopBar() {
                                 key: "data-publishGpsTimeSeries",
                                 icon: <FieldTimeOutlined/>
                             },
+                            {
+                                label: (<NavLink to={"/data/statistics"}>{t("TopBar.menu.dataManagement.statistics", {defaultValue: "Statistics"})}</NavLink>),
+                                key: "data-statistics",
+                                icon: <InfoCircleOutlined/>
+                            },
                         ],
                     },
                     {
