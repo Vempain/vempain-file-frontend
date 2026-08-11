@@ -802,6 +802,49 @@
       "returnButton" : "Till startsidan"
     }
   },
+  "Statistics" : {
+    "title" : "Statistik för fildatabasen",
+    "description" : "En sammanfattning av filer, metadata, grupper och lagring i fildatabasen.",
+    "messages" : {
+      "fetchError" : "Det gick inte att läsa in statistiken"
+    },
+    "sections" : {
+      "overview" : {
+        "title" : "Översikt",
+        "description" : "Antal filer och lagringsmängder för alla filer som lästs in i databasen."
+      },
+      "types" : {
+        "title" : "Filer per typ",
+        "description" : "Antal och storleksfördelning för varje filtyp."
+      },
+      "years" : {
+        "title" : "Filer per typ och skapelseår",
+        "description" : "Filantal grupperat efter filtyp och ursprungligt skapelseår när det finns tillgängligt."
+      },
+      "metadata" : {
+        "title" : "Metadata och grupper",
+        "description" : "Antal taggar, platser och fördelningen av filer mellan filgrupper."
+      }
+    },
+    "columns" : {
+      "fileType" : "Filtyp",
+      "fileCount" : "Filer",
+      "largestFile" : "Största fil",
+      "averageFile" : "Genomsnittlig fil",
+      "creationYear" : "Skapelseår"
+    },
+    "totalFiles" : "Totalt antal filer",
+    "totalFileSize" : "Total filstorlek",
+    "largestFileSize" : "Största fil",
+    "averageFileSize" : "Genomsnittlig filstorlek",
+    "totalTags" : "Taggar",
+    "totalGpsLocations" : "GPS-platser",
+    "filesWithGps" : "Filer med GPS",
+    "filesWithTags" : "Filer med taggar",
+    "largestGroup" : "Största grupp",
+    "smallestGroup" : "Minsta grupp",
+    "averageGroup" : "Genomsnittlig gruppstorlek"
+  },
   "TopBar" : {
     "a11y" : {
       "openMenu" : "Öppna menyn"
@@ -817,6 +860,7 @@
       "dataManagement" : {
         "publishGpsTimeSeries" : "Publicera GPS-tidsserie",
         "publishMusic" : "Publicera musik",
+        "statistics" : "Statistik",
         "title" : "Datahantering"
       },
       "fileManagement" : {

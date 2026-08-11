@@ -802,6 +802,49 @@
       "returnButton" : "Return to front page"
     }
   },
+  "Statistics" : {
+    "title" : "File database statistics",
+    "description" : "A summary of the files, metadata, groups, and storage represented in the file database.",
+    "messages" : {
+      "fetchError" : "Failed to load statistics"
+    },
+    "sections" : {
+      "overview" : {
+        "title" : "Overview",
+        "description" : "Counts and storage totals for all files currently read into the database."
+      },
+      "types" : {
+        "title" : "Files by type",
+        "description" : "The number and size distribution of files in each file type."
+      },
+      "years" : {
+        "title" : "Files by type and creation year",
+        "description" : "File counts grouped by file type and the original creation year when available."
+      },
+      "metadata" : {
+        "title" : "Metadata and groups",
+        "description" : "Counts of tags, locations, and the distribution of files across file groups."
+      }
+    },
+    "columns" : {
+      "fileType" : "File type",
+      "fileCount" : "Files",
+      "largestFile" : "Largest file",
+      "averageFile" : "Average file",
+      "creationYear" : "Creation year"
+    },
+    "totalFiles" : "Total files",
+    "totalFileSize" : "Total file size",
+    "largestFileSize" : "Largest file",
+    "averageFileSize" : "Average file size",
+    "totalTags" : "Tags",
+    "totalGpsLocations" : "GPS locations",
+    "filesWithGps" : "Files with GPS",
+    "filesWithTags" : "Files with tags",
+    "largestGroup" : "Largest group",
+    "smallestGroup" : "Smallest group",
+    "averageGroup" : "Average group size"
+  },
   "TopBar" : {
     "a11y" : {
       "openMenu" : "Open menu"
@@ -817,6 +860,7 @@
       "dataManagement" : {
         "publishGpsTimeSeries" : "Publish GPS time series",
         "publishMusic" : "Publish music",
+        "statistics" : "Statistics",
         "title" : "Data Management"
       },
       "fileManagement" : {

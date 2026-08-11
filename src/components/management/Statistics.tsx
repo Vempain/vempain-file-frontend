@@ -16,13 +16,6 @@ interface TypeRow {
     average_file_size: number;
 }
 
-interface YearRow {
-    key: string;
-    file_type: string;
-    creation_year: string;
-    file_count: number;
-}
-
 const formatBytes = (value: number): string => {
     if (value < 1024) return `${value} B`;
     const units = ["KB", "MB", "GB", "TB"];
@@ -64,16 +57,17 @@ export function Statistics() {
         }));
     }, [statistics]);
 
-    const yearRows = useMemo<YearRow[]>(() => {
+    const yearChartData = useMemo(() => {
         if (!statistics) return [];
-        return Object.entries(statistics.files_by_type_and_year).flatMap(([file_type, years]) =>
-                Object.entries(years).map(([creation_year, file_count]) => ({
-                    key: `${file_type}-${creation_year}`,
-                    file_type,
-                    creation_year,
-                    file_count,
-                }))
-        );
+        return Object.entries(statistics.files_by_type_and_year)
+                .flatMap(([file_type, years]) =>
+                        Object.entries(years).map(([creation_year, file_count]) => ({
+                            year: Number(creation_year),
+                            file_type,
+                            files: file_count,
+                        }))
+                )
+                .sort((left, right) => left.year - right.year || left.file_type.localeCompare(right.file_type));
     }, [statistics]);
 
     const typeColumns: ColumnsType<TypeRow> = [
@@ -90,18 +84,12 @@ export function Statistics() {
             render: formatBytes,
         },
     ];
-    const yearColumns: ColumnsType<YearRow> = [
-        {title: t("Statistics.columns.fileType", {defaultValue: "File type"}), dataIndex: "file_type"},
-        {title: t("Statistics.columns.creationYear", {defaultValue: "Creation year"}), dataIndex: "creation_year"},
-        {title: t("Statistics.columns.fileCount", {defaultValue: "Files"}), dataIndex: "file_count"},
-    ];
-
     const typeChartData = typeRows.map(row => ({type: row.file_type, files: row.file_count}));
-    const yearChartData = yearRows.map(row => ({
-        year: row.creation_year,
-        file_type: row.file_type,
-        files: row.file_count,
-    }));
+    const chartColors = ["#50b0ff", "#ff8a65", "#ffd166", "#7bd389", "#c77dff", "#f78fb3", "#4dd0e1", "#ffb703"];
+    const chartAxis = {
+        x: {labelFill: "#f0f0f0", tickStroke: "#a8a8a8", lineStroke: "#a8a8a8"},
+        y: {labelFill: "#f0f0f0", tickStroke: "#a8a8a8", lineStroke: "#a8a8a8"},
+    };
 
     return (
             <Spin spinning={loading}>
@@ -128,14 +116,15 @@ export function Statistics() {
                         <Card title={t("Statistics.sections.types.title", {defaultValue: "Files by type"})}>
                             <Paragraph
                                     type="secondary">{t("Statistics.sections.types.description", {defaultValue: "The number and size distribution of files in each file type."})}</Paragraph>
-                            <Column data={typeChartData} xField="type" yField="files" height={280}/>
+                            <Column data={typeChartData} xField="type" yField="files" colorField="type"
+                                    scale={{color: {range: chartColors}}} theme="classicDark" axis={chartAxis} height={280}/>
                             <Table columns={typeColumns} dataSource={typeRows} pagination={false} size="small"/>
                         </Card>
                         <Card title={t("Statistics.sections.years.title", {defaultValue: "Files by type and creation year"})}>
                             <Paragraph
                                     type="secondary">{t("Statistics.sections.years.description", {defaultValue: "File counts grouped by file type and the original creation year when available."})}</Paragraph>
-                            <Line data={yearChartData} xField="year" yField="files" colorField="file_type" height={280}/>
-                            <Table columns={yearColumns} dataSource={yearRows} pagination={{pageSize: 10}} size="small"/>
+                            <Line data={yearChartData} xField="year" yField="files" colorField="file_type"
+                                  scale={{color: {range: chartColors}}} theme="classicDark" axis={chartAxis} height={280}/>
                         </Card>
                         <Card title={t("Statistics.sections.metadata.title", {defaultValue: "Metadata and groups"})}>
                             <Paragraph
