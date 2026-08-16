@@ -150,7 +150,7 @@ Architecture Overview
     │     ArchiveFileAPI, AudioFileAPI, DocumentFileAPI, FontFileAPI,
     │     IconFileAPI, ImageFileAPI, VectorFileAPI, VideoFileAPI,
     │     FileGroupAPI, FileScannerAPI, LocationAPI, PathCompletionAPI,
-    │     PublishAPI, TagsAPI
+    │     PublishAPI, TagAPI
     ├── Models (src/models/) — TypeScript request/response types and enums
     └── i18next — runtime translation loading from /public/locales/<lang>.json
 

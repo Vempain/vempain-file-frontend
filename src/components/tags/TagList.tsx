@@ -1,6 +1,6 @@
 import {Button, Input, message, Space, Spin, Table} from "antd";
 import {useEffect, useState} from "react";
-import {tagsAPI} from "../../services";
+import {tagAPI} from "../../services";
 import type {TagRequest, TagResponse} from "../../models";
 import {getPaginationConfig} from "../../tools";
 import {useTranslation} from "react-i18next";
@@ -15,7 +15,7 @@ export function TagList() {
 
     useEffect(() => {
         setLoading(true);
-        tagsAPI.findAll()
+        tagAPI.findAll()
                 .then((response: TagResponse[]) => {
                     setTags(response);
                     setPagination(getPaginationConfig(response.length));
@@ -61,7 +61,7 @@ export function TagList() {
             tag_name_sv: editedRow.tag_name_sv || ""
         };
 
-        tagsAPI.update(requestPayload)
+        tagAPI.update(requestPayload)
                 .then(() => {
                     message.success(t("TagList.messages.updateSuccess"));
                     setTags(currentTags =>
