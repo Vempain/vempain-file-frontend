@@ -1,4 +1,5 @@
 import type {TagRequest, TagResponse} from "../../models";
+import type {PagedRequest} from "@vempain/vempain-auth-frontend";
 import {axiosMock, constructorSpy, resetServiceMockState, setAuthorizationHeaderSpy} from "../../testUtils/mockAuthFrontend";
 import {TagAPI} from "../../services";
 
@@ -65,6 +66,17 @@ describe("TagAPI", () => {
         expect(axiosMock.delete).toHaveBeenCalledWith("/10");
         expect(response).toBe(true);
     });
-});
 
+    it("findFilesPageable posts the tag id and paged request", async () => {
+        const pagedRequest: PagedRequest = {page: 0, size: 10, sort_by: "filename", direction: "ASC"};
+        const pagedResponse = {content: [], page: 0, size: 10, total_elements: 0, total_pages: 0, first: true, last: true, empty: true};
+        axiosMock.post.mockResolvedValueOnce({data: pagedResponse});
+
+        const response = await tagAPI.findFilesPageable(4, pagedRequest);
+
+        expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
+        expect(axiosMock.post).toHaveBeenCalledWith("4/files/paged", pagedRequest);
+        expect(response).toEqual(pagedResponse);
+    });
+});
 
