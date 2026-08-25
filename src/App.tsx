@@ -16,6 +16,7 @@ import {
     FileGroups,
     FileImports,
     FilePermissions,
+    FileTagEditor,
     FontFiles,
     IconFiles,
     ImageFiles,
@@ -30,6 +31,7 @@ import {
     Statistics,
     SystemSchedules,
     TagCreate,
+    TaggedFiles,
     TagList,
     TagSearch,
     ThumbFiles,
@@ -105,7 +107,9 @@ export default function App() {
                             <Route path={"/schedules/system"} element={<SystemSchedules/>}/>
                             <Route path={"/tags/create"} element={<TagCreate/>}/>
                             <Route path={"/tags/list"} element={<TagList/>}/>
+                            <Route path={"/tags/:tagId"} element={<TaggedFiles/>}/>
                             <Route path={"/tags/search"} element={<TagSearch/>}/>
+                            <Route path={"/tags/edit-files"} element={<FileTagEditor/>}/>
                             <Route path={"/user/account"} element={<Account/>}/>
                             <Route path={"/user/logout"} element={<Logout/>}/>
                             <Route path={"/user/password"} element={<ChangePassword/>}/>

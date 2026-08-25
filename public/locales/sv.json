@@ -751,10 +751,66 @@
       "returnButton" : "Till startsidan"
     }
   },
+  "TaggedFiles" : {
+    "title" : "Filer märkta med {{tag}}",
+    "actions" : {
+      "back" : "Tillbaka till taggar"
+    },
+    "columns" : {
+      "id" : "ID",
+      "filename" : "Filnamn",
+      "filePath" : "Sökväg",
+      "mimetype" : "MIME-typ",
+      "filesize" : "Storlek",
+      "fileType" : "Filtyp",
+      "created" : "Skapad"
+    },
+    "messages" : {
+      "fetchError" : "Det gick inte att läsa in taggade filer: {{error}}",
+      "invalidTag" : "Ogiltigt tagg-ID",
+      "noFiles" : "Den här taggen har inga filer."
+    }
+  },
+  "FileTagEditor" : {
+    "title" : "Redigera filtaggar",
+    "actions" : {
+      "loadTags" : "Läs in taggar",
+      "add" : "Lägg till tagg",
+      "remove" : "Ta bort tagg",
+      "replace" : "Ersätt tagg",
+      "rename" : "Byt namn på tagg",
+      "apply" : "Tillämpa ändringar",
+      "copyDefault" : "Kopiera standardnamnet till alla språk"
+    },
+    "fields" : {
+      "tag" : "Tagg",
+      "replacement" : "Ersättningstagg",
+      "files" : "Fil-ID:n",
+      "sourceTag" : "Befintlig tagg",
+      "targetTag" : "Ersättningstagg",
+      "newName" : "Nytt taggnamn",
+      "tag_name" : "Taggnamn",
+      "tag_name_de" : "Taggnamn (tyska)",
+      "tag_name_en" : "Taggnamn (engelska)",
+      "tag_name_es" : "Taggnamn (spanska)",
+      "tag_name_fi" : "Taggnamn (finska)",
+      "tag_name_sv" : "Taggnamn (svenska)"
+    },
+    "messages" : {
+      "fetchError" : "Det gick inte att läsa in taggar: {{error}}",
+      "required" : "Välj en tagg och minst en fil. Ersättningsåtgärder kräver också en ersättningstagg.",
+      "replacementRequired" : "Välj eller ange en ersättningstagg.",
+      "success" : "Taggändringarna genomfördes",
+      "failed" : "Det gick inte att genomföra taggändringarna: {{error}}"
+    }
+  },
   "TagList" : {
     "actions" : {
       "cancel" : "Avbryt",
       "edit" : "Redigera",
+      "removeAll" : "Ta bort alla",
+      "replaceAll" : "Ersätt alla",
+      "renameAll" : "Byt namn på alla",
       "save" : "Spara",
       "viewTaggedFiles" : "Visa taggade filer"
     },
@@ -766,7 +822,13 @@
       "updateFailed" : "Misslyckades att uppdatera tagg",
       "updateFailedWithReason" : "Misslyckades att uppdatera tagg: {{error}}",
       "updateSuccess" : "Tagg uppdaterad",
-      "updated" : "Tagg uppdaterad"
+      "updated" : "Tagg uppdaterad",
+      "replacementPrompt" : "Ange ersättningstaggen",
+      "replacementSelect" : "Välj en befintlig ersättningstagg",
+      "replacementRequired" : "Välj en ersättningstagg",
+      "confirmAll" : "Vill du tillämpa åtgärden på alla filer med denna tagg?",
+      "actionSuccess" : "Massåtgärden för taggar slutfördes",
+      "actionFailed" : "Massåtgärden för taggar misslyckades: {{error}}"
     },
     "tableColumns" : {
       "actions" : {
@@ -901,6 +963,7 @@
         "title" : "Säkerhet"
       },
       "tagManagement" : {
+        "editFiles" : "Redigera filtaggar",
         "newTag" : "Ny tagg",
         "search" : "Sök",
         "tags" : "Taggar",

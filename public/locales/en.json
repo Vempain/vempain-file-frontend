@@ -751,10 +751,66 @@
       "returnButton" : "Return to front page"
     }
   },
+  "TaggedFiles" : {
+    "title" : "Files tagged with {{tag}}",
+    "actions" : {
+      "back" : "Back to tags"
+    },
+    "columns" : {
+      "id" : "ID",
+      "filename" : "Filename",
+      "filePath" : "Path",
+      "mimetype" : "MIME type",
+      "filesize" : "Size",
+      "fileType" : "File type",
+      "created" : "Created"
+    },
+    "messages" : {
+      "fetchError" : "Failed to load tagged files: {{error}}",
+      "invalidTag" : "Invalid tag ID",
+      "noFiles" : "No files have this tag."
+    }
+  },
+  "FileTagEditor" : {
+    "title" : "Edit file tags",
+    "actions" : {
+      "loadTags" : "Load tags",
+      "add" : "Add tag",
+      "remove" : "Remove tag",
+      "replace" : "Replace tag",
+      "rename" : "Rename tag",
+      "apply" : "Apply changes",
+      "copyDefault" : "Copy default name to all languages"
+    },
+    "fields" : {
+      "tag" : "Tag",
+      "replacement" : "Replacement tag",
+      "files" : "File IDs",
+      "sourceTag" : "Existing tag",
+      "targetTag" : "Replacement tag",
+      "newName" : "New tag name",
+      "tag_name" : "Tag name",
+      "tag_name_de" : "Tag name (German)",
+      "tag_name_en" : "Tag name (English)",
+      "tag_name_es" : "Tag name (Spanish)",
+      "tag_name_fi" : "Tag name (Finnish)",
+      "tag_name_sv" : "Tag name (Swedish)"
+    },
+    "messages" : {
+      "fetchError" : "Failed to load tags: {{error}}",
+      "required" : "Select a tag and at least one file. Replacement actions also require a replacement tag.",
+      "replacementRequired" : "Select or enter a replacement tag.",
+      "success" : "Tag changes applied successfully",
+      "failed" : "Failed to apply tag changes: {{error}}"
+    }
+  },
   "TagList" : {
     "actions" : {
       "cancel" : "Cancel",
       "edit" : "Edit",
+      "removeAll" : "Remove all",
+      "replaceAll" : "Replace all",
+      "renameAll" : "Rename all",
       "save" : "Save",
       "viewTaggedFiles" : "View tagged files"
     },
@@ -766,7 +822,13 @@
       "updateFailed" : "Failed to update tag",
       "updateFailedWithReason" : "Failed to update tag: {{error}}",
       "updateSuccess" : "Tag updated successfully",
-      "updated" : "Tag updated"
+      "updated" : "Tag updated",
+      "replacementPrompt" : "Enter the replacement tag",
+      "replacementSelect" : "Select an existing replacement tag",
+      "replacementRequired" : "Select a replacement tag",
+      "confirmAll" : "Apply this action to all files with this tag?",
+      "actionSuccess" : "Bulk tag action completed successfully",
+      "actionFailed" : "Bulk tag action failed: {{error}}"
     },
     "tableColumns" : {
       "actions" : {
@@ -901,6 +963,7 @@
         "title" : "Security"
       },
       "tagManagement" : {
+        "editFiles" : "Edit file tags",
         "newTag" : "New tag",
         "search" : "Search",
         "tags" : "Tags",

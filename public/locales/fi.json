@@ -751,10 +751,66 @@
       "returnButton" : "Palaa etusivulle"
     }
   },
+  "TaggedFiles" : {
+    "title" : "Tunnisteen {{tag}} tiedostot",
+    "actions" : {
+      "back" : "Takaisin tunnisteisiin"
+    },
+    "columns" : {
+      "id" : "ID",
+      "filename" : "Tiedostonimi",
+      "filePath" : "Polku",
+      "mimetype" : "MIME-tyyppi",
+      "filesize" : "Koko",
+      "fileType" : "Tiedostotyyppi",
+      "created" : "Luotu"
+    },
+    "messages" : {
+      "fetchError" : "Tunnisteella merkittyjen tiedostojen lataus epäonnistui: {{error}}",
+      "invalidTag" : "Virheellinen tunnisteen ID",
+      "noFiles" : "Tunnisteella ei ole tiedostoja."
+    }
+  },
+  "FileTagEditor" : {
+    "title" : "Muokkaa tiedostojen tunnisteita",
+    "actions" : {
+      "loadTags" : "Lataa tunnisteet",
+      "add" : "Lisää tunniste",
+      "remove" : "Poista tunniste",
+      "replace" : "Korvaa tunniste",
+      "rename" : "Nimeä tunniste uudelleen",
+      "apply" : "Suorita muutokset",
+      "copyDefault" : "Kopioi oletusnimi kaikille kielille"
+    },
+    "fields" : {
+      "tag" : "Tunniste",
+      "replacement" : "Korvaava tunniste",
+      "files" : "Tiedostojen tunnisteet",
+      "sourceTag" : "Nykyinen tunniste",
+      "targetTag" : "Korvaava tunniste",
+      "newName" : "Uusi tunnisteen nimi",
+      "tag_name" : "Tunnisteen nimi",
+      "tag_name_de" : "Tunnisteen nimi (saksa)",
+      "tag_name_en" : "Tunnisteen nimi (englanti)",
+      "tag_name_es" : "Tunnisteen nimi (espanja)",
+      "tag_name_fi" : "Tunnisteen nimi (suomi)",
+      "tag_name_sv" : "Tunnisteen nimi (ruotsi)"
+    },
+    "messages" : {
+      "fetchError" : "Tunnisteiden lataus epäonnistui: {{error}}",
+      "required" : "Valitse tunniste ja vähintään yksi tiedosto. Korvaustoiminnot vaativat myös korvaavan tunnisteen.",
+      "replacementRequired" : "Valitse tai anna korvaava tunniste.",
+      "success" : "Tunnisteiden muutokset suoritettiin onnistuneesti",
+      "failed" : "Tunnisteiden muutosten suoritus epäonnistui: {{error}}"
+    }
+  },
   "TagList" : {
     "actions" : {
       "cancel" : "Peruuta",
       "edit" : "Muokkaa",
+      "removeAll" : "Poista kaikki",
+      "replaceAll" : "Korvaa kaikki",
+      "renameAll" : "Nimeä kaikki uudelleen",
       "save" : "Tallenna",
       "viewTaggedFiles" : "Näytä tunnisteen tiedostot"
     },
@@ -766,7 +822,13 @@
       "updateFailed" : "Tunnisteen päivitys epäonnistui",
       "updateFailedWithReason" : "Tunnisteen päivitys epäonnistui: {{error}}",
       "updateSuccess" : "Tunniste päivitetty onnistuneesti",
-      "updated" : "Tunniste päivitetty"
+      "updated" : "Tunniste päivitetty",
+      "replacementPrompt" : "Anna korvaava tunniste",
+      "replacementSelect" : "Valitse olemassa oleva korvaava tunniste",
+      "replacementRequired" : "Valitse korvaava tunniste",
+      "confirmAll" : "Suoritetaanko tämä toiminto kaikille tämän tunnisteen tiedostoille?",
+      "actionSuccess" : "Massatunnistetoiminto suoritettiin onnistuneesti",
+      "actionFailed" : "Massatunnistetoiminto epäonnistui: {{error}}"
     },
     "tableColumns" : {
       "actions" : {
@@ -901,6 +963,7 @@
         "title" : "Turvallisuus"
       },
       "tagManagement" : {
+        "editFiles" : "Muokkaa tiedostojen tunnisteita",
         "newTag" : "Uusi tunniste",
         "search" : "Haku",
         "tags" : "Tunnisteet",

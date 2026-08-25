@@ -1,9 +1,10 @@
-import {Button, Input, message, Space, Spin, Table} from "antd";
+import {Button, Input, message, Modal, Select, Space, Spin, Table} from "antd";
 import {useEffect, useState} from "react";
-import {tagsAPI} from "../../services";
+import {tagAPI} from "../../services";
 import type {TagRequest, TagResponse} from "../../models";
 import {getPaginationConfig} from "../../tools";
 import {useTranslation} from "react-i18next";
+import {Link} from "react-router-dom";
 
 export function TagList() {
     const {t} = useTranslation();
@@ -15,7 +16,7 @@ export function TagList() {
 
     useEffect(() => {
         setLoading(true);
-        tagsAPI.findAll()
+        tagAPI.findAll()
                 .then((response: TagResponse[]) => {
                     setTags(response);
                     setPagination(getPaginationConfig(response.length));
@@ -61,7 +62,7 @@ export function TagList() {
             tag_name_sv: editedRow.tag_name_sv || ""
         };
 
-        tagsAPI.update(requestPayload)
+        tagAPI.update(requestPayload)
                 .then(() => {
                     message.success(t("TagList.messages.updateSuccess"));
                     setTags(currentTags =>
@@ -88,6 +89,64 @@ export function TagList() {
                 record.tag_name_fi !== editedRow.tag_name_fi ||
                 record.tag_name_sv !== editedRow.tag_name_sv
         );
+    };
+
+    const executeAllAction = async (record: TagResponse, operation: "remove" | "replace" | "rename", replacement?: string) => {
+        const request = {tag_name: record.tag_name, replacement_tag_name: replacement, file_ids: []};
+        const call = operation === "remove" ? tagAPI.removeTagFromAll(request)
+                : operation === "replace" ? tagAPI.replaceTagAcrossAll(request) : tagAPI.renameTagAcrossAll(request);
+        try {
+            await call;
+            message.success(t("TagList.messages.actionSuccess"));
+            setTags(current => current.filter(tag => operation === "remove" || tag.id !== record.id));
+        } catch (error) {
+            message.error(t("TagList.messages.actionFailed", {error: String(error)}));
+        }
+    };
+
+    const runAllAction = (record: TagResponse, operation: "remove" | "replace" | "rename") => {
+        if (operation === "replace") {
+            tagAPI.findAll()
+                    .then(existingTags => {
+                        let replacement: string | undefined;
+                        Modal.confirm({
+                            title: t("TagList.messages.confirmAll"),
+                            content: (
+                                    <Select
+                                            autoFocus
+                                            showSearch
+                                            style={{width: "100%"}}
+                                            placeholder={t("TagList.messages.replacementSelect")}
+                                            options={existingTags
+                                                    .filter(tag => tag.id !== record.id)
+                                                    .sort((first, second) => first.tag_name.localeCompare(second.tag_name))
+                                                    .map(tag => ({label: tag.tag_name, value: tag.tag_name}))}
+                                            onChange={value => {
+                                                replacement = value;
+                                            }}
+                                    />
+                            ),
+                            onOk: () => {
+                                if (!replacement) {
+                                    message.error(t("TagList.messages.replacementRequired"));
+                                    return Promise.reject(new Error(t("TagList.messages.replacementRequired")));
+                                }
+                                return executeAllAction(record, operation, replacement);
+                            }
+                        });
+                    })
+                    .catch((error: unknown) => {
+                        message.error(t("TagList.messages.fetchError", {error: String(error)}));
+                    });
+            return;
+        }
+
+        const replacement = operation === "remove" ? undefined : window.prompt(t("TagList.messages.replacementPrompt"));
+        if (operation !== "remove" && !replacement) return;
+        Modal.confirm({
+            title: t("TagList.messages.confirmAll"),
+            onOk: () => executeAllAction(record, operation, replacement)
+        });
     };
 
     const editableCell = (dataIndex: keyof TagResponse, record: TagResponse) => {
@@ -176,9 +235,18 @@ export function TagList() {
                 }
                 return (
                         <Space>
-                            <a href={`/tags/${record.id}`}>{t("TagList.actions.viewTaggedFiles")}</a>
+                            <Link to={`/tags/${record.id}`}>{t("TagList.actions.viewTaggedFiles")}</Link>
                             <Button onClick={() => startEdit(record)} size="small">
                                 {t("TagList.actions.edit")}
+                            </Button>
+                            <Button danger size="small" onClick={() => runAllAction(record, "remove")}>
+                                {t("TagList.actions.removeAll", {defaultValue: "Remove all"})}
+                            </Button>
+                            <Button size="small" onClick={() => runAllAction(record, "replace")}>
+                                {t("TagList.actions.replaceAll", {defaultValue: "Replace all"})}
+                            </Button>
+                            <Button size="small" onClick={() => runAllAction(record, "rename")}>
+                                {t("TagList.actions.renameAll", {defaultValue: "Rename all"})}
                             </Button>
                         </Space>
                 );
@@ -188,7 +256,7 @@ export function TagList() {
 
     return (
             <div className={"DarkDiv"} key={"tagListDiv"}>
-                <Spin tip={t("TagList.messages.loadingTip")} spinning={loading} key={"componentListSpinner"}>
+                <Spin description={t("TagList.messages.loadingTip")} spinning={loading} key={"componentListSpinner"}>
                     {!loading &&
                             <Table
                                     dataSource={tags}

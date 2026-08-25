@@ -11,7 +11,7 @@
 
 - All API clients must extend `AbstractAPI` from `@vempain/vempain-auth-frontend`, or `src/services/AbstractFileAPI.ts` if they need the shared pageable
   `findAllPageable(page, size)` behavior.
-- Examples: `src/services/TagsAPI.ts` extends `AbstractAPI`; `src/services/ImageFileAPI.ts` extends `AbstractFileAPI`.
+- Examples: `../src/services/TagAPI.ts` extends `AbstractAPI`; `src/services/ImageFileAPI.ts` extends `AbstractFileAPI`.
 - Service instances are created with `import.meta.env.VITE_APP_API_URL` plus a resource path, e.g. `new FileScannerAPI(..., "/scan-files")`.
 - Auth/session expiry handling now lives in the shared auth library interceptor; keep using these base classes so 401 responses trigger logout correctly.
 - For frontend API invocations in components, use Promise chaining (`.then().catch().finally()`) consistently instead of wrapping API calls in `try/catch`.

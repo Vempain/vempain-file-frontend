@@ -1,9 +1,10 @@
 import type {TagRequest, TagResponse} from "../../models";
+import type {PagedRequest} from "@vempain/vempain-auth-frontend";
 import {axiosMock, constructorSpy, resetServiceMockState, setAuthorizationHeaderSpy} from "../../testUtils/mockAuthFrontend";
-import {TagsAPI} from "../../services";
+import {TagAPI} from "../../services";
 
-describe("TagsAPI", () => {
-    let tagsAPI: TagsAPI;
+describe("TagAPI", () => {
+    let tagAPI: TagAPI;
 
     const tagRequest: TagRequest = {
         id: 10,
@@ -19,7 +20,7 @@ describe("TagsAPI", () => {
 
     beforeEach(() => {
         resetServiceMockState();
-        tagsAPI = new TagsAPI("http://localhost:8080/api", "/tags");
+        tagAPI = new TagAPI("http://localhost:8080/api", "/tags");
     });
 
     it("is instantiated with /tags member path", () => {
@@ -29,7 +30,7 @@ describe("TagsAPI", () => {
     it("findAll returns TagResponse[]", async () => {
         axiosMock.get.mockResolvedValueOnce({data: [tagResponse]});
 
-        const response = await tagsAPI.findAll();
+        const response = await tagAPI.findAll();
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
         expect(axiosMock.get).toHaveBeenCalledWith("", {params: undefined});
@@ -39,7 +40,7 @@ describe("TagsAPI", () => {
     it("create posts TagRequest and returns TagResponse", async () => {
         axiosMock.post.mockResolvedValueOnce({data: tagResponse});
 
-        const response = await tagsAPI.create(tagRequest);
+        const response = await tagAPI.create(tagRequest);
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
         expect(axiosMock.post).toHaveBeenCalledWith("", tagRequest);
@@ -49,7 +50,7 @@ describe("TagsAPI", () => {
     it("update puts TagRequest and returns TagResponse", async () => {
         axiosMock.put.mockResolvedValueOnce({data: tagResponse});
 
-        const response = await tagsAPI.update(tagRequest);
+        const response = await tagAPI.update(tagRequest);
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
         expect(axiosMock.put).toHaveBeenCalledWith("", tagRequest);
@@ -59,12 +60,23 @@ describe("TagsAPI", () => {
     it("delete sends tag id and returns success flag", async () => {
         axiosMock.delete.mockResolvedValueOnce({data: true});
 
-        const response = await tagsAPI.delete(10);
+        const response = await tagAPI.delete(10);
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
         expect(axiosMock.delete).toHaveBeenCalledWith("/10");
         expect(response).toBe(true);
     });
-});
 
+    it("findFilesPageable posts the tag id and paged request", async () => {
+        const pagedRequest: PagedRequest = {page: 0, size: 10, sort_by: "filename", direction: "ASC"};
+        const pagedResponse = {content: [], page: 0, size: 10, total_elements: 0, total_pages: 0, first: true, last: true, empty: true};
+        axiosMock.post.mockResolvedValueOnce({data: pagedResponse});
+
+        const response = await tagAPI.findFilesPageable(4, pagedRequest);
+
+        expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
+        expect(axiosMock.post).toHaveBeenCalledWith("4/files/paged", pagedRequest);
+        expect(response).toEqual(pagedResponse);
+    });
+});
 
