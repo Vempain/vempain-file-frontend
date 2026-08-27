@@ -9,8 +9,80 @@ import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
 import type {PagedRequest} from "@vempain/vempain-auth-frontend";
 
+interface ReplacementTagSelectProps {
+    excludedTagId: number;
+    onChange: (value: string) => void;
+}
+
+function ReplacementTagSelect({excludedTagId, onChange}: ReplacementTagSelectProps) {
+    const {t} = useTranslation();
+    const [options, setOptions] = useState<TagResponse[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const searchRef = useRef("");
+    const requestIdRef = useRef(0);
+
+    const fetchOptions = useCallback((nextPage: number, search: string, append: boolean) => {
+        const requestId = ++requestIdRef.current;
+        setLoading(true);
+        tagAPI.findPageable({
+            page: nextPage,
+            size: 200,
+            sort_by: "tag_name",
+            direction: "ASC",
+            case_sensitive: false,
+            ...(search ? {search} : {})
+        })
+                .then(response => {
+                    if (requestId !== requestIdRef.current) return;
+                    const fetchedOptions = (response.content ?? []).filter(tag => tag.id !== excludedTagId);
+                    setOptions(current => append ? [...current, ...fetchedOptions] : fetchedOptions);
+                    setPage(nextPage);
+                    setHasMore(!response.last);
+                })
+                .catch((error: unknown) => {
+                    if (requestId !== requestIdRef.current) return;
+                    message.error(t("TagList.messages.fetchError", {error: String(error)}));
+                })
+                .finally(() => {
+                    if (requestId === requestIdRef.current) setLoading(false);
+                });
+    }, [excludedTagId, t]);
+
+    useEffect(() => {
+        fetchOptions(0, "", false);
+    }, [fetchOptions]);
+
+    return (
+            <Select
+                    autoFocus
+                    showSearch
+                    style={{width: "100%"}}
+                    placeholder={t("TagList.messages.replacementSelect")}
+                    filterOption={false}
+                    loading={loading}
+                    options={options
+                            .map(tag => ({label: tag.tag_name, value: tag.tag_name}))}
+                    onSearch={search => {
+                        searchRef.current = search;
+                        fetchOptions(0, search, false);
+                    }}
+                    onPopupScroll={event => {
+                        const target = event.currentTarget;
+                        if (target.scrollTop + target.offsetHeight >= target.scrollHeight - 1 &&
+                                !loading && hasMore) {
+                            fetchOptions(page + 1, searchRef.current, true);
+                        }
+                    }}
+                    onChange={onChange}
+            />
+    );
+}
+
 export function TagList() {
     const {t} = useTranslation();
+    const [modal, contextHolder] = Modal.useModal();
     const [tags, setTags] = useState<TagResponse[]>([]);
     const [loading, setLoading] = useState(true);
     const [pagedRequest, setPagedRequest] = useState<PagedRequest>({
@@ -117,51 +189,31 @@ export function TagList() {
 
     const runAllAction = (record: TagResponse, operation: "remove" | "replace" | "rename") => {
         if (operation === "replace") {
-            tagAPI.findPageable({
-                page: 0,
-                size: 200,
-                sort_by: "tag_name",
-                direction: "ASC",
-                case_sensitive: false
-            })
-                    .then(response => {
-                        const existingTags = response.content ?? [];
-                        let replacement: string | undefined;
-                        Modal.confirm({
-                            title: t("TagList.messages.confirmAll"),
-                            content: (
-                                    <Select
-                                            autoFocus
-                                            showSearch
-                                            style={{width: "100%"}}
-                                            placeholder={t("TagList.messages.replacementSelect")}
-                                            options={existingTags
-                                                    .filter(tag => tag.id !== record.id)
-                                                    .sort((first, second) => first.tag_name.localeCompare(second.tag_name))
-                                                    .map(tag => ({label: tag.tag_name, value: tag.tag_name}))}
-                                            onChange={value => {
-                                                replacement = value;
-                                            }}
-                                    />
-                            ),
-                            onOk: () => {
-                                if (!replacement) {
-                                    message.error(t("TagList.messages.replacementRequired"));
-                                    return Promise.reject(new Error(t("TagList.messages.replacementRequired")));
-                                }
-                                return executeAllAction(record, operation, replacement);
-                            }
-                        });
-                    })
-                    .catch((error: unknown) => {
-                        message.error(t("TagList.messages.fetchError", {error: String(error)}));
-                    });
+            let replacement: string | undefined;
+            modal.confirm({
+                title: t("TagList.messages.confirmAll"),
+                content: (
+                        <ReplacementTagSelect
+                                excludedTagId={record.id}
+                                onChange={value => {
+                                    replacement = value;
+                                }}
+                        />
+                ),
+                onOk: () => {
+                    if (!replacement) {
+                        message.error(t("TagList.messages.replacementRequired"));
+                        return Promise.reject(new Error(t("TagList.messages.replacementRequired")));
+                    }
+                    return executeAllAction(record, operation, replacement);
+                }
+            });
             return;
         }
 
         const replacement = operation === "remove" ? undefined : window.prompt(t("TagList.messages.replacementPrompt"));
         if (operation !== "remove" && !replacement) return;
-        Modal.confirm({
+        modal.confirm({
             title: t("TagList.messages.confirmAll"),
             onOk: () => executeAllAction(record, operation, replacement ?? undefined)
         });
@@ -336,6 +388,7 @@ export function TagList() {
 
     return (
             <div className={"DarkDiv"} key={"tagListDiv"}>
+                {contextHolder}
                 <Spin description={t("TagList.messages.loadingTip")} spinning={loading} key={"componentListSpinner"}>
                     {!loading &&
                             <Table
