@@ -18,6 +18,7 @@ metadata.
 - File discovery and navigation
     - Lists the files made available by the backend.
     - Supports searching and browsing so users can quickly find relevant items.
+  - The tag management table uses server-side paging, search/filtering across translated tag names, and sorting.
 
 - File details and actions
     - Shows key metadata provided by the API (for example: name, size, timestamps, and similar attributes).
@@ -29,6 +30,24 @@ metadata.
 
 - Internationalized user interface
     - The interface loads translations at runtime so users can switch language without rebuilding the app.
+
+## Tag pagination
+
+The tag management page uses `POST /api/tags/paged` and sends a zero-based `page`, `size`, optional `sort_by` and `direction`, and an optional `search` value.
+Searches match the default tag name and all translated tag-name fields. The Ant Design table translates its one-based pagination controls to the backend's
+zero-based request and reloads the page when pagination, column filters, or sorting changes.
+
+To verify the backend contract, authenticate and send a request such as:
+
+```bash
+curl -X POST "$VEMPAIN_FILE_API_URL/tags/paged" \
+  -H "Authorization: Bearer $VEMPAIN_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"page":0,"size":10,"sort_by":"tag_name","direction":"ASC","search":"nature"}'
+```
+
+Verify the frontend by opening the Tags page, changing page and page size, sorting each tag-name column, and using a column search on a translated value. Each
+action should update the table and issue a new paged request; the total count should remain the filtered result count.
 
 ## Typical user workflows
 

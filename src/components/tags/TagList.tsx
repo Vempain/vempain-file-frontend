@@ -1,32 +1,43 @@
-import {Button, Input, message, Modal, Select, Space, Spin, Table} from "antd";
-import {useEffect, useState} from "react";
+import {Button, Input, type InputRef, message, Modal, Select, Space, Spin, Table} from "antd";
+import {SearchOutlined} from "@ant-design/icons";
+import {useCallback, useEffect, useRef, useState} from "react";
+import type {ColumnsType} from "antd/es/table";
+import type {ColumnType, FilterDropdownProps, FilterValue, SorterResult} from "antd/es/table/interface";
 import {tagAPI} from "../../services";
 import type {TagRequest, TagResponse} from "../../models";
-import {getPaginationConfig} from "../../tools";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
+import type {PagedRequest} from "@vempain/vempain-auth-frontend";
 
 export function TagList() {
     const {t} = useTranslation();
     const [tags, setTags] = useState<TagResponse[]>([]);
     const [loading, setLoading] = useState(true);
-    const [pagination, setPagination] = useState({});
+    const [pagedRequest, setPagedRequest] = useState<PagedRequest>({
+        page: 0, size: 10, sort_by: "tag_name", direction: "ASC", case_sensitive: false
+    });
+    const [totalElements, setTotalElements] = useState(0);
+    const searchInput = useRef<InputRef>(null);
     const [editingRowId, setEditingRowId] = useState<number | null>(null);
     const [editedRow, setEditedRow] = useState<Partial<TagResponse>>({});
 
-    useEffect(() => {
+    const fetchTags = useCallback((request: PagedRequest = pagedRequest) => {
         setLoading(true);
-        tagAPI.findAll()
-                .then((response: TagResponse[]) => {
-                    setTags(response);
-                    setPagination(getPaginationConfig(response.length));
+        tagAPI.findPageable(request)
+                .then(response => {
+                    setTags(response.content ?? []);
+                    setTotalElements(response.total_elements ?? 0);
                 })
                 .catch((error: unknown) => {
                     const errMsg = error instanceof Error ? error.message : "Unknown error";
                     message.error(t("TagList.messages.fetchError", {error: errMsg}));
                 })
                 .finally(() => setLoading(false));
-    }, [t]);
+    }, [pagedRequest, t]);
+
+    useEffect(() => {
+        fetchTags();
+    }, [fetchTags]);
 
     const startEdit = (record: TagResponse) => {
         setEditingRowId(record.id);
@@ -106,8 +117,15 @@ export function TagList() {
 
     const runAllAction = (record: TagResponse, operation: "remove" | "replace" | "rename") => {
         if (operation === "replace") {
-            tagAPI.findAll()
-                    .then(existingTags => {
+            tagAPI.findPageable({
+                page: 0,
+                size: 200,
+                sort_by: "tag_name",
+                direction: "ASC",
+                case_sensitive: false
+            })
+                    .then(response => {
+                        const existingTags = response.content ?? [];
                         let replacement: string | undefined;
                         Modal.confirm({
                             title: t("TagList.messages.confirmAll"),
@@ -145,7 +163,7 @@ export function TagList() {
         if (operation !== "remove" && !replacement) return;
         Modal.confirm({
             title: t("TagList.messages.confirmAll"),
-            onOk: () => executeAllAction(record, operation, replacement)
+            onOk: () => executeAllAction(record, operation, replacement ?? undefined)
         });
     };
 
@@ -166,53 +184,97 @@ export function TagList() {
                 </span>;
     };
 
-    const tagColumns = [
+    const getColumnSearchProps = useCallback((dataIndex: keyof TagResponse): ColumnType<TagResponse> => ({
+        filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters, close}: FilterDropdownProps) => (
+                <div style={{padding: 8}} onKeyDown={event => event.stopPropagation()}>
+                    <Input
+                            ref={searchInput}
+                            value={selectedKeys[0]}
+                            onChange={event => setSelectedKeys(event.target.value ? [event.target.value] : [])}
+                            onPressEnter={() => confirm()}
+                            style={{marginBottom: 8, display: "block"}}
+                    />
+                    <Space>
+                        <Button type="primary" size="small" icon={<SearchOutlined/>} onClick={() => confirm()}>
+                            {t("Common.search", {defaultValue: "Search"})}
+                        </Button>
+                        <Button size="small" onClick={() => {
+                            clearFilters?.();
+                            confirm();
+                            close();
+                        }}>
+                            {t("Common.reset", {defaultValue: "Reset"})}
+                        </Button>
+                    </Space>
+                </div>
+        ),
+        filterIcon: (filtered: boolean) => <SearchOutlined style={{color: filtered ? "#1677ff" : undefined}}/>,
+        filterDropdownProps: {
+            onOpenChange: (visible: boolean) => visible && setTimeout(() => searchInput.current?.select(), 100)
+        },
+        dataIndex
+    }), [t]);
+
+    const tagColumns: ColumnsType<TagResponse> = [
         {
             title: t("TagList.tableColumns.id.title"),
             dataIndex: "id",
             key: "id",
-            sorter: (a: TagResponse, b: TagResponse) => a.id - b.id,
+            sorter: true,
+            sortOrder: pagedRequest.sort_by === "id" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
         },
         {
             title: t("TagList.tableColumns.tag_name.title"),
             dataIndex: "tag_name",
             key: "tag_name",
-            sorter: (a: TagResponse, b: TagResponse) => a.tag_name.localeCompare(b.tag_name),
+            sorter: true,
+            sortOrder: pagedRequest.sort_by === "tag_name" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
+            ...getColumnSearchProps("tag_name"),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name", record),
         },
         {
             title: t("TagList.tableColumns.tag_name_de.title"),
             dataIndex: "tag_name_de",
             key: "tag_name_de",
-            sorter: (a: TagResponse, b: TagResponse) => a.tag_name_de.localeCompare(b.tag_name_de),
+            sorter: true,
+            sortOrder: pagedRequest.sort_by === "tag_name_de" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
+            ...getColumnSearchProps("tag_name_de"),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name_de", record),
         },
         {
             title: t("TagList.tableColumns.tag_name_en.title"),
             dataIndex: "tag_name_en",
             key: "tag_name_en",
-            sorter: (a: TagResponse, b: TagResponse) => a.tag_name_en.localeCompare(b.tag_name_en),
+            sorter: true,
+            sortOrder: pagedRequest.sort_by === "tag_name_en" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
+            ...getColumnSearchProps("tag_name_en"),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name_en", record),
         },
         {
             title: t("TagList.tableColumns.tag_name_es.title"),
             dataIndex: "tag_name_es",
             key: "tag_name_es",
-            sorter: (a: TagResponse, b: TagResponse) => a.tag_name_es.localeCompare(b.tag_name_es),
+            sorter: true,
+            sortOrder: pagedRequest.sort_by === "tag_name_es" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
+            ...getColumnSearchProps("tag_name_es"),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name_es", record),
         },
         {
             title: t("TagList.tableColumns.tag_name_fi.title"),
             dataIndex: "tag_name_fi",
             key: "tag_name_fi",
-            sorter: (a: TagResponse, b: TagResponse) => a.tag_name_fi.localeCompare(b.tag_name_fi),
+            sorter: true,
+            sortOrder: pagedRequest.sort_by === "tag_name_fi" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
+            ...getColumnSearchProps("tag_name_fi"),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name_fi", record),
         },
         {
             title: t("TagList.tableColumns.tag_name_sv.title"),
             dataIndex: "tag_name_sv",
             key: "tag_name_sv",
-            sorter: (a: TagResponse, b: TagResponse) => a.tag_name_sv.localeCompare(b.tag_name_sv),
+            sorter: true,
+            sortOrder: pagedRequest.sort_by === "tag_name_sv" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
+            ...getColumnSearchProps("tag_name_sv"),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name_sv", record),
         },
         {
@@ -254,6 +316,24 @@ export function TagList() {
         }
     ];
 
+    const handleTableChange = (
+            pagination: { current?: number; pageSize?: number },
+            filters: Record<string, FilterValue | null>,
+            sorter: SorterResult<TagResponse> | SorterResult<TagResponse>[]
+    ) => {
+        const search = Object.values(filters).flatMap(value => value ?? [])
+                .find(value => typeof value === "string" && value.length > 0);
+        const nextSorter = !Array.isArray(sorter) && sorter.field ? sorter : undefined;
+        setPagedRequest(previous => ({
+            ...previous,
+            page: (pagination.current ?? 1) - 1,
+            size: pagination.pageSize ?? previous.size,
+            sort_by: typeof nextSorter?.field === "string" ? nextSorter.field : "tag_name",
+            direction: nextSorter?.order === "descend" ? "DESC" : "ASC",
+            search: typeof search === "string" ? search : undefined
+        }));
+    };
+
     return (
             <div className={"DarkDiv"} key={"tagListDiv"}>
                 <Spin description={t("TagList.messages.loadingTip")} spinning={loading} key={"componentListSpinner"}>
@@ -262,7 +342,14 @@ export function TagList() {
                                     dataSource={tags}
                                     loading={loading}
                                     rowKey="id"
-                                    pagination={pagination}
+                                    pagination={{
+                                        current: pagedRequest.page + 1,
+                                        pageSize: pagedRequest.size,
+                                        total: totalElements,
+                                        showSizeChanger: true,
+                                        pageSizeOptions: ["10", "20", "50", "100"]
+                                    }}
+                                    onChange={handleTableChange}
                                     columns={tagColumns}
                             />
                     }
