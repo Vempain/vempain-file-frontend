@@ -37,6 +37,18 @@ describe("TagAPI", () => {
         expect(response).toEqual([tagResponse]);
     });
 
+    it("findPageable posts a paged request and returns PagedResponse", async () => {
+        const pagedRequest: PagedRequest = {page: 0, size: 10, sort_by: "tag_name", direction: "ASC", search: "news"};
+        const pagedResponse = {content: [tagResponse], page: 0, size: 10, total_elements: 1, total_pages: 1, first: true, last: true, empty: false};
+        axiosMock.post.mockResolvedValueOnce({data: pagedResponse});
+
+        const response = await tagAPI.findPageable(pagedRequest);
+
+        expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
+        expect(axiosMock.post).toHaveBeenCalledWith("paged", pagedRequest);
+        expect(response).toEqual(pagedResponse);
+    });
+
     it("create posts TagRequest and returns TagResponse", async () => {
         axiosMock.post.mockResolvedValueOnce({data: tagResponse});
 
@@ -79,4 +91,3 @@ describe("TagAPI", () => {
         expect(response).toEqual(pagedResponse);
     });
 });
-
