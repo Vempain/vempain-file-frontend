@@ -18,6 +18,7 @@ import {
     HeatMapOutlined,
     ImportOutlined,
     InfoCircleOutlined,
+    LockOutlined,
     LoginOutlined,
     LogoutOutlined,
     MenuOutlined,
@@ -244,6 +245,12 @@ export function TopBar() {
                                 label: (<NavLink to={"/management/units"}>{t("TopBar.menu.userManagement.units")}</NavLink>),
                                 key: "user-units",
                                 icon: <UsergroupAddOutlined/>
+                            },
+                            {
+                                label: (<NavLink
+                                        to={"/management/permissions"}>{t("TopBar.menu.userManagement.permissions", {defaultValue: "Permissions"})}</NavLink>),
+                                key: "user-permissions",
+                                icon: <LockOutlined/>
                             },
                         ],
                     },

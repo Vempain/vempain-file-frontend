@@ -31,6 +31,7 @@ import {
     Statistics,
     SystemSchedules,
     TagCreate,
+    TagEdit,
     TaggedFiles,
     TagList,
     TagSearch,
@@ -106,6 +107,7 @@ export default function App() {
                             <Route path={"/schedules/publishing"} element={<Publishing/>}/>
                             <Route path={"/schedules/system"} element={<SystemSchedules/>}/>
                             <Route path={"/tags/create"} element={<TagCreate/>}/>
+                            <Route path={"/tags/:tagId/edit"} element={<TagEdit/>}/>
                             <Route path={"/tags/list"} element={<TagList/>}/>
                             <Route path={"/tags/:tagId"} element={<TaggedFiles/>}/>
                             <Route path={"/tags/search"} element={<TagSearch/>}/>
