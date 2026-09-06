@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars, react-hooks/rules-of-hooks */
+/* eslint-disable @typescript-eslint/ban-ts-comment, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars, no-var, react-hooks/rules-of-hooks */
 // @ts-nocheck
 import React from "react";
 import {cleanup, fireEvent, render, screen, waitFor} from "@testing-library/react";
@@ -39,7 +39,7 @@ import {ChangePassword} from "../../components/user/ChangePassword";
 import {TopBar} from "../../main/TopBar";
 import {SearchFiles} from "../../components/files/SearchFiles";
 
-const axiosMock = {defaults: {headers: {get: {}, post: {}, put: {}, delete: {}}}, get: jest.fn(), post: jest.fn(), put: jest.fn(), delete: jest.fn()};
+var axiosMock = {defaults: {headers: {get: {}, post: {}, put: {}, delete: {}}}, get: jest.fn(), post: jest.fn(), put: jest.fn(), delete: jest.fn()};
 const authSession = {userSession: {id: 7}, getSessionLanguage: () => "en", setSessionLanguage: jest.fn()};
 
 jest.mock("@vempain/vempain-auth-frontend", () => {
