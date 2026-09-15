@@ -23,8 +23,8 @@
   },
   "dependencies" : {
     "@ant-design/charts" : "^2.6.7",
-    "@vempain/vempain-auth-frontend" : "^2.0.4",
-    "antd" : "^6.6.3",
+    "@vempain/vempain-auth-frontend" : "^2.0.5",
+    "antd" : "^6.6.4",
     "axios" : "^1.20.0",
     "dayjs" : "^1.11.23",
     "i18next" : "^26.4.2",
@@ -32,13 +32,13 @@
     "leaflet" : "^1.9.4",
     "react" : "^19.3.0",
     "react-dom" : "^19.3.0",
-    "react-i18next" : "^17.0.13",
+    "react-i18next" : "^17.0.14",
     "react-leaflet" : "5.0.0",
     "react-router-dom" : "^7.18.3"
   },
   "devDependencies" : {
     "@eslint/js" : "^10.0.1",
-    "@testing-library/dom" : "^10.4.1",
+    "@testing-library/dom" : "^10.4.2",
     "@testing-library/jest-dom" : "^7.0.1",
     "@testing-library/react" : "^16.3.3",
     "@types/jest" : "^30.0.0",

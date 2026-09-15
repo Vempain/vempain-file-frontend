@@ -8,12 +8,13 @@ export function BottomFooter() {
     const {t} = useTranslation();
 
     return (
-            <Footer style={{textAlign: "center"}}
-                    dangerouslySetInnerHTML={{
-                        __html: import.meta.env.VITE_APP_VEMPAIN_COPYRIGHT_FOOTER + "<br/>"
-                                + t("BottomFooter.text.versionPrefix") + buildInfo.version + " "
-                                + t("BottomFooter.text.builtPrefix") + " " + buildInfo.buildTime + "<br/>"
-                                + import.meta.env.VITE_APP_POWERED_BY_VEMPAIN
-                    }}/>
+            <Footer style={{textAlign: "center"}}>
+                <div>{import.meta.env.VITE_APP_VEMPAIN_COPYRIGHT_FOOTER}</div>
+                <div>
+                    {t("BottomFooter.text.versionPrefix")}{buildInfo.version}{" "}
+                    {t("BottomFooter.text.builtPrefix")} {buildInfo.buildTime}
+                </div>
+                <div>{import.meta.env.VITE_APP_POWERED_BY_VEMPAIN}</div>
+            </Footer>
     );
 }
