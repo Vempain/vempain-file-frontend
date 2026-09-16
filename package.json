@@ -56,7 +56,7 @@
     "jest-environment-jsdom" : "^30.5.1",
     "translation-check" : "^1.1.1",
     "ts-jest" : "^29.4.12",
-    "typescript" : "^7.0.2",
+    "typescript" : "^6.0.2",
     "typescript-eslint" : "^8.70.0",
     "vite" : "^8.3.0"
   },
@@ -89,7 +89,8 @@
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$" : "<rootDir>/__mocks__/fileMock.js",
       "\\.(css|less)$" : "<rootDir>/__mocks__/styleMock.js",
       "^(.*)/resolveApiUrl$" : "<rootDir>/__mocks__/resolveApiUrl",
-      "^(.*)/resolveAdminApiUrl$" : "<rootDir>/__mocks__/resolveAdminApiUrl"
+      "^(.*)/resolveAdminApiUrl$" : "<rootDir>/__mocks__/resolveAdminApiUrl",
+      "^(.*)/resolveFooterConfig$" : "<rootDir>/__mocks__/resolveFooterConfig"
     }
   },
   "repository" : {

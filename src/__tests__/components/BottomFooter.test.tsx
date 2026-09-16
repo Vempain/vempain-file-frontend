@@ -1,5 +1,12 @@
 import {render, screen} from "@testing-library/react";
-import {BottomFooter} from "../../../main/BottomFooter";
+import type {HTMLAttributes, PropsWithChildren} from "react";
+import {BottomFooter} from "../../main/BottomFooter.tsx";
+
+jest.mock("antd/es/layout/layout", () => ({
+    Footer: ({children, ...props}: PropsWithChildren<HTMLAttributes<HTMLElement>>) => (
+            <footer {...props}>{children}</footer>
+    ),
+}));
 
 jest.mock("react-i18next", () => ({
     useTranslation: () => ({

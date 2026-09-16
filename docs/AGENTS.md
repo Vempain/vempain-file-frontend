@@ -60,6 +60,8 @@
 
 ## Build, test, and local workflows
 
+- Use Yarn exclusively for package-manager commands; never use `npm` or `npx`, including when installing dependencies, running tests, linting, building, or
+  invoking package binaries.
 - Install with Yarn 4: `yarn install`.
 - Dev server: `yarn start` (runs `generateBuildInfo.js` first, then `env-cmd -f .env.local vite`). Vite default port is `3000` in `vite.config.ts`.
 - Production build: `yarn build` or `yarn build:production`.
