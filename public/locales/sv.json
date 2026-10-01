@@ -100,6 +100,19 @@
       "yes" : "Ja"
     }
   },
+  "common" : {
+    "table" : {
+      "filter" : {
+        "reset" : "Återställ",
+        "searchColumn" : "Sök i kolumnen {{column}}",
+        "select" : "Välj"
+      },
+      "loadError" : "Det gick inte att läsa in tabelldata",
+      "pagination" : {
+        "total" : "{{from}}–{{to}} av {{total}}"
+      }
+    }
+  },
   "CommonColumns" : {
     "columns" : {
       "created" : {

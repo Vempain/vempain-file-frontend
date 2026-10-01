@@ -1,7 +1,8 @@
-import {Button, Form, Input, message, Modal, Space, Spin, Table} from "antd";
+import {Button, Form, Input, message, Modal, Space, Spin} from "antd";
 import type {ColumnsType} from "antd/es/table";
-import type {PagedRequest, UserVO} from "@vempain/vempain-auth-frontend";
-import {useCallback, useEffect, useState} from "react";
+import type {UserVO} from "@vempain/vempain-auth-frontend";
+import {usePagedTable, VempainTable} from "@vempain/vempain-auth-frontend";
+import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {adminUserAPI} from "../../services";
 import {AclEditor} from "./AclEditor";
@@ -12,25 +13,13 @@ type UserForm = Pick<UserVO, "name" | "nick" | "login_name" | "email" | "descrip
 
 export function Users() {
     const {t} = useTranslation();
-    const [users, setUsers] = useState<UserVO[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [request, setRequest] = useState<PagedRequest>({page: 0, size: 10, sort_by: "name", direction: "ASC", case_sensitive: false});
-    const [total, setTotal] = useState(0);
+    const paged = usePagedTable<UserVO>(
+            request => adminUserAPI.findPageable(request),
+            {defaultPageSize: 10, defaultSortBy: "name"}
+    );
+    const [loading, setLoading] = useState(false);
     const [editing, setEditing] = useState<UserVO | null>(null);
     const [form] = Form.useForm<UserForm>();
-
-    const fetchUsers = useCallback(() => {
-        setLoading(true);
-        adminUserAPI.findPageable(request)
-                .then(response => {
-                    setUsers(response.content ?? []);
-                    setTotal(response.total_elements ?? 0);
-                })
-                .catch(error => message.error(t("Users.messages.fetchError", {defaultValue: "Failed to load users", error: String(error)})))
-                .finally(() => setLoading(false));
-    }, [request, t]);
-
-    useEffect(fetchUsers, [fetchUsers]);
 
     const saveUser = (values: UserForm) => {
         setLoading(true);
@@ -47,7 +36,7 @@ export function Users() {
                     message.success(t("Users.messages.saveSuccess", {defaultValue: "User saved"}));
                     setEditing(null);
                     form.resetFields();
-                    fetchUsers();
+                    paged.reload();
                 })
                 .catch(error => message.error(t("Users.messages.saveError", {defaultValue: "Failed to save user", error: String(error)})))
                 .finally(() => setLoading(false));
@@ -69,6 +58,7 @@ export function Users() {
     ];
 
     return <Space direction="vertical" style={{width: "95%", margin: 30}} size="large">
+        {paged.contextHolder}
         <Space style={{justifyContent: "space-between", width: "100%"}}>
             <h1>{t("Users.title", {defaultValue: "Users"})}</h1>
             <Button type="primary" onClick={() => {
@@ -76,18 +66,13 @@ export function Users() {
                 form.resetFields();
             }}>{t("Users.actions.create", {defaultValue: "Create user"})}</Button>
         </Space>
-        <Spin spinning={loading}>
-            <Table<UserVO>
+        <Spin spinning={paged.loading}>
+            <VempainTable<UserVO>
+                    dataMode="server"
+                    paged={paged}
                     rowKey="id"
                     columns={columns}
-                    dataSource={users}
                     scroll={{x: "max-content"}}
-                    pagination={{current: request.page + 1, pageSize: request.size, total, showSizeChanger: true}}
-                    onChange={pagination => setRequest(previous => ({
-                        ...previous,
-                        page: (pagination.current ?? 1) - 1,
-                        size: pagination.pageSize ?? previous.size
-                    }))}
             />
         </Spin>
         <Modal

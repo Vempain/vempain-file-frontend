@@ -1,7 +1,7 @@
-import {Button, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
-import {useCallback, useEffect, useState} from "react";
+import {Button, message, Modal, Popconfirm, Space, Spin} from "antd";
+import {useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
-import type {PagedRequest} from "@vempain/vempain-auth-frontend";
+import {usePagedTable, VempainTable} from "@vempain/vempain-auth-frontend";
 import {vectorFileAPI} from "../../services";
 import type {VectorFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
@@ -11,60 +11,24 @@ import {useTranslation} from "react-i18next";
 
 export function VectorFiles() {
     const {t} = useTranslation();
-    const [loading, setLoading] = useState(true);
-    const [vectorFiles, setVectorFiles] = useState<VectorFileResponse[]>([]);
     const [detailsOpen, setDetailsOpen] = useState(false);
     const [selectedFile, setSelectedFile] = useState<VectorFileResponse | null>(null);
-    // Add paging state
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(10);
-    const [totalElements, setTotalElements] = useState<number>(0);
 
-    const fetchVectorFiles = useCallback((page: number, size: number) => {
-        setLoading(true);
-        const pagedRequest: PagedRequest = {
-            page: page - 1,
-            size,
-        };
-
-        vectorFileAPI.findAllPageable(pagedRequest)
-                .then(response => {
-                    if (response && response.content) {
-                        setVectorFiles(response.content);
-                    }
-
-                    setTotalElements(response.total_elements ?? 0);
-                    setCurrentPage(response.page + 1);
-                    setPageSize(response.size);
-                })
-                .catch(err => {
-                    console.error("Failed to fetch image files:", err);
-                    message.error(t("VectorFiles.messages.fetchError"));
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-    }, [t]);
-
-    useEffect(() => {
-        fetchVectorFiles(1, pageSize);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const paged = usePagedTable<VectorFileResponse>(
+            request => vectorFileAPI.findAllPageable(request),
+            {defaultPageSize: 10}
+    );
 
     function handleDelete(id: number) {
-        setLoading(true);
         vectorFileAPI.delete(id)
                 .then(() => {
                     message.success(t("VectorFiles.messages.deleteSuccess"));
-                    fetchVectorFiles(currentPage, pageSize);
+                    paged.reload();
                 })
                 .catch(err => {
                     console.error("Failed to delete vector file:", err);
                     message.error(t("VectorFiles.messages.deleteError"));
                 })
-                .finally(() => {
-                    setLoading(false);
-                });
     }
 
     const columns: ColumnsType<VectorFileResponse> = [
@@ -110,34 +74,18 @@ export function VectorFiles() {
         },
     ];
 
-    function handleTableChange(pagination: { current?: number; pageSize?: number }) {
-        const nextPage = pagination.current ?? 1;
-        const nextSize = pagination.pageSize ?? pageSize;
-        setCurrentPage(nextPage);
-        setPageSize(nextSize);
-        fetchVectorFiles(nextPage, nextSize);
-    }
-
     return (
             <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
-                <Spin spinning={loading}>
-                    {vectorFiles.length > 0 && <Table
+                {paged.contextHolder}
+                <Spin spinning={paged.loading}>
+                    {paged.dataSource.length > 0 && <VempainTable
+                            dataMode="server"
+                            paged={paged}
                             columns={columns}
-                            dataSource={vectorFiles.map(file => ({...file, key: file.id}))}
-                            loading={loading}
-                            pagination={{
-                                current: currentPage,
-                                pageSize: pageSize,
-                                total: totalElements,
-                                showSizeChanger: true,
-                                pageSizeOptions: ['10', '20', '50', '100'],
-                            }}
-                            onChange={handleTableChange}
                             scroll={{x: 'max-content'}}
-                            key="vector-files-table"
                             rowKey="external_file_id"
                     />
-                    }{vectorFiles.length === 0 && !loading && t("VectorFiles.messages.noFiles")}
+                    }{paged.dataSource.length === 0 && !paged.loading && t("VectorFiles.messages.noFiles")}
                 </Spin>
                 <Modal
                         open={detailsOpen}

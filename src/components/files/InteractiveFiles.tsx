@@ -1,7 +1,7 @@
-import {Button, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
-import {useCallback, useEffect, useState} from "react";
+import {Button, message, Modal, Popconfirm, Space, Spin} from "antd";
+import {useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
-import type {PagedRequest} from "@vempain/vempain-auth-frontend";
+import {usePagedTable, VempainTable} from "@vempain/vempain-auth-frontend";
 import {interactiveFileAPI} from "../../services";
 import type {InteractiveFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
@@ -11,59 +11,24 @@ import {useTranslation} from "react-i18next";
 
 export function InteractiveFiles() {
     const {t} = useTranslation();
-    const [loading, setLoading] = useState(true);
-    const [interactiveFiles, setInteractiveFiles] = useState<InteractiveFileResponse[]>([]);
     const [detailsOpen, setDetailsOpen] = useState(false);
     const [selectedFile, setSelectedFile] = useState<InteractiveFileResponse | null>(null);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(10);
-    const [totalElements, setTotalElements] = useState<number>(0);
 
-    const fetchInteractiveFiles = useCallback((page: number, size: number) => {
-        setLoading(true);
-        const pagedRequest: PagedRequest = {
-            page: page - 1,
-            size,
-        };
-
-        interactiveFileAPI.findAllPageable(pagedRequest)
-                .then(response => {
-                    if (response?.content) {
-                        setInteractiveFiles(response.content);
-                    }
-
-                    setTotalElements(response.total_elements ?? 0);
-                    setCurrentPage(response.page + 1);
-                    setPageSize(response.size);
-                })
-                .catch(err => {
-                    console.error("Failed to fetch interactive files:", err);
-                    message.error(t("InteractiveFiles.messages.fetchError", {defaultValue: "Failed to load interactive files"}));
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-    }, [t]);
-
-    useEffect(() => {
-        fetchInteractiveFiles(1, pageSize);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const paged = usePagedTable<InteractiveFileResponse>(
+            request => interactiveFileAPI.findAllPageable(request),
+            {defaultPageSize: 10}
+    );
 
     function handleDelete(id: number) {
-        setLoading(true);
         interactiveFileAPI.delete(id)
                 .then(() => {
                     message.success(t("InteractiveFiles.messages.deleteSuccess", {defaultValue: "Interactive file deleted successfully"}));
-                    fetchInteractiveFiles(currentPage, pageSize);
+                    paged.reload();
                 })
                 .catch(err => {
                     console.error("Failed to delete interactive file:", err);
                     message.error(t("InteractiveFiles.messages.deleteError", {defaultValue: "Failed to delete interactive file"}));
                 })
-                .finally(() => {
-                    setLoading(false);
-                });
     }
 
     const columns: ColumnsType<InteractiveFileResponse> = [
@@ -97,34 +62,18 @@ export function InteractiveFiles() {
         },
     ];
 
-    function handleTableChange(pagination: { current?: number; pageSize?: number }) {
-        const nextPage = pagination.current ?? 1;
-        const nextSize = pagination.pageSize ?? pageSize;
-        setCurrentPage(nextPage);
-        setPageSize(nextSize);
-        fetchInteractiveFiles(nextPage, nextSize);
-    }
-
     return (
             <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
-                <Spin spinning={loading}>
-                    {interactiveFiles.length > 0 && <Table
+                {paged.contextHolder}
+                <Spin spinning={paged.loading}>
+                    {paged.dataSource.length > 0 && <VempainTable
+                            dataMode="server"
+                            paged={paged}
                             columns={columns}
-                            dataSource={interactiveFiles.map(file => ({...file, key: file.id}))}
-                            loading={loading}
-                            pagination={{
-                                current: currentPage,
-                                pageSize: pageSize,
-                                total: totalElements,
-                                showSizeChanger: true,
-                                pageSizeOptions: ["10", "20", "50", "100"],
-                            }}
-                            onChange={handleTableChange}
                             scroll={{x: "max-content"}}
-                            key="interactive-files-table"
                             rowKey="external_file_id"
                     />
-                    }{interactiveFiles.length === 0 && !loading && t("InteractiveFiles.messages.noFiles", {defaultValue: "No interactive files found"})}
+                    }{paged.dataSource.length === 0 && !paged.loading && t("InteractiveFiles.messages.noFiles", {defaultValue: "No interactive files found"})}
                 </Spin>
                 <Modal
                         open={detailsOpen}

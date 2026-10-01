@@ -43,6 +43,7 @@ var axiosMock = {defaults: {headers: {get: {}, post: {}, put: {}, delete: {}}}, 
 const authSession = {userSession: {id: 7}, getSessionLanguage: () => "en", setSessionLanguage: jest.fn()};
 
 jest.mock("@vempain/vempain-auth-frontend", () => {
+    const R = jest.requireActual("react") as typeof React;
     class AbstractAPI {
         axiosInstance = axiosMock;
 
@@ -56,7 +57,52 @@ jest.mock("@vempain/vempain-auth-frontend", () => {
         update = async (payload: unknown) => (await axiosMock.put("", payload)).data;
     }
 
-    return {AbstractAPI, useSession: () => authSession};
+    function usePagedTable(fetcher: (request: unknown) => Promise<any>, options: any = {}) {
+        const [dataSource, setDataSource] = R.useState<any[]>([]);
+        const [loading, setLoading] = R.useState(true);
+        const [reloadToken, setReloadToken] = R.useState(0);
+        R.useEffect(() => {
+            setLoading(true);
+            fetcher({
+                page: 0,
+                size: options.defaultPageSize ?? 10,
+                ...(options.defaultSortBy ? {sort_by: options.defaultSortBy, direction: "ASC"} : {})
+            }).then(response => {
+                setDataSource(response?.content ?? []);
+                setLoading(false);
+            }).catch(() => setLoading(false));
+        }, [options.defaultPageSize, options.defaultSortBy, reloadToken]);
+        const handleTableChange = (pagination: any) => {
+            setLoading(true);
+            fetcher({
+                page: (pagination.current ?? 1) - 1,
+                size: pagination.pageSize ?? options.defaultPageSize ?? 10,
+                ...(options.defaultSortBy ? {sort_by: options.defaultSortBy, direction: "ASC"} : {})
+            }).then(response => {
+                setDataSource(response?.content ?? []);
+                setLoading(false);
+            }).catch(() => setLoading(false));
+        };
+        return {
+            dataSource,
+            loading,
+            pagination: {},
+            handleTableChange,
+            reload: () => setReloadToken(value => value + 1),
+            contextHolder: null
+        };
+    }
+
+    const VempainTable = ({paged, columns = []}: any) => <div data-testid="table">
+        {paged.dataSource.map((row: any) => <div key={row.id}>
+            {columns.map((column: any) => <span key={column.key}>
+                {column.render ? column.render(row[column.dataIndex], row) : String(row[column.dataIndex] ?? "")}
+            </span>)}
+        </div>)}
+        <button onClick={() => paged.handleTableChange({current: 2, pageSize: 20})}>next page</button>
+        <button onClick={() => paged.handleTableChange({})}>default page</button>
+    </div>;
+    return {AbstractAPI, useSession: () => authSession, usePagedTable, VempainTable};
 }, {virtual: true});
 
 const mockTranslate = (_key: string, options?: { defaultValue?: string }) => options?.defaultValue ?? _key;

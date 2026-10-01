@@ -100,6 +100,19 @@
       "yes" : "Kyllä"
     }
   },
+  "common" : {
+    "table" : {
+      "filter" : {
+        "reset" : "Nollaa",
+        "searchColumn" : "Hae sarakkeesta {{column}}",
+        "select" : "Valitse"
+      },
+      "loadError" : "Taulukon tietojen lataus epäonnistui",
+      "pagination" : {
+        "total" : "{{from}}–{{to}} / {{total}}"
+      }
+    }
+  },
   "CommonColumns" : {
     "columns" : {
       "created" : {

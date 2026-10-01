@@ -1,7 +1,7 @@
-import {Button, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
-import {useCallback, useEffect, useState} from "react";
+import {Button, message, Modal, Popconfirm, Space, Spin} from "antd";
+import {useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
-import type {PagedRequest} from "@vempain/vempain-auth-frontend";
+import {usePagedTable, VempainTable} from "@vempain/vempain-auth-frontend";
 import {musicFileAPI} from "../../services";
 import type {MusicFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
@@ -11,59 +11,24 @@ import {useTranslation} from "react-i18next";
 
 export function MusicFiles() {
     const {t} = useTranslation();
-    const [loading, setLoading] = useState(true);
-    const [musicFiles, setMusicFiles] = useState<MusicFileResponse[]>([]);
     const [detailsOpen, setDetailsOpen] = useState(false);
     const [selectedFile, setSelectedFile] = useState<MusicFileResponse | null>(null);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(10);
-    const [totalElements, setTotalElements] = useState<number>(0);
 
-    const fetchMusicFiles = useCallback((page: number, size: number) => {
-        setLoading(true);
-        const pagedRequest: PagedRequest = {
-            page: page - 1,
-            size,
-        };
-
-        musicFileAPI.findAllPageable(pagedRequest)
-                .then(response => {
-                    if (response?.content) {
-                        setMusicFiles(response.content);
-                    }
-
-                    setTotalElements(response.total_elements ?? 0);
-                    setCurrentPage(response.page + 1);
-                    setPageSize(response.size);
-                })
-                .catch(err => {
-                    console.error("Failed to fetch music files:", err);
-                    message.error(t("MusicFiles.messages.fetchError", {defaultValue: "Failed to load music files"}));
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-    }, [t]);
-
-    useEffect(() => {
-        fetchMusicFiles(1, pageSize);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const paged = usePagedTable<MusicFileResponse>(
+            request => musicFileAPI.findAllPageable(request),
+            {defaultPageSize: 10}
+    );
 
     function handleDelete(id: number) {
-        setLoading(true);
         musicFileAPI.delete(id)
                 .then(() => {
                     message.success(t("MusicFiles.messages.deleteSuccess", {defaultValue: "Music file deleted successfully"}));
-                    fetchMusicFiles(currentPage, pageSize);
+                    paged.reload();
                 })
                 .catch(err => {
                     console.error("Failed to delete music file:", err);
                     message.error(t("MusicFiles.messages.deleteError", {defaultValue: "Failed to delete music file"}));
                 })
-                .finally(() => {
-                    setLoading(false);
-                });
     }
 
     const columns: ColumnsType<MusicFileResponse> = [
@@ -128,34 +93,18 @@ export function MusicFiles() {
         },
     ];
 
-    function handleTableChange(pagination: { current?: number; pageSize?: number }) {
-        const nextPage = pagination.current ?? 1;
-        const nextSize = pagination.pageSize ?? pageSize;
-        setCurrentPage(nextPage);
-        setPageSize(nextSize);
-        fetchMusicFiles(nextPage, nextSize);
-    }
-
     return (
             <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
-                <Spin spinning={loading}>
-                    {musicFiles.length > 0 && <Table
+                {paged.contextHolder}
+                <Spin spinning={paged.loading}>
+                    {paged.dataSource.length > 0 && <VempainTable
+                            dataMode="server"
+                            paged={paged}
                             columns={columns}
-                            dataSource={musicFiles.map(file => ({...file, key: file.id}))}
-                            loading={loading}
-                            pagination={{
-                                current: currentPage,
-                                pageSize: pageSize,
-                                total: totalElements,
-                                showSizeChanger: true,
-                                pageSizeOptions: ["10", "20", "50", "100"],
-                            }}
-                            onChange={handleTableChange}
                             scroll={{x: "max-content"}}
-                            key="music-files-table"
                             rowKey="external_file_id"
                     />
-                    }{musicFiles.length === 0 && !loading && t("MusicFiles.messages.noFiles", {defaultValue: "No music files found"})}
+                    }{paged.dataSource.length === 0 && !paged.loading && t("MusicFiles.messages.noFiles", {defaultValue: "No music files found"})}
                 </Spin>
                 <Modal
                         open={detailsOpen}
