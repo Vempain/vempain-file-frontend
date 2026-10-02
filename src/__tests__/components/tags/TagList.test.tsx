@@ -57,8 +57,7 @@ describe("TagList", () => {
             page: 0,
             size: 10,
             sort_by: "tag_name",
-            direction: "ASC",
-            case_sensitive: false
+            direction: "ASC"
         }));
         findPageable.mockRestore();
     });

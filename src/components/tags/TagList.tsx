@@ -1,13 +1,12 @@
-import {Button, Input, type InputRef, message, Modal, Select, Space, Spin, Table} from "antd";
+import {Button, Input, type InputRef, message, Modal, Select, Space, Spin} from "antd";
 import {SearchOutlined} from "@ant-design/icons";
 import {useCallback, useEffect, useRef, useState} from "react";
-import type {ColumnsType} from "antd/es/table";
-import type {ColumnType, FilterDropdownProps, FilterValue, SorterResult} from "antd/es/table/interface";
+import type {ColumnType, FilterDropdownProps} from "antd/es/table/interface";
 import {tagAPI} from "../../services";
 import type {TagRequest, TagResponse} from "../../models";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
-import type {PagedRequest} from "@vempain/vempain-auth-frontend";
+import {usePagedTable, type VempainColumnsType, VempainTable} from "@vempain/vempain-auth-frontend";
 
 interface ReplacementTagSelectProps {
     excludedTagId: number;
@@ -83,33 +82,13 @@ function ReplacementTagSelect({excludedTagId, onChange}: ReplacementTagSelectPro
 export function TagList() {
     const {t} = useTranslation();
     const [modal, contextHolder] = Modal.useModal();
-    const [tags, setTags] = useState<TagResponse[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [pagedRequest, setPagedRequest] = useState<PagedRequest>({
-        page: 0, size: 10, sort_by: "tag_name", direction: "ASC", case_sensitive: false
-    });
-    const [totalElements, setTotalElements] = useState(0);
+    const paged = usePagedTable<TagResponse>(
+            request => tagAPI.findPageable(request),
+            {defaultPageSize: 10, defaultSortBy: "tag_name"}
+    );
     const searchInput = useRef<InputRef>(null);
     const [editingRowId, setEditingRowId] = useState<number | null>(null);
     const [editedRow, setEditedRow] = useState<Partial<TagResponse>>({});
-
-    const fetchTags = useCallback((request: PagedRequest = pagedRequest) => {
-        setLoading(true);
-        tagAPI.findPageable(request)
-                .then(response => {
-                    setTags(response.content ?? []);
-                    setTotalElements(response.total_elements ?? 0);
-                })
-                .catch((error: unknown) => {
-                    const errMsg = error instanceof Error ? error.message : "Unknown error";
-                    message.error(t("TagList.messages.fetchError", {error: errMsg}));
-                })
-                .finally(() => setLoading(false));
-    }, [pagedRequest, t]);
-
-    useEffect(() => {
-        fetchTags();
-    }, [fetchTags]);
 
     const startEdit = (record: TagResponse) => {
         setEditingRowId(record.id);
@@ -122,16 +101,13 @@ export function TagList() {
     };
 
     const saveEdit = (id: number) => {
-        setLoading(true);
         if (!editedRow) {
             message.error(t("TagList.messages.noChanges"));
-            setLoading(false);
             return;
         }
 
         if (!editedRow.tag_name) {
             message.error(t("TagList.messages.tagNameRequired"));
-            setLoading(false);
             return;
         }
 
@@ -148,9 +124,7 @@ export function TagList() {
         tagAPI.update(requestPayload)
                 .then(() => {
                     message.success(t("TagList.messages.updateSuccess"));
-                    setTags(currentTags =>
-                            currentTags.map(tag => tag.id === id ? {...tag, ...editedRow} : tag)
-                    );
+                    paged.reload();
                 })
                 .catch((error: unknown) => {
                     message.error(t("TagList.messages.updateFailedWithReason", {error: String(error)}));
@@ -158,7 +132,6 @@ export function TagList() {
                 .finally(() => {
                     setEditingRowId(null);
                     setEditedRow({});
-                    setLoading(false);
                 });
     };
 
@@ -181,7 +154,7 @@ export function TagList() {
         try {
             await call;
             message.success(t("TagList.messages.actionSuccess"));
-            setTags(current => current.filter(tag => operation === "remove" || tag.id !== record.id));
+            paged.reload();
         } catch (error) {
             message.error(t("TagList.messages.actionFailed", {error: String(error)}));
         }
@@ -267,20 +240,19 @@ export function TagList() {
         dataIndex
     }), [t]);
 
-    const tagColumns: ColumnsType<TagResponse> = [
+    const tagColumns: VempainColumnsType<TagResponse> = [
         {
             title: t("TagList.tableColumns.id.title"),
             dataIndex: "id",
             key: "id",
             sorter: true,
-            sortOrder: pagedRequest.sort_by === "id" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
         },
         {
             title: t("TagList.tableColumns.tag_name.title"),
             dataIndex: "tag_name",
             key: "tag_name",
             sorter: true,
-            sortOrder: pagedRequest.sort_by === "tag_name" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
+            searchable: true,
             ...getColumnSearchProps("tag_name"),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name", record),
         },
@@ -289,7 +261,7 @@ export function TagList() {
             dataIndex: "tag_name_de",
             key: "tag_name_de",
             sorter: true,
-            sortOrder: pagedRequest.sort_by === "tag_name_de" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
+            searchable: true,
             ...getColumnSearchProps("tag_name_de"),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name_de", record),
         },
@@ -298,7 +270,7 @@ export function TagList() {
             dataIndex: "tag_name_en",
             key: "tag_name_en",
             sorter: true,
-            sortOrder: pagedRequest.sort_by === "tag_name_en" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
+            searchable: true,
             ...getColumnSearchProps("tag_name_en"),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name_en", record),
         },
@@ -307,7 +279,7 @@ export function TagList() {
             dataIndex: "tag_name_es",
             key: "tag_name_es",
             sorter: true,
-            sortOrder: pagedRequest.sort_by === "tag_name_es" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
+            searchable: true,
             ...getColumnSearchProps("tag_name_es"),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name_es", record),
         },
@@ -316,7 +288,7 @@ export function TagList() {
             dataIndex: "tag_name_fi",
             key: "tag_name_fi",
             sorter: true,
-            sortOrder: pagedRequest.sort_by === "tag_name_fi" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
+            searchable: true,
             ...getColumnSearchProps("tag_name_fi"),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name_fi", record),
         },
@@ -325,7 +297,7 @@ export function TagList() {
             dataIndex: "tag_name_sv",
             key: "tag_name_sv",
             sorter: true,
-            sortOrder: pagedRequest.sort_by === "tag_name_sv" ? (pagedRequest.direction === "DESC" ? "descend" : "ascend") : undefined,
+            searchable: true,
             ...getColumnSearchProps("tag_name_sv"),
             render: (_: undefined, record: TagResponse) => editableCell("tag_name_sv", record),
         },
@@ -368,44 +340,17 @@ export function TagList() {
         }
     ];
 
-    const handleTableChange = (
-            pagination: { current?: number; pageSize?: number },
-            filters: Record<string, FilterValue | null>,
-            sorter: SorterResult<TagResponse> | SorterResult<TagResponse>[]
-    ) => {
-        const search = Object.values(filters).flatMap(value => value ?? [])
-                .find(value => typeof value === "string" && value.length > 0);
-        const nextSorter = !Array.isArray(sorter) && sorter.field ? sorter : undefined;
-        setPagedRequest(previous => ({
-            ...previous,
-            page: (pagination.current ?? 1) - 1,
-            size: pagination.pageSize ?? previous.size,
-            sort_by: typeof nextSorter?.field === "string" ? nextSorter.field : "tag_name",
-            direction: nextSorter?.order === "descend" ? "DESC" : "ASC",
-            search: typeof search === "string" ? search : undefined
-        }));
-    };
-
     return (
             <div className={"DarkDiv"} key={"tagListDiv"}>
+                {paged.contextHolder}
                 {contextHolder}
-                <Spin description={t("TagList.messages.loadingTip")} spinning={loading} key={"componentListSpinner"}>
-                    {!loading &&
-                            <Table
-                                    dataSource={tags}
-                                    loading={loading}
-                                    rowKey="id"
-                                    pagination={{
-                                        current: pagedRequest.page + 1,
-                                        pageSize: pagedRequest.size,
-                                        total: totalElements,
-                                        showSizeChanger: true,
-                                        pageSizeOptions: ["10", "20", "50", "100"]
-                                    }}
-                                    onChange={handleTableChange}
-                                    columns={tagColumns}
-                            />
-                    }
+                <Spin description={t("TagList.messages.loadingTip")} spinning={paged.loading} key={"componentListSpinner"}>
+                    <VempainTable
+                            dataMode="server"
+                            paged={paged}
+                            rowKey="id"
+                            columns={tagColumns}
+                    />
                 </Spin>
             </div>
     );

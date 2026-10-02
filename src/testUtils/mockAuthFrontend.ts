@@ -114,8 +114,43 @@ jest.mock("@vempain/vempain-auth-frontend", () => {
         }
     }
 
+    function usePagedTable<RESPONSE>(
+        fetcher: (request: Record<string, unknown>) => Promise<{ content?: RESPONSE[]; total_elements?: number }>,
+        options: { defaultPageSize?: number; defaultSortBy?: string } = {}
+    ) {
+        const fetcherRef = useRef(fetcher);
+        fetcherRef.current = fetcher;
+        const [dataSource, setDataSource] = useState<RESPONSE[]>([]);
+        const [loading, setLoading] = useState(true);
+        const [reloadToken, setReloadToken] = useState(0);
+        useEffect(() => {
+            const request = {
+                page: 0,
+                size: options.defaultPageSize ?? 10,
+                ...(options.defaultSortBy ? {sort_by: options.defaultSortBy, direction: "ASC"} : {})
+            };
+            fetcherRef.current(request)
+                .then(response => {
+                    setDataSource(response.content ?? []);
+                    setLoading(false);
+                })
+                .catch(() => setLoading(false));
+        }, [options.defaultPageSize, options.defaultSortBy, reloadToken]);
+        return {
+            dataSource,
+            loading,
+            pagination: {},
+            handleTableChange: () => undefined,
+            reload: () => setReloadToken(previous => previous + 1),
+            contextHolder: null
+        };
+    }
+
     return {
         AbstractAPI: MockAbstractAPI,
+        usePagedTable,
+        VempainTable: () => null
     };
 }, {virtual: true});
 
+import {useEffect, useRef, useState} from "react";

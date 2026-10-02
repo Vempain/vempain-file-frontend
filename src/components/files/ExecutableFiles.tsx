@@ -1,7 +1,7 @@
-import {Button, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
-import {useCallback, useEffect, useState} from "react";
+import {Button, message, Modal, Popconfirm, Space, Spin} from "antd";
+import {useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
-import type {PagedRequest} from "@vempain/vempain-auth-frontend";
+import {usePagedTable, VempainTable} from "@vempain/vempain-auth-frontend";
 import {executableFileAPI} from "../../services";
 import type {ExecutableFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
@@ -11,59 +11,24 @@ import {useTranslation} from "react-i18next";
 
 export function ExecutableFiles() {
     const {t} = useTranslation();
-    const [loading, setLoading] = useState(true);
-    const [executableFiles, setExecutableFiles] = useState<ExecutableFileResponse[]>([]);
     const [detailsOpen, setDetailsOpen] = useState(false);
     const [selectedFile, setSelectedFile] = useState<ExecutableFileResponse | null>(null);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(10);
-    const [totalElements, setTotalElements] = useState<number>(0);
 
-    const fetchExecutableFiles = useCallback((page: number, size: number) => {
-        setLoading(true);
-        const pagedRequest: PagedRequest = {
-            page: page - 1,
-            size,
-        };
-
-        executableFileAPI.findAllPageable(pagedRequest)
-                .then(response => {
-                    if (response?.content) {
-                        setExecutableFiles(response.content);
-                    }
-
-                    setTotalElements(response.total_elements ?? 0);
-                    setCurrentPage(response.page + 1);
-                    setPageSize(response.size);
-                })
-                .catch(err => {
-                    console.error("Failed to fetch executable files:", err);
-                    message.error(t("ExecutableFiles.messages.fetchError", {defaultValue: "Failed to load executable files"}));
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-    }, [t]);
-
-    useEffect(() => {
-        fetchExecutableFiles(1, pageSize);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const paged = usePagedTable<ExecutableFileResponse>(
+            request => executableFileAPI.findAllPageable(request),
+            {defaultPageSize: 10}
+    );
 
     function handleDelete(id: number) {
-        setLoading(true);
         executableFileAPI.delete(id)
                 .then(() => {
                     message.success(t("ExecutableFiles.messages.deleteSuccess", {defaultValue: "Executable file deleted successfully"}));
-                    fetchExecutableFiles(currentPage, pageSize);
+                    paged.reload();
                 })
                 .catch(err => {
                     console.error("Failed to delete executable file:", err);
                     message.error(t("ExecutableFiles.messages.deleteError", {defaultValue: "Failed to delete executable file"}));
                 })
-                .finally(() => {
-                    setLoading(false);
-                });
     }
 
     const columns: ColumnsType<ExecutableFileResponse> = [
@@ -104,34 +69,18 @@ export function ExecutableFiles() {
         },
     ];
 
-    function handleTableChange(pagination: { current?: number; pageSize?: number }) {
-        const nextPage = pagination.current ?? 1;
-        const nextSize = pagination.pageSize ?? pageSize;
-        setCurrentPage(nextPage);
-        setPageSize(nextSize);
-        fetchExecutableFiles(nextPage, nextSize);
-    }
-
     return (
             <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
-                <Spin spinning={loading}>
-                    {executableFiles.length > 0 && <Table
+                {paged.contextHolder}
+                <Spin spinning={paged.loading}>
+                    {paged.dataSource.length > 0 && <VempainTable
+                            dataMode="server"
+                            paged={paged}
                             columns={columns}
-                            dataSource={executableFiles.map(file => ({...file, key: file.id}))}
-                            loading={loading}
-                            pagination={{
-                                current: currentPage,
-                                pageSize: pageSize,
-                                total: totalElements,
-                                showSizeChanger: true,
-                                pageSizeOptions: ["10", "20", "50", "100"],
-                            }}
-                            onChange={handleTableChange}
                             scroll={{x: "max-content"}}
-                            key="executable-files-table"
                             rowKey="external_file_id"
                     />
-                    }{executableFiles.length === 0 && !loading && t("ExecutableFiles.messages.noFiles", {defaultValue: "No executable files found"})}
+                    }{paged.dataSource.length === 0 && !paged.loading && t("ExecutableFiles.messages.noFiles", {defaultValue: "No executable files found"})}
                 </Spin>
                 <Modal
                         open={detailsOpen}

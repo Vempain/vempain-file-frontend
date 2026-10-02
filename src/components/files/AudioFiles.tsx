@@ -1,7 +1,7 @@
-import {Button, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
-import {useCallback, useEffect, useState} from "react";
+import {Button, message, Modal, Popconfirm, Space, Spin} from "antd";
+import {useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
-import type {PagedRequest} from "@vempain/vempain-auth-frontend";
+import {usePagedTable, VempainTable} from "@vempain/vempain-auth-frontend";
 import {audioFileAPI} from "../../services";
 import type {AudioFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
@@ -11,60 +11,24 @@ import {useTranslation} from "react-i18next";
 
 export function AudioFiles() {
     const {t} = useTranslation();
-    const [loading, setLoading] = useState(true);
-    const [audioFiles, setAudioFiles] = useState<AudioFileResponse[]>([]);
     const [detailsOpen, setDetailsOpen] = useState(false);
     const [selectedFile, setSelectedFile] = useState<AudioFileResponse | null>(null);
-    // Add paging state
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(10);
-    const [totalElements, setTotalElements] = useState<number>(0);
 
-    const fetchAudioFiles = useCallback((page: number, size: number) => {
-        setLoading(true);
-        const pagedRequest: PagedRequest = {
-            page: page - 1,
-            size,
-        };
-
-        audioFileAPI.findAllPageable(pagedRequest)
-                .then(response => {
-                    if (response && response.content) {
-                        setAudioFiles(response.content);
-                    }
-
-                    setTotalElements(response.total_elements ?? 0);
-                    setCurrentPage(response.page + 1);
-                    setPageSize(response.size);
-                })
-                .catch(err => {
-                    console.error("Failed to fetch archive files:", err);
-                    message.error(t("AudioFiles.messages.fetchError"));
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-    }, [t]);
-
-    useEffect(() => {
-        fetchAudioFiles(1, pageSize);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const paged = usePagedTable<AudioFileResponse>(
+            request => audioFileAPI.findAllPageable(request),
+            {defaultPageSize: 10}
+    );
 
     function handleDelete(id: number) {
-        setLoading(true);
         audioFileAPI.delete(id)
                 .then(() => {
                     message.success(t("AudioFiles.messages.deleteSuccess"));
-                    fetchAudioFiles(currentPage, pageSize);
+                    paged.reload();
                 })
                 .catch(err => {
                     console.error("Failed to delete audio file:", err);
                     message.error(t("AudioFiles.messages.deleteError"));
                 })
-                .finally(() => {
-                    setLoading(false);
-                });
     }
 
     const columns: ColumnsType<AudioFileResponse> = [
@@ -119,34 +83,18 @@ export function AudioFiles() {
         },
     ];
 
-    function handleTableChange(pagination: { current?: number; pageSize?: number }) {
-        const nextPage = pagination.current ?? 1;
-        const nextSize = pagination.pageSize ?? pageSize;
-        setCurrentPage(nextPage);
-        setPageSize(nextSize);
-        fetchAudioFiles(nextPage, nextSize);
-    }
-
     return (
             <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
-                <Spin spinning={loading}>
-                    {audioFiles.length > 0 && <Table
+                {paged.contextHolder}
+                <Spin spinning={paged.loading}>
+                    {paged.dataSource.length > 0 && <VempainTable
+                            dataMode="server"
+                            paged={paged}
                             columns={columns}
-                            dataSource={audioFiles.map(file => ({...file, key: file.id}))}
-                            loading={loading}
-                            pagination={{
-                                current: currentPage,
-                                pageSize: pageSize,
-                                total: totalElements,
-                                showSizeChanger: true,
-                                pageSizeOptions: ['10', '20', '50', '100'],
-                            }}
-                            onChange={handleTableChange}
                             scroll={{x: 'max-content'}}
-                            key="audio-files-table"
                             rowKey="external_file_id"
                     />
-                    }{audioFiles.length === 0 && !loading && t("AudioFiles.messages.noFiles")}
+                    }{paged.dataSource.length === 0 && !paged.loading && t("AudioFiles.messages.noFiles")}
                 </Spin>
                 <Modal
                         open={detailsOpen}

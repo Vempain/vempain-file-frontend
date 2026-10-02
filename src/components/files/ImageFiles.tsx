@@ -1,7 +1,7 @@
-import {Button, message, Modal, Popconfirm, Space, Spin, Table} from "antd";
-import {useCallback, useEffect, useState} from "react";
+import {Button, message, Modal, Popconfirm, Space, Spin} from "antd";
+import {useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
-import type {PagedRequest} from "@vempain/vempain-auth-frontend";
+import {usePagedTable, VempainTable} from "@vempain/vempain-auth-frontend";
 import {imageFileAPI} from "../../services";
 import type {ImageFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
@@ -11,63 +11,24 @@ import {useTranslation} from "react-i18next";
 
 export function ImageFiles() {
     const {t} = useTranslation();
-    const [loading, setLoading] = useState(true);
-    const [imageFiles, setImageFiles] = useState<ImageFileResponse[]>([]);
     const [detailsOpen, setDetailsOpen] = useState(false);
     const [selectedFile, setSelectedFile] = useState<ImageFileResponse | null>(null);
-    // Add paging state
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(10);
-    const [totalElements, setTotalElements] = useState<number>(0);
 
-    const fetchImageFiles = useCallback((page: number, size: number) => {
-        setLoading(true);
-        const pagedRequest: PagedRequest = {
-            page: page - 1,
-            size,
-        };
-
-        imageFileAPI.findAllPageable(pagedRequest)
-                .then(response => {
-                    if (response && response.content) {
-                        setImageFiles(response.content);
-                    }
-
-                    const total = "total_elements" in response
-                            ? response.total_elements
-                            : (response as { totalElements?: number }).totalElements;
-                    setTotalElements(total ?? 0);
-                    setCurrentPage(response.page + 1);
-                    setPageSize(response.size);
-                })
-                .catch(err => {
-                    console.error("Failed to fetch image files:", err);
-                    message.error(t("ImageFiles.messages.fetchError"));
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-    }, [t]);
-
-    useEffect(() => {
-        fetchImageFiles(1, pageSize);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const paged = usePagedTable<ImageFileResponse>(
+            request => imageFileAPI.findAllPageable(request),
+            {defaultPageSize: 10}
+    );
 
     function handleDelete(id: number) {
-        setLoading(true);
         imageFileAPI.delete(id)
                 .then(() => {
                     message.success(t("ImageFiles.messages.deleteSuccess"));
-                    fetchImageFiles(currentPage, pageSize);
+                    paged.reload();
                 })
                 .catch(err => {
                     console.error("Failed to delete image file:", err);
                     message.error(t("ImageFiles.messages.deleteError"));
                 })
-                .finally(() => {
-                    setLoading(false);
-                });
     }
 
     const columns: ColumnsType<ImageFileResponse> = [
@@ -124,34 +85,18 @@ export function ImageFiles() {
         },
     ];
 
-    function handleTableChange(pagination: { current?: number; pageSize?: number }) {
-        const nextPage = pagination.current ?? 1;
-        const nextSize = pagination.pageSize ?? pageSize;
-        setCurrentPage(nextPage);
-        setPageSize(nextSize);
-        fetchImageFiles(nextPage, nextSize);
-    }
-
     return (
             <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
-                <Spin spinning={loading}>
-                    {imageFiles.length > 0 && <Table
+                {paged.contextHolder}
+                <Spin spinning={paged.loading}>
+                    {paged.dataSource.length > 0 && <VempainTable
+                            dataMode="server"
+                            paged={paged}
                             columns={columns}
-                            dataSource={imageFiles.map(file => ({...file, key: file.id}))}
-                            loading={loading}
-                            pagination={{
-                                current: currentPage,
-                                pageSize: pageSize,
-                                total: totalElements,
-                                showSizeChanger: true,
-                                pageSizeOptions: ['10', '20', '50', '100'],
-                            }}
-                            onChange={handleTableChange}
                             scroll={{x: 'max-content'}}
-                            key="image-files-table"
                             rowKey="external_file_id"
                     />
-                    }{imageFiles.length === 0 && !loading && t("ImageFiles.messages.noFiles")}
+                    }{paged.dataSource.length === 0 && !paged.loading && t("ImageFiles.messages.noFiles")}
                 </Spin>
                 <Modal
                         open={detailsOpen}

@@ -1,31 +1,21 @@
-import {Button, Form, Input, message, Modal, Space, Spin, Table} from "antd";
+import {Button, Form, Input, message, Modal, Space, Spin} from "antd";
 import type {ColumnsType} from "antd/es/table";
-import type {PagedRequest, UnitVO} from "@vempain/vempain-auth-frontend";
-import {useCallback, useEffect, useState} from "react";
+import type {UnitVO} from "@vempain/vempain-auth-frontend";
+import {usePagedTable, VempainTable} from "@vempain/vempain-auth-frontend";
+import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {adminUnitAPI} from "../../services";
 import {AclEditor} from "./AclEditor";
 
 export function Units() {
     const {t} = useTranslation();
-    const [units, setUnits] = useState<UnitVO[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [request, setRequest] = useState<PagedRequest>({page: 0, size: 10, sort_by: "name", direction: "ASC", case_sensitive: false});
-    const [total, setTotal] = useState(0);
+    const paged = usePagedTable<UnitVO>(
+            request => adminUnitAPI.findPageable(request),
+            {defaultPageSize: 10, defaultSortBy: "name"}
+    );
+    const [loading, setLoading] = useState(false);
     const [editing, setEditing] = useState<UnitVO | null>(null);
     const [form] = Form.useForm<Pick<UnitVO, "name" | "description">>();
-
-    const fetchUnits = useCallback(() => {
-        setLoading(true);
-        adminUnitAPI.findPageable(request)
-                .then(response => {
-                    setUnits(response.content ?? []);
-                    setTotal(response.total_elements ?? 0);
-                })
-                .catch(error => message.error(t("Units.messages.fetchError", {defaultValue: "Failed to load units", error: String(error)})))
-                .finally(() => setLoading(false));
-    }, [request, t]);
-    useEffect(fetchUnits, [fetchUnits]);
 
     const saveUnit = (values: Pick<UnitVO, "name" | "description">) => {
         setLoading(true);
@@ -36,7 +26,7 @@ export function Units() {
                 .then(() => {
                     message.success(t("Units.messages.saveSuccess", {defaultValue: "Unit saved"}));
                     setEditing(null);
-                    fetchUnits();
+                    paged.reload();
                 })
                 .catch(error => message.error(t("Units.messages.saveError", {defaultValue: "Failed to save unit", error: String(error)})))
                 .finally(() => setLoading(false));
@@ -56,6 +46,7 @@ export function Units() {
     ];
 
     return <Space direction="vertical" style={{width: "95%", margin: 30}} size="large">
+        {paged.contextHolder}
         <Space style={{justifyContent: "space-between", width: "100%"}}>
             <h1>{t("Units.title", {defaultValue: "Units"})}</h1>
             <Button type="primary" onClick={() => {
@@ -63,12 +54,13 @@ export function Units() {
                 form.resetFields();
             }}>{t("Units.actions.create", {defaultValue: "Create unit"})}</Button>
         </Space>
-        <Spin spinning={loading}>
-            <Table<UnitVO> rowKey="id" columns={columns} dataSource={units}
-                           pagination={{current: request.page + 1, pageSize: request.size, total, showSizeChanger: true}}
-                           onChange={pagination => setRequest(previous => ({
-                               ...previous, page: (pagination.current ?? 1) - 1, size: pagination.pageSize ?? previous.size
-                           }))}/>
+        <Spin spinning={paged.loading}>
+            <VempainTable<UnitVO>
+                    dataMode="server"
+                    paged={paged}
+                    rowKey="id"
+                    columns={columns}
+            />
         </Spin>
         <Modal open={editing !== null}
                title={editing?.id ? t("Units.actions.edit", {defaultValue: "Edit unit"}) : t("Units.actions.create", {defaultValue: "Create unit"})}
