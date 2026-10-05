@@ -14,7 +14,6 @@ import {
     DocumentFiles,
     ExecutableFiles,
     FileGroups,
-    FileImports,
     FilePermissions,
     FileTagEditor,
     FontFiles,
@@ -25,11 +24,9 @@ import {
     LocationGuards,
     MusicFiles,
     PublishGpsTimeSeries,
-    Publishing,
     PublishMusicData,
     SearchFiles,
     Statistics,
-    SystemSchedules,
     TagCreate,
     TagEdit,
     TaggedFiles,
@@ -103,9 +100,6 @@ export default function App() {
                             <Route path={"/management/units"} element={<Units/>}/>
                             <Route path={"/management/users"} element={<Users/>}/>
                             <Route path={"/security/location-guards"} element={<LocationGuards/>}/>
-                            <Route path={"/schedules/file-imports"} element={<FileImports/>}/>
-                            <Route path={"/schedules/publishing"} element={<Publishing/>}/>
-                            <Route path={"/schedules/system"} element={<SystemSchedules/>}/>
                             <Route path={"/tags/create"} element={<TagCreate/>}/>
                             <Route path={"/tags/:tagId/edit"} element={<TagEdit/>}/>
                             <Route path={"/tags/list"} element={<TagList/>}/>

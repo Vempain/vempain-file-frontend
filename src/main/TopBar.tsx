@@ -210,28 +210,6 @@ export function TopBar() {
                         ],
                     },
                     {
-                        label: t("TopBar.menu.schedules.title"),
-                        key: "scheduleManagement",
-                        icon: <ClockCircleOutlined/>,
-                        children: [
-                            {
-                                label: (<NavLink to={"/schedules/system"}>{t("TopBar.menu.schedules.systemSchedules")}</NavLink>),
-                                key: "schedule-systemSchedules",
-                                icon: <AppstoreOutlined/>
-                            },
-                            {
-                                label: (<NavLink to={"/schedules/file-imports"}>{t("TopBar.menu.schedules.fileImports")}</NavLink>),
-                                key: "schedule-fileImports",
-                                icon: <UploadOutlined/>
-                            },
-                            {
-                                label: (<NavLink to={"/schedules/publishing"}>{t("TopBar.menu.schedules.publishing")}</NavLink>),
-                                key: "schedule-publishing",
-                                icon: <FieldTimeOutlined/>
-                            },
-                        ],
-                    },
-                    {
                         label: t("TopBar.menu.userManagement.title"),
                         key: "userManagement",
                         icon: <UserOutlined/>,
