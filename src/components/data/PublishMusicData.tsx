@@ -1,40 +1,42 @@
-import {Button, message, Space, Spin, Typography} from "antd";
+import {Button, message, Space, Typography} from "antd";
 import {useCallback, useState} from "react";
 import {dataAPI} from "../../services";
 import {useTranslation} from "react-i18next";
+import {useTaskProgress} from "../../tasks";
 
 const {Title} = Typography;
 
 export function PublishMusicData() {
     const {t} = useTranslation();
-    const [publishing, setPublishing] = useState<boolean>(false);
+    const {trackTask} = useTaskProgress();
+    const [submitting, setSubmitting] = useState<boolean>(false);
 
     const handlePublish = useCallback(() => {
-        setPublishing(true);
+        setSubmitting(true);
+        // The data set is generated and uploaded as a background task shown in the task tray
         dataAPI.publishMusic()
-                .then(() => {
-                    message.success(t("PublishMusicData.messages.publishSuccess"));
+                .then(accepted => {
+                    trackTask(accepted);
+                    message.success(t("PublishMusicData.messages.publishStarted"));
                 })
                 .catch(() => {
                     message.error(t("PublishMusicData.messages.publishError"));
                 })
                 .finally(() => {
-                    setPublishing(false);
+                    setSubmitting(false);
                 });
-    }, [t]);
+    }, [t, trackTask]);
 
     return (
             <Space orientation={"vertical"} style={{width: "95%", padding: 24}}>
                 <Title level={3}>{t("PublishMusicData.header.title")}</Title>
-                <Spin spinning={publishing}>
-                    <Button
-                            type="primary"
-                            loading={publishing}
-                            onClick={handlePublish}
-                    >
-                        {t("PublishMusicData.actions.publish")}
-                    </Button>
-                </Spin>
+                <Button
+                        type="primary"
+                        loading={submitting}
+                        onClick={handlePublish}
+                >
+                    {t("PublishMusicData.actions.publish")}
+                </Button>
             </Space>
     );
 }

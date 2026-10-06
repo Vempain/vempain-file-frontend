@@ -22,7 +22,6 @@ import {
     LoginOutlined,
     LogoutOutlined,
     MenuOutlined,
-    SearchOutlined,
     SettingFilled,
     SnippetsOutlined,
     SwapOutlined,
@@ -73,11 +72,6 @@ export function TopBar() {
                             label: (<NavLink to={"/tags/edit-files"}>{t("TopBar.menu.tagManagement.editFiles", {defaultValue: "Edit file tags"})}</NavLink>),
                             key: "tag-fileTagEditor",
                             icon: <FormOutlined/>
-                        },
-                        {
-                            label: (<NavLink to={"/tags/search"}>{t("TopBar.menu.tagManagement.search")}</NavLink>),
-                            key: "tag-tagSearch",
-                            icon: <SearchOutlined/>
                         }
                     ]
                 },
@@ -118,11 +112,6 @@ export function TopBar() {
                                 icon: <SettingFilled/>
                             },
                             {
-                                label: (<NavLink to={"/files/images"}>{t("TopBar.menu.fileManagement.image")}</NavLink>),
-                                key: "file-imageFiles",
-                                icon: <FileImageOutlined/>
-                            },
-                            {
                                 label: (<NavLink to={"/files/fonts"}>{t("TopBar.menu.fileManagement.font", {defaultValue: "Font"})}</NavLink>),
                                 key: "file-fontFiles",
                                 icon: <SnippetsOutlined/>
@@ -131,6 +120,11 @@ export function TopBar() {
                                 label: (<NavLink to={"/files/icons"}>{t("TopBar.menu.fileManagement.icon", {defaultValue: "Icon"})}</NavLink>),
                                 key: "file-iconFiles",
                                 icon: <AppstoreOutlined/>
+                            },
+                            {
+                                label: (<NavLink to={"/files/images"}>{t("TopBar.menu.fileManagement.image")}</NavLink>),
+                                key: "file-imageFiles",
+                                icon: <FileImageOutlined/>
                             },
                             {
                                 label: (<NavLink

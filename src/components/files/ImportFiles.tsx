@@ -1,7 +1,16 @@
-import {AutoComplete, Button, Form, Space, Spin, Table} from "antd";
+import {AutoComplete, Button, Form, message, Space, Spin, Table} from "antd";
 import {type Key, useEffect, useState} from "react";
-import type {ExportFileResponse, FileResponse, PathCompletionRequest, ScanRequest, ScanResponses} from "../../models";
-import {PathCompletionEnum} from "../../models";
+import type {
+    ExportFileResponse,
+    FileResponse,
+    PathCompletionRequest,
+    ScanRequest,
+    ScanResponses,
+    TaskAcceptedResponse,
+    TaskProgressResponse
+} from "../../models";
+import {PathCompletionEnum, TaskStatusEnum} from "../../models";
+import {useTaskProgress} from "../../tasks";
 import {fileScannerAPI, pathCompletionAPI} from "../../services";
 import type {ColumnsType} from "antd/es/table";
 import dayjs from "dayjs";
@@ -10,7 +19,8 @@ import {useTranslation} from "react-i18next";
 
 export function ImportFiles() {
     const {t} = useTranslation();
-    const [loading, setLoading] = useState(false);
+    const {trackTask} = useTaskProgress();
+    const [submitting, setSubmitting] = useState(false);
     const [completionsLoading, setCompletionsLoading] = useState(false);
     const [result, setResult] = useState<ScanResponses | null>(null);
     const [originalPathOptions, setOriginalPathOptions] = useState<{ value: string }[]>([]);
@@ -235,7 +245,7 @@ export function ImportFiles() {
 
     useEffect(() => {
         // Load initial path suggestions when component mounts
-        setLoading(true);
+        setCompletionsLoading(true);
         Promise.all([
             fetchPathCompletions(PathCompletionEnum.ORIGINAL, "/"),
             fetchPathCompletions(PathCompletionEnum.EXPORTED, "/"),
@@ -247,7 +257,7 @@ export function ImportFiles() {
                     console.error("Failed to load initial path completions:", err);
                 })
                 .finally(() => {
-                    setLoading(false);
+                    setCompletionsLoading(false);
                 });
     }, []);
 
@@ -279,24 +289,33 @@ export function ImportFiles() {
     }
 
     function onFinish(values: ScanRequest) {
-        setLoading(true);
+        setSubmitting(true);
         setResult(null);
 
+        // The scan runs as a background task; its ScanResponses result arrives through the task tray callback
         fileScannerAPI.scanDirectory(values)
-                .then((response: ScanResponses) => {
-                    setResult(response);
+                .then((accepted: TaskAcceptedResponse) => {
+                    trackTask<ScanResponses>(accepted, {
+                        onFinished: (task: TaskProgressResponse<ScanResponses>) => {
+                            if (task.status === TaskStatusEnum.COMPLETED && task.result) {
+                                setResult(task.result);
+                            }
+                        }
+                    });
+                    message.success(t("ImportFiles.messages.scanStarted"));
                 })
                 .catch((err: Error) => {
                     console.error("Failed to start scan: " + err.message);
+                    message.error(t("ImportFiles.messages.scanError"));
                 })
                 .finally(() => {
-                    setLoading(false);
+                    setSubmitting(false);
                 });
     }
 
     return (
             <Space vertical={true} style={{width: "95%", margin: 30}} align="center" size="large">
-                <Spin spinning={loading}>
+                <div>
                     <Form
                             layout="vertical"
                             onFinish={onFinish}
@@ -352,12 +371,12 @@ export function ImportFiles() {
                             />
                         </Form.Item>
                         <Form.Item>
-                            <Button type="primary" htmlType="submit">
+                            <Button type="primary" htmlType="submit" loading={submitting}>
                                 {t("ImportFiles.form.submit.startScan")}
                             </Button>
                         </Form.Item>
                     </Form>
-                </Spin>
+                </div>
                 {result != null && (
                         <div style={{width: "100%"}}>
                             <h2 key={"original-header"}>{t("ImportFiles.results.original.title")}</h2>

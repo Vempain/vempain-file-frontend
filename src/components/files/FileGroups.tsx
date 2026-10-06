@@ -21,8 +21,9 @@ import {
     vectorFileAPI,
     videoFileAPI
 } from "../../services";
-import type {FileGroupListResponse, FileGroupRequest, FileGroupResponse, FileResponse, PublishFileGroupRequest, PublishFileGroupResponse} from "../../models";
+import type {FileGroupListResponse, FileGroupRequest, FileGroupResponse, FileResponse, PublishFileGroupRequest, TaskAcceptedResponse} from "../../models";
 import {FileTypeEnum} from "../../models";
+import {useTaskProgress} from "../../tasks";
 import {FileDetails} from "./FileDetails";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn, thumbnailColumn} from "./commonColumns";
 import {useTranslation} from "react-i18next";
@@ -31,6 +32,7 @@ import {usePagedTable, VempainTable} from "@vempain/vempain-auth-frontend";
 
 export function FileGroups() {
     const {t} = useTranslation();
+    const {trackTask} = useTaskProgress();
 
     // Table state
     const paged = usePagedTable<FileGroupListResponse>(
@@ -419,10 +421,11 @@ export function FileGroups() {
                         gallery_name: values.gallery_name || null,
                         gallery_description: values.gallery_description || null
                     };
+                    // The backend answers 202 immediately; the upload runs as a background task shown in the task tray
                     publishAPI.publishFileGroup(request)
-                            .then((result: PublishFileGroupResponse[]) => {
-                                const count = result?.[0]?.files_to_publish_count ?? 0;
-                                message.success(t("PublishFileGroup.messages.publishSuccess", {count}));
+                            .then((accepted: TaskAcceptedResponse) => {
+                                trackTask(accepted, {onFinished: () => paged.reload()});
+                                message.success(t("PublishFileGroup.messages.publishStarted"));
                                 closePublishModal();
                             })
                             .catch(err => {
@@ -431,7 +434,6 @@ export function FileGroups() {
                             })
                             .finally(() => {
                                 setPublishSubmitting(false);
-                                paged.reload();
                             });
                 })
                 .catch(() => undefined);

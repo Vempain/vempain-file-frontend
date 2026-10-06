@@ -1,15 +1,18 @@
-import {
-    type PublishAllFileGroupsResponse,
-    type PublishFileGroupRequest,
-    type PublishFileGroupResponse,
-    type PublishProgressResponse,
-    PublishProgressStatusEnum
-} from "../../models";
+import type {PublishFileGroupRequest, TaskAcceptedResponse} from "../../models";
+import {TaskStatusEnum} from "../../models";
 import {axiosMock, constructorSpy, resetServiceMockState, setAuthorizationHeaderSpy} from "../../testUtils/mockAuthFrontend";
 import {PublishAPI} from "../../services";
 
 describe("PublishAPI", () => {
     let publishAPI: PublishAPI;
+
+    const accepted: TaskAcceptedResponse = {
+        task_id: "4f1c2d7e-9a0b-4c3d-8e2f-1a2b3c4d5e6f",
+        type: "PUBLISH_FILE_GROUP",
+        title: "Publish file group Gallery",
+        status: TaskStatusEnum.QUEUED,
+        total_steps: 0,
+    };
 
     beforeEach(() => {
         resetServiceMockState();
@@ -20,55 +23,31 @@ describe("PublishAPI", () => {
         expect(constructorSpy).toHaveBeenCalledWith(expect.anything(), "/publish");
     });
 
-    it("publishFileGroup POSTs /file-group and returns PublishFileGroupResponse[]", async () => {
+    it("publishFileGroup POSTs /file-group and returns the accepted task", async () => {
         const request: PublishFileGroupRequest = {
             file_group_id: 11,
             gallery_name: "Gallery",
             gallery_description: "Description",
         };
-        const responseData: PublishFileGroupResponse[] = [{files_to_publish_count: 4}];
-        axiosMock.post.mockResolvedValueOnce({data: responseData});
+        axiosMock.post.mockResolvedValueOnce({data: accepted});
 
         const response = await publishAPI.publishFileGroup(request);
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
         expect(axiosMock.defaults.headers.post["Content-Type"]).toBe("application/json;charset=utf-8");
         expect(axiosMock.post).toHaveBeenCalledWith("/file-group", request);
-        expect(response).toEqual(responseData);
+        expect(response).toEqual(accepted);
     });
 
-    it("publishAllFileGroups GETs /all-file-groups", async () => {
-        const responseData: PublishAllFileGroupsResponse = {file_group_count: 6};
-        axiosMock.get.mockResolvedValueOnce({data: responseData});
+    it("publishAllFileGroups GETs /all-file-groups and returns the accepted task", async () => {
+        const allAccepted: TaskAcceptedResponse = {...accepted, type: "PUBLISH_ALL_FILE_GROUPS", title: "Publish all file groups", total_steps: 6};
+        axiosMock.get.mockResolvedValueOnce({data: allAccepted});
 
         const response = await publishAPI.publishAllFileGroups();
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
         expect(axiosMock.defaults.headers.get["Content-Type"]).toBe("application/json;charset=utf-8");
         expect(axiosMock.get).toHaveBeenCalledWith("/all-file-groups");
-        expect(response).toEqual(responseData);
-    });
-
-    it("getPublishProgress GETs /progress", async () => {
-        const responseData: PublishProgressResponse = {
-            total_groups: 6,
-            scheduled: 0,
-            started: 0,
-            completed: 6,
-            failed: 0,
-            per_group_status: {
-                "11": PublishProgressStatusEnum.COMPLETED,
-            },
-            last_updated: "2026-03-31T22:00:00Z",
-        };
-        axiosMock.get.mockResolvedValueOnce({data: responseData});
-
-        const response = await publishAPI.getPublishProgress();
-
-        expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
-        expect(axiosMock.defaults.headers.get["Content-Type"]).toBe("application/json;charset=utf-8");
-        expect(axiosMock.get).toHaveBeenCalledWith("/progress");
-        expect(response).toEqual(responseData);
+        expect(response).toEqual(allAccepted);
     });
 });
-

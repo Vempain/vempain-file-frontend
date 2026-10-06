@@ -542,6 +542,10 @@
       "success" : {
         "title" : "Onnistuneet tiedostot"
       }
+    },
+    "messages" : {
+      "scanStarted" : "Skannaus aloitettiin, seuraa edistymistä oikeasta alakulmasta",
+      "scanError" : "Skannauksen aloittaminen epäonnistui"
     }
   },
   "LocationGuards" : {
@@ -657,7 +661,8 @@
       "fetchError" : "Tiedostoryhmien lataaminen epäonnistui",
       "publishError" : "Tiedostoryhmän julkaisu epäonnistui",
       "publishSuccess" : "Julkaistiin {{count}} tiedostoa",
-      "selectWarning" : "Valitse julkaistava tiedostoryhmä"
+      "selectWarning" : "Valitse julkaistava tiedostoryhmä",
+      "publishStarted" : "Tiedostoryhmän julkaisu aloitettiin, seuraa edistymistä oikeasta alakulmasta"
     },
     "modal" : {
       "galleryDescription" : {
@@ -701,7 +706,8 @@
       "fetchGroupsError" : "Kuvatiedostoryhmien lataaminen epäonnistui",
       "publishError" : "GPS-aikasarjan julkaisu epäonnistui",
       "publishSuccess" : "GPS-aikasarja julkaistu onnistuneesti",
-      "selectWarning" : "Valitse kuvatiedostoryhmä"
+      "selectWarning" : "Valitse kuvatiedostoryhmä",
+      "publishStarted" : "GPS-aikasarjan julkaisu aloitettiin, seuraa edistymistä oikeasta alakulmasta"
     },
     "select" : {
       "label" : "Valitse kuvatiedostoryhmä",
@@ -725,7 +731,8 @@
       "fetchError" : "Musiikkitietojoukon lataaminen epäonnistui",
       "notFound" : "Musiikkitietojoukkoa ei löydy",
       "publishError" : "Musiikkidatan julkaisu epäonnistui",
-      "publishSuccess" : "Musiikkidata julkaistu onnistuneesti"
+      "publishSuccess" : "Musiikkidata julkaistu onnistuneesti",
+      "publishStarted" : "Musiikkidatan julkaisu aloitettiin, seuraa edistymistä oikeasta alakulmasta"
     }
   },
   "SearchFiles" : {
@@ -870,13 +877,6 @@
       }
     }
   },
-  "TagSearch" : {
-    "alert" : {
-      "description" : "Tämä on Tunnistehaku -sivu.",
-      "message" : "Tunnistehaku",
-      "returnButton" : "Palaa etusivulle"
-    }
-  },
   "Statistics" : {
     "title" : "Tietokannan tilastot",
     "description" : "Yhteenveto tiedostotietokannan tiedostoista, metatiedoista, ryhmistä ja tallennustilasta.",
@@ -978,7 +978,6 @@
       "tagManagement" : {
         "editFiles" : "Muokkaa tiedostojen tunnisteita",
         "newTag" : "Uusi tunniste",
-        "search" : "Haku",
         "tags" : "Tunnisteet",
         "title" : "Tunnisteiden hallinta"
       },
@@ -1067,5 +1066,18 @@
         "title" : "Poista tämä videotiedosto"
       }
     }
+  },
+  "TaskProgress" : {
+    "title" : "Taustatehtävät",
+    "queued" : "Jonossa",
+    "running" : "Käynnissä",
+    "completed" : "Valmis",
+    "failed" : "Epäonnistui",
+    "steps" : "{{completed}} / {{total}} vaihetta",
+    "failedSteps" : "{{count}} epäonnistui",
+    "close" : "Sulje",
+    "dismissError" : "Tehtävän sulkeminen epäonnistui",
+    "started" : "Aloitettu",
+    "restoreError" : "Taustatehtävien lataaminen epäonnistui"
   }
 }

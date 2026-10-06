@@ -3,6 +3,7 @@ import {type UIEvent, useCallback, useEffect, useRef, useState} from "react";
 import {dataAPI, fileGroupAPI} from "../../services";
 import type {FileGroupListResponse} from "../../models";
 import {useTranslation} from "react-i18next";
+import {useTaskProgress} from "../../tasks";
 import type {PagedRequest} from "@vempain/vempain-auth-frontend";
 import {fileGroupDatasetToIdentifier} from "../../tools";
 
@@ -12,6 +13,7 @@ const PAGE_SIZE = 200;
 
 export function PublishGpsTimeSeries() {
     const {t} = useTranslation();
+    const {trackTask} = useTaskProgress();
     const [loadingGroups, setLoadingGroups] = useState<boolean>(true);
     const [imageGroups, setImageGroups] = useState<FileGroupListResponse[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(0);
@@ -110,9 +112,11 @@ export function PublishGpsTimeSeries() {
             return;
         }
         setPublishing(true);
+        // The data set is generated and uploaded as a background task shown in the task tray
         dataAPI.publishGpsTimeSeries(selectedGroupId, identifier)
-                .then(() => {
-                    message.success(t("PublishGpsTimeSeries.messages.publishSuccess"));
+                .then(accepted => {
+                    trackTask(accepted);
+                    message.success(t("PublishGpsTimeSeries.messages.publishStarted"));
                 })
                 .catch(() => {
                     message.error(t("PublishGpsTimeSeries.messages.publishError"));
@@ -120,7 +124,7 @@ export function PublishGpsTimeSeries() {
                 .finally(() => {
                     setPublishing(false);
                 });
-    }, [identifier, selectedGroupId, t]);
+    }, [identifier, selectedGroupId, t, trackTask]);
 
     return (
             <Space orientation={"vertical"} style={{width: "95%", padding: 24}}>

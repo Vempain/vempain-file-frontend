@@ -31,7 +31,6 @@ import {
     TagEdit,
     TaggedFiles,
     TagList,
-    TagSearch,
     ThumbFiles,
     Units,
     Users,
@@ -39,6 +38,7 @@ import {
     VideoFiles
 } from "./components";
 import {Login, Logout, useSession} from "@vempain/vempain-auth-frontend";
+import {TaskProgressProvider, TaskProgressTray} from "./tasks";
 import i18next from "i18next";
 
 const {Content} = Layout;
@@ -68,6 +68,7 @@ export default function App() {
 
     return (
             <ConfigProvider theme={{algorithm: darkAlgorithm, token: darkThemeTokens}}>
+                <TaskProgressProvider>
                 <Layout className={"layout"}>
                     <TopBar/>
                     <Content style={{marginTop: "65px"}}>
@@ -104,7 +105,6 @@ export default function App() {
                             <Route path={"/tags/:tagId/edit"} element={<TagEdit/>}/>
                             <Route path={"/tags/list"} element={<TagList/>}/>
                             <Route path={"/tags/:tagId"} element={<TaggedFiles/>}/>
-                            <Route path={"/tags/search"} element={<TagSearch/>}/>
                             <Route path={"/tags/edit-files"} element={<FileTagEditor/>}/>
                             <Route path={"/user/account"} element={<Account/>}/>
                             <Route path={"/user/logout"} element={<Logout/>}/>
@@ -113,6 +113,8 @@ export default function App() {
                         <BottomFooter/>
                     </Content>
                 </Layout>
+                    <TaskProgressTray/>
+                </TaskProgressProvider>
             </ConfigProvider>
     );
 }
