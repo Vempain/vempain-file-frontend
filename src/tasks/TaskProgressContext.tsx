@@ -1,30 +1,9 @@
-import {createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
+import {type ReactNode, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {useSession} from "@vempain/vempain-auth-frontend";
 import {taskAPI} from "../services";
 import {isTaskFinished, type TaskAcceptedResponse, type TaskProgressResponse} from "../models";
-
-/** How often running tasks are polled from the backend. */
-export const TASK_POLL_INTERVAL_MS = 1500;
-
-export type TaskFinishedCallback<R = unknown> = (task: TaskProgressResponse<R>) => void;
-
-export interface TrackTaskOptions<R = unknown> {
-    /** Invoked once, when the task reaches COMPLETED or FAILED. Receives the final snapshot including the result payload. */
-    onFinished?: TaskFinishedCallback<R>;
-}
-
-export interface TaskProgressContextValue {
-    /** Tracked tasks, newest first. Finished tasks stay listed until the user dismisses them. */
-    tasks: TaskProgressResponse[];
-    /** Starts following a task that an endpoint has just accepted (202). */
-    trackTask: <R = unknown>(accepted: TaskAcceptedResponse, options?: TrackTaskOptions<R>) => void;
-    /** Removes a finished task from the tray and from the backend list. */
-    dismissTask: (taskId: string) => Promise<void>;
-    /** Re-reads the task list of the current user from the backend. */
-    refresh: () => Promise<void>;
-}
-
-const TaskProgressContext = createContext<TaskProgressContextValue | null>(null);
+import {TASK_POLL_INTERVAL_MS} from "./TaskProgressConfig";
+import {type TaskFinishedCallback, taskProgressContext, type TaskProgressContextValue, type TrackTaskOptions} from "./TaskProgressContextValue";
 
 function fromAccepted(accepted: TaskAcceptedResponse): TaskProgressResponse {
     return {
@@ -137,13 +116,5 @@ export function TaskProgressProvider({children}: { children: ReactNode }) {
 
     const value = useMemo<TaskProgressContextValue>(() => ({tasks, trackTask, dismissTask, refresh}), [tasks, trackTask, dismissTask, refresh]);
 
-    return <TaskProgressContext.Provider value={value}>{children}</TaskProgressContext.Provider>;
-}
-
-export function useTaskProgress(): TaskProgressContextValue {
-    const context = useContext(TaskProgressContext);
-    if (!context) {
-        throw new Error("useTaskProgress must be used inside a TaskProgressProvider");
-    }
-    return context;
+    return <taskProgressContext.Provider value={value}>{children}</taskProgressContext.Provider>;
 }

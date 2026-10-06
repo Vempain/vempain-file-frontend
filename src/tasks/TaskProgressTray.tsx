@@ -3,7 +3,7 @@ import {CheckCircleOutlined, CloseCircleOutlined, CloseOutlined, LoadingOutlined
 import type {CSSProperties} from "react";
 import {useTranslation} from "react-i18next";
 import {isTaskFinished, type TaskProgressResponse, TaskStatusEnum} from "../models";
-import {useTaskProgress} from "./TaskProgressContext";
+import {useTaskProgress} from "./useTaskProgress";
 
 const {Text} = Typography;
 
