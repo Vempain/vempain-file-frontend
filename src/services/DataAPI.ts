@@ -1,5 +1,5 @@
 import {AbstractAPI} from "@vempain/vempain-auth-frontend";
-import type {CreateGpsTimeSeriesRequest, DataResponse} from "../models";
+import type {CreateGpsTimeSeriesRequest, TaskAcceptedResponse} from "../models";
 
 /**
  * DataAPI provides access to the /data-publish endpoints.
@@ -7,7 +7,7 @@ import type {CreateGpsTimeSeriesRequest, DataResponse} from "../models";
  * Overrides the default auth interceptor so that 403 responses
  * do NOT terminate the session.  Only genuine 401 responses trigger logout.
  */
-export class DataAPI extends AbstractAPI<unknown, DataResponse> {
+export class DataAPI extends AbstractAPI<unknown, TaskAcceptedResponse> {
     constructor(baseURL: string, member: string) {
         super(baseURL, member);
 
@@ -31,26 +31,26 @@ export class DataAPI extends AbstractAPI<unknown, DataResponse> {
     }
 
     /**
-     * POST /data-publish/music
+     * POST /data-publish/music. Starts a background task whose result is the admin DataResponse.
      */
-    public async publishMusic(): Promise<DataResponse> {
+    public async publishMusic(): Promise<TaskAcceptedResponse> {
         this.setAuthorizationHeader();
         this.axiosInstance.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
-        const response = await this.axiosInstance.post<DataResponse>("/music", null);
+        const response = await this.axiosInstance.post<TaskAcceptedResponse>("/music", null);
         return response.data;
     }
 
     /**
-     * POST /data-publish/gps-timeseries
+     * POST /data-publish/gps-timeseries. Starts a background task whose result is the admin DataResponse.
      */
-    public async publishGpsTimeSeries(fileGroupId: number, timeSeriesName: string): Promise<DataResponse> {
+    public async publishGpsTimeSeries(fileGroupId: number, timeSeriesName: string): Promise<TaskAcceptedResponse> {
         this.setAuthorizationHeader();
         this.axiosInstance.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
         const request: CreateGpsTimeSeriesRequest = {
             file_group_id: fileGroupId,
             time_series_name: timeSeriesName,
         };
-        const response = await this.axiosInstance.post<DataResponse>("/gps-timeseries", request);
+        const response = await this.axiosInstance.post<TaskAcceptedResponse>("/gps-timeseries", request);
         return response.data;
     }
 }

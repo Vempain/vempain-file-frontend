@@ -5,7 +5,8 @@ export type {GeoCoordinate} from "./GeoCoordinate.ts";
 export {FileTypeEnum} from "./FileTypeEnum";
 export {GuardTypeEnum} from "./GuardTypeEnum";
 export {PathCompletionEnum} from "./PathCompletionEnum";
-export {PublishProgressStatusEnum} from "./PublishProgressStatusEnum";
+export {TaskStatusEnum, isTaskFinished} from "./TaskStatusEnum";
+export {TaskTypeEnum} from "./TaskTypeEnum";
 
 export * from './responses'
 export * from './requests'

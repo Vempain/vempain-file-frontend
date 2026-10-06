@@ -542,6 +542,10 @@
       "success" : {
         "title" : "Lyckade filer"
       }
+    },
+    "messages" : {
+      "scanStarted" : "Skanningen startade, följ förloppet i nedre högra hörnet",
+      "scanError" : "Kunde inte starta skanningen"
     }
   },
   "LocationGuards" : {
@@ -657,7 +661,8 @@
       "fetchError" : "Misslyckades att ladda filgrupper",
       "publishError" : "Misslyckades att publicera filgrupp",
       "publishSuccess" : "Publicerade {{count}} filer",
-      "selectWarning" : "Välj en filgrupp att publicera"
+      "selectWarning" : "Välj en filgrupp att publicera",
+      "publishStarted" : "Publiceringen av filgruppen startade, följ förloppet i nedre högra hörnet"
     },
     "modal" : {
       "galleryDescription" : {
@@ -701,7 +706,8 @@
       "fetchGroupsError" : "Misslyckades att ladda bildfilgrupper",
       "publishError" : "Misslyckades att publicera GPS-tidsserie",
       "publishSuccess" : "GPS-tidsserie publicerades",
-      "selectWarning" : "Välj en bildfilgrupp"
+      "selectWarning" : "Välj en bildfilgrupp",
+      "publishStarted" : "Publiceringen av GPS-tidsserien startade, följ förloppet i nedre högra hörnet"
     },
     "select" : {
       "label" : "Välj bildfilgrupp",
@@ -725,7 +731,8 @@
       "fetchError" : "Misslyckades att ladda musikdatasetet",
       "notFound" : "Musikdatasetet hittades inte",
       "publishError" : "Misslyckades att publicera musikdata",
-      "publishSuccess" : "Musikdata publicerades"
+      "publishSuccess" : "Musikdata publicerades",
+      "publishStarted" : "Publiceringen av musikdata startade, följ förloppet i nedre högra hörnet"
     }
   },
   "SearchFiles" : {
@@ -870,13 +877,6 @@
       }
     }
   },
-  "TagSearch" : {
-    "alert" : {
-      "description" : "Detta är sidan Taggsökning.",
-      "message" : "Taggsökning",
-      "returnButton" : "Till startsidan"
-    }
-  },
   "Statistics" : {
     "title" : "Statistik för fildatabasen",
     "description" : "En sammanfattning av filer, metadata, grupper och lagring i fildatabasen.",
@@ -978,7 +978,6 @@
       "tagManagement" : {
         "editFiles" : "Redigera filtaggar",
         "newTag" : "Ny tagg",
-        "search" : "Sök",
         "tags" : "Taggar",
         "title" : "Tagghantering"
       },
@@ -1067,5 +1066,18 @@
         "title" : "Ta bort denna videofil"
       }
     }
+  },
+  "TaskProgress" : {
+    "title" : "Bakgrundsuppgifter",
+    "queued" : "I kö",
+    "running" : "Pågår",
+    "completed" : "Klar",
+    "failed" : "Misslyckades",
+    "steps" : "{{completed}} / {{total}} steg",
+    "failedSteps" : "{{count}} misslyckades",
+    "close" : "Stäng",
+    "dismissError" : "Kunde inte stänga uppgiften",
+    "started" : "Startad",
+    "restoreError" : "Kunde inte ladda bakgrundsuppgifter"
   }
 }
