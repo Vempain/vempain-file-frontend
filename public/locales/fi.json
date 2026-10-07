@@ -1076,8 +1076,12 @@
     "steps" : "{{completed}} / {{total}} vaihetta",
     "failedSteps" : "{{count}} epäonnistui",
     "close" : "Sulje",
-    "dismissError" : "Tehtävän sulkeminen epäonnistui",
     "started" : "Aloitettu",
-    "restoreError" : "Taustatehtävien lataaminen epäonnistui"
+    "restoreError" : "Taustatehtävien lataaminen epäonnistui",
+    "cancelling" : "Peruutetaan, muutokset perutaan",
+    "cancelled" : "Peruutettu, muutokset peruttu",
+    "cancel" : "Peruuta",
+    "cancelError" : "Tehtävän peruuttaminen epäonnistui",
+    "revertedSteps" : "{{count}} peruttu"
   }
 }

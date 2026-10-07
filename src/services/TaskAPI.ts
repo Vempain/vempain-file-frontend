@@ -20,6 +20,13 @@ export class TaskAPI extends AbstractAPI<unknown, TaskProgressResponse> {
         return response.data;
     }
 
+    /** Asks the backend to stop the task at its next checkpoint and revert its changes; answers 409 once the task has finished. */
+    public async cancelTask<R = unknown>(taskId: string): Promise<TaskProgressResponse<R>> {
+        this.setAuthorizationHeader();
+        const response = await this.axiosInstance.post<TaskProgressResponse<R>>("/" + encodeURIComponent(taskId) + "/cancel", null);
+        return response.data;
+    }
+
     /** Removes a finished task from the list; the backend answers 409 while the task is still running. */
     public async dismissTask(taskId: string): Promise<void> {
         this.setAuthorizationHeader();

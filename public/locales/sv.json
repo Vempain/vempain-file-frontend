@@ -1076,8 +1076,12 @@
     "steps" : "{{completed}} / {{total}} steg",
     "failedSteps" : "{{count}} misslyckades",
     "close" : "Stäng",
-    "dismissError" : "Kunde inte stänga uppgiften",
     "started" : "Startad",
-    "restoreError" : "Kunde inte ladda bakgrundsuppgifter"
+    "restoreError" : "Kunde inte ladda bakgrundsuppgifter",
+    "cancelling" : "Avbryter, återställer ändringar",
+    "cancelled" : "Avbruten, ändringar återställda",
+    "cancel" : "Avbryt",
+    "cancelError" : "Kunde inte avbryta uppgiften",
+    "revertedSteps" : "{{count}} återställda"
   }
 }
