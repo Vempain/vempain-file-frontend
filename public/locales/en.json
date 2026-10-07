@@ -1076,8 +1076,12 @@
     "steps" : "{{completed}} / {{total}} steps",
     "failedSteps" : "{{count}} failed",
     "close" : "Close",
-    "dismissError" : "Failed to dismiss the task",
     "started" : "Started",
-    "restoreError" : "Failed to load background tasks"
+    "restoreError" : "Failed to load background tasks",
+    "cancelling" : "Cancelling, reverting changes",
+    "cancelled" : "Cancelled, changes reverted",
+    "cancel" : "Cancel",
+    "cancelError" : "Failed to cancel the task",
+    "revertedSteps" : "{{count}} reverted"
   }
 }

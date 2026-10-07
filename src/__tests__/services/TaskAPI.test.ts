@@ -15,6 +15,8 @@ describe("TaskAPI", () => {
         completed_steps: 2,
         failed_steps: 0,
         percent: 50,
+        cancel_requested: false,
+        reverted_steps: 0,
         message: "Scanned 2024",
         error_message: null,
         result: null,
@@ -49,6 +51,17 @@ describe("TaskAPI", () => {
 
         expect(axiosMock.get).toHaveBeenCalledWith("/a%20b");
         expect(response).toEqual(task);
+    });
+
+    it("cancelTask POSTs /{id}/cancel and returns the snapshot", async () => {
+        const cancelling = {...task, status: TaskStatusEnum.CANCELLING, cancel_requested: true};
+        axiosMock.post.mockResolvedValueOnce({data: cancelling});
+
+        const response = await taskAPI.cancelTask("abc");
+
+        expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
+        expect(axiosMock.post).toHaveBeenCalledWith("/abc/cancel", null);
+        expect(response).toEqual(cancelling);
     });
 
     it("dismissTask DELETEs the task", async () => {

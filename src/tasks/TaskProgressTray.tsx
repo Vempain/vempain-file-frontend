@@ -1,8 +1,8 @@
 import {Button, Card, message, Progress, Space, Typography} from "antd";
-import {CheckCircleOutlined, CloseCircleOutlined, CloseOutlined, LoadingOutlined} from "@ant-design/icons";
+import {CheckCircleOutlined, CloseCircleOutlined, CloseOutlined, LoadingOutlined, StopOutlined} from "@ant-design/icons";
 import type {CSSProperties} from "react";
 import {useTranslation} from "react-i18next";
-import {isTaskFinished, type TaskProgressResponse, TaskStatusEnum} from "../models";
+import {isTaskCancellable, isTaskFinished, type TaskProgressResponse, TaskStatusEnum} from "../models";
 import {useTaskProgress} from "./useTaskProgress";
 
 const {Text} = Typography;
@@ -28,6 +28,10 @@ function statusKey(status: TaskStatusEnum): string {
             return "TaskProgress.queued";
         case TaskStatusEnum.RUNNING:
             return "TaskProgress.running";
+        case TaskStatusEnum.CANCELLING:
+            return "TaskProgress.cancelling";
+        case TaskStatusEnum.CANCELLED:
+            return "TaskProgress.cancelled";
         case TaskStatusEnum.COMPLETED:
             return "TaskProgress.completed";
         default:
@@ -42,13 +46,26 @@ function StatusIcon({status}: { status: TaskStatusEnum }) {
     if (status === TaskStatusEnum.FAILED) {
         return <CloseCircleOutlined style={{color: "#ff4d4f"}} aria-label="failed"/>;
     }
+    if (status === TaskStatusEnum.CANCELLED) {
+        return <StopOutlined style={{color: "#faad14"}} aria-label="cancelled"/>;
+    }
     return <LoadingOutlined aria-label="running"/>;
 }
 
-export function TaskProgressCard({task, onDismiss}: { task: TaskProgressResponse; onDismiss: (taskId: string) => void }) {
+export interface TaskProgressCardProps {
+    task: TaskProgressResponse;
+    /** Closes the card; never touches the running task. */
+    onClose: (taskId: string) => void;
+    /** Stops the task in the backend and reverts its changes. */
+    onCancel: (taskId: string) => void;
+}
+
+export function TaskProgressCard({task, onClose, onCancel}: TaskProgressCardProps) {
     const {t} = useTranslation();
     const finished = isTaskFinished(task.status);
     const failed = task.status === TaskStatusEnum.FAILED;
+    const cancelled = task.status === TaskStatusEnum.CANCELLED;
+    const cancellable = isTaskCancellable(task.status) && !task.cancel_requested;
 
     return (
             <Card
@@ -58,13 +75,14 @@ export function TaskProgressCard({task, onDismiss}: { task: TaskProgressResponse
                     style={{pointerEvents: "auto", boxShadow: "0 4px 12px rgba(0,0,0,0.45)"}}
                     title={<Space size="small"><StatusIcon status={task.status}/><Text ellipsis={{tooltip: task.title}}
                                                                                        style={{maxWidth: 240}}>{task.title}</Text></Space>}
-                    extra={finished && (
+                    extra={(
                             <Button
                                     type="text"
                                     size="small"
                                     icon={<CloseOutlined/>}
                                     aria-label={t("TaskProgress.close")}
-                                    onClick={() => onDismiss(task.task_id)}
+                                    title={t("TaskProgress.close")}
+                                    onClick={() => onClose(task.task_id)}
                             />
                     )}
             >
@@ -72,17 +90,31 @@ export function TaskProgressCard({task, onDismiss}: { task: TaskProgressResponse
                     <Progress
                             percent={task.percent}
                             size="small"
-                            status={failed ? "exception" : finished ? "success" : "active"}
+                            status={failed ? "exception" : cancelled ? "normal" : finished ? "success" : "active"}
                     />
-                    <Text type={failed ? "danger" : "secondary"} style={{fontSize: 12}}>
+                    <Text type={failed ? "danger" : cancelled ? "warning" : "secondary"} style={{fontSize: 12}}>
                         {t(statusKey(task.status))}
                         {task.total_steps > 0 && ` · ${t("TaskProgress.steps", {completed: task.completed_steps, total: task.total_steps})}`}
                         {task.failed_steps > 0 && ` · ${t("TaskProgress.failedSteps", {count: task.failed_steps})}`}
+                        {task.reverted_steps > 0 && ` · ${t("TaskProgress.revertedSteps", {count: task.reverted_steps})}`}
                     </Text>
                     {(failed ? task.error_message : task.message) && (
                             <Text type={failed ? "danger" : undefined} ellipsis={{tooltip: failed ? task.error_message : task.message}} style={{fontSize: 12}}>
                                 {failed ? task.error_message : task.message}
                             </Text>
+                    )}
+                    {!finished && (
+                            <Button
+                                    danger
+                                    size="small"
+                                    icon={<StopOutlined/>}
+                                    disabled={!cancellable}
+                                    loading={task.cancel_requested && !finished}
+                                    onClick={() => onCancel(task.task_id)}
+                                    style={{alignSelf: "flex-end"}}
+                            >
+                                {t("TaskProgress.cancel")}
+                            </Button>
                     )}
                 </Space>
             </Card>
@@ -90,28 +122,29 @@ export function TaskProgressCard({task, onDismiss}: { task: TaskProgressResponse
 }
 
 /**
- * Non-blocking stack of task cards in the lower right corner. A finished task stays visible with its completion or failure
- * message until the user closes it with the X button.
+ * Non-blocking stack of task cards in the lower right corner. The X of a card only closes that card; the task itself keeps
+ * running. A running task can be stopped with its Cancel button, which also reverts the changes it has made. A finished task
+ * stays visible with its completion, cancellation or failure message until the user closes it.
  */
 export function TaskProgressTray() {
     const {t} = useTranslation();
-    const {tasks, dismissTask} = useTaskProgress();
+    const {tasks, closeTask, cancelTask} = useTaskProgress();
 
     if (tasks.length === 0) {
         return null;
     }
 
-    const handleDismiss = (taskId: string) => {
-        dismissTask(taskId)
+    const handleCancel = (taskId: string) => {
+        cancelTask(taskId)
                 .catch(() => {
-                    message.error(t("TaskProgress.dismissError"));
+                    message.error(t("TaskProgress.cancelError"));
                 });
     };
 
     return (
             <div style={TRAY_STYLE} role="region" aria-label={t("TaskProgress.title")} data-testid="task-progress-tray">
                 {tasks.map(task => (
-                        <TaskProgressCard key={task.task_id} task={task} onDismiss={handleDismiss}/>
+                        <TaskProgressCard key={task.task_id} task={task} onClose={closeTask} onCancel={handleCancel}/>
                 ))}
             </div>
     );

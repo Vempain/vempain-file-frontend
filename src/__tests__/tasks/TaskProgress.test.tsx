@@ -2,7 +2,7 @@ import {act, fireEvent, render, screen, waitFor} from "@testing-library/react";
 import {taskAPI} from "../../services";
 import type {TaskAcceptedResponse, TaskProgressResponse} from "../../models";
 import {TaskStatusEnum} from "../../models";
-import {TASK_POLL_INTERVAL_MS, TaskProgressProvider, TaskProgressTray, useTaskProgress} from "../../tasks";
+import {CLOSED_TASKS_STORAGE_KEY, TASK_POLL_INTERVAL_MS, TaskProgressProvider, TaskProgressTray, useTaskProgress} from "../../tasks";
 
 jest.mock("react-i18next", () => ({
     useTranslation: () => ({
@@ -19,12 +19,14 @@ jest.mock("../../services", () => ({
     taskAPI: {
         getTasks: jest.fn(),
         getTask: jest.fn(),
+        cancelTask: jest.fn(),
         dismissTask: jest.fn(),
     },
 }));
 
 const getTasks = jest.mocked(taskAPI.getTasks);
 const getTask = jest.mocked(taskAPI.getTask);
+const cancelTask = jest.mocked(taskAPI.cancelTask);
 const dismissTask = jest.mocked(taskAPI.dismissTask);
 
 const accepted: TaskAcceptedResponse = {
@@ -45,6 +47,8 @@ function snapshot(overrides: Partial<TaskProgressResponse>): TaskProgressRespons
         completed_steps: 1,
         failed_steps: 0,
         percent: 50,
+        cancel_requested: false,
+        reverted_steps: 0,
         message: "Scanned 2024",
         error_message: null,
         result: null,
@@ -65,7 +69,9 @@ describe("TaskProgressProvider and TaskProgressTray", () => {
         jest.useFakeTimers();
         getTasks.mockReset();
         getTask.mockReset();
+        cancelTask.mockReset();
         dismissTask.mockReset();
+        window.sessionStorage.clear();
         getTasks.mockResolvedValue([]);
         sessionState.userSession = {token: "token"};
     });
@@ -110,7 +116,9 @@ describe("TaskProgressProvider and TaskProgressTray", () => {
         const card = screen.getByTestId("task-card-task-1");
         expect(card.getAttribute("data-status")).toBe(TaskStatusEnum.QUEUED);
         expect(screen.getByText("Scan /photos")).toBeTruthy();
-        expect(screen.queryByLabelText("TaskProgress.close")).toBeNull();
+        // A running card can be closed (X) and cancelled; the X never touches the backend
+        expect(screen.getByLabelText("TaskProgress.close")).toBeTruthy();
+        expect(screen.getByText("TaskProgress.cancel")).toBeTruthy();
 
         await act(async () => {
             jest.advanceTimersByTime(TASK_POLL_INTERVAL_MS);
@@ -136,10 +144,77 @@ describe("TaskProgressProvider and TaskProgressTray", () => {
         });
         expect(getTask).toHaveBeenCalledTimes(2);
         expect(screen.getByTestId("task-card-task-1")).toBeTruthy();
+        expect(screen.queryByText("TaskProgress.cancel")).toBeNull();
 
         fireEvent.click(screen.getByLabelText("TaskProgress.close"));
         await waitFor(() => expect(screen.queryByTestId("task-card-task-1")).toBeNull());
         expect(dismissTask).toHaveBeenCalledWith("task-1");
+    });
+
+    it("closing a running card hides it without touching the task, and its callback still fires", async () => {
+        const onFinished = jest.fn();
+        getTask.mockResolvedValueOnce(snapshot({status: TaskStatusEnum.COMPLETED, percent: 100, result: {scanned: 1}}));
+
+        render(
+                <TaskProgressProvider>
+                    <Starter onFinished={onFinished}/>
+                    <TaskProgressTray/>
+                </TaskProgressProvider>
+        );
+        await act(async () => {
+            await Promise.resolve();
+        });
+        fireEvent.click(screen.getByText("start"));
+        fireEvent.click(screen.getByLabelText("TaskProgress.close"));
+
+        expect(screen.queryByTestId("task-card-task-1")).toBeNull();
+        expect(dismissTask).not.toHaveBeenCalled();
+        expect(cancelTask).not.toHaveBeenCalled();
+        expect(JSON.parse(window.sessionStorage.getItem(CLOSED_TASKS_STORAGE_KEY) ?? "[]")).toEqual(["task-1"]);
+
+        await act(async () => {
+            jest.advanceTimersByTime(TASK_POLL_INTERVAL_MS);
+            await Promise.resolve();
+        });
+        await waitFor(() => expect(onFinished).toHaveBeenCalledTimes(1));
+        expect(screen.queryByTestId("task-card-task-1")).toBeNull();
+    });
+
+    it("cancel asks the backend to stop and shows the cancelling and cancelled states", async () => {
+        cancelTask.mockResolvedValueOnce(snapshot({status: TaskStatusEnum.CANCELLING, cancel_requested: true}));
+        getTask.mockResolvedValueOnce(snapshot({
+            status: TaskStatusEnum.CANCELLED,
+            cancel_requested: true,
+            reverted_steps: 1,
+            percent: 100,
+            message: "Cancelled, reverted 1 change",
+        }));
+
+        render(
+                <TaskProgressProvider>
+                    <Starter onFinished={() => undefined}/>
+                    <TaskProgressTray/>
+                </TaskProgressProvider>
+        );
+        await act(async () => {
+            await Promise.resolve();
+        });
+        fireEvent.click(screen.getByText("start"));
+        fireEvent.click(screen.getByText("TaskProgress.cancel"));
+
+        await waitFor(() => expect(cancelTask).toHaveBeenCalledWith("task-1"));
+        await waitFor(() => expect(screen.getByTestId("task-card-task-1").getAttribute("data-status")).toBe(TaskStatusEnum.CANCELLING));
+        expect(screen.getByText("TaskProgress.cancelling", {exact: false})).toBeTruthy();
+
+        await act(async () => {
+            jest.advanceTimersByTime(TASK_POLL_INTERVAL_MS);
+            await Promise.resolve();
+        });
+        await waitFor(() => expect(screen.getByTestId("task-card-task-1").getAttribute("data-status")).toBe(TaskStatusEnum.CANCELLED));
+        expect(screen.getByText("TaskProgress.cancelled", {exact: false})).toBeTruthy();
+        expect(screen.getByText("Cancelled, reverted 1 change")).toBeTruthy();
+        expect(screen.queryByText("TaskProgress.cancel")).toBeNull();
+        expect(screen.getByLabelText("TaskProgress.close")).toBeTruthy();
     });
 
     it("shows the error of a failed task", async () => {

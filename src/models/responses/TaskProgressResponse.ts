@@ -3,6 +3,7 @@ import type {TaskStatusEnum} from "../TaskStatusEnum.ts";
 /**
  * Progress snapshot of a background task; mirrors TaskProgressResponse of the file backend.
  * The result payload depends on the task type and is only present once the task has completed.
+ * A cancelled task has reverted the changes it made before the cancellation.
  */
 export interface TaskProgressResponse<R = unknown> {
     task_id: string;
@@ -13,6 +14,8 @@ export interface TaskProgressResponse<R = unknown> {
     completed_steps: number;
     failed_steps: number;
     percent: number;
+    cancel_requested: boolean;
+    reverted_steps: number;
     message: string | null;
     error_message: string | null;
     result: R | null;
