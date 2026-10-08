@@ -23,7 +23,7 @@ import {
 } from "../../services";
 import type {FileGroupListResponse, FileGroupRequest, FileGroupResponse, FileResponse, PublishFileGroupRequest, TaskAcceptedResponse} from "../../models";
 import {FileTypeEnum} from "../../models";
-import {useTaskProgress} from "../../tasks";
+import {useTaskProgress} from "@vempain/vempain-common-frontend";
 import {FileDetails} from "./FileDetails";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn, thumbnailColumn} from "./commonColumns";
 import {useTranslation} from "react-i18next";

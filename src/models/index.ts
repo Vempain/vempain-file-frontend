@@ -5,7 +5,8 @@ export type {GeoCoordinate} from "./GeoCoordinate.ts";
 export {FileTypeEnum} from "./FileTypeEnum";
 export {GuardTypeEnum} from "./GuardTypeEnum";
 export {PathCompletionEnum} from "./PathCompletionEnum";
-export {TaskStatusEnum, isTaskFinished, isTaskCancellable} from "./TaskStatusEnum";
+// The task models come from the shared frontend component; re-exported so that the file service keeps one models entry point
+export {TaskStatusEnum, isTaskFinished, isTaskCancellable} from "@vempain/vempain-common-frontend";
 export {TaskTypeEnum} from "./TaskTypeEnum";
 
 export * from './responses'

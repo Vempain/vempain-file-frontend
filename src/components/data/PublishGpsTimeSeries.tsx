@@ -3,7 +3,7 @@ import {type UIEvent, useCallback, useEffect, useRef, useState} from "react";
 import {dataAPI, fileGroupAPI} from "../../services";
 import type {FileGroupListResponse} from "../../models";
 import {useTranslation} from "react-i18next";
-import {useTaskProgress} from "../../tasks";
+import {useTaskProgress} from "@vempain/vempain-common-frontend";
 import type {PagedRequest} from "@vempain/vempain-auth-frontend";
 import {fileGroupDatasetToIdentifier} from "../../tools";
 
