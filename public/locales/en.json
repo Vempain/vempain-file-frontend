@@ -542,6 +542,10 @@
       "success" : {
         "title" : "Successful Files"
       }
+    },
+    "messages" : {
+      "scanStarted" : "Scan started, follow the progress in the lower right corner",
+      "scanError" : "Failed to start the scan"
     }
   },
   "LocationGuards" : {
@@ -657,7 +661,8 @@
       "fetchError" : "Failed to load file groups",
       "publishError" : "Failed to publish file group",
       "publishSuccess" : "Published {{count}} files",
-      "selectWarning" : "Please select a file group to publish"
+      "selectWarning" : "Please select a file group to publish",
+      "publishStarted" : "Publishing of the file group started, follow the progress in the lower right corner"
     },
     "modal" : {
       "galleryDescription" : {
@@ -701,7 +706,8 @@
       "fetchGroupsError" : "Failed to load image file groups",
       "publishError" : "Failed to publish GPS time series",
       "publishSuccess" : "GPS time series published successfully",
-      "selectWarning" : "Please select an image file group"
+      "selectWarning" : "Please select an image file group",
+      "publishStarted" : "GPS time series publishing started, follow the progress in the lower right corner"
     },
     "select" : {
       "label" : "Select image file group",
@@ -725,7 +731,8 @@
       "fetchError" : "Failed to load music data set",
       "notFound" : "Music data set not found",
       "publishError" : "Failed to publish music data",
-      "publishSuccess" : "Music data published successfully"
+      "publishSuccess" : "Music data published successfully",
+      "publishStarted" : "Music data publishing started, follow the progress in the lower right corner"
     }
   },
   "SearchFiles" : {
@@ -870,13 +877,6 @@
       }
     }
   },
-  "TagSearch" : {
-    "alert" : {
-      "description" : "This is the Tag search page.",
-      "message" : "Tag search",
-      "returnButton" : "Return to front page"
-    }
-  },
   "Statistics" : {
     "title" : "File database statistics",
     "description" : "A summary of the files, metadata, groups, and storage represented in the file database.",
@@ -978,7 +978,6 @@
       "tagManagement" : {
         "editFiles" : "Edit file tags",
         "newTag" : "New tag",
-        "search" : "Search",
         "tags" : "Tags",
         "title" : "Tag management"
       },
@@ -1067,5 +1066,22 @@
         "title" : "Delete this video file"
       }
     }
+  },
+  "TaskProgress" : {
+    "title" : "Background tasks",
+    "queued" : "Queued",
+    "running" : "Running",
+    "completed" : "Completed",
+    "failed" : "Failed",
+    "steps" : "{{completed}} / {{total}} steps",
+    "failedSteps" : "{{count}} failed",
+    "close" : "Close",
+    "started" : "Started",
+    "restoreError" : "Failed to load background tasks",
+    "cancelling" : "Cancelling, reverting changes",
+    "cancelled" : "Cancelled, changes reverted",
+    "cancel" : "Cancel",
+    "cancelError" : "Failed to cancel the task",
+    "revertedSteps" : "{{count}} reverted"
   }
 }

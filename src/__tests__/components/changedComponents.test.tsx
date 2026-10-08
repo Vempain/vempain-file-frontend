@@ -33,7 +33,6 @@ import {Publishing} from "../../components/schedules/Publishing";
 import {SystemSchedules} from "../../components/schedules/SystemSchedules";
 import {TagCreate} from "../../components/tags/TagCreate";
 import {TagEdit} from "../../components/tags/TagEdit";
-import {TagSearch} from "../../components/tags/TagSearch";
 import {Account} from "../../components/user/Account";
 import {ChangePassword} from "../../components/user/ChangePassword";
 import {TopBar} from "../../main/TopBar";
@@ -440,23 +439,6 @@ describe("tag and account components", () => {
         routeParams = {tagId: "bad"};
         render(<TagEdit/>);
         await waitFor(() => expect(message.error).toHaveBeenCalled());
-    });
-
-    it("searches tags, handles empty/error responses and navigates to edit", async () => {
-        jest.spyOn(tagAPI, "findPageable").mockResolvedValue(page([tag]) as any);
-        render(<TagSearch/>);
-        fireEvent.click(screen.getByText("Search"));
-        await waitFor(() => expect(screen.getByText("nature")).toBeTruthy());
-        fireEvent.click(screen.getByText("Edit"));
-        expect(navigate).toHaveBeenCalledWith("/tags/1/edit");
-        (tagAPI.findPageable as jest.Mock).mockRejectedValueOnce(new Error("bad"));
-        fireEvent.change(screen.getByPlaceholderText("Search tag names"), {target: {value: "  tree "}});
-        fireEvent.keyDown(screen.getByPlaceholderText("Search tag names"), {key: "Enter"});
-        await waitFor(() => expect(tagAPI.findPageable).toHaveBeenCalledWith(expect.objectContaining({search: "tree"})));
-        await waitFor(() => expect(tagAPI.findPageable).toHaveBeenCalledTimes(2));
-        (tagAPI.findPageable as jest.Mock).mockResolvedValueOnce({} as any);
-        fireEvent.click(screen.getByText("Search"));
-        await waitFor(() => expect(tagAPI.findPageable).toHaveBeenCalledTimes(3));
     });
 
     it("loads account with and without a session and saves success/error", async () => {

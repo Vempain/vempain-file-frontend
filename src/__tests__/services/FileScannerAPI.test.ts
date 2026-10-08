@@ -1,4 +1,5 @@
-import type {ScanRequest, ScanResponses} from "../../models";
+import type {ScanRequest, TaskAcceptedResponse} from "../../models";
+import {TaskStatusEnum} from "../../models";
 import {axiosMock, constructorSpy, resetServiceMockState, setAuthorizationHeaderSpy} from "../../testUtils/mockAuthFrontend";
 import {FileScannerAPI} from "../../services";
 
@@ -14,29 +15,18 @@ describe("FileScannerAPI", () => {
         expect(constructorSpy).toHaveBeenCalledWith(expect.anything(), "/scan-files");
     });
 
-    it("scanDirectory POSTs request body to base endpoint and returns ScanResponses", async () => {
+    it("scanDirectory POSTs request body to base endpoint and returns the accepted task", async () => {
         const request: ScanRequest = {
             original_directory: "/source",
             exported_directory: "/export",
         };
 
-        const responseData: ScanResponses = {
-            scan_original_response: {
-                success: true,
-                error_message: null,
-                scanned_files_count: 1,
-                new_files_count: 1,
-                successful_files: [],
-                failed_files: [],
-            },
-            scan_export_response: {
-                success: true,
-                error_message: null,
-                scanned_files_count: 1,
-                new_files_count: 1,
-                successful_files: [],
-                failed_files: [],
-            },
+        const responseData: TaskAcceptedResponse = {
+            task_id: "scan-task",
+            type: "SCAN_DIRECTORIES",
+            title: "Scan /source and /export",
+            status: TaskStatusEnum.QUEUED,
+            total_steps: 0,
         };
         axiosMock.post.mockResolvedValueOnce({data: responseData});
 

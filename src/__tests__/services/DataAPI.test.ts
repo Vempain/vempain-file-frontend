@@ -1,4 +1,5 @@
-import type {DataResponse} from "../../models";
+import type {TaskAcceptedResponse} from "../../models";
+import {TaskStatusEnum} from "../../models";
 import {axiosMock, constructorSpy, resetServiceMockState, setAuthorizationHeaderSpy} from "../../testUtils/mockAuthFrontend";
 import {DataAPI} from "../../services";
 
@@ -14,19 +15,13 @@ describe("DataAPI", () => {
         expect(constructorSpy).toHaveBeenCalledWith(expect.anything(), "/data-publish");
     });
 
-    it("publishMusic POSTs /music with null body and returns DataResponse", async () => {
-        const responseData: DataResponse = {
-            id: 1,
-            identifier: "music",
-            type: "tabulated",
-            description: "Music collection",
-            column_definitions: "[{\"name\":\"title\",\"type\":\"string\"}]",
-            create_sql: "CREATE TABLE website_data__music (id BIGSERIAL PRIMARY KEY, title VARCHAR(255))",
-            fetch_all_sql: "SELECT * FROM website_data__music ORDER BY id",
-            fetch_subset_sql: "SELECT * FROM website_data__music WHERE title = :title",
-            csv_data: "title\nAbbey Road",
-            created_at: "2024-01-01T00:00:00Z",
-            updated_at: "2024-01-02T00:00:00Z",
+    it("publishMusic POSTs /music with null body and returns the accepted task", async () => {
+        const responseData: TaskAcceptedResponse = {
+            task_id: "music-task",
+            type: "PUBLISH_MUSIC_DATA",
+            title: "Publish music data set",
+            status: TaskStatusEnum.QUEUED,
+            total_steps: 3,
         };
         axiosMock.post.mockResolvedValueOnce({data: responseData});
 
@@ -38,18 +33,13 @@ describe("DataAPI", () => {
         expect(response).toEqual(responseData);
     });
 
-    it("publishGpsTimeSeries POSTs /gps-timeseries with filegroup ID and time series name and returns DataResponse", async () => {
-        const responseData: DataResponse = {
-            id: 2,
-            identifier: "holidays_2024",
-            type: "gps-timeseries",
-            column_definitions: "[]",
-            create_sql: "",
-            fetch_all_sql: "",
-            fetch_subset_sql: "",
-            csv_data: "",
-            created_at: "2024-06-01T00:00:00Z",
-            updated_at: "2024-06-02T00:00:00Z",
+    it("publishGpsTimeSeries POSTs /gps-timeseries with filegroup ID and time series name and returns the accepted task", async () => {
+        const responseData: TaskAcceptedResponse = {
+            task_id: "gps-task",
+            type: "PUBLISH_GPS_TIME_SERIES",
+            title: "Publish GPS time series holidays_2024",
+            status: TaskStatusEnum.QUEUED,
+            total_steps: 3,
         };
         axiosMock.post.mockResolvedValueOnce({data: responseData});
 

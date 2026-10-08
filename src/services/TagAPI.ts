@@ -1,5 +1,5 @@
 // services/TagAPI.ts
-import type {FileResponse, TagOperationRequest, TagRequest, TagResponse} from "../models";
+import type {FileResponse, TagOperationRequest, TagRequest, TagResponse, TaskAcceptedResponse} from "../models";
 import {AbstractAPI, type PagedRequest, type PagedResponse} from "@vempain/vempain-auth-frontend";
 
 export class TagAPI extends AbstractAPI<TagRequest, TagResponse> {
@@ -26,16 +26,24 @@ export class TagAPI extends AbstractAPI<TagRequest, TagResponse> {
         return this.postOperation("files/rename", request);
     }
 
-    public removeTagFromAll(request: TagOperationRequest) {
-        return this.postOperation("all/remove", request);
+    /** Background task (one step per tagged file). */
+    public removeTagFromAll(request: TagOperationRequest): Promise<TaskAcceptedResponse> {
+        return this.postTaskOperation("all/remove", request);
     }
 
-    public replaceTagAcrossAll(request: TagOperationRequest) {
-        return this.postOperation("all/replace", request);
+    /** Background task (one step per tagged file). */
+    public replaceTagAcrossAll(request: TagOperationRequest): Promise<TaskAcceptedResponse> {
+        return this.postTaskOperation("all/replace", request);
     }
 
-    public renameTagAcrossAll(request: TagOperationRequest) {
-        return this.postOperation("all/rename", request);
+    /** Background task (one step per tagged file). */
+    public renameTagAcrossAll(request: TagOperationRequest): Promise<TaskAcceptedResponse> {
+        return this.postTaskOperation("all/rename", request);
+    }
+
+    private postTaskOperation(path: string, request: TagOperationRequest): Promise<TaskAcceptedResponse> {
+        this.setAuthorizationHeader();
+        return this.axiosInstance.post<TaskAcceptedResponse>(path, request).then(response => response.data);
     }
 
     private postOperation(path: string, request: TagOperationRequest): Promise<void> {
