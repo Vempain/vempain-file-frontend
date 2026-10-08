@@ -26,5 +26,4 @@ export type {ThumbFileResponse} from "./ThumbFileResponse";
 export type {MusicFileResponse} from "./MusicFileResponse";
 export type {VectorFileResponse} from "./VectorFileResponse";
 export type {VideoFileResponse} from "./VideoFileResponse";
-export type {TaskAcceptedResponse} from "./TaskAcceptedResponse";
-export type {TaskProgressResponse} from "./TaskProgressResponse";
+export type {TaskAcceptedResponse, TaskProgressResponse} from "@vempain/vempain-common-frontend";

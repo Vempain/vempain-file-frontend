@@ -38,7 +38,8 @@ import {
     VideoFiles
 } from "./components";
 import {Login, Logout, useSession} from "@vempain/vempain-auth-frontend";
-import {TaskProgressProvider, TaskProgressTray} from "./tasks";
+import {TaskProgressProvider, TaskProgressTray} from "@vempain/vempain-common-frontend";
+import {taskAPI} from "./services";
 import i18next from "i18next";
 
 const {Content} = Layout;
@@ -68,7 +69,7 @@ export default function App() {
 
     return (
             <ConfigProvider theme={{algorithm: darkAlgorithm, token: darkThemeTokens}}>
-                <TaskProgressProvider>
+                <TaskProgressProvider taskAPI={taskAPI}>
                 <Layout className={"layout"}>
                     <TopBar/>
                     <Content style={{marginTop: "65px"}}>

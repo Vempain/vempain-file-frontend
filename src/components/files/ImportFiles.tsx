@@ -10,7 +10,7 @@ import type {
     TaskProgressResponse
 } from "../../models";
 import {PathCompletionEnum, TaskStatusEnum} from "../../models";
-import {useTaskProgress} from "../../tasks";
+import {useTaskProgress} from "@vempain/vempain-common-frontend";
 import {fileScannerAPI, pathCompletionAPI} from "../../services";
 import type {ColumnsType} from "antd/es/table";
 import dayjs from "dayjs";

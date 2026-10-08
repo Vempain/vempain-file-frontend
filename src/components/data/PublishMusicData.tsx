@@ -2,7 +2,7 @@ import {Button, message, Space, Typography} from "antd";
 import {useCallback, useState} from "react";
 import {dataAPI} from "../../services";
 import {useTranslation} from "react-i18next";
-import {useTaskProgress} from "../../tasks";
+import {useTaskProgress} from "@vempain/vempain-common-frontend";
 
 const {Title} = Typography;
 

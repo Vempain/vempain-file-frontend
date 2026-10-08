@@ -23,7 +23,9 @@
   },
   "dependencies" : {
     "@ant-design/charts" : "^2.6.7",
+    "@ant-design/icons" : "^6.3.4",
     "@vempain/vempain-auth-frontend" : "^2.0.17",
+    "@vempain/vempain-common-frontend" : "^1.0.0",
     "antd" : "^6.6.5",
     "axios" : "^1.20.0",
     "dayjs" : "^1.11.23",
