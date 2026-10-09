@@ -3,6 +3,8 @@
  * this list documents which result payload a finished task of each type carries.
  */
 export const TaskTypeEnum = {
+    /** One file published as a site file, no gallery */
+    PUBLISH_FILE: 'PUBLISH_FILE' as const,
     PUBLISH_FILE_GROUP: 'PUBLISH_FILE_GROUP' as const,
     PUBLISH_ALL_FILE_GROUPS: 'PUBLISH_ALL_FILE_GROUPS' as const,
     /** Result: ScanResponses */

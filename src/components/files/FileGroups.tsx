@@ -25,6 +25,8 @@ import type {FileGroupListResponse, FileGroupRequest, FileGroupResponse, FileRes
 import {FileTypeEnum} from "../../models";
 import {useTaskProgress} from "@vempain/vempain-common-frontend";
 import {FileDetails} from "./FileDetails";
+import {PublishAclEditor} from "./PublishAclEditor";
+import {toPublishAclRequests} from "../../tools/publishAcl";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn, thumbnailColumn} from "./commonColumns";
 import {useTranslation} from "react-i18next";
 import type {PagedRequest, PagedResponse} from "@vempain/vempain-auth-frontend";
@@ -284,7 +286,8 @@ export function FileGroups() {
         setPublishingGroup(record);
         publishForm.setFieldsValue({
             gallery_name: record.group_name ?? "",
-            gallery_description: record.description ?? ""
+            gallery_description: record.description ?? "",
+            acls: []
         });
         setPublishModalOpen(true);
     }, [publishForm]);
@@ -419,7 +422,9 @@ export function FileGroups() {
                     const request: PublishFileGroupRequest = {
                         file_group_id: publishingGroup.id,
                         gallery_name: values.gallery_name || null,
-                        gallery_description: values.gallery_description || null
+                        gallery_description: values.gallery_description || null,
+                        // Additional admin users granted access to the published site files and gallery; null keeps the request unchanged
+                        acls: toPublishAclRequests(values.acls)
                     };
                     // The backend answers 202 immediately; the upload runs as a background task shown in the task tray
                     publishAPI.publishFileGroup(request)
@@ -630,6 +635,7 @@ export function FileGroups() {
                         onCancel={closePublishModal}
                         confirmLoading={publishSubmitting}
                         destroyOnClose
+                        width={760}
                 >
                     <Form form={publishForm} layout="vertical">
                         <Form.Item
@@ -645,6 +651,7 @@ export function FileGroups() {
                             <Input.TextArea rows={4}
                                             placeholder={t("PublishFileGroup.modal.galleryDescription.placeholder", {defaultValue: "Describe the gallery"})}/>
                         </Form.Item>
+                        {publishModalOpen && <PublishAclEditor/>}
                     </Form>
                 </Modal>
 

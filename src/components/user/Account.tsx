@@ -3,7 +3,7 @@ import type {UserVO} from "@vempain/vempain-auth-frontend";
 import {useSession} from "@vempain/vempain-auth-frontend";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {adminUserAPI} from "../../services";
+import {userAPI} from "../../services";
 
 type AccountFields = Pick<UserVO, "name" | "nick" | "login_name" | "email" | "street" | "pob" | "description">;
 
@@ -19,7 +19,7 @@ export function Account() {
             setLoading(false);
             return;
         }
-        adminUserAPI.findById(Number(userSession.id), null)
+        userAPI.findById(Number(userSession.id), null)
                 .then(response => {
                     setUser(response);
                     form.setFieldsValue(response);
@@ -31,7 +31,7 @@ export function Account() {
     const save = (values: AccountFields) => {
         if (!user) return;
         setLoading(true);
-        adminUserAPI.update({...values, id: user.id, private_user: user.private_user, privacy_type: user.privacy_type, acls: user.acls ?? []})
+        userAPI.update({...user, ...values, id: user.id, acls: user.acls ?? [], unit_ids: user.unit_ids ?? [], password: ""})
                 .then(response => {
                     setUser(response);
                     message.success(t("Account.messages.success", {defaultValue: "Account updated"}));

@@ -647,6 +647,19 @@
     "exported" : "Exported",
     "original" : "Original"
   },
+  "PublishFile" : {
+    "actions" : {
+      "publish" : "Publish"
+    },
+    "messages" : {
+      "publishError" : "Failed to publish file",
+      "publishStarted" : "Publishing of {{filename}} started, follow the progress in the lower right corner"
+    },
+    "modal" : {
+      "description" : "{{filename}} is published to Vempain Admin as a single site file; no gallery is created.",
+      "title" : "Publish file"
+    }
+  },
   "PublishFileGroup" : {
     "actions" : {
       "publish" : "Publish",
@@ -665,6 +678,20 @@
       "publishStarted" : "Publishing of the file group started, follow the progress in the lower right corner"
     },
     "modal" : {
+      "acl" : {
+        "add" : "Add admin user",
+        "create" : "Create",
+        "delete" : "Delete",
+        "hint" : "The publishing service account keeps every privilege. Grant other admin users access to the published files and gallery here.",
+        "loadError" : "Could not load the admin users",
+        "modify" : "Modify",
+        "privilegeRequired" : "Grant at least one privilege",
+        "read" : "Read",
+        "remove" : "Remove",
+        "title" : "Additional admin users",
+        "userPlaceholder" : "Select admin user",
+        "userRequired" : "Select a user"
+      },
       "galleryDescription" : {
         "label" : "Gallery description",
         "placeholder" : "Enter gallery description here"

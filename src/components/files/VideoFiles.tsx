@@ -6,6 +6,7 @@ import {videoFileAPI} from "../../services";
 import type {VideoFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
 import {FileDetails} from "./FileDetails";
+import {PublishFileButton} from "./PublishFileButton";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
 import {useTranslation} from "react-i18next";
 
@@ -72,15 +73,18 @@ export function VideoFiles() {
             title: t("VideoFiles.columns.actions.title"),
             key: 'actions',
             render: (_: undefined, record: VideoFileResponse) => (
-                    <Popconfirm
-                            title={t("VideoFiles.popconfirm.delete.title")}
-                            description={t("VideoFiles.popconfirm.delete.description")}
-                            onConfirm={() => handleDelete(record.id)}
-                            okText={t("Common.popconfirm.yes")}
-                            cancelText={t("Common.popconfirm.no")}
-                    >
-                        <Button danger icon={<DeleteOutlined/>}/>
-                    </Popconfirm>
+                    <Space>
+                        <PublishFileButton file={record} onPublished={() => paged.reload()}/>
+                        <Popconfirm
+                                title={t("VideoFiles.popconfirm.delete.title")}
+                                description={t("VideoFiles.popconfirm.delete.description")}
+                                onConfirm={() => handleDelete(record.id)}
+                                okText={t("Common.popconfirm.yes")}
+                                cancelText={t("Common.popconfirm.no")}
+                        >
+                            <Button danger icon={<DeleteOutlined/>}/>
+                        </Popconfirm>
+                    </Space>
             ),
         },
     ];

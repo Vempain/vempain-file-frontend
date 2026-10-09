@@ -6,6 +6,7 @@ import {archiveFileAPI} from "../../services";
 import type {ArchiveFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
 import {FileDetails} from "./FileDetails";
+import {PublishFileButton} from "./PublishFileButton";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
 import {useTranslation} from "react-i18next";
 
@@ -66,15 +67,18 @@ export function ArchiveFiles() {
             title: t("ArchiveFiles.columns.actions.title"),
             key: 'actions',
             render: (_: undefined, record: ArchiveFileResponse) => (
-                    <Popconfirm
-                            title={t("ArchiveFiles.popconfirm.delete.title")}
-                            description={t("ArchiveFiles.popconfirm.delete.description")}
-                            onConfirm={() => handleDelete(record.id)}
-                            okText={t("Common.popconfirm.yes")}
-                            cancelText={t("Common.popconfirm.no")}
-                    >
-                        <Button danger icon={<DeleteOutlined/>}/>
-                    </Popconfirm>
+                    <Space>
+                        <PublishFileButton file={record} onPublished={() => paged.reload()}/>
+                        <Popconfirm
+                                title={t("ArchiveFiles.popconfirm.delete.title")}
+                                description={t("ArchiveFiles.popconfirm.delete.description")}
+                                onConfirm={() => handleDelete(record.id)}
+                                okText={t("Common.popconfirm.yes")}
+                                cancelText={t("Common.popconfirm.no")}
+                        >
+                            <Button danger icon={<DeleteOutlined/>}/>
+                        </Popconfirm>
+                    </Space>
             ),
         },
     ];

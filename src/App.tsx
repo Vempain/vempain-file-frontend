@@ -32,7 +32,9 @@ import {
     TaggedFiles,
     TagList,
     ThumbFiles,
+    UnitEdit,
     Units,
+    UserEdit,
     Users,
     VectorFiles,
     VideoFiles
@@ -100,7 +102,9 @@ export default function App() {
                             <Route path={"/files/videos"} element={<VideoFiles/>}/>
                             <Route path={"/management/permissions"} element={<FilePermissions/>}/>
                             <Route path={"/management/units"} element={<Units/>}/>
+                            <Route path={"/management/units/:paramId/edit"} element={<UnitEdit/>}/>
                             <Route path={"/management/users"} element={<Users/>}/>
+                            <Route path={"/management/users/:paramId/edit"} element={<UserEdit/>}/>
                             <Route path={"/security/location-guards"} element={<LocationGuards/>}/>
                             <Route path={"/tags/create"} element={<TagCreate/>}/>
                             <Route path={"/tags/:tagId/edit"} element={<TagEdit/>}/>

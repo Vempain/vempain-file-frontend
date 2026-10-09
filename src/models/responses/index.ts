@@ -20,6 +20,7 @@ export type {LocationGuardResponse} from "./LocationGuardResponse";
 export type {LocationResponse} from "./LocationsResponse";
 export type {OriginalScanResponse} from "./OriginalScanResponse.ts";
 export type {PathCompletionResponse} from "./PathCompletionResponse";
+export type {PublishUserResponse} from "./PublishUserResponse";
 export type {ScanResponses} from "./ScanResponses";
 export type {TagResponse} from "./TagResponse";
 export type {ThumbFileResponse} from "./ThumbFileResponse";

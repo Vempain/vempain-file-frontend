@@ -6,6 +6,7 @@ import {fontFileAPI} from "../../services";
 import type {FontFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
 import {FileDetails} from "./FileDetails";
+import {PublishFileButton} from "./PublishFileButton";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
 import {useTranslation} from "react-i18next";
 
@@ -59,15 +60,18 @@ export function FontFiles() {
             title: t("FontFiles.columns.actions.title", {defaultValue: "Actions"}),
             key: "actions",
             render: (_: undefined, record: FontFileResponse) => (
-                    <Popconfirm
-                            title={t("FontFiles.popconfirm.delete.title", {defaultValue: "Delete this font file"})}
-                            description={t("FontFiles.popconfirm.delete.description", {defaultValue: "Are you sure you want to delete this font file?"})}
-                            onConfirm={() => handleDelete(record.id)}
-                            okText={t("Common.popconfirm.yes", {defaultValue: "Yes"})}
-                            cancelText={t("Common.popconfirm.no", {defaultValue: "No"})}
-                    >
-                        <Button danger icon={<DeleteOutlined/>}/>
-                    </Popconfirm>
+                    <Space>
+                        <PublishFileButton file={record} onPublished={() => paged.reload()}/>
+                        <Popconfirm
+                                title={t("FontFiles.popconfirm.delete.title", {defaultValue: "Delete this font file"})}
+                                description={t("FontFiles.popconfirm.delete.description", {defaultValue: "Are you sure you want to delete this font file?"})}
+                                onConfirm={() => handleDelete(record.id)}
+                                okText={t("Common.popconfirm.yes", {defaultValue: "Yes"})}
+                                cancelText={t("Common.popconfirm.no", {defaultValue: "No"})}
+                        >
+                            <Button danger icon={<DeleteOutlined/>}/>
+                        </Popconfirm>
+                    </Space>
             ),
         },
     ];

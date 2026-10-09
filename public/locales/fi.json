@@ -647,6 +647,19 @@
     "exported" : "Viety",
     "original" : "Alkuperäinen"
   },
+  "PublishFile" : {
+    "actions" : {
+      "publish" : "Julkaise"
+    },
+    "messages" : {
+      "publishError" : "Tiedoston julkaisu epäonnistui",
+      "publishStarted" : "Tiedoston {{filename}} julkaisu käynnistyi, seuraa edistymistä oikeasta alakulmasta"
+    },
+    "modal" : {
+      "description" : "{{filename}} julkaistaan Vempain Adminiin yksittäisenä sivustotiedostona; galleriaa ei luoda.",
+      "title" : "Julkaise tiedosto"
+    }
+  },
   "PublishFileGroup" : {
     "actions" : {
       "publish" : "Julkaise",
@@ -665,6 +678,20 @@
       "publishStarted" : "Tiedostoryhmän julkaisu aloitettiin, seuraa edistymistä oikeasta alakulmasta"
     },
     "modal" : {
+      "acl" : {
+        "add" : "Lisää ylläpitokäyttäjä",
+        "create" : "Luonti",
+        "delete" : "Poisto",
+        "hint" : "Julkaiseva palvelutili säilyttää kaikki oikeudet. Myönnä tässä muille ylläpitokäyttäjille oikeuksia julkaistuihin tiedostoihin ja galleriaan.",
+        "loadError" : "Ylläpitokäyttäjien lataus epäonnistui",
+        "modify" : "Muokkaus",
+        "privilegeRequired" : "Myönnä vähintään yksi oikeus",
+        "read" : "Luku",
+        "remove" : "Poista",
+        "title" : "Muut ylläpitokäyttäjät",
+        "userPlaceholder" : "Valitse ylläpitokäyttäjä",
+        "userRequired" : "Valitse käyttäjä"
+      },
       "galleryDescription" : {
         "label" : "Gallerian kuvaus",
         "placeholder" : "Syötä gallerian kuvaus tähän"

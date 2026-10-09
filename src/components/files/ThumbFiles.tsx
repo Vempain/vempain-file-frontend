@@ -6,6 +6,7 @@ import {thumbFileAPI} from "../../services";
 import type {ThumbFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
 import {FileDetails} from "./FileDetails";
+import {PublishFileButton} from "./PublishFileButton";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
 import {useTranslation} from "react-i18next";
 
@@ -54,15 +55,18 @@ export function ThumbFiles() {
             title: t("ThumbFiles.columns.actions.title", {defaultValue: "Actions"}),
             key: "actions",
             render: (_: undefined, record: ThumbFileResponse) => (
-                    <Popconfirm
-                            title={t("ThumbFiles.popconfirm.delete.title", {defaultValue: "Delete this thumbnail file"})}
-                            description={t("ThumbFiles.popconfirm.delete.description", {defaultValue: "Are you sure you want to delete this thumbnail file?"})}
-                            onConfirm={() => handleDelete(record.id)}
-                            okText={t("Common.popconfirm.yes", {defaultValue: "Yes"})}
-                            cancelText={t("Common.popconfirm.no", {defaultValue: "No"})}
-                    >
-                        <Button danger icon={<DeleteOutlined/>}/>
-                    </Popconfirm>
+                    <Space>
+                        <PublishFileButton file={record} onPublished={() => paged.reload()}/>
+                        <Popconfirm
+                                title={t("ThumbFiles.popconfirm.delete.title", {defaultValue: "Delete this thumbnail file"})}
+                                description={t("ThumbFiles.popconfirm.delete.description", {defaultValue: "Are you sure you want to delete this thumbnail file?"})}
+                                onConfirm={() => handleDelete(record.id)}
+                                okText={t("Common.popconfirm.yes", {defaultValue: "Yes"})}
+                                cancelText={t("Common.popconfirm.no", {defaultValue: "No"})}
+                        >
+                            <Button danger icon={<DeleteOutlined/>}/>
+                        </Popconfirm>
+                    </Space>
             ),
         },
     ];

@@ -3,10 +3,8 @@
 import React from "react";
 import {cleanup, fireEvent, render, screen, waitFor} from "@testing-library/react";
 import {
-    adminAclAPI,
+    aclAPI,
     adminScheduleAPI,
-    adminUnitAPI,
-    adminUserAPI,
     archiveFileAPI,
     audioFileAPI,
     binaryFileAPI,
@@ -20,14 +18,17 @@ import {
     musicFileAPI,
     tagAPI,
     thumbFileAPI,
+    unitAPI,
+    userAPI,
     vectorFileAPI,
     videoFileAPI
 } from "../../services";
 import {message} from "antd";
-import {AclEditor} from "../../components/management/AclEditor";
 import {FilePermissions} from "../../components/management/FilePermissions";
 import {Units} from "../../components/management/Units";
+import {UnitEdit} from "../../components/management/UnitEdit";
 import {Users} from "../../components/management/Users";
+import {UserEdit} from "../../components/management/UserEdit";
 import {FileImports} from "../../components/schedules/FileImports";
 import {Publishing} from "../../components/schedules/Publishing";
 import {SystemSchedules} from "../../components/schedules/SystemSchedules";
@@ -101,7 +102,53 @@ jest.mock("@vempain/vempain-auth-frontend", () => {
         <button onClick={() => paged.handleTableChange({current: 2, pageSize: 20})}>next page</button>
         <button onClick={() => paged.handleTableChange({})}>default page</button>
     </div>;
-    return {AbstractAPI, useSession: () => authSession, usePagedTable, VempainTable};
+
+    class UserAPI extends AbstractAPI {
+        update = async (payload: any) => (await axiosMock.put(`/${payload.id}`, payload)).data;
+    }
+
+    class UnitAPI extends AbstractAPI {
+        update = async (payload: any) => (await axiosMock.put(`/${payload.id}`, payload)).data;
+    }
+
+    class AclAPI extends AbstractAPI {
+        getAll = async () => (await axiosMock.get("", {params: undefined})).data;
+    }
+
+    // The shared management screens are tested in the library; here they are stand-ins that expose their callbacks
+    const UserList = ({onEdit, onCreate}: any) => <div data-testid="shared-user-list">
+        <button onClick={() => onEdit(5)}>edit user</button>
+        <button onClick={onCreate}>create user</button>
+    </div>;
+    const UnitList = ({onEdit, onCreate}: any) => <div data-testid="shared-unit-list">
+        <button onClick={() => onEdit(3)}>edit unit</button>
+        <button onClick={onCreate}>create unit</button>
+    </div>;
+    const UserEditor = ({userId, currentUserId, onSaved, onCancel}: any) => <div data-testid="shared-user-editor">
+        user {userId} by {String(currentUserId)}
+        <button onClick={() => onSaved({id: userId})}>saved user</button>
+        <button onClick={onCancel}>cancel user</button>
+    </div>;
+    const UnitEditor = ({unitId, currentUserId, onSaved, onCancel}: any) => <div data-testid="shared-unit-editor">
+        unit {unitId} by {String(currentUserId)}
+        <button onClick={() => onSaved({id: unitId})}>saved unit</button>
+        <button onClick={onCancel}>cancel unit</button>
+    </div>;
+    const validateParamId = (paramId?: string) => paramId === undefined || paramId.length === 0 ? -1 : (Number.isNaN(parseInt(paramId)) ? 0 : parseInt(paramId));
+    return {
+        AbstractAPI,
+        UserAPI,
+        UnitAPI,
+        AclAPI,
+        UserList,
+        UnitList,
+        UserEditor,
+        UnitEditor,
+        validateParamId,
+        useSession: () => authSession,
+        usePagedTable,
+        VempainTable
+    };
 }, {virtual: true});
 
 const mockTranslate = (_key: string, options?: { defaultValue?: string }) => options?.defaultValue ?? _key;
@@ -269,92 +316,60 @@ beforeEach(() => {
     routeParams = {tagId: "1"};
     (globalThis as any).__mobile = false;
     authSession.userSession = {id: 7};
-    jest.spyOn(adminUserAPI, "findPageable").mockResolvedValue(page([user]) as any);
-    jest.spyOn(adminUnitAPI, "findPageable").mockResolvedValue(page([unit]) as any);
+    jest.spyOn(userAPI, "findPageable").mockResolvedValue(page([user]) as any);
+    jest.spyOn(unitAPI, "findPageable").mockResolvedValue(page([unit]) as any);
 });
 
 describe("management components", () => {
-    it("loads ACL choices and supports add/remove, including failure", async () => {
-        render(<AclEditor initialAcls={[{user: null, unit: null} as any]}/>);
-        await waitFor(() => expect(screen.getByText("Add permission")).toBeTruthy());
-        fireEvent.click(screen.getByText("Add permission"));
-        expect(screen.getAllByRole("button").length).toBeGreaterThan(1);
-        fireEvent.click(screen.getAllByRole("button")[0]);
-        (adminUserAPI.findPageable as jest.Mock).mockRejectedValueOnce(new Error("no"));
-        (adminUnitAPI.findPageable as jest.Mock).mockRejectedValueOnce(new Error("no"));
-        render(<AclEditor initialAcls={[]}/>);
-        await waitFor(() => expect(screen.queryByText("Add permission")).toBeTruthy());
-        (adminUserAPI.findPageable as jest.Mock).mockResolvedValueOnce({} as any);
-        (adminUnitAPI.findPageable as jest.Mock).mockResolvedValueOnce({} as any);
-        cleanup();
-        render(<AclEditor initialAcls={[]}/>);
-        await waitFor(() => expect(screen.getByText("Add permission")).toBeTruthy());
-    });
-
-    it("renders permissions and reports load errors", async () => {
-        jest.spyOn(adminAclAPI, "getAll").mockResolvedValue([
+    it("renders permissions from the file backend and reports load errors", async () => {
+        jest.spyOn(aclAPI, "getAll").mockResolvedValue([
             {acl_id: 1, user: null, unit: 2, create_privilege: true, read_privilege: false, modify_privilege: true, delete_privilege: false},
             {acl_id: 2, user: 3, unit: null, create_privilege: false, read_privilege: true, modify_privilege: false, delete_privilege: true}
-        ]);
+        ] as any);
         render(<FilePermissions/>);
         await waitFor(() => expect(screen.getAllByText("✓").length).toBeGreaterThan(0));
         expect(screen.getAllByText("—").length).toBeGreaterThan(0);
-        jest.spyOn(adminAclAPI, "getAll").mockRejectedValueOnce(new Error("bad"));
+        jest.spyOn(aclAPI, "getAll").mockRejectedValueOnce(new Error("bad"));
         render(<FilePermissions/>);
         await waitFor(() => expect(message.error).toHaveBeenCalled());
     });
 
-    it("creates and updates units through the form and handles errors", async () => {
-        jest.spyOn(adminUnitAPI, "create").mockResolvedValue(unit as any);
-        jest.spyOn(adminUnitAPI, "update").mockResolvedValue(unit as any);
+    it("hosts the shared unit list and editor on the file backend routes", async () => {
         render(<Units/>);
-        await waitFor(() => expect(screen.getByText("Team")).toBeTruthy());
-        fireEvent.click(screen.getByText("default page"));
-        fireEvent.click(screen.getAllByText("Save", {hidden: true})[0]);
-        fireEvent.click(screen.getByText("Create unit"));
-        fireEvent.click(screen.getByText("Save"));
-        await waitFor(() => expect(adminUnitAPI.create).toHaveBeenCalled());
-        fireEvent.click(screen.getByText("Edit"));
-        fireEvent.click(screen.getByText("Save"));
-        await waitFor(() => expect(adminUnitAPI.update).toHaveBeenCalled());
-        (adminUnitAPI.create as jest.Mock).mockRejectedValueOnce(new Error("bad"));
-        fireEvent.click(screen.getByText("Create unit"));
-        fireEvent.click(screen.getByText("Save"));
-        await waitFor(() => expect(message.error).toHaveBeenCalled());
-        (adminUnitAPI.findPageable as jest.Mock).mockRejectedValue(new Error("load"));
+        fireEvent.click(screen.getByText("edit unit"));
+        expect(navigate).toHaveBeenCalledWith("/management/units/3/edit");
+        fireEvent.click(screen.getByText("create unit"));
+        expect(navigate).toHaveBeenCalledWith("/management/units/0/edit");
+
+        routeParams = {paramId: "3"};
         cleanup();
-        render(<Units/>);
-        await waitFor(() => expect(message.error).toHaveBeenCalled());
-        (adminUnitAPI.findPageable as jest.Mock).mockResolvedValue({});
+        render(<UnitEdit/>);
+        expect(screen.getByText("unit 3 by 7")).toBeTruthy();
+        fireEvent.click(screen.getByText("saved unit"));
+        expect(navigate).toHaveBeenLastCalledWith("/management/units");
+        fireEvent.click(screen.getByText("cancel unit"));
+        expect(navigate).toHaveBeenLastCalledWith("/management/units");
+
+        // An unparsable id falls back to creating a new unit
+        routeParams = {paramId: "abc"};
         cleanup();
-        render(<Units/>);
-        await waitFor(() => expect(adminUnitAPI.findPageable).toHaveBeenCalled());
-        fireEvent.click(screen.getAllByText("Cancel")[0]);
+        render(<UnitEdit/>);
+        expect(screen.getByText("unit 0 by 7")).toBeTruthy();
     });
 
-    it("creates and updates users through the form and handles errors", async () => {
-        jest.spyOn(adminUserAPI, "create").mockResolvedValue(user as any);
-        jest.spyOn(adminUserAPI, "update").mockResolvedValue(user as any);
+    it("hosts the shared user list and editor on the file backend routes", async () => {
         render(<Users/>);
-        await waitFor(() => expect(screen.getByText("Alice")).toBeTruthy());
-        fireEvent.click(screen.getByText("default page"));
-        fireEvent.click(screen.getAllByText("Save", {hidden: true})[0]);
-        fireEvent.click(screen.getByText("Create user"));
-        await waitFor(() => expect(screen.getByText("Save")).toBeTruthy());
-        fireEvent.click(screen.getByText("Save"));
-        await waitFor(() => expect(adminUserAPI.create).toHaveBeenCalled());
-        fireEvent.click(screen.getByText("Edit"));
-        fireEvent.click(screen.getByText("Save"));
-        await waitFor(() => expect(adminUserAPI.update).toHaveBeenCalled());
-        (adminUserAPI.update as jest.Mock).mockRejectedValueOnce(new Error("bad"));
-        fireEvent.click(screen.getByText("Edit"));
-        fireEvent.click(screen.getByText("Save"));
-        await waitFor(() => expect(message.error).toHaveBeenCalled());
-        (adminUserAPI.findPageable as jest.Mock).mockRejectedValue(new Error("load"));
+        fireEvent.click(screen.getByText("edit user"));
+        expect(navigate).toHaveBeenCalledWith("/management/users/5/edit");
+        fireEvent.click(screen.getByText("create user"));
+        expect(navigate).toHaveBeenCalledWith("/management/users/0/edit");
+
+        routeParams = {paramId: "5"};
         cleanup();
-        render(<Users/>);
-        await waitFor(() => expect(message.error).toHaveBeenCalled());
-        fireEvent.click(screen.getAllByText("Cancel")[0]);
+        render(<UserEdit/>);
+        expect(screen.getByText("user 5 by 7")).toBeTruthy();
+        fireEvent.click(screen.getByText("saved user"));
+        expect(navigate).toHaveBeenLastCalledWith("/management/users");
     });
 });
 
@@ -442,56 +457,56 @@ describe("tag and account components", () => {
     });
 
     it("loads account with and without a session and saves success/error", async () => {
-        jest.spyOn(adminUserAPI, "findById").mockResolvedValue(user as any);
-        jest.spyOn(adminUserAPI, "update").mockResolvedValue(user as any);
+        jest.spyOn(userAPI, "findById").mockResolvedValue(user as any);
+        jest.spyOn(userAPI, "update").mockResolvedValue(user as any);
         render(<Account/>);
-        await waitFor(() => expect(adminUserAPI.findById).toHaveBeenCalledWith(7, null));
+        await waitFor(() => expect(userAPI.findById).toHaveBeenCalledWith(7, null));
         await waitFor(() => expect(screen.getByDisplayValue("Alice")).toBeTruthy());
         fireEvent.click(screen.getByText("Save"));
-        await waitFor(() => expect(adminUserAPI.update).toHaveBeenCalled());
-        (adminUserAPI.update as jest.Mock).mockRejectedValueOnce(new Error("bad"));
+        await waitFor(() => expect(userAPI.update).toHaveBeenCalled());
+        (userAPI.update as jest.Mock).mockRejectedValueOnce(new Error("bad"));
         fireEvent.click(screen.getByText("Save"));
         await waitFor(() => expect(message.error).toHaveBeenCalled());
         authSession.userSession = undefined;
         cleanup();
         render(<Account/>);
         fireEvent.click(screen.getByText("Save"));
-        expect(adminUserAPI.findById).toHaveBeenCalledTimes(1);
+        expect(userAPI.findById).toHaveBeenCalledTimes(1);
         authSession.userSession = {id: 7};
-        (adminUserAPI.findById as jest.Mock).mockRejectedValueOnce(new Error("load"));
+        (userAPI.findById as jest.Mock).mockRejectedValueOnce(new Error("load"));
         cleanup();
         render(<Account/>);
         await waitFor(() => expect(message.error).toHaveBeenCalled());
-        (adminUserAPI.findById as jest.Mock).mockResolvedValueOnce({...user, acls: undefined} as any);
+        (userAPI.findById as jest.Mock).mockResolvedValueOnce({...user, acls: undefined} as any);
         cleanup();
         render(<Account/>);
         await waitFor(() => expect(screen.getByDisplayValue("Alice")).toBeTruthy());
         fireEvent.click(screen.getByText("Save"));
-        await waitFor(() => expect(adminUserAPI.update).toHaveBeenCalled());
+        await waitFor(() => expect(userAPI.update).toHaveBeenCalled());
     });
 
     it("changes password and handles both lookup and update errors", async () => {
-        jest.spyOn(adminUserAPI, "findById").mockResolvedValue({...user, acls: undefined} as any);
-        jest.spyOn(adminUserAPI, "update").mockResolvedValue(user as any);
+        jest.spyOn(userAPI, "findById").mockResolvedValue({...user, acls: undefined} as any);
+        jest.spyOn(userAPI, "update").mockResolvedValue(user as any);
         render(<ChangePassword/>);
         fireEvent.click(screen.getByRole("button", {name: "Change password"}));
-        await waitFor(() => expect(adminUserAPI.update).toHaveBeenCalled());
+        await waitFor(() => expect(userAPI.update).toHaveBeenCalled());
         const passwordFields = screen.getAllByRole("textbox");
         fireEvent.change(passwordFields[0], {target: {value: "Abcdefghij1!"}});
         fireEvent.change(passwordFields[1], {target: {value: "different"}});
         fireEvent.click(screen.getByRole("button", {name: "Change password"}));
-        (adminUserAPI.findById as jest.Mock).mockRejectedValueOnce(new Error("bad"));
+        (userAPI.findById as jest.Mock).mockRejectedValueOnce(new Error("bad"));
         fireEvent.click(screen.getByRole("button", {name: "Change password"}));
         await waitFor(() => expect(message.error).toHaveBeenCalled());
-        (adminUserAPI.findById as jest.Mock).mockResolvedValueOnce(user as any);
-        (adminUserAPI.update as jest.Mock).mockRejectedValueOnce(new Error("bad"));
+        (userAPI.findById as jest.Mock).mockResolvedValueOnce(user as any);
+        (userAPI.update as jest.Mock).mockRejectedValueOnce(new Error("bad"));
         fireEvent.click(screen.getByRole("button", {name: "Change password"}));
         await waitFor(() => expect(message.error).toHaveBeenCalled());
         authSession.userSession = undefined;
         cleanup();
         render(<ChangePassword/>);
         fireEvent.click(screen.getByRole("button", {name: "Change password"}));
-        expect(adminUserAPI.findById).toHaveBeenCalledTimes(4);
+        expect(userAPI.findById).toHaveBeenCalledTimes(4);
     });
 });
 
