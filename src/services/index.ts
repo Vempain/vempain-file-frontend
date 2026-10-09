@@ -51,7 +51,6 @@ export {ThumbFileAPI} from './ThumbFileAPI';
 export {VectorFileAPI} from './VectorFileAPI';
 export {VideoFileAPI} from './VideoFileAPI';
 export {AdminAPI} from "./AdminAPI";
-export {adminAclAPI} from "./AdminAclAPI";
 export {adminScheduleAPI} from "./AdminScheduleAPI";
 export type {
     FileImportScheduleResponse,
@@ -60,8 +59,9 @@ export type {
     TriggerPublishScheduleRequest,
     TriggerSystemScheduleRequest
 } from "./AdminScheduleAPI";
-export {adminUnitAPI} from "./AdminUnitAPI";
-export {adminUserAPI} from "./AdminUserAPI";
+export {userAPI} from "./UserAPI";
+export {unitAPI} from "./UnitAPI";
+export {aclAPI} from "./AclAPI";
 
 export const apiUrl: string = resolveApiUrl();
 

@@ -647,6 +647,19 @@
     "exported" : "Exporterad",
     "original" : "Original"
   },
+  "PublishFile" : {
+    "actions" : {
+      "publish" : "Publicera"
+    },
+    "messages" : {
+      "publishError" : "Publiceringen av filen misslyckades",
+      "publishStarted" : "Publiceringen av {{filename}} startade, följ förloppet i nedre högra hörnet"
+    },
+    "modal" : {
+      "description" : "{{filename}} publiceras till Vempain Admin som en enskild webbplatsfil; inget galleri skapas.",
+      "title" : "Publicera fil"
+    }
+  },
   "PublishFileGroup" : {
     "actions" : {
       "publish" : "Publicera",
@@ -665,6 +678,20 @@
       "publishStarted" : "Publiceringen av filgruppen startade, följ förloppet i nedre högra hörnet"
     },
     "modal" : {
+      "acl" : {
+        "add" : "Lägg till administratörsanvändare",
+        "create" : "Skapa",
+        "delete" : "Radera",
+        "hint" : "Tjänstekontot som publicerar behåller alla rättigheter. Ge här andra administratörsanvändare åtkomst till de publicerade filerna och galleriet.",
+        "loadError" : "Kunde inte läsa in administratörsanvändarna",
+        "modify" : "Ändra",
+        "privilegeRequired" : "Ge minst en rättighet",
+        "read" : "Läsa",
+        "remove" : "Ta bort",
+        "title" : "Ytterligare administratörsanvändare",
+        "userPlaceholder" : "Välj administratörsanvändare",
+        "userRequired" : "Välj en användare"
+      },
       "galleryDescription" : {
         "label" : "Galleribeskrivning",
         "placeholder" : "Ange galleribeskrivning här"

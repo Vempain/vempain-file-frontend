@@ -3,7 +3,7 @@ import type {UserVO} from "@vempain/vempain-auth-frontend";
 import {useSession} from "@vempain/vempain-auth-frontend";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {adminUserAPI} from "../../services";
+import {userAPI} from "../../services";
 
 interface PasswordFields {
     password: string;
@@ -19,21 +19,8 @@ export function ChangePassword() {
     const save = (values: PasswordFields) => {
         if (!userSession?.id) return;
         setLoading(true);
-        adminUserAPI.findById(Number(userSession.id), null)
-                .then((user: UserVO) => adminUserAPI.update({
-                    id: user.id,
-                    private_user: user.private_user,
-                    name: user.name,
-                    nick: user.nick,
-                    login_name: user.login_name,
-                    privacy_type: user.privacy_type,
-                    email: user.email,
-                    street: user.street,
-                    pob: user.pob,
-                    description: user.description,
-                    password: values.password,
-                    acls: user.acls ?? []
-                }))
+        userAPI.findById(Number(userSession.id), null)
+                .then((user: UserVO) => userAPI.update({...user, password: values.password, acls: user.acls ?? [], unit_ids: user.unit_ids ?? []}))
                 .then(() => {
                     message.success(t("ChangePassword.messages.success", {defaultValue: "Password changed"}));
                     form.resetFields();

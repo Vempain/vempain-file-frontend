@@ -6,6 +6,7 @@ import {interactiveFileAPI} from "../../services";
 import type {InteractiveFileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
 import {FileDetails} from "./FileDetails";
+import {PublishFileButton} from "./PublishFileButton";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
 import {useTranslation} from "react-i18next";
 
@@ -49,15 +50,18 @@ export function InteractiveFiles() {
             title: t("InteractiveFiles.columns.actions.title", {defaultValue: "Actions"}),
             key: "actions",
             render: (_: undefined, record: InteractiveFileResponse) => (
-                    <Popconfirm
-                            title={t("InteractiveFiles.popconfirm.delete.title", {defaultValue: "Delete this interactive file"})}
-                            description={t("InteractiveFiles.popconfirm.delete.description", {defaultValue: "Are you sure you want to delete this interactive file?"})}
-                            onConfirm={() => handleDelete(record.id)}
-                            okText={t("Common.popconfirm.yes", {defaultValue: "Yes"})}
-                            cancelText={t("Common.popconfirm.no", {defaultValue: "No"})}
-                    >
-                        <Button danger icon={<DeleteOutlined/>}/>
-                    </Popconfirm>
+                    <Space>
+                        <PublishFileButton file={record} onPublished={() => paged.reload()}/>
+                        <Popconfirm
+                                title={t("InteractiveFiles.popconfirm.delete.title", {defaultValue: "Delete this interactive file"})}
+                                description={t("InteractiveFiles.popconfirm.delete.description", {defaultValue: "Are you sure you want to delete this interactive file?"})}
+                                onConfirm={() => handleDelete(record.id)}
+                                okText={t("Common.popconfirm.yes", {defaultValue: "Yes"})}
+                                cancelText={t("Common.popconfirm.no", {defaultValue: "No"})}
+                        >
+                            <Button danger icon={<DeleteOutlined/>}/>
+                        </Popconfirm>
+                    </Space>
             ),
         },
     ];

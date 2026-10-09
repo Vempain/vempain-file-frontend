@@ -2,16 +2,16 @@ import {Alert, message, Space, Spin, Table} from "antd";
 import type {ColumnsType} from "antd/es/table";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import type {AdminAclResponse} from "../../services/AdminAclAPI";
-import {adminAclAPI} from "../../services";
+import type {AclVO} from "@vempain/vempain-auth-frontend";
+import {aclAPI} from "../../services";
 
 export function FilePermissions() {
     const {t} = useTranslation();
-    const [permissions, setPermissions] = useState<AdminAclResponse[]>([]);
+    const [permissions, setPermissions] = useState<AclVO[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        adminAclAPI.getAll()
+        aclAPI.getAll()
                 .then(setPermissions)
                 .catch(error => message.error(t("FilePermissions.messages.fetchError", {
                     defaultValue: "Failed to load permissions", error: String(error)
@@ -19,7 +19,7 @@ export function FilePermissions() {
                 .finally(() => setLoading(false));
     }, [t]);
 
-    const columns: ColumnsType<AdminAclResponse> = [
+    const columns: ColumnsType<AclVO> = [
         {title: t("FilePermissions.columns.acl_id", {defaultValue: "ACL ID"}), dataIndex: "acl_id", key: "acl_id"},
         {title: t("FilePermissions.columns.user", {defaultValue: "User ID"}), dataIndex: "user", key: "user", render: value => value ?? "-"},
         {title: t("FilePermissions.columns.unit", {defaultValue: "Unit ID"}), dataIndex: "unit", key: "unit", render: value => value ?? "-"},

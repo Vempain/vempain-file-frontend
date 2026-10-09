@@ -146,7 +146,33 @@ jest.mock("@vempain/vempain-auth-frontend", () => {
         };
     }
 
+    class MockUserAPI<REQUEST extends { id: number }, RESPONSE> extends MockAbstractAPI<REQUEST, RESPONSE> {
+        public constructor(baseURL: string, member: string) {
+            super(baseURL, member);
+        }
+
+        public async update(payload: REQUEST): Promise<RESPONSE> {
+            this.setAuthorizationHeader();
+            this.axiosInstance.defaults.headers.put["Content-Type"] = "application/json;charset=utf-8";
+            const response = await this.axiosInstance.put(`/${payload.id}`, payload);
+            return response.data as RESPONSE;
+        }
+    }
+
+    class MockAclAPI<RESPONSE> extends MockAbstractAPI<never, RESPONSE> {
+        public constructor(baseURL: string, member: string) {
+            super(baseURL, member);
+        }
+
+        public getAll(): Promise<RESPONSE[]> {
+            return this.findAll();
+        }
+    }
+
     return {
+        UserAPI: MockUserAPI,
+        UnitAPI: MockUserAPI,
+        AclAPI: MockAclAPI,
         AbstractAPI: MockAbstractAPI,
         usePagedTable,
         VempainTable: () => null
