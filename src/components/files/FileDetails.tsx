@@ -7,6 +7,8 @@ import utc from 'dayjs/plugin/utc';
 import {fileTypeEnum2Tag, formatDateWithTimeZone} from "../../tools";
 import {useTranslation} from "react-i18next";
 import {DisplayMap} from "../common";
+import {userAPI} from "../../services";
+import {UserName} from "@vempain/vempain-auth-frontend";
 
 dayjs.extend(utc);
 
@@ -81,9 +83,9 @@ export function FileDetails({file}: Props) {
                     : "",
         },
         {key: "locked", label: t("FileDetails.rows.locked.label"), value: file.locked ? t("Common.general.yes") : t("Common.general.no")},
-        {key: "creator", label: t("FileDetails.rows.creator.label"), value: file.creator ?? ""},
+        {key: "creator", label: t("FileDetails.rows.creator.label"), value: <UserName userAPI={userAPI} id={file.creator}/>},
         {key: "created", label: t("FileDetails.rows.created.label"), value: formatDateWithTimeZone(file.created == null ? null : file.created)},
-        {key: "modifier", label: t("FileDetails.rows.modifier.label"), value: file.modifier ?? ""},
+        {key: "modifier", label: t("FileDetails.rows.modifier.label"), value: <UserName userAPI={userAPI} id={file.modifier}/>},
         {key: "modified", label: t("FileDetails.rows.modified.label"), value: formatDateWithTimeZone(file.modified == null ? null : file.modified)},
         {
             key: "acls",
