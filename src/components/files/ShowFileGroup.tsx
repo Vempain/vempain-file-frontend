@@ -78,7 +78,7 @@ export function ShowFileGroup() {
                         afterClose={() => setSelectedFile(null)}
                         footer={null}
                         destroyOnHidden
-                        maskClosable
+                        mask={{closable: true}}
                         title={selectedFile?.filename || t("Common.modal.fileDetailsTitle")}
                         width={720}
                 >
@@ -87,4 +87,3 @@ export function ShowFileGroup() {
             </Space>
     );
 }
-

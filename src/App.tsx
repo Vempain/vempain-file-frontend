@@ -22,6 +22,7 @@ import {
     ImportFiles,
     InteractiveFiles,
     LocationGuards,
+    MetadataList,
     MusicFiles,
     PublishGpsTimeSeries,
     PublishMusicData,
@@ -105,6 +106,7 @@ export default function App() {
                             <Route path={"/management/units/:paramId/edit"} element={<UnitEdit/>}/>
                             <Route path={"/management/users"} element={<Users/>}/>
                             <Route path={"/management/users/:paramId/edit"} element={<UserEdit/>}/>
+                            <Route path={"/metadata/list"} element={<MetadataList/>}/>
                             <Route path={"/security/location-guards"} element={<LocationGuards/>}/>
                             <Route path={"/tags/create"} element={<TagCreate/>}/>
                             <Route path={"/tags/:tagId/edit"} element={<TagEdit/>}/>

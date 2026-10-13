@@ -24,12 +24,12 @@
   "dependencies" : {
     "@ant-design/charts" : "^2.6.7",
     "@ant-design/icons" : "^6.3.4",
-    "@vempain/vempain-auth-frontend" : "^2.1.1",
-    "@vempain/vempain-common-frontend" : "^1.0.1",
-    "antd" : "^6.6.5",
+    "@vempain/vempain-auth-frontend" : "^2.1.2",
+    "@vempain/vempain-common-frontend" : "^1.0.2",
+    "antd" : "^6.6.6",
     "axios" : "^1.20.0",
     "dayjs" : "^1.11.23",
-    "i18next" : "^26.4.3",
+    "i18next" : "^26.4.4",
     "i18next-http-backend" : "^4.0.2",
     "leaflet" : "^1.9.4",
     "react" : "^19.3.0",
@@ -79,7 +79,7 @@
       ".tsx"
     ],
     "transform" : {
-      "^.+\\.[tj]sx?$" : [
+      "^.+\\.tsx?$" : [
         "ts-jest",
         {
           "tsconfig" : "tsconfig.test.json",
@@ -87,14 +87,18 @@
         }
       ]
     },
+    "maxWorkers" : 1,
+    "testTimeout" : 30000,
     "moduleNameMapper" : {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$" : "<rootDir>/__mocks__/fileMock.js",
       "\\.(css|less)$" : "<rootDir>/__mocks__/styleMock.js",
       "^@ant-design/colors/es/generate$" : "<rootDir>/node_modules/@ant-design/colors/lib/generate",
-      "^(.*)/resolveApiUrl$" : "<rootDir>/__mocks__/resolveApiUrl",
-      "^(.*)/resolveAdminApiUrl$" : "<rootDir>/__mocks__/resolveAdminApiUrl",
-      "^(.*)/resolveFooterConfig$" : "<rootDir>/__mocks__/resolveFooterConfig"
-    }
+      "^(.*)/viteEnv$" : "<rootDir>/__mocks__/viteEnv"
+    },
+    "coveragePathIgnorePatterns" : [
+      "/node_modules/",
+      "<rootDir>/src/viteEnv.ts"
+    ]
   },
   "repository" : {
     "type" : "git",

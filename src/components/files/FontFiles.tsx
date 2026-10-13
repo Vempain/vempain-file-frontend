@@ -95,7 +95,7 @@ export function FontFiles() {
                         afterClose={() => setSelectedFile(null)}
                         footer={null}
                         destroyOnHidden
-                        maskClosable
+                        mask={{closable: true}}
                         title={selectedFile?.filename || t("Common.modal.fileDetailsTitle", {defaultValue: "File details"})}
                         width={720}
                 >
@@ -104,4 +104,3 @@ export function FontFiles() {
             </Space>
     );
 }
-

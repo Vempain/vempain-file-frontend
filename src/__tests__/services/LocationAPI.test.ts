@@ -138,3 +138,30 @@ describe("LocationAPI", () => {
 });
 
 
+describe("LocationAPI coordinate helpers", () => {
+    it("round5 rejects non-finite numbers", () => {
+        expect(LocationAPI.round5(Number.NaN)).toBeNull();
+        expect(LocationAPI.round5(Number.POSITIVE_INFINITY)).toBeNull();
+    });
+
+    it("roundCoord returns null for a missing coordinate or a non-finite component", () => {
+        expect(LocationAPI.roundCoord(null)).toBeNull();
+        expect(LocationAPI.roundCoord(undefined)).toBeNull();
+        expect(LocationAPI.roundCoord({latitude: Number.NaN, longitude: 24})).toBeNull();
+        expect(LocationAPI.roundCoord({latitude: 60, longitude: Number.POSITIVE_INFINITY})).toBeNull();
+        expect(LocationAPI.roundCoord({latitude: 60.123456, longitude: 24.987654})).toEqual({latitude: 60.12346, longitude: 24.98765});
+    });
+
+    it("sanitizeGuardRequest keeps a missing secondary coordinate as null", () => {
+        const sanitized = LocationAPI.sanitizeGuardRequest({
+            id: null,
+            guard_type: GuardTypeEnum.CIRCLE,
+            primary_coordinate: {latitude: 60.123456, longitude: 24.987654},
+            radius: 5
+        });
+
+        expect(sanitized.primary_coordinate).toEqual({latitude: 60.12346, longitude: 24.98765});
+        expect(sanitized.secondary_coordinate).toBeNull();
+        expect(sanitized.radius).toBe(5);
+    });
+});

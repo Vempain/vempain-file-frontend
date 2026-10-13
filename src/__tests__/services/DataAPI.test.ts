@@ -54,3 +54,58 @@ describe("DataAPI", () => {
         expect(response).toEqual(responseData);
     });
 });
+
+describe("DataAPI response interceptor", () => {
+    type Handler = { fulfilled: (response: unknown) => unknown; rejected: (error: unknown) => Promise<never> };
+
+    afterEach(() => {
+        delete (axiosMock as unknown as { interceptors?: unknown }).interceptors;
+    });
+
+    it("ejects the inherited response interceptors and installs a pass-through one", async () => {
+        resetServiceMockState();
+        const handlers: Handler[] = [];
+        const eject = jest.fn();
+        const use = jest.fn((fulfilled: Handler["fulfilled"], rejected: Handler["rejected"]) => handlers.push({fulfilled, rejected}));
+        (axiosMock as unknown as { interceptors: unknown }).interceptors = {
+            response: {handlers: [{}, {}], eject, use}
+        };
+
+        new DataAPI("http://localhost:8080/api", "/data-publish");
+
+        // Both pre-existing handlers (the session-terminating ones of the shared client) are removed by index
+        expect(eject).toHaveBeenCalledTimes(2);
+        expect(eject).toHaveBeenNthCalledWith(1, 0);
+        expect(eject).toHaveBeenNthCalledWith(2, 1);
+        expect(use).toHaveBeenCalledTimes(1);
+        const [installed] = handlers;
+        expect(installed.fulfilled({status: 403})).toEqual({status: 403});
+        const error = new Error("forbidden");
+        await expect(installed.rejected(error)).rejects.toBe(error);
+    });
+
+    it("installs the pass-through interceptor when the manager has no handler list", () => {
+        resetServiceMockState();
+        const use = jest.fn();
+        (axiosMock as unknown as { interceptors: unknown }).interceptors = {response: {use}};
+
+        new DataAPI("http://localhost:8080/api", "/data-publish");
+
+        expect(use).toHaveBeenCalledTimes(1);
+    });
+
+    it("tolerates an interceptor manager that throws", () => {
+        resetServiceMockState();
+        (axiosMock as unknown as { interceptors: unknown }).interceptors = {
+            response: {
+                handlers: [{}],
+                eject: () => {
+                    throw new Error("not supported");
+                },
+                use: jest.fn()
+            }
+        };
+
+        expect(() => new DataAPI("http://localhost:8080/api", "/data-publish")).not.toThrow();
+    });
+});

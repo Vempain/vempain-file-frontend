@@ -72,6 +72,11 @@ export function TopBar() {
                             label: (<NavLink to={"/tags/edit-files"}>{t("TopBar.menu.tagManagement.editFiles", {defaultValue: "Edit file tags"})}</NavLink>),
                             key: "tag-fileTagEditor",
                             icon: <FormOutlined/>
+                        },
+                        {
+                            label: (<NavLink to={"/metadata/list"}>{t("TopBar.menu.tagManagement.metadata", {defaultValue: "Metadata"})}</NavLink>),
+                            key: "tag-metadataList",
+                            icon: <FormOutlined/>
                         }
                     ]
                 },
