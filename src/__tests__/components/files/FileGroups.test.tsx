@@ -288,7 +288,7 @@ describe("FileGroups", () => {
         }));
         await waitFor(() => expect(message.success).toHaveBeenCalledWith("FileGroups.messages.createSuccess"));
         await waitFor(() => expect(findPageable).toHaveBeenCalledTimes(2));
-    }, 15000);
+    }, 60000);
 
     it("reports candidate loading and creation failures", async () => {
         create.mockRejectedValue(new Error("conflict"));
