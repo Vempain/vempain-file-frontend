@@ -1,8 +1,9 @@
+import type {TableColumnType} from "antd";
 import {Button, Form, Input, type InputRef, message, Modal, Popconfirm, Select, Space, Spin, Table, Typography} from "antd";
 import {DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined, UploadOutlined} from "@ant-design/icons";
 import {useCallback, useMemo, useRef, useState} from "react";
 import type {ColumnsType} from "antd/es/table";
-import type {FilterDropdownProps, TableColumnType} from "antd/es/table/interface";
+import type {FilterDropdownProps} from "antd/es/table/interface";
 import {
     archiveFileAPI,
     audioFileAPI,
@@ -502,7 +503,7 @@ export function FileGroups() {
                         onOk={handleSubmit}
                         onCancel={() => setIsModalOpen(false)}
                         destroyOnHidden
-                        maskClosable
+                        mask={{closable: true}}
                         width={900}
                 >
                     <Form form={form} layout="vertical">
@@ -634,7 +635,7 @@ export function FileGroups() {
                         onOk={submitPublish}
                         onCancel={closePublishModal}
                         confirmLoading={publishSubmitting}
-                        destroyOnClose
+                        destroyOnHidden
                         width={760}
                 >
                     <Form form={publishForm} layout="vertical">
@@ -661,7 +662,7 @@ export function FileGroups() {
                         afterClose={() => setSelectedFile(null)}
                         footer={null}
                         destroyOnHidden
-                        maskClosable
+                        mask={{closable: true}}
                         title={selectedFile?.filename || t("Common.modal.fileDetailsTitle", {defaultValue: "File details"})}
                         width={720}
                 >

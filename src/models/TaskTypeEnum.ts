@@ -15,7 +15,9 @@ export const TaskTypeEnum = {
     PUBLISH_GPS_TIME_SERIES: 'PUBLISH_GPS_TIME_SERIES' as const,
     TAG_REMOVE_FROM_ALL: 'TAG_REMOVE_FROM_ALL' as const,
     TAG_REPLACE_ACROSS_ALL: 'TAG_REPLACE_ACROSS_ALL' as const,
-    TAG_RENAME_ACROSS_ALL: 'TAG_RENAME_ACROSS_ALL' as const
+    TAG_RENAME_ACROSS_ALL: 'TAG_RENAME_ACROSS_ALL' as const,
+    /** One metadata group/key value rewritten in every file carrying it */
+    METADATA_UPDATE_VALUE: 'METADATA_UPDATE_VALUE' as const
 };
 
 export type TaskTypeEnum = typeof TaskTypeEnum[keyof typeof TaskTypeEnum];

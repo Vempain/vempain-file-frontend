@@ -3,6 +3,7 @@ export type {DataRequest} from "./DataRequest";
 export type {FileGroupRequest} from "./FileGroupRequest";
 export type {LocationGuardRequest} from "./LocationGuardRequest";
 export type {LocationRequest} from "./LocationRequest";
+export type {MetadataFilesRequest, MetadataSearchRequest, MetadataValueUpdateRequest} from "./MetadataRequest";
 export type {PathCompletionRequest} from "./PathCompletionRequest";
 export type {PublishAclRequest} from "./PublishAclRequest";
 export type {PublishAllFileGroupsRequest} from "./PublishAllFileGroupsRequest";

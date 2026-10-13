@@ -6,11 +6,12 @@ import App from './App.tsx'
 import {SessionProvider} from "@vempain/vempain-auth-frontend";
 import i18n from "./i18n";
 import {I18nextProvider} from "react-i18next";
+import {viteEnv} from "./viteEnv";
 
 createRoot(document.getElementById('root')!).render(
         <StrictMode>
             <I18nextProvider i18n={i18n}>
-                <SessionProvider baseURL={`${import.meta.env.VITE_APP_API_URL}`} loginPath="/login">
+                <SessionProvider baseURL={`${viteEnv().VITE_APP_API_URL}`} loginPath="/login">
                     <BrowserRouter>
                         <App/>
                     </BrowserRouter>

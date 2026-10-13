@@ -1,9 +1,12 @@
+import {viteEnv} from "../viteEnv";
+
 export function resolveAdminApiUrl(): string {
     try {
-        const configured = import.meta.env.VITE_APP_ADMIN_API_URL;
+        const env = viteEnv();
+        const configured = env.VITE_APP_ADMIN_API_URL;
         if (configured) return configured;
 
-        const fileApi = import.meta.env.VITE_APP_API_URL;
+        const fileApi = env.VITE_APP_API_URL;
         if (fileApi?.includes("localhost:8080")) {
             return fileApi.replace("localhost:8080", "localhost:9999");
         }

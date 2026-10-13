@@ -10,17 +10,17 @@
 
 ## Layout
 
-| Path              | Purpose                                                                                      |
-|-------------------|----------------------------------------------------------------------------------------------|
-| `src/App.tsx`     | Router: `/login`, `/logout`, `/files/<type>`, `/data/*`, management and tag routes           |
-| `src/main/`       | `TopBar`, `BottomFooter`, `Home`, `resolveFooterConfig`                                      |
-| `src/components/` | Feature folders: `files/`, `data/`, `tags/`, `management/`, `schedules/`, `user/`, `common/` |
-| `src/services/`   | One `*API.ts` per backend resource; typed file APIs extend `AbstractFileAPI`                 |
-| `src/models/`     | TS models (`requests/`, `responses/`, `*Enum.ts` as `as const` objects)                      |
-| `src/tools/`      | Pure helpers (bytes, dates, enums to tags, map config, pagination)                           |
-| `src/__tests__/`  | Jest tests (`*.test.ts(x)`), mirroring the `src/` structure                                  |
-| `src/testUtils/`  | Shared test doubles (`mockAuthFrontend.ts`)                                                  |
-| `__mocks__/`      | Jest mocks for assets, styles and the `resolve*Url`/`resolveFooterConfig` modules            |
+| Path              | Purpose                                                                                            |
+|-------------------|----------------------------------------------------------------------------------------------------|
+| `src/App.tsx`     | Router: `/login`, `/logout`, `/files/<type>`, `/data/*`, management and tag routes                 |
+| `src/main/`       | `TopBar`, `BottomFooter`, `Home`, `resolveFooterConfig`                                            |
+| `src/components/` | Feature folders: `files/`, `data/`, `tags/`, `management/`, `schedules/`, `user/`, `common/`       |
+| `src/services/`   | One `*API.ts` per backend resource; typed file APIs extend `AbstractFileAPI`                       |
+| `src/models/`     | TS models (`requests/`, `responses/`, `*Enum.ts` as `as const` objects)                            |
+| `src/tools/`      | Pure helpers (bytes, dates, enums to tags, map config, pagination)                                 |
+| `src/__tests__/`  | Jest tests (`*.test.ts(x)`), mirroring the `src/` structure                                        |
+| `src/testUtils/`  | Shared test doubles (`mockAuthFrontend.ts`)                                                        |
+| `__mocks__/`      | Jest mocks for assets, styles, `src/viteEnv.ts` and the `@vempain/vempain-common-frontend` package |
 
 ## Conventions
 
@@ -46,8 +46,24 @@
   the same `PublishAclEditor`, calls `publishAPI.publishFile({file_id, acls})` (`POST /publish/file`, task type `PUBLISH_FILE`, one
   step) and hands the task to the tray. A single-file publish never creates or links a gallery on the admin side. Tested in
   `src/__tests__/components/files/PublishFileButton.test.tsx` with the services and the task hook mocked.
+- Metadata management (`/metadata/list`, Tag management > Metadata, `src/components/metadata/`): `MetadataList` shows every distinct
+  metadata group/key/value of the file backend's `metadata` table with its file count (`metadataAPI.findSummaries`, `POST /metadata/paged`,
+  filters by group, key and/or value sent as `metadata_group`/`metadata_key`/`metadata_value`; the filters are `deps` of `usePagedTable`
+  and `paged.setFilter(undefined, "")` returns to the first page). A row expands into `MetadataFiles` (`metadataAPI.findFiles`,
+  `POST /metadata/files/paged`): the readable files carrying the row, always `METADATA_FILES_PAGE_SIZE` (10) at a time, filtered by file
+  name and type, sortable by file name, type and size; the file name opens the shared `FileDetails` modal. The Edit action (disabled for
+  rows with `writable=false`, the read-only ExifTool groups) opens `MetadataValueEditModal`, which posts
+  `MetadataValueUpdateRequest` (`metadataAPI.updateValue`, `POST /metadata/value`, an empty new value removes the entry from the files) and
+  hands the `202` task (`METADATA_UPDATE_VALUE`) to the tray with `trackTask`; the list reloads when the task finishes. Row keys come from
+  `metadataRowKey` (`src/tools/metadataTools.ts`) because the rows have no id. Tested in `src/__tests__/components/metadata/` and
+  `src/__tests__/services/MetadataAPI.test.ts` with the auth-frontend table hook, the services and the task hook mocked.
 - Tests live in `src/__tests__/` only (the directory name is plural); Jest config is in `package.json` (`ts-jest` ESM preset) with `jest.setup.ts`
-  providing `VITE_APP_API_URL`. `resolveApiUrl.ts` exists so code under test works without `import.meta`.
+  providing `VITE_APP_API_URL` and the `TextEncoder` polyfill react-router needs. `src/viteEnv.ts` is the only module that reads
+  `import.meta.env` (Vite replaces the whole object at build and dev time); Jest maps it to `__mocks__/viteEnv.ts` (`process.env`) and
+  excludes it from coverage (`coveragePathIgnorePatterns`), so `resolveApiUrl`, `resolveAdminApiUrl`, `resolveFooterConfig`, `mapConfig`,
+  `i18n.ts` and `index.tsx` are real, testable modules. Never add `import.meta` to any other module. Every source file is kept at or
+  above 95 % line, statement and function coverage (`yarn jest --coverage`); screens are tested with `react-i18next`, the services, the
+  task hook and the auth-frontend table hook mocked, the typed file lists in one parametrized suite (`typedFileLists.test.tsx`).
 - Build metadata is generated by `generateBuildInfo.js` into `src/buildInfo.json`; treat the JSON as a derived artifact.
 - `.env` is the template; `.env.local` and `.env.prod` are local/deployment files and must not receive secrets.
 
@@ -70,7 +86,7 @@ yarn build
 
 ## Background tasks (non-blocking long actions)
 
-- Long-running backend actions (file group publishing, directory scans, music/GPS data set publishing, tag rewrites across all files)
+- Long-running backend actions (file group publishing, directory scans, music/GPS data set publishing, tag and metadata rewrites across all files)
   answer `202 TaskAcceptedResponse` instead of blocking. Never show a blocking `Spin`/`loading` state for them: call the API, then
   `trackTask(accepted, {onFinished})` from `useTaskProgress()` of `@vempain/vempain-common-frontend` and tell the user the work started.
 - The task tracking lives in the shared `@vempain/vempain-common-frontend` package: `src/services/index.ts` creates

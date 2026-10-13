@@ -818,6 +818,57 @@
       "noFiles" : "No files have this tag."
     }
   },
+  "MetadataList" : {
+    "title" : "Metadata",
+    "emptyValue" : "(empty)",
+    "actions" : {
+      "edit" : "Edit value",
+      "readOnly" : "This group is read-only and can not be written into the files"
+    },
+    "columns" : {
+      "group" : "Group",
+      "key" : "Key",
+      "value" : "Value",
+      "fileCount" : "Files",
+      "actions" : "Actions"
+    },
+    "filters" : {
+      "group" : "Group",
+      "key" : "Key",
+      "value" : "Value",
+      "apply" : "Filter",
+      "reset" : "Reset"
+    },
+    "messages" : {
+      "noRows" : "No metadata matches the filters"
+    }
+  },
+  "MetadataFiles" : {
+    "columns" : {
+      "filename" : "Filename",
+      "filePath" : "Path",
+      "fileType" : "File type",
+      "filesize" : "Size"
+    },
+    "filters" : {
+      "filename" : "Filter by file name",
+      "fileType" : "File type",
+      "apply" : "Filter"
+    },
+    "messages" : {
+      "noFiles" : "No readable files carry this value"
+    }
+  },
+  "MetadataValueEdit" : {
+    "title" : "Edit metadata value",
+    "currentValue" : "Current value",
+    "newValue" : "New value",
+    "warning" : "The new value is written into all {{count}} files carrying this value. Leave it empty to remove the entry from the files.",
+    "messages" : {
+      "started" : "Rewriting {{key}} in {{count}} files started, follow the progress in the lower right corner",
+      "error" : "Failed to start the metadata rewrite"
+    }
+  },
   "FileTagEditor" : {
     "title" : "Edit file tags",
     "actions" : {
@@ -1006,7 +1057,8 @@
         "editFiles" : "Edit file tags",
         "newTag" : "New tag",
         "tags" : "Tags",
-        "title" : "Tag management"
+        "title" : "Tag management",
+        "metadata" : "Metadata"
       },
       "userManagement" : {
         "title" : "User Management",

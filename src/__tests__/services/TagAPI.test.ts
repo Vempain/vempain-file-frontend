@@ -91,3 +91,41 @@ describe("TagAPI", () => {
         expect(response).toEqual(pagedResponse);
     });
 });
+
+describe("TagAPI file operations", () => {
+    let tagAPI: TagAPI;
+    const request = {tag_name: "news", replacement_tag_name: "headlines", file_ids: [1, 2]};
+
+    beforeEach(() => {
+        resetServiceMockState();
+        tagAPI = new TagAPI("http://localhost:8080/api", "/tags");
+    });
+
+    it.each([
+        ["addTag", "files/add"],
+        ["removeTag", "files/remove"],
+        ["replaceTag", "files/replace"],
+        ["renameTag", "files/rename"]
+    ] as const)("%s posts the operation request to %s", async (method, path) => {
+        axiosMock.post.mockResolvedValueOnce({data: undefined});
+
+        await expect(tagAPI[method](request)).resolves.toBeUndefined();
+
+        expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
+        expect(axiosMock.post).toHaveBeenCalledWith(path, request);
+    });
+
+    it.each([
+        ["removeTagFromAll", "all/remove", "TAG_REMOVE_FROM_ALL"],
+        ["replaceTagAcrossAll", "all/replace", "TAG_REPLACE_ACROSS_ALL"],
+        ["renameTagAcrossAll", "all/rename", "TAG_RENAME_ACROSS_ALL"]
+    ] as const)("%s posts to %s and returns the accepted background task", async (method, path, type) => {
+        const accepted = {task_id: "t-1", type, title: "Tag news", status: "QUEUED", total_steps: 2};
+        axiosMock.post.mockResolvedValueOnce({data: accepted});
+
+        await expect(tagAPI[method](request)).resolves.toEqual(accepted);
+
+        expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
+        expect(axiosMock.post).toHaveBeenCalledWith(path, request);
+    });
+});

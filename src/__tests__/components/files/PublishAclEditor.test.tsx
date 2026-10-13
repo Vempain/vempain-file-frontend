@@ -139,4 +139,50 @@ describe("PublishAclEditor", () => {
         await waitFor(() => expect(screen.getByText("Could not load the admin users")).toBeTruthy());
         expect(screen.queryByText("Add admin user")).toBeNull();
     });
+
+    it("treats a missing user list as empty and ignores results that arrive after unmounting", async () => {
+        getPublishUsers.mockResolvedValue(null as never);
+        renderEditor();
+        await waitFor(() => expect(screen.getByText("Add admin user")).toBeTruthy());
+        expect((screen.getByText("Add admin user").closest("button") as HTMLButtonElement).disabled).toBe(true);
+
+        let rejectLoad: (error: Error) => void = () => undefined;
+        getPublishUsers.mockReturnValue(new Promise((_resolve, reject) => {
+            rejectLoad = reject;
+        }));
+        const {unmount} = renderEditor();
+        unmount();
+        rejectLoad(new Error("late"));
+        await new Promise(resolve => setTimeout(resolve, 0));
+        expect(screen.queryByText("Could not load the admin users")).toBeNull();
+    });
+
+    it("offers each row only the users not chosen in another row", async () => {
+        getPublishUsers.mockResolvedValue(users);
+        const onFinish = jest.fn();
+        render(
+                <Form onFinish={onFinish} initialValues={{acls: [{user_id: 12, read_privilege: true}]}}>
+                    <PublishAclEditor/>
+                    <button type="submit">submit</button>
+                </Form>
+        );
+        await waitFor(() => expect(screen.getAllByTestId("publish-acl-row")).toHaveLength(1));
+
+        fireEvent.click(screen.getByText("Add admin user"));
+        await waitFor(() => expect(screen.getAllByTestId("publish-acl-row")).toHaveLength(2));
+        // Every grantable user has a row now, so no further row can be added
+        expect((screen.getByText("Add admin user").closest("button") as HTMLButtonElement).disabled).toBe(true);
+
+        fireEvent.mouseDown(screen.getAllByRole("combobox")[1]);
+        await waitFor(() => expect(screen.getByText("Bea (bea)", {selector: ".ant-select-item-option-content"})).toBeTruthy());
+        expect(screen.queryByText("Arnold (arnold)", {selector: ".ant-select-item-option-content"})).toBeNull();
+        fireEvent.click(screen.getByText("Bea (bea)", {selector: ".ant-select-item-option-content"}));
+
+        fireEvent.click(screen.getByText("submit"));
+        await waitFor(() => expect(onFinish).toHaveBeenCalledTimes(1));
+        expect(toPublishAclRequests(onFinish.mock.calls[0][0].acls)).toEqual([
+            {user_id: 12, read_privilege: true, create_privilege: false, modify_privilege: false, delete_privilege: false},
+            {user_id: 13, read_privilege: true, create_privilege: false, modify_privilege: false, delete_privilege: false}
+        ]);
+    });
 });

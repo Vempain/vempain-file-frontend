@@ -818,6 +818,57 @@
       "noFiles" : "Den här taggen har inga filer."
     }
   },
+  "MetadataList" : {
+    "title" : "Metadata",
+    "emptyValue" : "(tom)",
+    "actions" : {
+      "edit" : "Redigera värde",
+      "readOnly" : "Den här gruppen är skrivskyddad och kan inte skrivas till filerna"
+    },
+    "columns" : {
+      "group" : "Grupp",
+      "key" : "Nyckel",
+      "value" : "Värde",
+      "fileCount" : "Filer",
+      "actions" : "Åtgärder"
+    },
+    "filters" : {
+      "group" : "Grupp",
+      "key" : "Nyckel",
+      "value" : "Värde",
+      "apply" : "Filtrera",
+      "reset" : "Återställ"
+    },
+    "messages" : {
+      "noRows" : "Ingen metadata matchar filtren"
+    }
+  },
+  "MetadataFiles" : {
+    "columns" : {
+      "filename" : "Filnamn",
+      "filePath" : "Sökväg",
+      "fileType" : "Filtyp",
+      "filesize" : "Storlek"
+    },
+    "filters" : {
+      "filename" : "Filtrera på filnamn",
+      "fileType" : "Filtyp",
+      "apply" : "Filtrera"
+    },
+    "messages" : {
+      "noFiles" : "Inga läsbara filer har det här värdet"
+    }
+  },
+  "MetadataValueEdit" : {
+    "title" : "Redigera metadatavärde",
+    "currentValue" : "Nuvarande värde",
+    "newValue" : "Nytt värde",
+    "warning" : "Det nya värdet skrivs till alla {{count}} filer som har det här värdet. Lämna tomt för att ta bort posten från filerna.",
+    "messages" : {
+      "started" : "Omskrivningen av {{key}} i {{count}} filer startade, följ förloppet i nedre högra hörnet",
+      "error" : "Det gick inte att starta omskrivningen av metadata"
+    }
+  },
   "FileTagEditor" : {
     "title" : "Redigera filtaggar",
     "actions" : {
@@ -1006,7 +1057,8 @@
         "editFiles" : "Redigera filtaggar",
         "newTag" : "Ny tagg",
         "tags" : "Taggar",
-        "title" : "Tagghantering"
+        "title" : "Tagghantering",
+        "metadata" : "Metadata"
       },
       "userManagement" : {
         "title" : "Användarhantering",

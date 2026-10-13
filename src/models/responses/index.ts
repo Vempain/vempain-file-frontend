@@ -18,6 +18,7 @@ export type {ImageFileResponse} from "./ImageFileResponse";
 export type {InteractiveFileResponse} from "./InteractiveFileResponse";
 export type {LocationGuardResponse} from "./LocationGuardResponse";
 export type {LocationResponse} from "./LocationsResponse";
+export type {MetadataSummaryResponse} from "./MetadataSummaryResponse";
 export type {OriginalScanResponse} from "./OriginalScanResponse.ts";
 export type {PathCompletionResponse} from "./PathCompletionResponse";
 export type {PublishUserResponse} from "./PublishUserResponse";

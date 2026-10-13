@@ -232,6 +232,8 @@ jest.mock("antd", () => {
     const Table = ({columns = [], dataSource = [], onChange, rowKey}: any) =>
             <div data-testid="table">
                 <div>{columns.map((column: any) => <span key={column.key}>{column.title}</span>)}</div>
+                {columns.filter((column: any) => typeof column.sorter === "function").map((column: any) =>
+                        <button key={column.key} onClick={() => [...dataSource].sort(column.sorter)}>sort {column.key}</button>)}
                 {dataSource.map((record: any, row: number) => <div
                         key={typeof rowKey === "function" ? rowKey(record) : record[rowKey] ?? record.id ?? record.acl_id ?? row}>
                     {columns.map((column: any) => <span
@@ -370,6 +372,14 @@ describe("management components", () => {
         expect(screen.getByText("user 5 by 7")).toBeTruthy();
         fireEvent.click(screen.getByText("saved user"));
         expect(navigate).toHaveBeenLastCalledWith("/management/users");
+        fireEvent.click(screen.getByText("cancel user"));
+        expect(navigate).toHaveBeenCalledTimes(4);
+
+        // Without a session the editor gets no current user id
+        authSession.userSession = undefined;
+        cleanup();
+        render(<UserEdit/>);
+        expect(screen.getByText("user 5 by undefined")).toBeTruthy();
     });
 });
 
@@ -407,6 +417,16 @@ describe("schedule components", () => {
         fireEvent.click(screen.getByText("Trigger"));
         fireEvent.click(screen.getByText("OK"));
         await waitFor(() => expect(message.error).toHaveBeenCalled());
+        // Cancelling the dialog clears the selection
+        fireEvent.click(screen.getByText("Trigger"));
+        fireEvent.click(screen.getByText("Cancel"));
+        expect(adminScheduleAPI.triggerPublishingSchedule).toHaveBeenCalledTimes(2);
+
+        jest.spyOn(adminScheduleAPI, "getPublishingSchedules").mockRejectedValueOnce(new Error("down"));
+        cleanup();
+        (message.error as jest.Mock).mockClear();
+        render(<Publishing/>);
+        await waitFor(() => expect(message.error).toHaveBeenCalledWith("Failed to load publishing schedules"));
     });
 
     it("triggers system schedules with a delay and handles load errors", async () => {
@@ -425,6 +445,15 @@ describe("schedule components", () => {
         fireEvent.click(screen.getByText("Trigger"));
         fireEvent.click(screen.getByText("OK"));
         await waitFor(() => expect(message.error).toHaveBeenCalled());
+        fireEvent.click(screen.getByText("Trigger"));
+        fireEvent.click(screen.getByText("Cancel"));
+        expect(adminScheduleAPI.triggerSystemSchedule).toHaveBeenCalledTimes(2);
+
+        jest.spyOn(adminScheduleAPI, "getSystemSchedules").mockRejectedValueOnce(new Error("down"));
+        cleanup();
+        (message.error as jest.Mock).mockClear();
+        render(<SystemSchedules/>);
+        await waitFor(() => expect(message.error).toHaveBeenCalledWith("Failed to load schedules"));
     });
 });
 
@@ -447,6 +476,9 @@ describe("tag and account components", () => {
         await waitFor(() => expect(tagAPI.findById).toHaveBeenCalledWith(1, null));
         fireEvent.click(screen.getByText("Save"));
         await waitFor(() => expect(tagAPI.update).toHaveBeenCalled());
+        (tagAPI.update as jest.Mock).mockRejectedValueOnce(new Error("bad"));
+        fireEvent.click(screen.getByText("Save"));
+        await waitFor(() => expect(message.error).toHaveBeenCalledWith("Failed to update tag"));
         fireEvent.click(screen.getByText("Cancel"));
         (tagAPI.findById as jest.Mock).mockRejectedValueOnce(new Error("bad"));
         render(<TagEdit/>);
@@ -527,6 +559,7 @@ describe("search and navigation components", () => {
         render(<SearchFiles/>);
         fireEvent.click(screen.getByText("Search"));
         await waitFor(() => expect(screen.getAllByText("photo.jpg").length).toBeGreaterThan(0));
+        fireEvent.click(screen.getByText("sort filename"));
         fireEvent.click(screen.getAllByText("photo.jpg")[0]);
         expect(screen.getByText("details")).toBeTruthy();
         (imageFileAPI.findAllPageable as jest.Mock).mockResolvedValueOnce({content: [{...file, external_file_id: undefined}]} as any);

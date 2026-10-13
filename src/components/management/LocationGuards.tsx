@@ -278,8 +278,8 @@ export function LocationGuards() {
                         onOk={onSubmit}
                         confirmLoading={submitting}
                         width={900}
-                        destroyOnClose
-                        maskClosable
+                        destroyOnHidden
+                        mask={{closable: true}}
                 >
                     <Form<GuardFormValues> form={form} layout="vertical">
                         <Row gutter={16}>

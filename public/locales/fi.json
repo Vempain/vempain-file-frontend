@@ -818,6 +818,57 @@
       "noFiles" : "Tunnisteella ei ole tiedostoja."
     }
   },
+  "MetadataList" : {
+    "title" : "Metatiedot",
+    "emptyValue" : "(tyhjä)",
+    "actions" : {
+      "edit" : "Muokkaa arvoa",
+      "readOnly" : "Tämä ryhmä on vain luettavissa, eikä sitä voi kirjoittaa tiedostoihin"
+    },
+    "columns" : {
+      "group" : "Ryhmä",
+      "key" : "Avain",
+      "value" : "Arvo",
+      "fileCount" : "Tiedostoja",
+      "actions" : "Toiminnot"
+    },
+    "filters" : {
+      "group" : "Ryhmä",
+      "key" : "Avain",
+      "value" : "Arvo",
+      "apply" : "Suodata",
+      "reset" : "Tyhjennä"
+    },
+    "messages" : {
+      "noRows" : "Suodattimiin sopivia metatietoja ei löytynyt"
+    }
+  },
+  "MetadataFiles" : {
+    "columns" : {
+      "filename" : "Tiedostonimi",
+      "filePath" : "Polku",
+      "fileType" : "Tiedostotyyppi",
+      "filesize" : "Koko"
+    },
+    "filters" : {
+      "filename" : "Suodata tiedostonimellä",
+      "fileType" : "Tiedostotyyppi",
+      "apply" : "Suodata"
+    },
+    "messages" : {
+      "noFiles" : "Yhdelläkään luettavissa olevalla tiedostolla ei ole tätä arvoa"
+    }
+  },
+  "MetadataValueEdit" : {
+    "title" : "Muokkaa metatiedon arvoa",
+    "currentValue" : "Nykyinen arvo",
+    "newValue" : "Uusi arvo",
+    "warning" : "Uusi arvo kirjoitetaan kaikkiin {{count}} tiedostoon, joilla on tämä arvo. Jätä tyhjäksi, jos haluat poistaa merkinnän tiedostoista.",
+    "messages" : {
+      "started" : "Arvon {{key}} uudelleenkirjoitus {{count}} tiedostoon käynnistyi, seuraa edistymistä oikeasta alakulmasta",
+      "error" : "Metatiedon uudelleenkirjoituksen käynnistys epäonnistui"
+    }
+  },
   "FileTagEditor" : {
     "title" : "Muokkaa tiedostojen tunnisteita",
     "actions" : {
@@ -1006,7 +1057,8 @@
         "editFiles" : "Muokkaa tiedostojen tunnisteita",
         "newTag" : "Uusi tunniste",
         "tags" : "Tunnisteet",
-        "title" : "Tunnisteiden hallinta"
+        "title" : "Tunnisteiden hallinta",
+        "metadata" : "Metatiedot"
       },
       "userManagement" : {
         "title" : "Käyttäjien hallinta",
