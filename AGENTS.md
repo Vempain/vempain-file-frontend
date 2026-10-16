@@ -36,12 +36,20 @@
   `AclEditor`, `AclAPI`) bound to `userAPI`/`unitAPI`/`aclAPI` from `src/services/` (library `UserAPI`/`UnitAPI`/`AclAPI` instances on the
   file backend URL). Nested units and the cycle check, the ACL rules and the editors are implemented and tested in the library; the
   tests here only cover the route hosts and the account screens (`changedComponents.test.tsx`).
-- Publishing a file group (`FileGroups.tsx` publish modal) can grant additional admin-backend users privileges on the site files and
-  gallery it creates: `PublishAclEditor` (`src/components/files/`) owns the `acls` `Form.List`, loads the grantable users with
-  `publishAPI.getPublishUsers()` (`GET /publish/users`, proxied by the file backend from the admin backend because the admin and
-  file user bases are separate) and `toPublishAclRequests()` turns the rows into `PublishAclRequest[]` (`user_id` + the four
-  `*_privilege` flags, null when nothing is granted). The publishing service account always keeps every privilege; the editor only
-  adds users. `publishAPI.publishAllFileGroups(request?)` is a `POST` that carries the same `acls` list.
+- Publishing a file group (`FileGroups.tsx` publish modal) can grant additional admin-backend users and units privileges on the site
+  files and gallery it creates: `PublishAclEditor` (`src/components/files/`) loads the grantable admin users and units with
+  `publishAPI.getPublishUsers()`/`getPublishUnits()` (`GET /publish/users` and `/publish/units`, proxied by the file backend from the
+  admin backend because the admin and file user bases are separate, never this backend's own users) and renders the shared
+  `AclRowsEditor` of `@vempain/vempain-auth-frontend` (the one ACL row editor of all Vempain frontends, also behind the `AclEditor` of
+  the user and unit screens) on the `acls` `Form.List` with the row fields `user_id`/`unit_id` and `uniqueGrantees`;
+  `toPublishAclRequests()` turns the rows into `PublishAclRequest[]` (exactly one of `user_id`/`unit_id` + the four `*_privilege`
+  flags, null when nothing is granted). The row rules ("All" button, read required, delete needs modify, create implies read) live and
+  are tested in the auth library, never in a local copy here; `src/__tests__/components/files/PublishAclEditor.test.tsx` covers the
+  wrapper with the editor stubbed by `src/testUtils/mockAclRowsEditor.tsx` (`aclRowsEditorMock`, "stub: grant first user" button,
+  installed per test with `jest.mock("@vempain/vempain-auth-frontend", ...)`). The publishing service account always keeps every
+  privilege; the editor only adds grantees. `publishAPI.publishAllFileGroups(request?)` is a `POST` that carries the same `acls` list.
+  Any new shared ACL component, rule or helper this SPA needs is added to `@vempain/vempain-auth-frontend` (the home of all shared ACL
+  functionality) and consumed from there, never written here or in `vempain-common-frontend`.
 - Every typed file list (`src/components/files/*Files.tsx`) has a publish action next to delete: `PublishFileButton` opens a modal with
   the same `PublishAclEditor`, calls `publishAPI.publishFile({file_id, acls})` (`POST /publish/file`, task type `PUBLISH_FILE`, one
   step) and hands the task to the tray. A single-file publish never creates or links a gallery on the admin side. Tested in

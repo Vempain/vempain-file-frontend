@@ -1,5 +1,6 @@
 import {fireEvent, render, screen, waitFor} from "@testing-library/react";
 import {Form} from "antd";
+import {aclRowsEditorMock as sharedEditor} from "../../../testUtils/mockAclRowsEditor";
 import {publishAPI} from "../../../services";
 import {PublishAclEditor} from "../../../components/files/PublishAclEditor";
 import {toPublishAclRequests} from "../../../tools/publishAcl";
@@ -12,13 +13,17 @@ jest.mock("react-i18next", () => ({
 
 jest.mock("../../../services", () => ({
     publishAPI: {
-        getPublishUsers: jest.fn()
+        getPublishUsers: jest.fn(),
+        getPublishUnits: jest.fn()
     }
 }));
 
-const getPublishUsers = jest.mocked(publishAPI.getPublishUsers);
+// The shared editor of the auth library is the stand-in of src/testUtils/mockAclRowsEditor.tsx, which records its props in aclRowsEditorMock
+jest.mock("@vempain/vempain-auth-frontend", () => jest.requireActual("../../../testUtils/mockAclRowsEditor"), {virtual: true});
 
-// antd's responsive Row and the Form field scheduler need these browser APIs that jsdom lacks
+const getPublishUsers = jest.mocked(publishAPI.getPublishUsers);
+const getPublishUnits = jest.mocked(publishAPI.getPublishUnits);
+
 Object.defineProperty(window, "matchMedia", {
     writable: true,
     value: () => ({
@@ -30,6 +35,7 @@ Object.defineProperty(window, "matchMedia", {
     })
 });
 
+// antd's Form field scheduler needs MessageChannel, which jsdom lacks
 if (typeof globalThis.MessageChannel === "undefined") {
     class StubMessageChannel {
         port1: { onmessage: ((event: { data: unknown }) => void) | null; postMessage: (data: unknown) => void };
@@ -48,6 +54,7 @@ const users = [
     {id: 12, login_name: "arnold", name: "Arnold", nick: "Ahnold"},
     {id: 13, login_name: "bea", name: "Bea", nick: "B"}
 ];
+const units = [{id: 3, name: "Editors", description: "Site editors"}];
 
 function renderEditor(onFinish: jest.Mock = jest.fn()) {
     return render(
@@ -59,13 +66,18 @@ function renderEditor(onFinish: jest.Mock = jest.fn()) {
 }
 
 describe("toPublishAclRequests", () => {
-    it("drops rows without a user, defaults missing switches to false and returns null when empty", () => {
+    it("drops rows without a grantee, defaults missing switches to false and returns null when empty", () => {
         expect(toPublishAclRequests(undefined)).toBeNull();
         expect(toPublishAclRequests([])).toBeNull();
-        expect(toPublishAclRequests([{user_id: null, read_privilege: true}])).toBeNull();
-        expect(toPublishAclRequests([{user_id: 12, read_privilege: true}, {user_id: 13, modify_privilege: true, delete_privilege: true}])).toEqual([
-            {user_id: 12, read_privilege: true, create_privilege: false, modify_privilege: false, delete_privilege: false},
-            {user_id: 13, read_privilege: false, create_privilege: false, modify_privilege: true, delete_privilege: true}
+        expect(toPublishAclRequests([{user_id: null, unit_id: null, read_privilege: true}])).toBeNull();
+        expect(toPublishAclRequests([
+            {user_id: 12, read_privilege: true},
+            {unit_id: 3, modify_privilege: true, delete_privilege: true},
+            {user_id: 13, unit_id: null, create_privilege: true}
+        ])).toEqual([
+            {user_id: 12, unit_id: null, read_privilege: true, create_privilege: false, modify_privilege: false, delete_privilege: false},
+            {user_id: null, unit_id: 3, read_privilege: false, create_privilege: false, modify_privilege: true, delete_privilege: true},
+            {user_id: 13, unit_id: null, read_privilege: false, create_privilege: true, modify_privilege: false, delete_privilege: false}
         ]);
     });
 });
@@ -73,116 +85,65 @@ describe("toPublishAclRequests", () => {
 describe("PublishAclEditor", () => {
     beforeEach(() => {
         getPublishUsers.mockReset();
+        getPublishUnits.mockReset();
+        sharedEditor.mockClear();
     });
 
-    it("loads the admin users and adds a row with read granted by default", async () => {
+    it("loads the admin users and units and hands them to the shared editor as options on the acls list", async () => {
         getPublishUsers.mockResolvedValue(users);
+        getPublishUnits.mockResolvedValue(units);
         const onFinish = jest.fn();
         renderEditor(onFinish);
 
-        await waitFor(() => expect(screen.getByText("Add admin user")).toBeTruthy());
+        await waitFor(() => expect(screen.getByTestId("acl-rows-editor")).toBeTruthy());
         expect(getPublishUsers).toHaveBeenCalledTimes(1);
+        expect(getPublishUnits).toHaveBeenCalledTimes(1);
+        expect(screen.getByText("Additional admin users and units")).toBeTruthy();
 
-        fireEvent.click(screen.getByText("Add admin user"));
-        await waitFor(() => expect(screen.getAllByTestId("publish-acl-row")).toHaveLength(1));
-        expect(screen.getByText("Read")).toBeTruthy();
-        expect(screen.getByText("Delete")).toBeTruthy();
-        const switches = screen.getAllByRole("switch");
-        expect(switches).toHaveLength(4);
-        expect(switches[0].getAttribute("aria-checked")).toBe("true");
-        expect(switches[1].getAttribute("aria-checked")).toBe("false");
+        const props = sharedEditor.mock.calls.at(-1)[0];
+        expect(props.fieldName).toBe("acls");
+        expect(props.userField).toBe("user_id");
+        expect(props.unitField).toBe("unit_id");
+        expect(props.uniqueGrantees).toBe(true);
+        expect(props.rowTestId).toBe("publish-acl-row");
+        expect(props.users).toEqual([{value: 12, label: "Arnold (arnold)"}, {value: 13, label: "Bea (bea)"}]);
+        expect(props.units).toEqual([{value: 3, label: "Editors"}]);
 
-        // Submitting without a user fails validation and never reaches onFinish
-        fireEvent.click(screen.getByText("submit"));
-        await waitFor(() => expect(screen.getByText("Select a user")).toBeTruthy());
-        expect(onFinish).not.toHaveBeenCalled();
-
-        // Removing the row makes the form valid again
-        fireEvent.click(screen.getByLabelText("Remove"));
-        await waitFor(() => expect(screen.queryAllByTestId("publish-acl-row")).toHaveLength(0));
-        fireEvent.click(screen.getByText("submit"));
-        await waitFor(() => expect(onFinish).toHaveBeenCalledTimes(1));
-        expect(toPublishAclRequests(onFinish.mock.calls[0][0].acls)).toBeNull();
-    });
-
-    it("rejects a row whose every privilege is off", async () => {
-        getPublishUsers.mockResolvedValue(users);
-        const onFinish = jest.fn();
-        const {container} = render(
-                <Form onFinish={onFinish}
-                      initialValues={{acls: [{user_id: 12, read_privilege: false, create_privilege: false, modify_privilege: false, delete_privilege: false}]}}>
-                    <PublishAclEditor/>
-                    <button type="submit">submit</button>
-                </Form>
-        );
-
-        await waitFor(() => expect(screen.getAllByTestId("publish-acl-row")).toHaveLength(1));
-        expect(container.textContent).toContain("Arnold (arnold)");
-
-        fireEvent.click(screen.getByText("submit"));
-        await waitFor(() => expect(screen.getByText("Grant at least one privilege")).toBeTruthy());
-        expect(onFinish).not.toHaveBeenCalled();
-
-        // Granting modify satisfies the rule
-        fireEvent.click(screen.getAllByRole("switch")[2]);
+        // A row written by the editor reaches the form as a request entry
+        fireEvent.click(screen.getByText("stub: grant first user"));
         fireEvent.click(screen.getByText("submit"));
         await waitFor(() => expect(onFinish).toHaveBeenCalledTimes(1));
         expect(toPublishAclRequests(onFinish.mock.calls[0][0].acls)).toEqual([
-            {user_id: 12, read_privilege: false, create_privilege: false, modify_privilege: true, delete_privilege: false}
+            {user_id: 12, unit_id: null, read_privilege: true, create_privilege: false, modify_privilege: true, delete_privilege: false}
         ]);
     });
 
-    it("shows a warning when the admin users cannot be loaded", async () => {
-        getPublishUsers.mockRejectedValue(new Error("down"));
+    it("shows a warning when the admin users or units cannot be loaded", async () => {
+        getPublishUsers.mockResolvedValue(users);
+        getPublishUnits.mockRejectedValue(new Error("down"));
         renderEditor();
 
-        await waitFor(() => expect(screen.getByText("Could not load the admin users")).toBeTruthy());
-        expect(screen.queryByText("Add admin user")).toBeNull();
+        await waitFor(() => expect(screen.getByText("Could not load the admin users and units")).toBeTruthy());
+        expect(screen.queryByTestId("acl-rows-editor")).toBeNull();
     });
 
-    it("treats a missing user list as empty and ignores results that arrive after unmounting", async () => {
+    it("treats missing lists as empty and ignores results that arrive after unmounting", async () => {
         getPublishUsers.mockResolvedValue(null as never);
+        getPublishUnits.mockResolvedValue(null as never);
         renderEditor();
-        await waitFor(() => expect(screen.getByText("Add admin user")).toBeTruthy());
-        expect((screen.getByText("Add admin user").closest("button") as HTMLButtonElement).disabled).toBe(true);
+        await waitFor(() => expect(screen.getByTestId("acl-rows-editor")).toBeTruthy());
+        expect(sharedEditor.mock.calls.at(-1)[0].users).toEqual([]);
+        expect(sharedEditor.mock.calls.at(-1)[0].units).toEqual([]);
 
         let rejectLoad: (error: Error) => void = () => undefined;
         getPublishUsers.mockReturnValue(new Promise((_resolve, reject) => {
             rejectLoad = reject;
         }));
+        getPublishUnits.mockResolvedValue(units);
         const {unmount} = renderEditor();
         unmount();
         rejectLoad(new Error("late"));
         await new Promise(resolve => setTimeout(resolve, 0));
-        expect(screen.queryByText("Could not load the admin users")).toBeNull();
-    });
-
-    it("offers each row only the users not chosen in another row", async () => {
-        getPublishUsers.mockResolvedValue(users);
-        const onFinish = jest.fn();
-        render(
-                <Form onFinish={onFinish} initialValues={{acls: [{user_id: 12, read_privilege: true}]}}>
-                    <PublishAclEditor/>
-                    <button type="submit">submit</button>
-                </Form>
-        );
-        await waitFor(() => expect(screen.getAllByTestId("publish-acl-row")).toHaveLength(1));
-
-        fireEvent.click(screen.getByText("Add admin user"));
-        await waitFor(() => expect(screen.getAllByTestId("publish-acl-row")).toHaveLength(2));
-        // Every grantable user has a row now, so no further row can be added
-        expect((screen.getByText("Add admin user").closest("button") as HTMLButtonElement).disabled).toBe(true);
-
-        fireEvent.mouseDown(screen.getAllByRole("combobox")[1]);
-        await waitFor(() => expect(screen.getByText("Bea (bea)", {selector: ".ant-select-item-option-content"})).toBeTruthy());
-        expect(screen.queryByText("Arnold (arnold)", {selector: ".ant-select-item-option-content"})).toBeNull();
-        fireEvent.click(screen.getByText("Bea (bea)", {selector: ".ant-select-item-option-content"}));
-
-        fireEvent.click(screen.getByText("submit"));
-        await waitFor(() => expect(onFinish).toHaveBeenCalledTimes(1));
-        expect(toPublishAclRequests(onFinish.mock.calls[0][0].acls)).toEqual([
-            {user_id: 12, read_privilege: true, create_privilege: false, modify_privilege: false, delete_privilege: false},
-            {user_id: 13, read_privilege: true, create_privilege: false, modify_privilege: false, delete_privilege: false}
-        ]);
+        expect(screen.queryByText("Could not load the admin users and units")).toBeNull();
     });
 });

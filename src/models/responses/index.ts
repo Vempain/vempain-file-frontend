@@ -21,6 +21,7 @@ export type {LocationResponse} from "./LocationsResponse";
 export type {MetadataSummaryResponse} from "./MetadataSummaryResponse";
 export type {OriginalScanResponse} from "./OriginalScanResponse.ts";
 export type {PathCompletionResponse} from "./PathCompletionResponse";
+export type {PublishUnitResponse} from "./PublishUnitResponse";
 export type {PublishUserResponse} from "./PublishUserResponse";
 export type {ScanResponses} from "./ScanResponses";
 export type {TagResponse} from "./TagResponse";
