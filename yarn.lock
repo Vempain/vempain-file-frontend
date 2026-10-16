@@ -3231,9 +3231,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vempain/vempain-common-frontend@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@vempain/vempain-common-frontend@npm:1.0.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40vempain%2Fvempain-common-frontend%2F1.0.2%2Ffba87a7468dca3381738611d397688254d49f5ac"
+"@vempain/vempain-common-frontend@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@vempain/vempain-common-frontend@npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40vempain%2Fvempain-common-frontend%2F1.0.3%2Ff43c028eef459e0653d3843ee56743d6fa202200"
   dependencies:
     dayjs: "npm:^1.11.23"
   peerDependencies:
@@ -3244,7 +3244,7 @@ __metadata:
     react: ^19.2.5
     react-dom: ^19.2.5
     react-i18next: ^17.0.15
-  checksum: 10c0/1433b2c4bfd625f24d3c67347f96c6327e9d1195fec8e0cf90eddfa2bf4e077e66921aebf60c68649e7fe6aa28b116e352546d08bce1a6db6cf3acb8350771cd
+  checksum: 10c0/8c0498fd34bf1a0a6d704b658adb9a916044c1d7e16488ff95ca39003e78ff47e2d2f3ff3c300ac57ac83c96faa1fd3a87ee03955a362da85cd6864b4470c611
   languageName: node
   linkType: hard
 
@@ -3264,7 +3264,7 @@ __metadata:
     "@types/react-dom": "npm:^19.3.0"
     "@typescript/native": "npm:typescript@^6.0.3"
     "@vempain/vempain-auth-frontend": "npm:^2.2.0"
-    "@vempain/vempain-common-frontend": "npm:^1.0.2"
+    "@vempain/vempain-common-frontend": "npm:^1.0.3"
     "@vitejs/plugin-react": "npm:^6.1.2"
     antd: "npm:^6.6.6"
     axios: "npm:^1.20.0"
