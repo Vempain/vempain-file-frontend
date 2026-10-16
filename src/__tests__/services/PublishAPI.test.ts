@@ -1,4 +1,11 @@
-import type {PublishAllFileGroupsRequest, PublishFileGroupRequest, PublishFileRequest, PublishUserResponse, TaskAcceptedResponse} from "../../models";
+import type {
+    PublishAllFileGroupsRequest,
+    PublishFileGroupRequest,
+    PublishFileRequest,
+    PublishUnitResponse,
+    PublishUserResponse,
+    TaskAcceptedResponse
+} from "../../models";
 import {TaskStatusEnum} from "../../models";
 import {axiosMock, constructorSpy, resetServiceMockState, setAuthorizationHeaderSpy} from "../../testUtils/mockAuthFrontend";
 import {PublishAPI} from "../../services";
@@ -26,7 +33,7 @@ describe("PublishAPI", () => {
     it("publishFile POSTs /file with the ACL grantees and returns the accepted task", async () => {
         const request: PublishFileRequest = {
             file_id: 55,
-            acls: [{user_id: 12, read_privilege: true, create_privilege: false, modify_privilege: false, delete_privilege: false}],
+            acls: [{user_id: 12, unit_id: null, read_privilege: true, create_privilege: false, modify_privilege: false, delete_privilege: false}],
         };
         const single: TaskAcceptedResponse = {...accepted, type: "PUBLISH_FILE", title: "Publish file doc.pdf", total_steps: 1};
         axiosMock.post.mockResolvedValueOnce({data: single});
@@ -44,7 +51,7 @@ describe("PublishAPI", () => {
             file_group_id: 11,
             gallery_name: "Gallery",
             gallery_description: "Description",
-            acls: [{user_id: 12, read_privilege: true, create_privilege: false, modify_privilege: true, delete_privilege: false}],
+            acls: [{user_id: 12, unit_id: null, read_privilege: true, create_privilege: false, modify_privilege: true, delete_privilege: false}],
         };
         axiosMock.post.mockResolvedValueOnce({data: accepted});
 
@@ -70,13 +77,24 @@ describe("PublishAPI", () => {
 
     it("publishAllFileGroups forwards the ACL grantees", async () => {
         const request: PublishAllFileGroupsRequest = {
-            acls: [{user_id: 12, read_privilege: true, create_privilege: false, modify_privilege: false, delete_privilege: false}],
+            acls: [{user_id: 12, unit_id: null, read_privilege: true, create_privilege: false, modify_privilege: false, delete_privilege: false}],
         };
         axiosMock.post.mockResolvedValueOnce({data: accepted});
 
         await publishAPI.publishAllFileGroups(request);
 
         expect(axiosMock.post).toHaveBeenCalledWith("/all-file-groups", request);
+    });
+
+    it("getPublishUnits GETs /units and returns the admin units", async () => {
+        const units: PublishUnitResponse[] = [{id: 3, name: "Editors", description: "Site editors"}];
+        axiosMock.get.mockResolvedValueOnce({data: units});
+
+        const response = await publishAPI.getPublishUnits();
+
+        expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
+        expect(axiosMock.get).toHaveBeenCalledWith("/units");
+        expect(response).toEqual(units);
     });
 
     it("getPublishUsers GETs /users and returns the admin users", async () => {

@@ -14,18 +14,24 @@ jest.mock("react-i18next", () => ({
 }));
 
 jest.mock("@vempain/vempain-common-frontend", () => ({
+    ...jest.requireActual("../../../../__mocks__/@vempain/vempain-common-frontend"),
     useTaskProgress: () => ({trackTask})
 }));
+
+// The shared ACL editor of the auth library is the stand-in of src/testUtils/mockAclRowsEditor.tsx ("stub: grant first user" button)
+jest.mock("@vempain/vempain-auth-frontend", () => jest.requireActual("../../../testUtils/mockAclRowsEditor"), {virtual: true});
 
 jest.mock("../../../services", () => ({
     publishAPI: {
         publishFile: jest.fn(),
-        getPublishUsers: jest.fn()
+        getPublishUsers: jest.fn(),
+        getPublishUnits: jest.fn()
     }
 }));
 
 const publishFile = jest.mocked(publishAPI.publishFile);
 const getPublishUsers = jest.mocked(publishAPI.getPublishUsers);
+const getPublishUnits = jest.mocked(publishAPI.getPublishUnits);
 
 Object.defineProperty(window, "matchMedia", {
     writable: true,
@@ -58,8 +64,10 @@ describe("PublishFileButton", () => {
     beforeEach(() => {
         publishFile.mockReset();
         getPublishUsers.mockReset();
+        getPublishUnits.mockReset();
         trackTask.mockReset();
         getPublishUsers.mockResolvedValue([{id: 12, login_name: "arnold", name: "Arnold", nick: "Ahnold"}]);
+        getPublishUnits.mockResolvedValue([{id: 3, name: "Editors", description: null}]);
         jest.spyOn(message, "success").mockImplementation(() => ({}) as never);
         jest.spyOn(message, "error").mockImplementation(() => ({}) as never);
     });
@@ -72,7 +80,7 @@ describe("PublishFileButton", () => {
 
         fireEvent.click(screen.getByLabelText("Publish"));
         await waitFor(() => expect(screen.getByText("doc.pdf is published to Vempain Admin as a single site file; no gallery is created.")).toBeTruthy());
-        await waitFor(() => expect(screen.getByText("Add admin user")).toBeTruthy());
+        await waitFor(() => expect(screen.getByTestId("acl-rows-editor")).toBeTruthy());
 
         fireEvent.click(screen.getByText("OK"));
 
@@ -88,24 +96,14 @@ describe("PublishFileButton", () => {
         render(<PublishFileButton file={file}/>);
 
         fireEvent.click(screen.getByLabelText("Publish"));
-        await waitFor(() => expect(screen.getByText("Add admin user")).toBeTruthy());
-        fireEvent.click(screen.getByText("Add admin user"));
-        await waitFor(() => expect(screen.getAllByTestId("publish-acl-row")).toHaveLength(1));
-
-        // A row without a user blocks the submit
-        fireEvent.click(screen.getByText("OK"));
-        await waitFor(() => expect(screen.getByText("Select a user")).toBeTruthy());
-        expect(publishFile).not.toHaveBeenCalled();
-
-        // Pick the user through the select and grant modify in addition to the default read
-        fireEvent.mouseDown(screen.getByRole("combobox"));
-        fireEvent.click(await screen.findByText("Arnold (arnold)"));
-        fireEvent.click(screen.getAllByRole("switch")[2]);
+        await waitFor(() => expect(screen.getByTestId("acl-rows-editor")).toBeTruthy());
+        // The shared editor (stubbed here, tested in vempain-auth-frontend) writes one row granting the first user read and modify
+        fireEvent.click(screen.getByText("stub: grant first user"));
         fireEvent.click(screen.getByText("OK"));
 
         await waitFor(() => expect(publishFile).toHaveBeenCalledWith({
             file_id: 55,
-            acls: [{user_id: 12, read_privilege: true, create_privilege: false, modify_privilege: true, delete_privilege: false}]
+            acls: [{user_id: 12, unit_id: null, read_privilege: true, create_privilege: false, modify_privilege: true, delete_privilege: false}]
         }));
     });
 
@@ -115,7 +113,7 @@ describe("PublishFileButton", () => {
         render(<PublishFileButton file={file}/>);
 
         fireEvent.click(screen.getByLabelText("Publish"));
-        await waitFor(() => expect(screen.getByText("Add admin user")).toBeTruthy());
+        await waitFor(() => expect(screen.getByTestId("acl-rows-editor")).toBeTruthy());
         fireEvent.click(screen.getByText("OK"));
 
         await waitFor(() => expect(message.error).toHaveBeenCalledWith("Failed to publish file"));
