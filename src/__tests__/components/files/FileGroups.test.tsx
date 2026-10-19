@@ -123,8 +123,8 @@ const remove = jest.mocked(fileGroupAPI.delete);
 const publishFileGroup = jest.mocked(publishAPI.publishFileGroup);
 const findImages = jest.mocked(imageFileAPI.findAllPageable);
 
-const summer = {id: 1, path: "/trips/2024", group_name: "Summer", description: "Summer trip", file_count: 2, gallery_id: 9};
-const winter = {id: 2, path: "/trips/2025", group_name: "Winter", description: "", file_count: null, gallery_id: null};
+const summer = {id: 1, path: "/trips/2024", group_name: "Summer", description: "Summer trip", file_count: 2, exported_file_count: 1, gallery_id: 9};
+const winter = {id: 2, path: "/trips/2025", group_name: "Winter", description: "", file_count: null, exported_file_count: null, gallery_id: null};
 
 function fileRow(id: number, filename: string) {
     return {
@@ -186,6 +186,8 @@ describe("FileGroups", () => {
         await waitFor(() => expect(screen.getAllByTestId("row")).toHaveLength(2));
         expect(within(screen.getAllByTestId("row")[0]).getByText("9")).toBeTruthy();
         expect(within(screen.getAllByTestId("row")[0]).getByText("2")).toBeTruthy();
+        // The exported count is the number of files a publish actually transfers, shown next to the file count
+        expect(within(screen.getAllByTestId("row")[0]).getByText("1")).toBeTruthy();
         expect(within(screen.getAllByTestId("row")[1]).getByText("Winter")).toBeTruthy();
 
         fireEvent.click(screen.getByRole("button", {name: "expand 1"}));

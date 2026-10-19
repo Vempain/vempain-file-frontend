@@ -364,6 +364,13 @@ export function FileGroups() {
             render: (_: unknown, record: FileGroupListResponse) => record.file_count ?? "",
         },
         {
+            title: t("FileGroups.columns.exported_file_count.title", {defaultValue: "Exported"}),
+            dataIndex: "exported_file_count",
+            key: "exported_file_count",
+            sorter: true,
+            render: (_: unknown, record: FileGroupListResponse) => record.exported_file_count ?? "",
+        },
+        {
             title: t("FileGroups.columns.actions.title", {defaultValue: "Actions"}),
             key: "actions",
             width: 210,
