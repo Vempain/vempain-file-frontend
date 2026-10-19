@@ -48,6 +48,7 @@ describe("FileGroupAPI", () => {
                 group_name: "Group 1",
                 description: "Test group",
                 file_count: 0,
+                exported_file_count: 0,
                 gallery_id: null,
             }],
             page: 0,

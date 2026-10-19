@@ -268,6 +268,9 @@
       "description" : {
         "title" : "Kuvaus"
       },
+      "exported_file_count" : {
+        "title" : "Vietyjen tiedostojen määrä"
+      },
       "file_count" : {
         "title" : "Tiedostojen määrä"
       },
