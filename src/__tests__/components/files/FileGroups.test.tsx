@@ -24,7 +24,7 @@ jest.mock("../../../services", () => {
         executableFileAPI: fileApi(), fontFileAPI: fileApi(), iconFileAPI: fileApi(), imageFileAPI: fileApi(), interactiveFileAPI: fileApi(),
         musicFileAPI: fileApi(), thumbFileAPI: fileApi(), vectorFileAPI: fileApi(), videoFileAPI: fileApi(),
         fileGroupAPI: {findPageable: jest.fn(), findById: jest.fn(), create: jest.fn(), update: jest.fn(), delete: jest.fn()},
-        publishAPI: {publishFileGroup: jest.fn(), getPublishUsers: jest.fn()}
+        publishAPI: {publishFileGroup: jest.fn(), getPublishUsers: jest.fn(), getFileGroupStatus: jest.fn()}
     };
 });
 
@@ -32,9 +32,19 @@ jest.mock("../../../components/files/FileDetails", () => ({
     FileDetails: ({file}: { file: { filename: string } }) => <div>details of {file.filename}</div>
 }));
 
-jest.mock("../../../components/files/PublishAclEditor", () => ({
-    PublishAclEditor: () => <div>acl editor</div>
-}));
+// The editor stand-in registers the "acls" list with the form, like the real one, so that prefilled rows are part of the submitted values
+jest.mock("../../../components/files/PublishAclEditor", () => {
+    const {Form} = jest.requireActual("antd");
+    const Registered = () => null;
+    return {
+        PublishAclEditor: () => (
+                <div>
+                    <Form.Item name="acls" hidden><Registered/></Form.Item>
+                    acl editor
+                </div>
+        )
+    };
+});
 
 const filterProps = {setSelectedKeys: jest.fn(), confirm: jest.fn(), clearFilters: jest.fn(), close: jest.fn()};
 
@@ -121,6 +131,7 @@ const create = jest.mocked(fileGroupAPI.create);
 const update = jest.mocked(fileGroupAPI.update);
 const remove = jest.mocked(fileGroupAPI.delete);
 const publishFileGroup = jest.mocked(publishAPI.publishFileGroup);
+const getFileGroupStatus = jest.mocked(publishAPI.getFileGroupStatus);
 const findImages = jest.mocked(imageFileAPI.findAllPageable);
 
 const summer = {id: 1, path: "/trips/2024", group_name: "Summer", description: "Summer trip", file_count: 2, exported_file_count: 1, gallery_id: 9};
@@ -164,6 +175,8 @@ describe("FileGroups", () => {
         update.mockReset();
         remove.mockReset();
         publishFileGroup.mockReset();
+        getFileGroupStatus.mockReset();
+        getFileGroupStatus.mockResolvedValue({file_group_id: 1, published: false, gallery_id: null, gallery_name: null, site_file_ids: [], acls: []});
         findImages.mockReset();
         trackTask.mockReset();
         Object.values(filterProps).forEach(mock => mock.mockReset());
@@ -364,6 +377,9 @@ describe("FileGroups", () => {
         await waitFor(() => expect(within(modal()).getByText("PublishFileGroup.modal.title")).toBeTruthy());
         expect((within(modal()).getByLabelText("PublishFileGroup.modal.galleryName.label") as HTMLInputElement).value).toBe("Summer");
         expect(within(modal()).getByText("acl editor")).toBeTruthy();
+        // The group was never published: the file backend was asked and the rows start empty
+        await waitFor(() => expect(getFileGroupStatus).toHaveBeenCalledWith(1));
+        await waitFor(() => expect(within(modal()).getByTestId("publish-status-new")).toBeTruthy());
 
         fireEvent.click(within(modal()).getByRole("button", {name: "OK"}));
         await waitFor(() => expect(publishFileGroup).toHaveBeenCalledWith({
@@ -386,5 +402,46 @@ describe("FileGroups", () => {
         await waitFor(() => expect(message.error).toHaveBeenCalledWith("PublishFileGroup.messages.publishError"));
         fireEvent.click(within(modal()).getByRole("button", {name: "Cancel"}));
         await waitFor(() => expect(screen.queryByText("acl editor")).toBeNull());
+    });
+
+    it("prefills the grantees of the previous publish of a group and sends them again", async () => {
+        getFileGroupStatus.mockResolvedValue({
+            file_group_id: 1,
+            published: true,
+            gallery_id: 1001,
+            gallery_name: "Summer gallery",
+            site_file_ids: [500, 501],
+            acls: [{user_id: 12, unit_id: null, read_privilege: true, create_privilege: false, modify_privilege: true, delete_privilege: false}]
+        });
+        publishFileGroup.mockResolvedValueOnce(accepted as never);
+        render(<FileGroups/>);
+        await waitFor(() => expect(screen.getAllByTestId("row")).toHaveLength(2));
+
+        fireEvent.click(within(screen.getAllByTestId("row")[0]).getByRole("button", {name: /FileGroups.actions.publish/}));
+        await waitFor(() => expect(within(modal()).getByTestId("publish-status-published")).toBeTruthy());
+        expect(within(modal()).getByText("PublishFileGroup.modal.status.published")).toBeTruthy();
+
+        fireEvent.click(within(modal()).getByRole("button", {name: "OK"}));
+
+        await waitFor(() => expect(publishFileGroup).toHaveBeenCalledWith({
+            file_group_id: 1,
+            gallery_name: "Summer",
+            gallery_description: "Summer trip",
+            acls: [{user_id: 12, unit_id: null, read_privilege: true, create_privilege: false, modify_privilege: true, delete_privilege: false}]
+        }));
+    });
+
+    it("reports a failed status lookup and still publishes the group", async () => {
+        getFileGroupStatus.mockRejectedValue(new Error("admin down"));
+        publishFileGroup.mockResolvedValueOnce(accepted as never);
+        render(<FileGroups/>);
+        await waitFor(() => expect(screen.getAllByTestId("row")).toHaveLength(2));
+
+        fireEvent.click(within(screen.getAllByTestId("row")[1]).getByRole("button", {name: /FileGroups.actions.publish/}));
+        await waitFor(() => expect(within(modal()).getByTestId("publish-status-failed")).toBeTruthy());
+
+        fireEvent.click(within(modal()).getByRole("button", {name: "OK"}));
+
+        await waitFor(() => expect(publishFileGroup).toHaveBeenCalledWith({file_group_id: 2, gallery_name: "Winter", gallery_description: null, acls: null}));
     });
 });

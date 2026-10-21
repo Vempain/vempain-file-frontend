@@ -1,7 +1,9 @@
 import type {
     PublishAllFileGroupsRequest,
     PublishFileGroupRequest,
+    PublishFileGroupStatusResponse,
     PublishFileRequest,
+    PublishFileStatusResponse,
     PublishUnitResponse,
     PublishUserResponse,
     TaskAcceptedResponse
@@ -106,5 +108,40 @@ describe("PublishAPI", () => {
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
         expect(axiosMock.get).toHaveBeenCalledWith("/users");
         expect(response).toEqual(users);
+    });
+
+    it("getFileStatus GETs /file/{id}/status and returns the publication state with the previous grantees", async () => {
+        const status: PublishFileStatusResponse = {
+            file_id: 55,
+            published: true,
+            site_file_id: 500,
+            acls: [{user_id: 12, unit_id: null, read_privilege: true, create_privilege: false, modify_privilege: true, delete_privilege: false}],
+        };
+        axiosMock.get.mockResolvedValueOnce({data: status});
+
+        const response = await publishAPI.getFileStatus(55);
+
+        expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
+        expect(axiosMock.defaults.headers.get["Content-Type"]).toBe("application/json;charset=utf-8");
+        expect(axiosMock.get).toHaveBeenCalledWith("/file/55/status");
+        expect(response).toEqual(status);
+    });
+
+    it("getFileGroupStatus GETs /file-group/{id}/status and returns the gallery, its site files and grantees", async () => {
+        const status: PublishFileGroupStatusResponse = {
+            file_group_id: 11,
+            published: true,
+            gallery_id: 1001,
+            gallery_name: "Gallery",
+            site_file_ids: [500, 501],
+            acls: [],
+        };
+        axiosMock.get.mockResolvedValueOnce({data: status});
+
+        const response = await publishAPI.getFileGroupStatus(11);
+
+        expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
+        expect(axiosMock.get).toHaveBeenCalledWith("/file-group/11/status");
+        expect(response).toEqual(status);
     });
 });

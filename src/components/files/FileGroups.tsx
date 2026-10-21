@@ -27,6 +27,8 @@ import {FileTypeEnum} from "../../models";
 import {useTaskProgress} from "@vempain/vempain-common-frontend";
 import {FileDetails} from "./FileDetails";
 import {PublishAclEditor} from "./PublishAclEditor";
+import {PublishStatusNotice} from "./PublishStatusNotice";
+import {usePublishStatus} from "./usePublishStatus";
 import {toPublishAclRequests} from "../../tools/publishAcl";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn, thumbnailColumn} from "./commonColumns";
 import {useTranslation} from "react-i18next";
@@ -52,6 +54,9 @@ export function FileGroups() {
     const [publishSubmitting, setPublishSubmitting] = useState<boolean>(false);
     const [publishingGroup, setPublishingGroup] = useState<FileGroupListResponse | null>(null);
     const [publishForm] = Form.useForm();
+    // Whether the group was published before; the grantees of that publish are prefilled into the ACL rows of the publish form
+    const publishStatus = usePublishStatus(publishModalOpen && publishingGroup != null,
+            () => publishAPI.getFileGroupStatus(publishingGroup?.id ?? 0), publishForm);
 
     // Expanded rows: cache files per group id
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
@@ -645,6 +650,14 @@ export function FileGroups() {
                         destroyOnHidden
                         width={760}
                 >
+                    <PublishStatusNotice loading={publishStatus.loading} failed={publishStatus.failed}
+                                         published={publishStatus.status?.published ?? null}
+                                         publishedMessage={t("PublishFileGroup.modal.status.published", {
+                                             defaultValue: "Published before as gallery \"{{galleryName}}\" (#{{galleryId}}) with {{count}} site files",
+                                             galleryName: publishStatus.status?.gallery_name ?? "",
+                                             galleryId: publishStatus.status?.gallery_id ?? "",
+                                             count: publishStatus.status?.site_file_ids.length ?? 0
+                                         })}/>
                     <Form form={publishForm} layout="vertical">
                         <Form.Item
                                 name="gallery_name"

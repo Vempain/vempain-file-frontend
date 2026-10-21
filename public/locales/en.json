@@ -660,7 +660,10 @@
     },
     "modal" : {
       "description" : "{{filename}} is published to Vempain Admin as a single site file; no gallery is created.",
-      "title" : "Publish file"
+      "title" : "Publish file",
+      "status" : {
+        "published" : "Published before as site file #{{siteFileId}}"
+      }
     }
   },
   "PublishFileGroup" : {
@@ -703,7 +706,10 @@
         "label" : "Gallery short name",
         "placeholder" : "Enter gallery shortname here"
       },
-      "title" : "Publish File Group"
+      "title" : "Publish File Group",
+      "status" : {
+        "published" : "Published before as gallery \"{{galleryName}}\" (#{{galleryId}}) with {{count}} site files"
+      }
     },
     "popconfirm" : {
       "delete" : {
@@ -714,6 +720,11 @@
     "select" : {
       "placeholder" : "Select file group"
     }
+  },
+  "PublishStatus" : {
+    "loadError" : "Could not check whether this was published before; the permissions start empty",
+    "notPublished" : "Not published to Vempain Admin before",
+    "prefilled" : "The admin users and units granted access by the previous publish are prefilled below; publishing again keeps the same site files."
   },
   "Publishing" : {
     "alert" : {

@@ -6,6 +6,8 @@ import {useTaskProgress} from "@vempain/vempain-common-frontend";
 import {publishAPI} from "../../services";
 import type {FileResponse, PublishFileRequest, TaskAcceptedResponse} from "../../models";
 import {PublishAclEditor} from "./PublishAclEditor";
+import {PublishStatusNotice} from "./PublishStatusNotice";
+import {usePublishStatus} from "./usePublishStatus";
 import {toPublishAclRequests} from "../../tools/publishAcl";
 
 interface PublishFileButtonProps {
@@ -17,6 +19,8 @@ interface PublishFileButtonProps {
 /**
  * Action button of the typed file lists: opens a modal where additional admin users can be granted access, then starts the
  * single-file publish task (POST /publish/file). No gallery is created on the admin side; the progress shows in the task tray.
+ * When the modal opens, GET /publish/file/{id}/status tells whether the file was published before; the grantees of that publish are
+ * prefilled so that they need not be entered again.
  */
 export function PublishFileButton({file, onPublished}: PublishFileButtonProps) {
     const {t} = useTranslation();
@@ -24,6 +28,7 @@ export function PublishFileButton({file, onPublished}: PublishFileButtonProps) {
     const [open, setOpen] = useState<boolean>(false);
     const [submitting, setSubmitting] = useState<boolean>(false);
     const [form] = Form.useForm();
+    const {status, loading, failed} = usePublishStatus(open, () => publishAPI.getFileStatus(file.id), form);
 
     function close() {
         setOpen(false);
@@ -77,6 +82,11 @@ export function PublishFileButton({file, onPublished}: PublishFileButtonProps) {
                             filename: file.filename
                         })}
                     </Typography.Paragraph>
+                    <PublishStatusNotice loading={loading} failed={failed} published={status?.published ?? null}
+                                         publishedMessage={t("PublishFile.modal.status.published", {
+                                             defaultValue: "Published before as site file #{{siteFileId}}",
+                                             siteFileId: status?.site_file_id ?? ""
+                                         })}/>
                     <Form form={form} layout="vertical" initialValues={{acls: []}}>
                         {open && <PublishAclEditor/>}
                     </Form>

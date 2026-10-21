@@ -50,6 +50,16 @@
   privilege; the editor only adds grantees. `publishAPI.publishAllFileGroups(request?)` is a `POST` that carries the same `acls` list.
   Any new shared ACL component, rule or helper this SPA needs is added to `@vempain/vempain-auth-frontend` (the home of all shared ACL
   functionality) and consumed from there, never written here or in `vempain-common-frontend`.
+- Both publish dialogs prefill the grantees of the previous publish: when the dialog opens, `usePublishStatus` (`src/components/files/`)
+  calls `publishAPI.getFileStatus(fileId)` (`GET /publish/file/{id}/status`, `PublishFileStatusResponse`) or
+  `publishAPI.getFileGroupStatus(groupId)` (`GET /publish/file-group/{id}/status`, `PublishFileGroupStatusResponse`: gallery, its
+  `site_file_ids`, `acls`), and when `published` it writes the `acls` rows (`PublishedAclResponse`, the shape of `PublishAclRequest`) into
+  the `PUBLISH_ACL_FIELD` list of the form, so the shared `AclRowsEditor` shows them and `toPublishAclRequests` sends them again unchanged.
+  `PublishStatusNotice` renders the state above the editor (loading, lookup failed = rows start empty but publishing still works, published
+  before as site file / gallery with the prefilled hint, not published before). The lookup is repeated on every open and an answer that
+  arrives after the dialog closed is dropped. The file backend asks the admin backend, so a deleted site file or gallery answers
+  `published=false`. Tested in `PublishFileButton.test.tsx`, `FileGroups.test.tsx` (the editor stub registers the `acls` field so that
+  prefilled rows are part of the submitted values), `PublishStatusNotice.test.tsx` and `PublishAPI.test.ts`.
 - Every typed file list (`src/components/files/*Files.tsx`) has a publish action next to delete: `PublishFileButton` opens a modal with
   the same `PublishAclEditor`, calls `publishAPI.publishFile({file_id, acls})` (`POST /publish/file`, task type `PUBLISH_FILE`, one
   step) and hands the task to the tray. A single-file publish never creates or links a gallery on the admin side. Tested in

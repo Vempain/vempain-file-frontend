@@ -660,7 +660,10 @@
     },
     "modal" : {
       "description" : "{{filename}} publiceras till Vempain Admin som en enskild webbplatsfil; inget galleri skapas.",
-      "title" : "Publicera fil"
+      "title" : "Publicera fil",
+      "status" : {
+        "published" : "Tidigare publicerad som webbplatsfil #{{siteFileId}}"
+      }
     }
   },
   "PublishFileGroup" : {
@@ -703,7 +706,10 @@
         "label" : "Galleriets kortnamn",
         "placeholder" : "Ange galleriets kortnamn här"
       },
-      "title" : "Publicera filgrupp"
+      "title" : "Publicera filgrupp",
+      "status" : {
+        "published" : "Tidigare publicerad som galleri \"{{galleryName}}\" (#{{galleryId}}) med {{count}} webbplatsfiler"
+      }
     },
     "popconfirm" : {
       "delete" : {
@@ -714,6 +720,11 @@
     "select" : {
       "placeholder" : "Välj filgrupp"
     }
+  },
+  "PublishStatus" : {
+    "loadError" : "Kunde inte kontrollera om detta publicerats tidigare; behörigheterna börjar tomma",
+    "notPublished" : "Inte tidigare publicerad till Vempain Admin",
+    "prefilled" : "Administratörsanvändarna och -enheterna som fick åtkomst vid förra publiceringen är förifyllda nedan; en ny publicering behåller samma webbplatsfiler."
   },
   "Publishing" : {
     "alert" : {
