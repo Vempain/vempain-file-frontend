@@ -27,4 +27,8 @@ export interface FileResponse extends AbstractResponse {
     creator_email: string;
     creator_url: string;
     tags: string[];
+    /** Whether the file is known to be published as a site file in the admin backend; null when not yet determined */
+    site_file_published?: boolean | null;
+    /** The site file the last publish created or updated in the admin backend; null when never published by the current release */
+    site_file_id?: number | null;
 }

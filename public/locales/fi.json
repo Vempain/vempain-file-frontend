@@ -660,7 +660,10 @@
     },
     "modal" : {
       "description" : "{{filename}} julkaistaan Vempain Adminiin yksittäisenä sivustotiedostona; galleriaa ei luoda.",
-      "title" : "Julkaise tiedosto"
+      "title" : "Julkaise tiedosto",
+      "status" : {
+        "published" : "Julkaistu aiemmin sivustotiedostona #{{siteFileId}}"
+      }
     }
   },
   "PublishFileGroup" : {
@@ -703,7 +706,10 @@
         "label" : "Gallerian lyhytnimi",
         "placeholder" : "Syötä gallerian lyhytnimi tähän"
       },
-      "title" : "Julkaise tiedostoryhmä"
+      "title" : "Julkaise tiedostoryhmä",
+      "status" : {
+        "published" : "Julkaistu aiemmin galleriana \"{{galleryName}}\" (#{{galleryId}}), {{count}} sivustotiedostoa"
+      }
     },
     "popconfirm" : {
       "delete" : {
@@ -714,6 +720,11 @@
     "select" : {
       "placeholder" : "Valitse tiedostoryhmä"
     }
+  },
+  "PublishStatus" : {
+    "loadError" : "Aiempaa julkaisua ei voitu tarkistaa; oikeudet alkavat tyhjinä",
+    "notPublished" : "Ei aiemmin julkaistu Vempain Adminiin",
+    "prefilled" : "Edellisen julkaisun myöntämät ylläpitokäyttäjien ja -yksiköiden oikeudet on esitäytetty alle; uusi julkaisu säilyttää samat sivustotiedostot."
   },
   "Publishing" : {
     "alert" : {
