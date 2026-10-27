@@ -43,14 +43,16 @@ export function SystemSchedules() {
         }
     ];
 
-    return <Space direction="vertical" style={{width: "95%", margin: 30}} size="large">
+    return <Space orientation="vertical" style={{width: "95%", margin: 30}} size="large">
         <h1>{t("SystemSchedules.title", {defaultValue: "System schedules"})}</h1>
         <Spin spinning={loading}><Table rowKey="id" columns={columns} dataSource={schedules} sticky={stickyTableHeader}/></Spin>
         <Modal open={selected !== null} title={t("SystemSchedules.actions.trigger", {defaultValue: "Trigger schedule"})}
                onCancel={() => setSelected(null)} onOk={trigger} confirmLoading={loading}>
             <p>{selected?.schedule_name}</p>
-            <InputNumber min={0} value={delay} onChange={value => setDelay(value ?? 0)}
-                         addonAfter={t("SystemSchedules.fields.seconds", {defaultValue: "seconds"})}/>
+            <Space.Compact>
+                <InputNumber min={0} value={delay} onChange={value => setDelay(value ?? 0)}/>
+                <Space.Addon>{t("SystemSchedules.fields.seconds", {defaultValue: "seconds"})}</Space.Addon>
+            </Space.Compact>
         </Modal>
     </Space>;
 }

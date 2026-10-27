@@ -64,7 +64,7 @@ export function SearchFiles() {
         createdColumn(t)
     ], [t]);
 
-    return <Space direction="vertical" style={{width: "95%", margin: 30}} size="large">
+    return <Space orientation="vertical" style={{width: "95%", margin: 30}} size="large">
         <h1>{t("SearchFiles.title", {defaultValue: "Search files"})}</h1>
         <Space.Compact style={{width: "100%"}}>
             <Select value={fileType} onChange={setFileType} style={{minWidth: 150}}

@@ -97,6 +97,9 @@ yarn test
 yarn build
 ```
 
+`yarn lint` is type-aware (`parserOptions.projectService`) and fails on `@typescript-eslint/no-deprecated`: any use of functionality that the type declarations
+mark `@deprecated` (Ant Design props, DOM or library APIs) must be replaced by the documented successor. CI runs it before the build.
+
 - CI uses the reusable `frontend-spa.yaml` workflow from `vempain-workflows`.
 - Do not commit `dist/`, `coverage/`, `node_modules/` or local environment files.
 - Security findings and their mitigations are recorded in `security/OWASP-2025-audit-report.md`; keep it current when changing sanitization,

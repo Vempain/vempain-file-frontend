@@ -340,7 +340,7 @@ export function ImportFiles() {
                         >
                             <AutoComplete
                                     options={originalPathOptions}
-                                    onSearch={handleSearchOriginal}
+                                    showSearch={{onSearch: handleSearchOriginal}}
                                     onSelect={handleSelectOriginal}
                                     placeholder={t("ImportFiles.form.placeholder.pathExample")}
                                     notFoundContent={completionsLoading ? <Spin size="small"/> : t("ImportFiles.form.noSuggestions")}
@@ -364,7 +364,7 @@ export function ImportFiles() {
                         >
                             <AutoComplete
                                     options={exportedPathOptions}
-                                    onSearch={handleSearchExported}
+                                    showSearch={{onSearch: handleSearchExported}}
                                     onSelect={handleSelectExported}
                                     placeholder={t("ImportFiles.form.placeholder.pathExample")}
                                     notFoundContent={completionsLoading ? <Spin size="small"/> : t("ImportFiles.form.noSuggestions")}

@@ -49,7 +49,7 @@ export function Publishing() {
         }
     ];
 
-    return <Space direction="vertical" style={{width: "95%", margin: 30}} size="large">
+    return <Space orientation="vertical" style={{width: "95%", margin: 30}} size="large">
         <h1>{t("Publishing.title", {defaultValue: "Publishing schedules"})}</h1>
         <Spin spinning={loading}><Table rowKey="id" columns={columns} dataSource={schedules} scroll={{x: "max-content"}} sticky={stickyTableHeader}/></Spin>
         <Modal open={selected !== null} title={t("Publishing.actions.trigger", {defaultValue: "Trigger publishing"})}

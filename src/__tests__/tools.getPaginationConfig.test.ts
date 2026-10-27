@@ -9,7 +9,7 @@ describe("getPaginationConfig", () => {
 
     it("should include default pagination properties", () => {
         const config = getPaginationConfig(10);
-        expect(config.position).toEqual(["topRight", "bottomRight"]);
+        expect(config.placement).toEqual(["topEnd", "bottomEnd"]);
         expect(config.defaultPageSize).toBe(15);
         expect(config.hideOnSinglePage).toBe(true);
         expect(config.showSizeChanger).toBe(true);

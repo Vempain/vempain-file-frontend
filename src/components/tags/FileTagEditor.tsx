@@ -128,7 +128,7 @@ export function FileTagEditor() {
     );
 
     const addContent = (
-            <Space direction="vertical" style={{width: "100%"}}>
+            <Space orientation="vertical" style={{width: "100%"}}>
                 {(["tag_name", "tag_name_de", "tag_name_en", "tag_name_es", "tag_name_fi", "tag_name_sv"] as const).map(field =>
                         <Input
                                 key={field}
@@ -144,7 +144,7 @@ export function FileTagEditor() {
     );
 
     const replaceContent = (
-            <Space direction="vertical" style={{width: "100%"}}>
+            <Space orientation="vertical" style={{width: "100%"}}>
                 {tagSelector(t("FileTagEditor.fields.sourceTag"), selectedTag, setSelectedTag)}
                 {tagSelector(t("FileTagEditor.fields.targetTag"), replacementTag, setReplacementTag)}
                 {fileSelection}
@@ -153,7 +153,7 @@ export function FileTagEditor() {
     );
 
     const renameContent = (
-            <Space direction="vertical" style={{width: "100%"}}>
+            <Space orientation="vertical" style={{width: "100%"}}>
                 {tagSelector(t("FileTagEditor.fields.sourceTag"), selectedTag, setSelectedTag)}
                 {(["tag_name", "tag_name_de", "tag_name_en", "tag_name_es", "tag_name_fi", "tag_name_sv"] as const).map(field =>
                         <Input
@@ -170,7 +170,7 @@ export function FileTagEditor() {
     );
 
     const removeContent = (
-            <Space direction="vertical" style={{width: "100%"}}>
+            <Space orientation="vertical" style={{width: "100%"}}>
                 {tagSelector(t("FileTagEditor.fields.tag"), selectedTag, setSelectedTag)}
                 {fileSelection}
                 <Button danger type="primary" loading={loading} onClick={submit}>{t("FileTagEditor.actions.remove")}</Button>
@@ -179,7 +179,7 @@ export function FileTagEditor() {
 
     return (
             <Card title={t("FileTagEditor.title")} style={{margin: 30}}>
-                <Space direction="vertical" style={{width: "100%"}}>
+                <Space orientation="vertical" style={{width: "100%"}}>
                     <Tabs
                             activeKey={activeAction}
                             onChange={key => {

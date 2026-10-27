@@ -271,7 +271,7 @@ jest.mock("antd", () => {
         InputNumber,
         Modal,
         Row: passthrough,
-        Space: Object.assign(passthrough, {Compact: passthrough}),
+        Space: Object.assign(passthrough, {Compact: passthrough, Addon: passthrough}),
         Spin: passthrough,
         Table,
         Select,

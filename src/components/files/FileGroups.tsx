@@ -577,10 +577,10 @@ export function FileGroups() {
                                         value: f.id,
                                         label: `${f.filename} — ${f.file_path}`,
                                     }))}
-                                    optionFilterProp="label"
+                                    showSearch={{optionFilterProp: "label"}}
                                     maxTagCount="responsive"
                                     // NEW: dropdown footer to paginate
-                                    dropdownRender={(menu) => (
+                                    popupRender={(menu) => (
                                             <div>
                                                 {menu}
                                                 <div style={{display: "flex", justifyContent: "center", padding: 8}}>

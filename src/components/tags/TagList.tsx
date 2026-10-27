@@ -57,17 +57,18 @@ function ReplacementTagSelect({excludedTagId, onChange}: ReplacementTagSelectPro
     return (
             <Select
                     autoFocus
-                    showSearch
+                    showSearch={{
+                        filterOption: false,
+                        onSearch: search => {
+                            searchRef.current = search;
+                            fetchOptions(0, search, false);
+                        }
+                    }}
                     style={{width: "100%"}}
                     placeholder={t("TagList.messages.replacementSelect")}
-                    filterOption={false}
                     loading={loading}
                     options={options
                             .map(tag => ({label: tag.tag_name, value: tag.tag_name}))}
-                    onSearch={search => {
-                        searchRef.current = search;
-                        fetchOptions(0, search, false);
-                    }}
                     onPopupScroll={event => {
                         const target = event.currentTarget;
                         if (target.scrollTop + target.offsetHeight >= target.scrollHeight - 1 &&
