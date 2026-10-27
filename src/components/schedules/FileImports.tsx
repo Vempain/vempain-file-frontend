@@ -37,7 +37,7 @@ export function FileImports() {
         {title: t("FileImports.columns.page", {defaultValue: "Page"}), dataIndex: "generate_page", key: "generate_page", render: value => value ? "✓" : "—"}
     ];
 
-    return <Space direction="vertical" style={{width: "95%", margin: 30}} size="large">
+    return <Space orientation="vertical" style={{width: "95%", margin: 30}} size="large">
         <h1>{t("FileImports.title", {defaultValue: "File import schedules"})}</h1>
         <Spin spinning={loading}><Table rowKey="id" columns={columns} dataSource={schedules} scroll={{x: "max-content"}} sticky={stickyTableHeader}/></Spin>
     </Space>;

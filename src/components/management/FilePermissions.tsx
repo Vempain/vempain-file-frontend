@@ -50,9 +50,9 @@ export function FilePermissions() {
         }
     ];
 
-    return <Space direction="vertical" style={{width: "95%", margin: 30}} size="large">
+    return <Space orientation="vertical" style={{width: "95%", margin: 30}} size="large">
         <h1>{t("FilePermissions.title", {defaultValue: "File permissions"})}</h1>
-        <Alert type="info" showIcon message={t("FilePermissions.info", {
+        <Alert type="info" showIcon title={t("FilePermissions.info", {
             defaultValue: "Permissions are managed centrally in the administration service."
         })}/>
         <Spin spinning={loading}>

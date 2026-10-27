@@ -8,7 +8,6 @@ import type {PagedRequest} from "@vempain/vempain-auth-frontend";
 import {fileGroupDatasetToIdentifier} from "../../tools";
 
 const {Title, Text} = Typography;
-const {Option} = Select;
 const PAGE_SIZE = 200;
 
 export function PublishGpsTimeSeries() {
@@ -135,21 +134,17 @@ export function PublishGpsTimeSeries() {
                         <Select
                                 style={{width: 400}}
                                 placeholder={t("PublishGpsTimeSeries.select.placeholder")}
-                                showSearch
-                                filterOption={false}
-                                onSearch={handleSearch}
+                                showSearch={{filterOption: false, onSearch: handleSearch}}
                                 onPopupScroll={handleDropdownScroll}
                                 onChange={(value: number | undefined) => setSelectedGroupId(value)}
                                 value={selectedGroupId}
                                 loading={loadingGroups}
                                 allowClear
-                        >
-                            {imageGroups.map(group => (
-                                    <Option key={group.id} value={group.id}>
-                                        {group.path} {group.group_name ? `(${group.group_name})` : ""}
-                                    </Option>
-                            ))}
-                        </Select>
+                                options={imageGroups.map(group => ({
+                                    value: group.id,
+                                    label: `${group.path} ${group.group_name ? `(${group.group_name})` : ""}`
+                                }))}
+                        />
                         {identifier && (
                                 <Text type="secondary">
                                     {t("PublishGpsTimeSeries.fields.derivedIdentifier")}: <strong>{identifier}</strong>

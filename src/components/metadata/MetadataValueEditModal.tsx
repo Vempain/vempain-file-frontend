@@ -93,7 +93,7 @@ export function MetadataValueEditModal({summary, onClose, onFinished}: MetadataV
                             type="warning"
                             showIcon
                             style={{marginBottom: 16}}
-                            message={t("MetadataValueEdit.warning", {
+                            title={t("MetadataValueEdit.warning", {
                                 defaultValue: "The new value is written into all {{count}} files carrying this value. Leave it empty to remove the entry from the files.",
                                 count: summary.file_count
                             })}
