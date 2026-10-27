@@ -1175,6 +1175,10 @@
     "cancelled" : "Avbruten, ändringar återställda",
     "cancel" : "Avbryt",
     "cancelError" : "Kunde inte avbryta uppgiften",
-    "revertedSteps" : "{{count}} återställda"
+    "revertedSteps" : "{{count}} återställda",
+    "remainingUnderMinute" : "mindre än en minut kvar",
+    "remainingMinutes" : "cirka {{minutes}} min kvar",
+    "remainingWholeHours" : "cirka {{hours}} h kvar",
+    "remainingHours" : "cirka {{hours}} h {{minutes}} min kvar"
   }
 }

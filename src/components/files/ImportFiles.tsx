@@ -14,7 +14,7 @@ import {useTaskProgress} from "@vempain/vempain-common-frontend";
 import {fileScannerAPI, pathCompletionAPI} from "../../services";
 import type {ColumnsType} from "antd/es/table";
 import dayjs from "dayjs";
-import {compareDayjsNullable, formatDayjsNullable} from "../../tools";
+import {compareDayjsNullable, formatDayjsNullable, stickyTableHeader} from "../../tools";
 import {useTranslation} from "react-i18next";
 
 export function ImportFiles() {
@@ -384,6 +384,7 @@ export function ImportFiles() {
                                     <>
                                         <h3 key={"original-header-fail"}>{t("ImportFiles.results.failed.title")}</h3>
                                         <Table
+                                                sticky={stickyTableHeader}
                                                 columns={[
                                                     {title: t("ImportFiles.failedTable.filename.title"), dataIndex: 'file', key: 'file'}
                                                 ]}
@@ -403,6 +404,7 @@ export function ImportFiles() {
                                     <>
                                         <h3 key={"original-header-success"}>{t("ImportFiles.results.success.title")}</h3>
                                         <Table
+                                                sticky={stickyTableHeader}
                                                 dataSource={result.scan_original_response.successful_files}
                                                 columns={fileColumns}
                                                 pagination={{
@@ -419,6 +421,7 @@ export function ImportFiles() {
                                     <>
                                         <h3 key={"export-header-fail"}>{t("ImportFiles.results.failed.title")}</h3>
                                         <Table
+                                                sticky={stickyTableHeader}
                                                 columns={[
                                                     {title: t("ImportFiles.failedTable.filename.title"), dataIndex: 'file', key: 'file'}
                                                 ]}
@@ -438,6 +441,7 @@ export function ImportFiles() {
                                     <>
                                         <h3 key={"export-header-success"}>{t("ImportFiles.results.success.title")}</h3>
                                         <Table
+                                                sticky={stickyTableHeader}
                                                 dataSource={result.scan_export_response.successful_files}
                                                 columns={exportFileColumns}
                                                 pagination={{

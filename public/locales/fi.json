@@ -1175,6 +1175,10 @@
     "cancelled" : "Peruutettu, muutokset peruttu",
     "cancel" : "Peruuta",
     "cancelError" : "Tehtävän peruuttaminen epäonnistui",
-    "revertedSteps" : "{{count}} peruttu"
+    "revertedSteps" : "{{count}} peruttu",
+    "remainingUnderMinute" : "alle minuutti jäljellä",
+    "remainingMinutes" : "noin {{minutes}} min jäljellä",
+    "remainingWholeHours" : "noin {{hours}} h jäljellä",
+    "remainingHours" : "noin {{hours}} h {{minutes}} min jäljellä"
   }
 }

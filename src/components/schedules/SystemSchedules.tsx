@@ -3,6 +3,7 @@ import type {ColumnsType} from "antd/es/table";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {adminScheduleAPI, type ScheduleTriggerResponse} from "../../services";
+import {stickyTableHeader} from "../../tools";
 
 export function SystemSchedules() {
     const {t} = useTranslation();
@@ -44,7 +45,7 @@ export function SystemSchedules() {
 
     return <Space direction="vertical" style={{width: "95%", margin: 30}} size="large">
         <h1>{t("SystemSchedules.title", {defaultValue: "System schedules"})}</h1>
-        <Spin spinning={loading}><Table rowKey="id" columns={columns} dataSource={schedules}/></Spin>
+        <Spin spinning={loading}><Table rowKey="id" columns={columns} dataSource={schedules} sticky={stickyTableHeader}/></Spin>
         <Modal open={selected !== null} title={t("SystemSchedules.actions.trigger", {defaultValue: "Trigger schedule"})}
                onCancel={() => setSelected(null)} onOk={trigger} confirmLoading={loading}>
             <p>{selected?.schedule_name}</p>

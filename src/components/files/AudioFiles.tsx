@@ -9,6 +9,7 @@ import {FileDetails} from "./FileDetails";
 import {PublishFileButton} from "./PublishFileButton";
 import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
 import {useTranslation} from "react-i18next";
+import {stickyTableHeader} from "../../tools";
 
 export function AudioFiles() {
     const {t} = useTranslation();
@@ -92,6 +93,7 @@ export function AudioFiles() {
                 {paged.contextHolder}
                 <Spin spinning={paged.loading}>
                     {paged.dataSource.length > 0 && <VempainTable
+                            sticky={stickyTableHeader}
                             dataMode="server"
                             paged={paged}
                             columns={columns}

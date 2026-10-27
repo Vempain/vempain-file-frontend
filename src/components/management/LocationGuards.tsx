@@ -9,7 +9,7 @@ import {GuardTypeEnum} from "../../models";
 import {CircleMarker, MapContainer, TileLayer, useMap, useMapEvents} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import {useTranslation} from "react-i18next";
-import {MAP_ATTRIBUTION, MAP_TILE_URL} from "../../tools";
+import {MAP_ATTRIBUTION, MAP_TILE_URL, stickyTableHeader} from "../../tools";
 
 const {Title, Text} = Typography;
 
@@ -263,6 +263,7 @@ export function LocationGuards() {
                 </Row>
 
                 <Table<LocationGuardResponse>
+                        sticky={stickyTableHeader}
                         columns={columns}
                         dataSource={guards.map((g) => ({...g, key: g.id}))}
                         loading={loading}

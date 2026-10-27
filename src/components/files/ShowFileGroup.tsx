@@ -6,6 +6,7 @@ import type {FileGroupResponse, FileResponse} from "../../models";
 import type {ColumnsType} from "antd/es/table";
 import {useTranslation} from "react-i18next";
 import {createdColumn, FileDetails, filenameColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./index";
+import {stickyTableHeader} from "../../tools";
 
 export function ShowFileGroup() {
     const {t} = useTranslation();
@@ -58,6 +59,7 @@ export function ShowFileGroup() {
                                     <strong>{t("FileGroups.columns.path.title")}:</strong> {group.path}
                                 </Typography.Paragraph>
                                 <Table<FileResponse>
+                                        sticky={stickyTableHeader}
                                         columns={columns}
                                         dataSource={(group.files ?? []).map(f => ({...f, key: f.id}))}
                                         pagination={{

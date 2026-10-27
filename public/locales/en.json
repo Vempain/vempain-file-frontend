@@ -1175,6 +1175,10 @@
     "cancelled" : "Cancelled, changes reverted",
     "cancel" : "Cancel",
     "cancelError" : "Failed to cancel the task",
-    "revertedSteps" : "{{count}} reverted"
+    "revertedSteps" : "{{count}} reverted",
+    "remainingUnderMinute" : "less than a minute left",
+    "remainingMinutes" : "about {{minutes}} min left",
+    "remainingWholeHours" : "about {{hours}} h left",
+    "remainingHours" : "about {{hours}} h {{minutes}} min left"
   }
 }

@@ -3,6 +3,7 @@ import type {ColumnsType} from "antd/es/table";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {adminScheduleAPI, type FileImportScheduleResponse} from "../../services";
+import {stickyTableHeader} from "../../tools";
 
 export function FileImports() {
     const {t} = useTranslation();
@@ -38,6 +39,6 @@ export function FileImports() {
 
     return <Space direction="vertical" style={{width: "95%", margin: 30}} size="large">
         <h1>{t("FileImports.title", {defaultValue: "File import schedules"})}</h1>
-        <Spin spinning={loading}><Table rowKey="id" columns={columns} dataSource={schedules} scroll={{x: "max-content"}}/></Spin>
+        <Spin spinning={loading}><Table rowKey="id" columns={columns} dataSource={schedules} scroll={{x: "max-content"}} sticky={stickyTableHeader}/></Spin>
     </Space>;
 }

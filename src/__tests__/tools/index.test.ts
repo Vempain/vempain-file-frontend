@@ -13,6 +13,7 @@ describe("tools barrel", () => {
         expect(typeof tools.pathCompletionEnum2Tag).toBe("function");
         expect(tools.LanguageTool.getLanguages()).toHaveLength(3);
         expect(tools.getPaginationConfig(3).total).toBe(3);
+        expect(tools.stickyTableHeader).toEqual({offsetHeader: tools.TOP_BAR_HEIGHT});
         expect(tools.MAP_TILE_URL).toContain("{z}");
         expect(tools.MAP_ATTRIBUTION).toContain("OpenStreetMap");
         expect(tools.metadataRowKey({metadata_group: "g", metadata_key: "k", metadata_value: "v", file_count: 1, writable: true})).toBe("g\u0000k\u0000v");

@@ -7,6 +7,7 @@ import type {TagRequest, TagResponse} from "../../models";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
 import {usePagedTable, type VempainColumnsType, VempainTable} from "@vempain/vempain-auth-frontend";
+import {stickyTableHeader} from "../../tools";
 
 interface ReplacementTagSelectProps {
     excludedTagId: number;
@@ -346,6 +347,7 @@ export function TagList() {
                 {contextHolder}
                 <Spin description={t("TagList.messages.loadingTip")} spinning={paged.loading} key={"componentListSpinner"}>
                     <VempainTable
+                            sticky={stickyTableHeader}
                             dataMode="server"
                             paged={paged}
                             rowKey="id"
