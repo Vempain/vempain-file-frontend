@@ -3,6 +3,7 @@ import type {ColumnsType} from "antd/es/table";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {adminScheduleAPI, type PublishScheduleResponse} from "../../services";
+import {stickyTableHeader} from "../../tools";
 
 export function Publishing() {
     const {t} = useTranslation();
@@ -50,7 +51,7 @@ export function Publishing() {
 
     return <Space direction="vertical" style={{width: "95%", margin: 30}} size="large">
         <h1>{t("Publishing.title", {defaultValue: "Publishing schedules"})}</h1>
-        <Spin spinning={loading}><Table rowKey="id" columns={columns} dataSource={schedules} scroll={{x: "max-content"}}/></Spin>
+        <Spin spinning={loading}><Table rowKey="id" columns={columns} dataSource={schedules} scroll={{x: "max-content"}} sticky={stickyTableHeader}/></Spin>
         <Modal open={selected !== null} title={t("Publishing.actions.trigger", {defaultValue: "Trigger publishing"})}
                onCancel={() => setSelected(null)} onOk={trigger} confirmLoading={loading}>
             <p>{selected?.publish_message}</p>

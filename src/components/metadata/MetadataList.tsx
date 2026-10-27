@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next";
 import {usePagedTable, type VempainColumnsType, VempainTable} from "@vempain/vempain-auth-frontend";
 import type {FileResponse, MetadataSummaryResponse} from "../../models";
 import {metadataAPI} from "../../services";
-import {metadataRowKey} from "../../tools";
+import {metadataRowKey, stickyTableHeader} from "../../tools";
 import {FileDetails} from "../files";
 import {MetadataFiles} from "./MetadataFiles";
 import {MetadataValueEditModal} from "./MetadataValueEditModal";
@@ -170,6 +170,7 @@ export function MetadataList() {
                 </Space>
                 <Spin spinning={paged.loading}>
                     <VempainTable
+                            sticky={stickyTableHeader}
                             dataMode="server"
                             paged={paged}
                             columns={columns}

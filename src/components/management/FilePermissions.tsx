@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import type {AclVO} from "@vempain/vempain-auth-frontend";
 import {aclAPI} from "../../services";
+import {stickyTableHeader} from "../../tools";
 
 export function FilePermissions() {
     const {t} = useTranslation();
@@ -55,7 +56,7 @@ export function FilePermissions() {
             defaultValue: "Permissions are managed centrally in the administration service."
         })}/>
         <Spin spinning={loading}>
-            <Table rowKey="acl_id" columns={columns} dataSource={permissions} scroll={{x: "max-content"}}/>
+            <Table rowKey="acl_id" columns={columns} dataSource={permissions} scroll={{x: "max-content"}} sticky={stickyTableHeader}/>
         </Spin>
     </Space>;
 }

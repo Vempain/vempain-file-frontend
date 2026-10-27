@@ -34,6 +34,7 @@ import {createdColumn, filenameColumn, filePathColumn, fileSizeColumn, mimetypeC
 import {useTranslation} from "react-i18next";
 import type {PagedRequest, PagedResponse} from "@vempain/vempain-auth-frontend";
 import {usePagedTable, VempainTable} from "@vempain/vempain-auth-frontend";
+import {stickyTableHeader} from "../../tools";
 
 export function FileGroups() {
     const {t} = useTranslation();
@@ -477,6 +478,7 @@ export function FileGroups() {
 
                 <Spin spinning={paged.loading}>
                     <VempainTable<FileGroupListResponse>
+                            sticky={stickyTableHeader}
                             dataMode="server"
                             paged={paged}
                             columns={columns}

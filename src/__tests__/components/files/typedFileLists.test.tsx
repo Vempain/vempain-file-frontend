@@ -83,11 +83,11 @@ jest.mock("@vempain/vempain-auth-frontend", () => {
         };
     }
 
-    function VempainTable({paged, columns = [], rowKey}: any) {
+    function VempainTable({paged, columns = [], rowKey, sticky}: any) {
         const [sortKey, setSortKey] = R.useState<string | null>(null);
         const sorter = columns.find((column: any) => column.key === sortKey)?.sorter;
         const rows = sorter ? [...paged.dataSource].sort(sorter) : paged.dataSource;
-        return <div data-testid="table">
+        return <div data-testid="table" data-sticky-offset={sticky?.offsetHeader}>
             {rows.map((row: any) => <div key={row[rowKey]} data-testid="row">
                 {columns.map((column: any) => <span key={column.key}>
                     {column.render ? column.render(row[column.dataIndex], row) : String(row[column.dataIndex] ?? "")}
@@ -275,6 +275,8 @@ describe.each(cases)("$name", ({name, Component, api, extras, expectedTexts}) =>
             expect(screen.getAllByText(text).length).toBeGreaterThan(0);
         }
         expect(screen.getAllByText("2.00 kB").length).toBe(1);
+        // The header stays visible below the 60px top bar while a long list is scrolled
+        expect(screen.getByTestId("table").getAttribute("data-sticky-offset")).toBe("60");
 
         // Every sortable column orders the two rows without failing; the file name sorter puts alpha before beta
         for (const button of screen.getAllByRole("button", {name: /^sort /})) {

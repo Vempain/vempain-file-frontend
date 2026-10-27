@@ -6,7 +6,7 @@ import {usePagedTable, type VempainColumnsType, VempainTable} from "@vempain/vem
 import type {FileResponse, MetadataSummaryResponse} from "../../models";
 import {FileTypeEnum} from "../../models";
 import {metadataAPI} from "../../services";
-import {fileTypeEnum2Tag, formatByteSize} from "../../tools";
+import {fileTypeEnum2Tag, formatByteSize, stickyTableHeader} from "../../tools";
 
 /** Files shown per page in the expanded row; fixed so that an expanded metadata row never floods the list. */
 export const METADATA_FILES_PAGE_SIZE = 10;
@@ -128,6 +128,7 @@ export function MetadataFiles({summary, onOpenFile}: MetadataFilesProps) {
                     {!paged.loading && paged.dataSource.length === 0
                             ? <Tag>{t("MetadataFiles.messages.noFiles", {defaultValue: "No readable files carry this value"})}</Tag>
                             : <VempainTable
+                                    sticky={stickyTableHeader}
                                     dataMode="server"
                                     paged={fixedPaged}
                                     columns={columns}

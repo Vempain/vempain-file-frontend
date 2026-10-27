@@ -7,7 +7,7 @@ import {useTranslation} from "react-i18next";
 import {usePagedTable, type VempainColumnsType, VempainTable} from "@vempain/vempain-auth-frontend";
 import type {FileResponse} from "../../models";
 import {tagAPI} from "../../services";
-import {formatByteSize, formatDateWithTimeZone} from "../../tools";
+import {formatByteSize, formatDateWithTimeZone, stickyTableHeader} from "../../tools";
 
 type SearchableColumn = "filename" | "file_path" | "description" | "mimetype";
 
@@ -137,6 +137,7 @@ export function TaggedFiles() {
                     {!paged.loading && paged.dataSource.length === 0
                             ? t("TaggedFiles.messages.noFiles")
                             : <VempainTable
+                                    sticky={stickyTableHeader}
                                     dataMode="server"
                                     paged={paged}
                                     columns={columns}

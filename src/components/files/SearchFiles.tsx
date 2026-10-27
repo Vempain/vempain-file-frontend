@@ -22,6 +22,7 @@ import {
 } from "../../services";
 import {FileDetails} from "./FileDetails";
 import {createdColumn, filePathColumn, fileSizeColumn, mimetypeColumn} from "./commonColumns";
+import {stickyTableHeader} from "../../tools";
 
 interface PageableFileAPI {
     findAllPageable(request: PagedRequest): Promise<{ content: FileResponse[] }>;
@@ -75,6 +76,7 @@ export function SearchFiles() {
         </Space.Compact>
         <Spin spinning={loading}>
             <Table rowKey={record => record.external_file_id || record.id} columns={columns} dataSource={files}
+                   sticky={stickyTableHeader}
                    scroll={{x: "max-content"}} pagination={{showSizeChanger: true}}/>
         </Spin>
         <Modal open={selected !== null} footer={null} onCancel={() => setSelected(null)}
