@@ -1,107 +1,107 @@
 {
-  "name" : "@vempain/vempain-file-frontend",
-  "type" : "module",
-  "version" : "0.9.0",
-  "description" : "Vempain File frontend",
-  "author" : "Paul-Erik Törrönen",
-  "homepage" : "https://vempain.poltsi.fi",
-  "license" : "GPL-2.0",
-  "packageManager" : "yarn@4.18.1",
-  "scripts" : {
-    "prebuild" : "node generateBuildInfo.js",
-    "prestart" : "node generateBuildInfo.js",
-    "start" : "env-cmd -f .env.local vite",
-    "build" : "yarn prebuild && tsc && env-cmd -f .env.prod vite build",
-    "test" : "jest",
-    "test:watch" : "jest --watch",
-    "test:coverage" : "jest --coverage .",
-    "test:debug" : "jest --inspect-brk --runInBand --no-cache",
-    "preview" : "vite preview",
-    "build:production" : "yarn prebuild && env-cmd -f .env.prod vite build",
-    "lint" : "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "lint:fix" : "eslint . --ext ts,tsx --fix"
+  "name": "@vempain/vempain-file-frontend",
+  "type": "module",
+  "version": "0.9.0",
+  "description": "Vempain File frontend",
+  "author": "Paul-Erik Törrönen",
+  "homepage": "https://vempain.poltsi.fi",
+  "license": "GPL-2.0",
+  "packageManager": "yarn@4.18.1",
+  "scripts": {
+    "prebuild": "node generateBuildInfo.js",
+    "prestart": "node generateBuildInfo.js",
+    "start": "env-cmd -f .env.local vite",
+    "build": "yarn prebuild && tsc -b && env-cmd -f .env.prod vite build",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage .",
+    "test:debug": "jest --inspect-brk --runInBand --no-cache",
+    "preview": "vite preview",
+    "build:production": "yarn prebuild && env-cmd -f .env.prod vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --ext ts,tsx --fix"
   },
-  "dependencies" : {
-    "@ant-design/charts" : "^2.6.7",
-    "@ant-design/icons" : "^6.3.4",
-    "@vempain/vempain-auth-frontend" : "^2.3.3",
-    "@vempain/vempain-common-frontend" : "^1.0.7",
-    "antd" : "^6.6.8",
-    "axios" : "^1.20.0",
-    "dayjs" : "^1.11.23",
-    "i18next" : "^26.5.11",
-    "i18next-http-backend" : "^4.0.6",
-    "leaflet" : "^1.9.4",
-    "react" : "^19.3.1",
-    "react-dom" : "^19.3.1",
-    "react-i18next" : "^17.1.9",
-    "react-leaflet" : "5.0.0",
-    "react-router-dom" : "^7.18.4"
+  "dependencies": {
+    "@ant-design/charts": "^2.6.7",
+    "@ant-design/icons": "^6.3.4",
+    "@vempain/vempain-auth-frontend": "^2.3.4",
+    "@vempain/vempain-common-frontend": "^1.0.8",
+    "antd": "^6.6.8",
+    "axios": "^1.21.0",
+    "dayjs": "^1.11.23",
+    "i18next": "^26.5.11",
+    "i18next-http-backend": "^4.0.6",
+    "leaflet": "^1.9.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-i18next": "^17.1.9",
+    "react-leaflet": "5.0.0",
+    "react-router-dom": "^7.18.5"
   },
-  "devDependencies" : {
-    "@eslint/js" : "^10.0.1",
-    "@testing-library/dom" : "^10.4.2",
-    "@testing-library/jest-dom" : "^7.0.1",
-    "@testing-library/react" : "^16.3.3",
-    "@types/jest" : "^30.0.0",
-    "@types/leaflet" : "^1.9.22",
-    "@types/react" : "^19.3.0",
-    "@types/react-dom" : "^19.3.0",
-    "@typescript/native" : "npm:typescript@^6.0.3",
-    "@vitejs/plugin-react" : "^6.1.2",
-    "env-cmd" : "^11.0.0",
-    "eslint" : "^10.13.0",
-    "eslint-plugin-react-hooks" : "^7.1.1",
-    "eslint-plugin-react-refresh" : "^0.5.7",
-    "globals" : "^17.13.0",
-    "jest" : "^30.5.2",
-    "jest-environment-jsdom" : "^30.5.2",
-    "translation-check" : "^1.1.1",
-    "ts-jest" : "^29.4.15",
-    "typescript" : "^6.0.3",
-    "typescript-eslint" : "^8.72.1",
-    "vite" : "^8.3.5"
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/jest": "^30.0.0",
+    "@types/leaflet": "^1.9.22",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@typescript/native": "npm:typescript@^6.0.3",
+    "@vitejs/plugin-react": "^6.1.2",
+    "env-cmd": "^11.0.0",
+    "eslint": "^10.13.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.13.0",
+    "jest": "^30.5.2",
+    "jest-environment-jsdom": "^30.5.2",
+    "translation-check": "^1.1.1",
+    "ts-jest": "^29.4.15",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.1",
+    "vite": "^8.3.5"
   },
-  "eslintConfig" : {
-    "extends" : [
+  "eslintConfig": {
+    "extends": [
       "react-app",
       "react-app/jest"
     ]
   },
-  "jest" : {
-    "preset" : "ts-jest/presets/default-esm",
-    "testEnvironment" : "jest-environment-jsdom",
-    "setupFiles" : [
+  "jest": {
+    "preset": "ts-jest/presets/default-esm",
+    "testEnvironment": "jest-environment-jsdom",
+    "setupFiles": [
       "<rootDir>/jest.setup.ts"
     ],
-    "extensionsToTreatAsEsm" : [
+    "extensionsToTreatAsEsm": [
       ".ts",
       ".tsx"
     ],
-    "transform" : {
-      "^.+\\.tsx?$" : [
+    "transform": {
+      "^.+\\.tsx?$": [
         "ts-jest",
         {
-          "tsconfig" : "tsconfig.test.json",
-          "useESM" : true
+          "tsconfig": "tsconfig.test.json",
+          "useESM": true
         }
       ]
     },
-    "maxWorkers" : 1,
-    "testTimeout" : 30000,
-    "moduleNameMapper" : {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$" : "<rootDir>/__mocks__/fileMock.js",
-      "\\.(css|less)$" : "<rootDir>/__mocks__/styleMock.js",
-      "^@ant-design/colors/es/generate$" : "<rootDir>/node_modules/@ant-design/colors/lib/generate",
-      "^(.*)/viteEnv$" : "<rootDir>/__mocks__/viteEnv"
+    "maxWorkers": 1,
+    "testTimeout": 30000,
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js",
+      "^@ant-design/colors/es/generate$": "<rootDir>/node_modules/@ant-design/colors/lib/generate",
+      "^(.*)/viteEnv$": "<rootDir>/__mocks__/viteEnv"
     },
-    "coveragePathIgnorePatterns" : [
+    "coveragePathIgnorePatterns": [
       "/node_modules/",
       "<rootDir>/src/viteEnv.ts"
     ]
   },
-  "repository" : {
-    "type" : "git",
-    "url" : "git+https://github.com/Vempain/vempain-file-frontend.git"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vempain/vempain-file-frontend.git"
   }
 }
