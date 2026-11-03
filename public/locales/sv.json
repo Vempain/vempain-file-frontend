@@ -98,6 +98,9 @@
     "popconfirm" : {
       "no" : "Nej",
       "yes" : "Ja"
+    },
+    "splitButton" : {
+      "menu" : "Välj åtgärd"
     }
   },
   "common" : {
@@ -334,7 +337,9 @@
         "validation" : {
           "required" : "Sökväg krävs"
         }
-      }
+      },
+      "createAndPublish" : "Skapa och publicera",
+      "saveAndPublish" : "Spara och publicera"
     },
     "popconfirm" : {
       "delete" : {
@@ -735,7 +740,9 @@
   },
   "PublishGpsTimeSeries" : {
     "actions" : {
-      "publish" : "Publicera GPS-tidsserie"
+      "publish" : "Publicera GPS-tidsserie",
+      "create" : "Skapa GPS-tidsserie",
+      "createAndPublish" : "Skapa och publicera GPS-tidsserie"
     },
     "fields" : {
       "derivedIdentifier" : "Datasetidentifierare"
@@ -753,11 +760,17 @@
     "select" : {
       "label" : "Välj bildfilgrupp",
       "placeholder" : "Välj en filgrupp"
+    },
+    "modal" : {
+      "description" : "GPS-tidsserien skapas av de publicerade GPS-taggade bilderna i {{group}} och lagras i Vempain Admin.",
+      "title" : "GPS-tidsseriedatamängd"
     }
   },
   "PublishMusicData" : {
     "actions" : {
-      "publish" : "Publicera musikdata"
+      "publish" : "Publicera musikdata",
+      "create" : "Skapa musikdatamängd",
+      "createAndPublish" : "Skapa och publicera musikdatamängd"
     },
     "fields" : {
       "description" : "Beskrivning",
@@ -774,6 +787,10 @@
       "publishError" : "Misslyckades att publicera musikdata",
       "publishSuccess" : "Musikdata publicerades",
       "publishStarted" : "Publiceringen av musikdata startade, följ förloppet i nedre högra hörnet"
+    },
+    "modal" : {
+      "description" : "Musikdatamängden skapas av alla musikfiler och lagras i Vempain Admin.",
+      "title" : "Musikdatamängd"
     }
   },
   "SearchFiles" : {
@@ -1028,7 +1045,8 @@
         "publishGpsTimeSeries" : "Publicera GPS-tidsserie",
         "publishMusic" : "Publicera musik",
         "statistics" : "Statistik",
-        "title" : "Datahantering"
+        "title" : "Datahantering",
+        "dataSets" : "Datamängder"
       },
       "fileManagement" : {
         "archive" : "Arkiv",
@@ -1048,7 +1066,8 @@
         "thumb" : "Miniatyr",
         "title" : "Filhantering",
         "vector" : "Vektor",
-        "video" : "Video"
+        "video" : "Video",
+        "map" : "Karta"
       },
       "profile" : {
         "account" : "Konto",
@@ -1180,5 +1199,69 @@
     "remainingMinutes" : "cirka {{minutes}} min kvar",
     "remainingWholeHours" : "cirka {{hours}} h kvar",
     "remainingHours" : "cirka {{hours}} h {{minutes}} min kvar"
+  },
+  "PublishDataSet" : {
+    "modal" : {
+      "identifier" : "Datamängdens identifierare",
+      "status" : {
+        "published" : "Datamängden {{identifier}} finns redan i Vempain Admin; den här körningen ersätter dess innehåll"
+      }
+    }
+  },
+  "DataSets" : {
+    "columns" : {
+      "created" : "Skapad",
+      "description" : "Beskrivning",
+      "generated" : "Genererad",
+      "identifier" : "Identifierare",
+      "modified" : "Ändrad",
+      "published" : "Publicerad",
+      "type" : "Typ"
+    },
+    "filters" : {
+      "modifiedAfterPublish" : "Endast ändrade efter publicering"
+    },
+    "header" : {
+      "description" : "Datamängderna som skapats i Vempain Admin av musikfilerna och de GPS-taggade bilderna, och om de publicerats på webbplatsen.",
+      "title" : "Datamängder"
+    },
+    "values" : {
+      "notReleased" : "Inte publicerad"
+    }
+  },
+  "FileMap" : {
+    "header" : {
+      "title" : "Karta över filer",
+      "description" : "Alla filer med GPS-koordinater som du får läsa; punkterna grupperas av backend, zooma in eller håll muspekaren över en grupp för att se filerna."
+    }
+  },
+  "MapView" : {
+    "cluster" : {
+      "files" : "{{count}} filer",
+      "loadError" : "Kunde inte läsa in gruppens filer",
+      "loading" : "Läser in filerna",
+      "tooMany" : "För många filer att visa, zooma in för att se de enskilda filerna",
+      "zoomIn" : "Zooma in"
+    },
+    "details" : {
+      "close" : "Stäng",
+      "title" : "Resursens uppgifter"
+    },
+    "filters" : {
+      "allFileTypes" : "Alla filtyper",
+      "apply" : "Tillämpa",
+      "dateRange" : "Tagen mellan",
+      "fileType" : "Filtyp",
+      "reset" : "Återställ",
+      "search" : "Filnamnet innehåller",
+      "tags" : "Taggar",
+      "tagsPlaceholder" : "Någon av dessa taggar"
+    },
+    "status" : {
+      "error" : "Kunde inte läsa in kartan",
+      "loading" : "Läser in kartan",
+      "points" : "{{count}} resurser i vyn",
+      "truncated" : "Endast de största grupperna visas, zooma in för att se resten"
+    }
   }
 }

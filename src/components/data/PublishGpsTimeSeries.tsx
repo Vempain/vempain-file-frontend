@@ -1,9 +1,11 @@
-import {Button, message, Select, Space, Spin, Typography} from "antd";
-import {type UIEvent, useCallback, useEffect, useRef, useState} from "react";
+import {message, Select, Space, Spin, Typography} from "antd";
+import {type UIEvent, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {dataAPI, fileGroupAPI} from "../../services";
-import type {FileGroupListResponse} from "../../models";
+import type {FileGroupListResponse, PublishAclRequest} from "../../models";
 import {useTranslation} from "react-i18next";
-import {useTaskProgress} from "@vempain/vempain-common-frontend";
+import {SplitActionButton, useTaskProgress} from "@vempain/vempain-common-frontend";
+import {CREATE_ACTION, CREATE_AND_PUBLISH_ACTION, createActions} from "../common/createActions";
+import {PublishDataSetModal} from "./PublishDataSetModal";
 import type {PagedRequest} from "@vempain/vempain-auth-frontend";
 import {fileGroupDatasetToIdentifier} from "../../tools";
 
@@ -20,6 +22,11 @@ export function PublishGpsTimeSeries() {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [selectedGroupId, setSelectedGroupId] = useState<number | undefined>(undefined);
     const [publishing, setPublishing] = useState<boolean>(false);
+    const [modalOpen, setModalOpen] = useState<boolean>(false);
+    // Create the data set in the admin backend, or create it and start its publishing to the website as well
+    const [action, setAction] = useState<string>(CREATE_ACTION);
+    const actions = useMemo(() => createActions(t, "PublishGpsTimeSeries", "Create GPS time series", "Create and publish GPS time series"), [t]);
+    const actionLabel = actions.find(item => item.key === action)?.label ?? "";
     const requestIdRef = useRef<number>(0);
     const searchDebounceRef = useRef<number | null>(null);
 
@@ -105,17 +112,27 @@ export function PublishGpsTimeSeries() {
         }
     }, [currentPage, fetchImageGroups, hasMorePages, loadingGroups, searchTerm]);
 
-    const handlePublish = useCallback(() => {
+    // The split button opens the dialog that asks which admin users and units get access to the data set
+    const openModal = useCallback(() => {
+        if (!identifier || !selectedGroupId) {
+            message.warning(t("PublishGpsTimeSeries.messages.selectWarning"));
+            return;
+        }
+        setModalOpen(true);
+    }, [identifier, selectedGroupId, t]);
+
+    const handlePublish = useCallback((acls: PublishAclRequest[]) => {
         if (!identifier || !selectedGroupId) {
             message.warning(t("PublishGpsTimeSeries.messages.selectWarning"));
             return;
         }
         setPublishing(true);
         // The data set is generated and uploaded as a background task shown in the task tray
-        dataAPI.publishGpsTimeSeries(selectedGroupId, identifier)
+        dataAPI.publishGpsTimeSeries(selectedGroupId, identifier, action === CREATE_AND_PUBLISH_ACTION, acls)
                 .then(accepted => {
                     trackTask(accepted);
                     message.success(t("PublishGpsTimeSeries.messages.publishStarted"));
+                    setModalOpen(false);
                 })
                 .catch(() => {
                     message.error(t("PublishGpsTimeSeries.messages.publishError"));
@@ -123,7 +140,7 @@ export function PublishGpsTimeSeries() {
                 .finally(() => {
                     setPublishing(false);
                 });
-    }, [identifier, selectedGroupId, t, trackTask]);
+    }, [action, identifier, selectedGroupId, t, trackTask]);
 
     return (
             <Space orientation={"vertical"} style={{width: "95%", padding: 24}}>
@@ -150,16 +167,30 @@ export function PublishGpsTimeSeries() {
                                     {t("PublishGpsTimeSeries.fields.derivedIdentifier")}: <strong>{identifier}</strong>
                                 </Text>
                         )}
-                        <Button
-                                type="primary"
+                        <SplitActionButton
+                                actions={actions.map(item => ({...item, onClick: openModal}))}
+                                selectedActionKey={action}
+                                onActionSelect={setAction}
                                 loading={publishing}
                                 disabled={!selectedGroupId}
-                                onClick={handlePublish}
-                        >
-                            {t("PublishGpsTimeSeries.actions.publish")}
-                        </Button>
+                                menuLabel={t("Common.splitButton.menu", {defaultValue: "Choose action"})}
+                                data-testid="gps-create"
+                        />
                     </Space>
                 </Spin>
+                <PublishDataSetModal
+                        open={modalOpen}
+                        identifier={identifier ?? ""}
+                        title={t("PublishGpsTimeSeries.modal.title", {defaultValue: "GPS time series data set"})}
+                        description={t("PublishGpsTimeSeries.modal.description", {
+                            defaultValue: "The GPS time series is generated from the published GPS-tagged images of {{group}} and stored in Vempain Admin.",
+                            group: selectedGroup ? `${selectedGroup.path} ${selectedGroup.group_name ? `(${selectedGroup.group_name})` : ""}`.trim() : ""
+                        })}
+                        okText={actionLabel}
+                        submitting={publishing}
+                        onCancel={() => setModalOpen(false)}
+                        onSubmit={handlePublish}
+                />
             </Space>
     );
 }

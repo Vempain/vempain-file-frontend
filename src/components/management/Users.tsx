@@ -7,7 +7,7 @@ import {userAPI} from "../../services";
 export function Users() {
     const navigate = useNavigate();
     return (
-            <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
+            <Space vertical={true} style={{width: "calc(100% - 60px)", margin: 30}} size="large">
                 <UserList userAPI={userAPI}
                           onEdit={id => navigate(`/management/users/${id}/edit`)}
                           onCreate={() => navigate("/management/users/0/edit")}/>

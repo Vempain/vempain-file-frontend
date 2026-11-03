@@ -1,8 +1,8 @@
-import {Button, Input, Modal, Select, Space, Spin, Table} from "antd";
+import {Button, Input, Modal, Select, Space, Spin} from "antd";
 import type {ColumnsType} from "antd/es/table";
 import {useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
-import type {PagedRequest} from "@vempain/vempain-auth-frontend";
+import {type PagedRequest, VempainTable} from "@vempain/vempain-auth-frontend";
 import type {FileResponse} from "../../models";
 import {
     archiveFileAPI,
@@ -64,7 +64,7 @@ export function SearchFiles() {
         createdColumn(t)
     ], [t]);
 
-    return <Space orientation="vertical" style={{width: "95%", margin: 30}} size="large">
+    return <Space orientation="vertical" style={{width: "calc(100% - 60px)", margin: 30}} size="large">
         <h1>{t("SearchFiles.title", {defaultValue: "Search files"})}</h1>
         <Space.Compact style={{width: "100%"}}>
             <Select value={fileType} onChange={setFileType} style={{minWidth: 150}}
@@ -75,9 +75,9 @@ export function SearchFiles() {
             <Button type="primary" onClick={search}>{t("Common.search", {defaultValue: "Search"})}</Button>
         </Space.Compact>
         <Spin spinning={loading}>
-            <Table rowKey={record => record.external_file_id || record.id} columns={columns} dataSource={files}
+            <VempainTable rowKey={record => record.external_file_id || record.id} columns={columns} dataSource={files}
                    sticky={stickyTableHeader}
-                   scroll={{x: "max-content"}} pagination={{showSizeChanger: true}}/>
+ pagination={{showSizeChanger: true}}/>
         </Spin>
         <Modal open={selected !== null} footer={null} onCancel={() => setSelected(null)}
                title={selected?.filename ?? t("Common.modal.fileDetailsTitle", {defaultValue: "File details"})} destroyOnHidden>

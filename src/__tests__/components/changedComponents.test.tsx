@@ -93,14 +93,19 @@ jest.mock("@vempain/vempain-auth-frontend", () => {
         };
     }
 
-    const VempainTable = ({paged, columns = []}: any) => <div data-testid="table">
-        {paged.dataSource.map((row: any) => <div key={row.id}>
+    // server mode renders the paged rows; client mode (the management, schedule and search screens) is the stubbed Ant Design table
+    // of this file, with its sort and filter buttons
+    const VempainTable = ({paged, dataSource, columns = []}: any) => paged === undefined ? (() => {
+        const {Table} = jest.requireMock("antd") as any;
+        return <Table columns={columns} dataSource={dataSource ?? []}/>;
+    })() : <div data-testid="table">
+        {(paged?.dataSource ?? dataSource ?? []).map((row: any, index: number) => <div key={row.id ?? index}>
             {columns.map((column: any) => <span key={column.key}>
                 {column.render ? column.render(row[column.dataIndex], row) : String(row[column.dataIndex] ?? "")}
             </span>)}
         </div>)}
-        <button onClick={() => paged.handleTableChange({current: 2, pageSize: 20})}>next page</button>
-        <button onClick={() => paged.handleTableChange({})}>default page</button>
+        {paged && <button onClick={() => paged.handleTableChange({current: 2, pageSize: 20})}>next page</button>}
+        {paged && <button onClick={() => paged.handleTableChange({})}>default page</button>}
     </div>;
 
     class UserAPI extends AbstractAPI {

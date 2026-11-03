@@ -1,5 +1,7 @@
 export type {CreateGpsTimeSeriesRequest} from "./CreateGpsTimeSeriesRequest";
+export type {PublishMusicDatasetRequest} from "./PublishMusicDatasetRequest";
 export type {DataRequest} from "./DataRequest";
+export type {DataPagedRequest} from "./DataPagedRequest";
 export type {FileGroupRequest} from "./FileGroupRequest";
 export type {LocationGuardRequest} from "./LocationGuardRequest";
 export type {LocationRequest} from "./LocationRequest";

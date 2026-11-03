@@ -125,7 +125,7 @@ export function TaggedFiles() {
     ], [getColumnSearchProps, t]);
 
     return (
-            <Space vertical style={{width: "95%", margin: 30}} size="large">
+            <Space vertical style={{width: "calc(100% - 60px)", margin: 30}} size="large">
                 {paged.contextHolder}
                 <Space>
                     <Button icon={<ArrowLeftOutlined/>} onClick={() => navigate("/tags/list")}>
@@ -142,7 +142,6 @@ export function TaggedFiles() {
                                     paged={paged}
                                     columns={columns}
                                     rowKey="id"
-                                    scroll={{x: "max-content"}}
                             />}
                 </Spin>
             </Space>

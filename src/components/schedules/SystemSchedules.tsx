@@ -43,7 +43,7 @@ export function SystemSchedules() {
         }
     ];
 
-    return <Space orientation="vertical" style={{width: "95%", margin: 30}} size="large">
+    return <Space orientation="vertical" style={{width: "calc(100% - 60px)", margin: 30}} size="large">
         <h1>{t("SystemSchedules.title", {defaultValue: "System schedules"})}</h1>
         <Spin spinning={loading}><Table rowKey="id" columns={columns} dataSource={schedules} sticky={stickyTableHeader}/></Spin>
         <Modal open={selected !== null} title={t("SystemSchedules.actions.trigger", {defaultValue: "Trigger schedule"})}

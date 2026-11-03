@@ -6,6 +6,7 @@ import {
     AudioOutlined,
     ClockCircleOutlined,
     DatabaseOutlined,
+    EnvironmentOutlined,
     FieldTimeOutlined,
     FileImageOutlined,
     FileOutlined,
@@ -18,6 +19,7 @@ import {
     HeatMapOutlined,
     ImportOutlined,
     InfoCircleOutlined,
+    TableOutlined,
     LockOutlined,
     LoginOutlined,
     LogoutOutlined,
@@ -158,6 +160,11 @@ export function TopBar() {
                                 icon: <VideoCameraOutlined/>
                             },
                             {
+                                label: (<NavLink to={"/files/map"}>{t("TopBar.menu.fileManagement.map", {defaultValue: "Map"})}</NavLink>),
+                                key: "file-map",
+                                icon: <EnvironmentOutlined/>
+                            },
+                            {
                                 label: (<NavLink to={"/files/file-groups"}>{t("TopBar.menu.fileManagement.file-groups")}</NavLink>),
                                 key: "file-file-groups",
                                 icon: <GroupOutlined/>
@@ -188,6 +195,11 @@ export function TopBar() {
                                 label: (<NavLink to={"/data/gps-time-series"}>{t("TopBar.menu.dataManagement.publishGpsTimeSeries")}</NavLink>),
                                 key: "data-publishGpsTimeSeries",
                                 icon: <FieldTimeOutlined/>
+                            },
+                            {
+                                label: (<NavLink to={"/data/sets"}>{t("TopBar.menu.dataManagement.dataSets", {defaultValue: "Data sets"})}</NavLink>),
+                                key: "data-dataSets",
+                                icon: <TableOutlined/>
                             },
                             {
                                 label: (<NavLink to={"/data/statistics"}>{t("TopBar.menu.dataManagement.statistics", {defaultValue: "Statistics"})}</NavLink>),

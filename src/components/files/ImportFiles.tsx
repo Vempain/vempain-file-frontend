@@ -1,4 +1,5 @@
-import {AutoComplete, Button, Form, message, Space, Spin, Table} from "antd";
+import {VempainTable} from "@vempain/vempain-auth-frontend";
+import {AutoComplete, Button, Form, message, Space, Spin} from "antd";
 import {type Key, useEffect, useState} from "react";
 import type {
     ExportFileResponse,
@@ -314,7 +315,7 @@ export function ImportFiles() {
     }
 
     return (
-            <Space vertical={true} style={{width: "95%", margin: 30}} align="center" size="large">
+            <Space vertical={true} style={{width: "calc(100% - 60px)", margin: 30}} align="center" size="large">
                 <div>
                     <Form
                             layout="vertical"
@@ -383,13 +384,13 @@ export function ImportFiles() {
                             {result.scan_original_response && result.scan_original_response.failed_files?.length > 0 && (
                                     <>
                                         <h3 key={"original-header-fail"}>{t("ImportFiles.results.failed.title")}</h3>
-                                        <Table
+                                        <VempainTable
                                                 sticky={stickyTableHeader}
                                                 columns={[
                                                     {title: t("ImportFiles.failedTable.filename.title"), dataIndex: 'file', key: 'file'}
                                                 ]}
-                                                dataSource={result.scan_original_response.failed_files}
-                                                scroll={{x: 'max-content'}}
+                                                dataSource={result.scan_original_response.failed_files.map((file) => ({file}))}
+                                                rowKey="file"
                                                 pagination={{
                                                     pageSize: 10,
                                                     showSizeChanger: true,
@@ -403,7 +404,7 @@ export function ImportFiles() {
                             {result.scan_original_response && result.scan_original_response.successful_files?.length > 0 && (
                                     <>
                                         <h3 key={"original-header-success"}>{t("ImportFiles.results.success.title")}</h3>
-                                        <Table
+                                        <VempainTable
                                                 sticky={stickyTableHeader}
                                                 dataSource={result.scan_original_response.successful_files}
                                                 columns={fileColumns}
@@ -420,13 +421,13 @@ export function ImportFiles() {
                             {result.scan_export_response && result.scan_export_response.failed_files?.length > 0 && (
                                     <>
                                         <h3 key={"export-header-fail"}>{t("ImportFiles.results.failed.title")}</h3>
-                                        <Table
+                                        <VempainTable
                                                 sticky={stickyTableHeader}
                                                 columns={[
                                                     {title: t("ImportFiles.failedTable.filename.title"), dataIndex: 'file', key: 'file'}
                                                 ]}
-                                                dataSource={result.scan_export_response.failed_files}
-                                                scroll={{x: 'max-content'}}
+                                                dataSource={result.scan_export_response.failed_files.map((file) => ({file}))}
+                                                rowKey="file"
                                                 pagination={{
                                                     pageSize: 10,
                                                     showSizeChanger: true,
@@ -440,7 +441,7 @@ export function ImportFiles() {
                             {result.scan_export_response && result.scan_export_response.successful_files?.length > 0 && (
                                     <>
                                         <h3 key={"export-header-success"}>{t("ImportFiles.results.success.title")}</h3>
-                                        <Table
+                                        <VempainTable
                                                 sticky={stickyTableHeader}
                                                 dataSource={result.scan_export_response.successful_files}
                                                 columns={exportFileColumns}

@@ -11,7 +11,7 @@ export function UserEdit() {
     const userId = Math.max(0, validateParamId(paramId));
 
     return (
-            <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
+            <Space vertical={true} style={{width: "calc(100% - 60px)", margin: 30}} size="large">
                 <UserEditor userAPI={userAPI}
                             unitAPI={unitAPI}
                             userId={userId}

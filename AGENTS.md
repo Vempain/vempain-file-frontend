@@ -22,6 +22,12 @@
 | `src/testUtils/`  | Shared test doubles (`mockAuthFrontend.ts`)                                                        |
 | `__mocks__/`      | Jest mocks for assets, styles, `src/viteEnv.ts` and the `@vempain/vempain-common-frontend` package |
 
+- Every table is the shared `VempainTable` of `@vempain/vempain-auth-frontend`, never a raw Ant Design `Table`, and no screen passes
+  `scroll={{x: ...}}`: a horizontally scrolling table is sized by its content and grew past the viewport (the library drops `scroll.x`
+  anyway). The table fits its container by moving columns into the expandable row, so screens rank their columns with `priority` and give
+  action columns a `width`. The list screens wrap their content in `Space` with `width: calc(100% - 60px)` and a 30 px margin (95 % plus
+  the margins overflowed the viewport below 1200 px).
+
 ## Conventions
 
 - Services: `class XxxFileAPI extends AbstractFileAPI<Request, Response>` (adds `findAllPageable` with the `POST <base>/paged` + `PagedRequest`
@@ -36,6 +42,37 @@
   `AclEditor`, `AclAPI`) bound to `userAPI`/`unitAPI`/`aclAPI` from `src/services/` (library `UserAPI`/`UnitAPI`/`AclAPI` instances on the
   file backend URL). Nested units and the cycle check, the ACL rules and the editors are implemented and tested in the library; the
   tests here only cover the route hosts and the account screens (`changedComponents.test.tsx`).
+- The create/edit modal of `FileGroups.tsx` and the data set screens (`src/components/data/PublishMusicData.tsx`, `PublishGpsTimeSeries.tsx`)
+  use the `SplitActionButton` of `@vempain/vempain-common-frontend`: picking an action in its menu only changes the label, the main part
+  runs it. The modal offers "Save"/"Create" and "Save and publish"/"Create and publish" (`handleSubmit(publish)`: the saved group is then
+  published with `publishAPI.publishFileGroup({file_group_id, acls: null})`, so the grantees of a previous publish are kept and new ones are
+  given through the list's Publish action). The data set screens offer "Create" and "Create and publish" (`createActions` in
+  `src/components/common/createActions.ts`); the main part of their split button opens `PublishDataSetModal` (`src/components/data/`),
+  the data set counterpart of the file publish dialogs: it loads `dataAPI.getDataSetStatus(identifier)` (`GET
+  /data-publish/{identifier}/status`; `music_library` = `MUSIC_DATA_SET_IDENTIFIER`, or the identifier derived by
+  `fileGroupDatasetToIdentifier`) through `usePublishStatus`, shows `PublishStatusNotice`, prefills the grantees of an existing set into
+  the same `PublishAclEditor` and submits always a list (`toPublishAclRequests(rows) ?? []`, an empty list removes every additional
+  grantee in the admin backend). Its OK button carries the picked action; `dataAPI.publishMusic(publishToSite, acls)` /
+  `publishGpsTimeSeries(id, name, publishToSite, acls)` send `publish_to_site` (the file backend's task also starts the admin backend's
+  publishing of the data set to the website) and `acls`. The Jest
+  stub of the library (`__mocks__/@vempain/vempain-common-frontend.tsx`) renders the main part as `<testid>-main` and one `<testid>-option-<key>`
+  button per action; tests that replace the library with a factory spread `jest.requireActual` of that stub. Tested in
+  `src/__tests__/components/files/FileGroups.test.tsx` and `src/__tests__/components/data/*.test.tsx` (`PublishDataSetModal.test.tsx` with
+  the editor stub of `src/testUtils/mockAclRowsEditor.tsx`).
+- `FileMap` (`src/components/files/FileMap.tsx`, route `/files/map`, menu File management > Map) is the map of the original files with GPS
+  coordinates: the `MapView` of `@vempain/vempain-common-frontend` over `mapAPI` (`new MapAPI(apiUrl, '/map')`, the file backend's
+  `MapAPI` endpoints, which cluster the readable files on the backend), with the file types that can carry coordinates (`THUMB` left out),
+  the tile server of `src/tools/mapConfig.ts`, tag suggestions through `tagAPI.findPageable`, the thumbnail through `FileDisplay` (the thumb
+  file's `thumbnail_id`, else the file itself) and the details through `FileDetails` (`toFileDetails` turns the signed coordinates back
+  into value + hemisphere). The `MapView`/`MapAPI` stubs live in `__mocks__/@vempain/vempain-common-frontend.tsx` (`MAP_STUB_FILE`). Tested
+  in `src/__tests__/components/files/FileMap.test.tsx`.
+- `DataSets` (`src/components/data/DataSets.tsx`, route `/data/sets`, menu Data Management > Data sets) is the table of the data sets this
+  backend created in the admin backend: one `VempainTable` in server mode over `usePagedTable` (`dataAPI.findPageableDataSets`, `POST
+  /data-publish/paged`, which the file backend forwards to the admin backend's paged listing; request `DataPagedRequest` with
+  `modified_after_publish`, rows the file backend's `DataSetSummaryResponse` as `src/models/responses/DataSummaryResponse.ts`). Default sort `identifier`
+  ascending, 25 rows; every column sorts on the backend, identifier/type/description carry the column text filter, the timestamps are
+  `searchable: false`; the "Only modified after publish" switch is a dep of the hook. The table is read-only: data sets are created from the
+  music and GPS screens. Tested in `src/__tests__/components/data/DataSets.test.tsx` with the reduced paged-table stub of the auth library.
 - Publishing a file group (`FileGroups.tsx` publish modal) can grant additional admin-backend users and units privileges on the site
   files and gallery it creates: `PublishAclEditor` (`src/components/files/`) loads the grantable admin users and units with
   `publishAPI.getPublishUsers()`/`getPublishUnits()` (`GET /publish/users` and `/publish/units`, proxied by the file backend from the

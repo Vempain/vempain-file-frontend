@@ -7,3 +7,4 @@ export {getPaginationConfig} from './tablePaginationConfig';
 export {stickyTableHeader, TOP_BAR_HEIGHT} from './tableStickyConfig';
 export {MAP_TILE_URL, MAP_ATTRIBUTION} from './mapConfig';
 export {metadataRowKey} from './metadataTools';
+export {toFileDetails} from './mapFileTools';

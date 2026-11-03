@@ -85,7 +85,7 @@ export function ArchiveFiles() {
     ];
 
     return (
-            <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
+            <Space vertical={true} style={{width: "calc(100% - 60px)", margin: 30}} size="large">
                 {paged.contextHolder}
                 <Spin spinning={paged.loading}>
                     {paged.dataSource.length > 0 && <VempainTable
@@ -93,7 +93,6 @@ export function ArchiveFiles() {
                             dataMode="server"
                             paged={paged}
                             columns={columns}
-                            scroll={{x: 'max-content'}}
                             rowKey="external_file_id"
                     />
                     }{paged.dataSource.length === 0 && !paged.loading && t("ArchiveFiles.messages.noFiles")}

@@ -1,3 +1,4 @@
+import type React from "react";
 import {fireEvent, render, screen, waitFor} from "@testing-library/react";
 import {message} from "antd";
 import {ShowFileGroup} from "../../../components/files/ShowFileGroup";
@@ -18,6 +19,14 @@ jest.mock("react-i18next", () => ({
 jest.mock("../../../services", () => ({
     fileGroupAPI: {findById: jest.fn()}
 }));
+
+// The library is not installed for jest; the screen's shared table is the Ant Design table it wraps
+jest.mock("@vempain/vempain-auth-frontend", () => ({
+    VempainTable: (props: Record<string, unknown>) => {
+        const {Table} = jest.requireActual("antd") as { Table: (tableProps: Record<string, unknown>) => React.ReactElement };
+        return <Table {...props}/>;
+    }
+}), {virtual: true});
 
 // The barrel is replaced so that the shared file details modal (map, user names) stays out of this test
 jest.mock("../../../components/files/index", () => ({

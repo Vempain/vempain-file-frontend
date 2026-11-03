@@ -14,6 +14,8 @@ jest.mock("react-i18next", () => ({
 }));
 
 jest.mock("@vempain/vempain-common-frontend", () => ({
+    // the split button stub of the manual mock, the task hook with this test's spy
+    ...jest.requireActual<Record<string, unknown>>("../../../../__mocks__/@vempain/vempain-common-frontend"),
     useTaskProgress: () => ({trackTask})
 }));
 
