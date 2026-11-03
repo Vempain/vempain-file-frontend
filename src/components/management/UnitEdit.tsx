@@ -11,7 +11,7 @@ export function UnitEdit() {
     const unitId = Math.max(0, validateParamId(paramId));
 
     return (
-            <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
+            <Space vertical={true} style={{width: "calc(100% - 60px)", margin: 30}} size="large">
                 <UnitEditor unitAPI={unitAPI}
                             userAPI={userAPI}
                             unitId={unitId}

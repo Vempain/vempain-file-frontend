@@ -1,5 +1,13 @@
-import {AbstractAPI} from "@vempain/vempain-auth-frontend";
-import type {CreateGpsTimeSeriesRequest, TaskAcceptedResponse} from "../models";
+import {AbstractAPI, type PagedResponse} from "@vempain/vempain-auth-frontend";
+import type {
+    CreateGpsTimeSeriesRequest,
+    DataPagedRequest,
+    DataSummaryResponse,
+    PublishAclRequest,
+    PublishDataSetStatusResponse,
+    PublishMusicDatasetRequest,
+    TaskAcceptedResponse
+} from "../models";
 
 /**
  * DataAPI provides access to the /data-publish endpoints.
@@ -31,26 +39,49 @@ export class DataAPI extends AbstractAPI<unknown, TaskAcceptedResponse> {
     }
 
     /**
-     * POST /data-publish/music. Starts a background task whose result is the admin DataResponse.
+     * POST /data-publish/music. Starts a background task whose result is the admin DataResponse; with `publishToSite` the task also starts the
+     * admin backend's publishing of the data set to the website. `acls` names the admin users and units granted privileges on the data set
+     * (a list replaces the grantees of an existing set, null leaves them untouched).
      */
-    public async publishMusic(): Promise<TaskAcceptedResponse> {
+    public async publishMusic(publishToSite: boolean = false, acls: PublishAclRequest[] | null = null): Promise<TaskAcceptedResponse> {
         this.setAuthorizationHeader();
         this.axiosInstance.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
-        const response = await this.axiosInstance.post<TaskAcceptedResponse>("/music", null);
+        const request: PublishMusicDatasetRequest = {publish_to_site: publishToSite, acls};
+        const response = await this.axiosInstance.post<TaskAcceptedResponse>("/music", request);
         return response.data;
     }
 
     /**
-     * POST /data-publish/gps-timeseries. Starts a background task whose result is the admin DataResponse.
+     * POST /data-publish/gps-timeseries. Starts a background task whose result is the admin DataResponse; with `publishToSite` the task also
+     * starts the admin backend's publishing of the data set to the website. `acls` as in {@link publishMusic}.
      */
-    public async publishGpsTimeSeries(fileGroupId: number, timeSeriesName: string): Promise<TaskAcceptedResponse> {
+    public async publishGpsTimeSeries(fileGroupId: number, timeSeriesName: string, publishToSite: boolean = false,
+                                      acls: PublishAclRequest[] | null = null): Promise<TaskAcceptedResponse> {
         this.setAuthorizationHeader();
         this.axiosInstance.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
         const request: CreateGpsTimeSeriesRequest = {
             file_group_id: fileGroupId,
             time_series_name: timeSeriesName,
+            publish_to_site: publishToSite,
+            acls,
         };
         const response = await this.axiosInstance.post<TaskAcceptedResponse>("/gps-timeseries", request);
+        return response.data;
+    }
+
+    /** POST /data-publish/paged: the data sets of the admin backend filtered, sorted and paged there, for the data set table */
+    public async findPageableDataSets(request: DataPagedRequest): Promise<PagedResponse<DataSummaryResponse>> {
+        this.setAuthorizationHeader();
+        this.axiosInstance.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+        const response = await this.axiosInstance.post<PagedResponse<DataSummaryResponse>>("/paged", request);
+        return response.data;
+    }
+
+    /** GET /data-publish/{identifier}/status: whether the admin backend holds the data set already and who was granted privileges on it */
+    public async getDataSetStatus(identifier: string): Promise<PublishDataSetStatusResponse> {
+        this.setAuthorizationHeader();
+        this.axiosInstance.defaults.headers.get['Content-Type'] = 'application/json;charset=utf-8';
+        const response = await this.axiosInstance.get<PublishDataSetStatusResponse>(`/${encodeURIComponent(identifier)}/status`);
         return response.data;
     }
 }

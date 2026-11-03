@@ -15,6 +15,7 @@ import {ImageFileAPI} from './ImageFileAPI';
 import {InteractiveFileAPI} from './InteractiveFileAPI';
 import {LocationAPI} from './LocationAPI';
 import {MetadataAPI} from './MetadataAPI';
+import {MapAPI} from '@vempain/vempain-common-frontend';
 import {MusicFileAPI} from './MusicFileAPI';
 import {PathCompletionAPI} from './PathCompletionAPI';
 import {PublishAPI} from './PublishAPI';
@@ -82,6 +83,8 @@ export const iconFileAPI = new IconFileAPI(apiUrl, '/files/icon');
 export const imageFileAPI = new ImageFileAPI(apiUrl, '/files/image');
 export const interactiveFileAPI = new InteractiveFileAPI(apiUrl, '/files/interactive');
 export const locationAPI = new LocationAPI(apiUrl, '/location');
+// The clustered map of the GPS-tagged files (MapAPI of vempain-common, hosted by this backend at /map)
+export const mapAPI = new MapAPI(apiUrl, '/map');
 export const metadataAPI = new MetadataAPI(apiUrl, '/metadata');
 export const musicFileAPI = new MusicFileAPI(apiUrl, '/files/music');
 export const pathCompletionAPI = new PathCompletionAPI(apiUrl, '/path-completion');

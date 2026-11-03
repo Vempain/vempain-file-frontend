@@ -134,7 +134,6 @@ export function MetadataFiles({summary, onOpenFile}: MetadataFilesProps) {
                                     columns={columns}
                                     rowKey="id"
                                     size="small"
-                                    scroll={{x: "max-content"}}
                             />}
                 </Spin>
             </Space>

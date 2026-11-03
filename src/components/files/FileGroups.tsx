@@ -24,7 +24,7 @@ import {
 } from "../../services";
 import type {FileGroupListResponse, FileGroupRequest, FileGroupResponse, FileResponse, PublishFileGroupRequest, TaskAcceptedResponse} from "../../models";
 import {FileTypeEnum} from "../../models";
-import {useTaskProgress} from "@vempain/vempain-common-frontend";
+import {SplitActionButton, useTaskProgress} from "@vempain/vempain-common-frontend";
 import {FileDetails} from "./FileDetails";
 import {PublishAclEditor} from "./PublishAclEditor";
 import {PublishStatusNotice} from "./PublishStatusNotice";
@@ -35,6 +35,9 @@ import {useTranslation} from "react-i18next";
 import type {PagedRequest, PagedResponse} from "@vempain/vempain-auth-frontend";
 import {usePagedTable, VempainTable} from "@vempain/vempain-auth-frontend";
 import {stickyTableHeader} from "../../tools";
+/** The actions of the modal's split button; the selected one is kept in state and read when the main part is clicked */
+const SAVE_ACTION = "save";
+const SAVE_AND_PUBLISH_ACTION = "save-and-publish";
 
 export function FileGroups() {
     const {t} = useTranslation();
@@ -49,6 +52,8 @@ export function FileGroups() {
 
     // Edit/Create modal state
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    // What the modal's split button does: save the group, or save it and publish it to the admin backend right away
+    const [saveAction, setSaveAction] = useState<string>(SAVE_ACTION);
     const [editingGroup, setEditingGroup] = useState<FileGroupListResponse | null>(null);
     const [form] = Form.useForm<FileGroupRequest>();
     const [publishModalOpen, setPublishModalOpen] = useState<boolean>(false);
@@ -217,7 +222,11 @@ export function FileGroups() {
         setIsModalOpen(true);
     }, [form, t]);
 
-    function handleSubmit() {
+    /**
+     * Saves the group of the modal; with `publish` the saved group is then published to the admin backend right away (the grantees of a previous
+     * publish are kept, new ones are given through the Publish action of the list).
+     */
+    function handleSubmit(publish: boolean = false) {
         form.validateFields()
                 .then(values => {
                     const payload: FileGroupRequest = {
@@ -230,7 +239,7 @@ export function FileGroups() {
 
                     const op = editingGroup ? fileGroupAPI.update(payload) : fileGroupAPI.create(payload);
 
-                    return op.then(() => {
+                    return op.then((saved) => {
                         message.success(
                                 editingGroup
                                         ? t("FileGroups.messages.updateSuccess", {defaultValue: "File group updated successfully"})
@@ -238,6 +247,9 @@ export function FileGroups() {
                         );
                         setIsModalOpen(false);
                         paged.reload();
+                        if (publish) {
+                            publishSavedGroup(editingGroup ? editingGroup.id : saved.id);
+                        }
                     });
                 })
                 .catch((err) => {
@@ -250,6 +262,19 @@ export function FileGroups() {
                                     ? t("FileGroups.messages.updateError", {defaultValue: "Failed to update file group"})
                                     : t("FileGroups.messages.createError", {defaultValue: "Failed to create file group"})
                     );
+                });
+    }
+
+    /** The second step of "... and publish": publishes the saved group without changing its grantees and follows the task in the tray */
+    function publishSavedGroup(groupId: number) {
+        publishAPI.publishFileGroup({file_group_id: groupId, acls: null})
+                .then((accepted: TaskAcceptedResponse) => {
+                    trackTask(accepted, {onFinished: () => paged.reload()});
+                    message.success(t("PublishFileGroup.messages.publishStarted"));
+                })
+                .catch(err => {
+                    console.error("Failed to publish the saved file group:", err);
+                    message.error(t("PublishFileGroup.messages.publishError", {defaultValue: "Failed to publish file group"}));
                 });
     }
 
@@ -465,7 +490,7 @@ export function FileGroups() {
     };
 
     return (
-            <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
+            <Space vertical={true} style={{width: "calc(100% - 60px)", margin: 30}} size="large">
                 {paged.contextHolder}
                 <Space style={{width: "95%", justifyContent: "space-between"}}>
                     <Typography.Text type="secondary">
@@ -512,9 +537,31 @@ export function FileGroups() {
                                     ? t("FileGroups.modal.edit.title", {defaultValue: "Edit file group"})
                                     : t("FileGroups.modal.create.title", {defaultValue: "Create file group"})
                         }
-                        okText={editingGroup ? t("Common.modal.save", {defaultValue: "Save"}) : t("Common.modal.create", {defaultValue: "Create"})}
-                        cancelText={t("Common.modal.cancel", {defaultValue: "Cancel"})}
-                        onOk={handleSubmit}
+                        footer={
+                            <Space>
+                                <Button onClick={() => setIsModalOpen(false)}>{t("Common.modal.cancel", {defaultValue: "Cancel"})}</Button>
+                                <SplitActionButton
+                                        actions={[
+                                            {
+                                                key: SAVE_ACTION,
+                                                label: editingGroup ? t("Common.modal.save", {defaultValue: "Save"}) : t("Common.modal.create", {defaultValue: "Create"}),
+                                                onClick: () => handleSubmit(false)
+                                            },
+                                            {
+                                                key: SAVE_AND_PUBLISH_ACTION,
+                                                label: editingGroup
+                                                        ? t("FileGroups.modal.saveAndPublish", {defaultValue: "Save and publish"})
+                                                        : t("FileGroups.modal.createAndPublish", {defaultValue: "Create and publish"}),
+                                                onClick: () => handleSubmit(true)
+                                            },
+                                        ]}
+                                        selectedActionKey={saveAction}
+                                        onActionSelect={setSaveAction}
+                                        menuLabel={t("Common.splitButton.menu", {defaultValue: "Choose action"})}
+                                        data-testid="file-group-save"
+                                />
+                            </Space>
+                        }
                         onCancel={() => setIsModalOpen(false)}
                         destroyOnHidden
                         mask={{closable: true}}
@@ -692,4 +739,5 @@ export function FileGroups() {
                 </Modal>
             </Space>
     );
+
 }

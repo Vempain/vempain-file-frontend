@@ -22,6 +22,7 @@ export type {MetadataSummaryResponse} from "./MetadataSummaryResponse";
 export type {OriginalScanResponse} from "./OriginalScanResponse.ts";
 export type {PathCompletionResponse} from "./PathCompletionResponse";
 export type {PublishedAclResponse} from "./PublishedAclResponse";
+export type {PublishDataSetStatusResponse} from "./PublishDataSetStatusResponse";
 export type {PublishFileGroupStatusResponse} from "./PublishFileGroupStatusResponse";
 export type {PublishFileStatusResponse} from "./PublishFileStatusResponse";
 export type {PublishUnitResponse} from "./PublishUnitResponse";

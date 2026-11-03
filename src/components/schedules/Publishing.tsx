@@ -1,4 +1,5 @@
-import {Button, message, Modal, Space, Spin, Table} from "antd";
+import {VempainTable} from "@vempain/vempain-auth-frontend";
+import {Button, message, Modal, Space, Spin} from "antd";
 import type {ColumnsType} from "antd/es/table";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
@@ -49,9 +50,9 @@ export function Publishing() {
         }
     ];
 
-    return <Space orientation="vertical" style={{width: "95%", margin: 30}} size="large">
+    return <Space orientation="vertical" style={{width: "calc(100% - 60px)", margin: 30}} size="large">
         <h1>{t("Publishing.title", {defaultValue: "Publishing schedules"})}</h1>
-        <Spin spinning={loading}><Table rowKey="id" columns={columns} dataSource={schedules} scroll={{x: "max-content"}} sticky={stickyTableHeader}/></Spin>
+        <Spin spinning={loading}><VempainTable rowKey="id" columns={columns} dataSource={schedules} sticky={stickyTableHeader}/></Spin>
         <Modal open={selected !== null} title={t("Publishing.actions.trigger", {defaultValue: "Trigger publishing"})}
                onCancel={() => setSelected(null)} onOk={trigger} confirmLoading={loading}>
             <p>{selected?.publish_message}</p>

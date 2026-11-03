@@ -1,7 +1,7 @@
 import {act, fireEvent, render, screen, waitFor} from "@testing-library/react";
 import {message} from "antd";
 import {PublishGpsTimeSeries} from "../../../components/data/PublishGpsTimeSeries";
-import {dataAPI, fileGroupAPI} from "../../../services";
+import {dataAPI, fileGroupAPI, publishAPI} from "../../../services";
 
 const trackTask = jest.fn();
 
@@ -12,12 +12,18 @@ jest.mock("react-i18next", () => ({
 }));
 
 jest.mock("@vempain/vempain-common-frontend", () => ({
+    // the split button stub of the manual mock, the task hook with this test's spy
+    ...jest.requireActual<Record<string, unknown>>("../../../../__mocks__/@vempain/vempain-common-frontend"),
     useTaskProgress: () => ({trackTask})
 }));
 
+// The shared ACL editor of the auth library is the stand-in of src/testUtils/mockAclRowsEditor.tsx ("stub: grant first user" button)
+jest.mock("@vempain/vempain-auth-frontend", () => jest.requireActual("../../../testUtils/mockAclRowsEditor"), {virtual: true});
+
 jest.mock("../../../services", () => ({
-    dataAPI: {publishGpsTimeSeries: jest.fn()},
-    fileGroupAPI: {findPageable: jest.fn()}
+    dataAPI: {publishGpsTimeSeries: jest.fn(), getDataSetStatus: jest.fn()},
+    fileGroupAPI: {findPageable: jest.fn()},
+    publishAPI: {getPublishUsers: jest.fn(), getPublishUnits: jest.fn()}
 }));
 
 Object.defineProperty(window, "matchMedia", {
@@ -41,6 +47,9 @@ if (typeof globalThis.MessageChannel === "undefined") {
 
 const findPageable = jest.mocked(fileGroupAPI.findPageable);
 const publishGpsTimeSeries = jest.mocked(dataAPI.publishGpsTimeSeries);
+const getDataSetStatus = jest.mocked(dataAPI.getDataSetStatus);
+const getPublishUsers = jest.mocked(publishAPI.getPublishUsers);
+const getPublishUnits = jest.mocked(publishAPI.getPublishUnits);
 
 const summer = {id: 1, path: "/trips/2024", group_name: "Summer", description: "", file_count: 2, gallery_id: null};
 const winter = {id: 2, path: "/trips/2025", group_name: "", description: "", file_count: 1, gallery_id: null};
@@ -56,12 +65,24 @@ async function openDropdown() {
     await screen.findByText("/trips/2024 (Summer)");
 }
 
+/** The main part of the split button opens the dialog; the task starts when its OK button (labelled with the action) is clicked */
+async function openDialog() {
+    fireEvent.click(screen.getByTestId("gps-create-main"));
+    await waitFor(() => expect(screen.getByTestId("acl-rows-editor")).toBeTruthy());
+}
+
 describe("PublishGpsTimeSeries", () => {
     beforeEach(() => {
         findPageable.mockReset();
         publishGpsTimeSeries.mockReset();
         trackTask.mockReset();
         findPageable.mockResolvedValue(page([summer, winter]) as never);
+        getDataSetStatus.mockReset();
+        getPublishUsers.mockReset();
+        getPublishUnits.mockReset();
+        getDataSetStatus.mockResolvedValue({identifier: "trips_2024-summer", published: false, acls: []});
+        getPublishUsers.mockResolvedValue([{id: 12, login_name: "arnold", name: "Arnold", nick: "Ahnold"}]);
+        getPublishUnits.mockResolvedValue([]);
         jest.spyOn(message, "success").mockImplementation(() => ({}) as never);
         jest.spyOn(message, "error").mockImplementation(() => ({}) as never);
         jest.spyOn(message, "warning").mockImplementation(() => ({}) as never);
@@ -75,7 +96,7 @@ describe("PublishGpsTimeSeries", () => {
         render(<PublishGpsTimeSeries/>);
 
         await waitFor(() => expect(findPageable).toHaveBeenCalledWith(firstRequest));
-        const publish = screen.getByRole("button", {name: "PublishGpsTimeSeries.actions.publish"}) as HTMLButtonElement;
+        const publish = screen.getByTestId("gps-create-main") as HTMLButtonElement;
         await waitFor(() => expect(publish.disabled).toBe(true));
 
         await openDropdown();
@@ -83,9 +104,24 @@ describe("PublishGpsTimeSeries", () => {
         await waitFor(() => expect(screen.getByText("trips_2024-summer")).toBeTruthy());
         expect(publish.disabled).toBe(false);
 
-        fireEvent.click(publish);
-        await waitFor(() => expect(publishGpsTimeSeries).toHaveBeenCalledWith(1, "trips_2024-summer"));
+        // the button opens the dialog, which asks the file backend whether the data set exists and starts the task with the granted rows
+        await openDialog();
+        expect(publishGpsTimeSeries).not.toHaveBeenCalled();
+        await waitFor(() => expect(getDataSetStatus).toHaveBeenCalledWith("trips_2024-summer"));
+        fireEvent.click(screen.getByText("stub: grant first user"));
+        fireEvent.click(screen.getAllByText("PublishGpsTimeSeries.actions.create")[1]);
+        await waitFor(() => expect(publishGpsTimeSeries).toHaveBeenCalledWith(1, "trips_2024-summer", false, [
+            {user_id: 12, unit_id: null, read_privilege: true, create_privilege: false, modify_privilege: true, delete_privilege: false}
+        ]));
         expect(trackTask).toHaveBeenCalledWith(accepted);
+        await waitFor(() => expect(screen.queryByTestId("acl-rows-editor")).toBeNull());
+
+        // "Create and publish" sends the website publishing flag; without rows the grantee list is empty
+        fireEvent.click(screen.getByTestId("gps-create-option-create-and-publish"));
+        expect(screen.getByTestId("gps-create-main").textContent).toBe("PublishGpsTimeSeries.actions.createAndPublish");
+        await openDialog();
+        fireEvent.click(screen.getAllByText("PublishGpsTimeSeries.actions.createAndPublish")[1]);
+        await waitFor(() => expect(publishGpsTimeSeries).toHaveBeenLastCalledWith(1, "trips_2024-summer", true, []));
         expect(message.success).toHaveBeenCalledWith("PublishGpsTimeSeries.messages.publishStarted");
     });
 
@@ -97,10 +133,13 @@ describe("PublishGpsTimeSeries", () => {
         await openDropdown();
         fireEvent.click(screen.getByText("/trips/2025"));
         await waitFor(() => expect(screen.getByText("trips_2025")).toBeTruthy());
-        fireEvent.click(screen.getByRole("button", {name: "PublishGpsTimeSeries.actions.publish"}));
+        await openDialog();
+        fireEvent.click(screen.getAllByText("PublishGpsTimeSeries.actions.create")[1]);
 
         await waitFor(() => expect(message.error).toHaveBeenCalledWith("PublishGpsTimeSeries.messages.publishError"));
         expect(trackTask).not.toHaveBeenCalled();
+        // the dialog stays open after a failure
+        expect(screen.getByTestId("acl-rows-editor")).toBeTruthy();
     });
 
     it("searches with a debounce and warns when the selected group disappears from the results", async () => {
@@ -117,10 +156,11 @@ describe("PublishGpsTimeSeries", () => {
         await waitFor(() => expect(findPageable).toHaveBeenCalledTimes(2), {timeout: 2000});
         expect(findPageable).toHaveBeenLastCalledWith({...firstRequest, search: "trips/2025"});
 
-        // The selected group is no longer listed, so there is no identifier to publish
+        // The selected group is no longer listed, so there is no identifier to publish and no dialog opens
         await waitFor(() => expect(screen.queryByText("trips_2024-summer")).toBeNull());
-        fireEvent.click(screen.getByRole("button", {name: "PublishGpsTimeSeries.actions.publish"}));
+        fireEvent.click(screen.getByTestId("gps-create-main"));
         expect(message.warning).toHaveBeenCalledWith("PublishGpsTimeSeries.messages.selectWarning");
+        expect(screen.queryByTestId("acl-rows-editor")).toBeNull();
         expect(publishGpsTimeSeries).not.toHaveBeenCalled();
     });
 

@@ -75,7 +75,7 @@ export function ExecutableFiles() {
     ];
 
     return (
-            <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
+            <Space vertical={true} style={{width: "calc(100% - 60px)", margin: 30}} size="large">
                 {paged.contextHolder}
                 <Spin spinning={paged.loading}>
                     {paged.dataSource.length > 0 && <VempainTable
@@ -83,7 +83,6 @@ export function ExecutableFiles() {
                             dataMode="server"
                             paged={paged}
                             columns={columns}
-                            scroll={{x: "max-content"}}
                             rowKey="external_file_id"
                     />
                     }{paged.dataSource.length === 0 && !paged.loading && t("ExecutableFiles.messages.noFiles", {defaultValue: "No executable files found"})}

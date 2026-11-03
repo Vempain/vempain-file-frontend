@@ -1,8 +1,8 @@
-import {Alert, message, Space, Spin, Table} from "antd";
+import {Alert, message, Space, Spin} from "antd";
 import type {ColumnsType} from "antd/es/table";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import type {AclVO} from "@vempain/vempain-auth-frontend";
+import {type AclVO, VempainTable} from "@vempain/vempain-auth-frontend";
 import {aclAPI} from "../../services";
 import {stickyTableHeader} from "../../tools";
 
@@ -50,13 +50,13 @@ export function FilePermissions() {
         }
     ];
 
-    return <Space orientation="vertical" style={{width: "95%", margin: 30}} size="large">
+    return <Space orientation="vertical" style={{width: "calc(100% - 60px)", margin: 30}} size="large">
         <h1>{t("FilePermissions.title", {defaultValue: "File permissions"})}</h1>
         <Alert type="info" showIcon title={t("FilePermissions.info", {
             defaultValue: "Permissions are managed centrally in the administration service."
         })}/>
         <Spin spinning={loading}>
-            <Table rowKey="acl_id" columns={columns} dataSource={permissions} scroll={{x: "max-content"}} sticky={stickyTableHeader}/>
+            <VempainTable rowKey="acl_id" columns={columns} dataSource={permissions} sticky={stickyTableHeader}/>
         </Spin>
     </Space>;
 }

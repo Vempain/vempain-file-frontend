@@ -98,6 +98,9 @@
     "popconfirm" : {
       "no" : "No",
       "yes" : "Yes"
+    },
+    "splitButton" : {
+      "menu" : "Choose action"
     }
   },
   "common" : {
@@ -334,7 +337,9 @@
         "validation" : {
           "required" : "Path is required"
         }
-      }
+      },
+      "createAndPublish" : "Create and publish",
+      "saveAndPublish" : "Save and publish"
     },
     "popconfirm" : {
       "delete" : {
@@ -735,7 +740,9 @@
   },
   "PublishGpsTimeSeries" : {
     "actions" : {
-      "publish" : "Publish GPS time series"
+      "publish" : "Publish GPS time series",
+      "create" : "Create GPS time series",
+      "createAndPublish" : "Create and publish GPS time series"
     },
     "fields" : {
       "derivedIdentifier" : "Data set identifier"
@@ -753,11 +760,17 @@
     "select" : {
       "label" : "Select image file group",
       "placeholder" : "Select a file group"
+    },
+    "modal" : {
+      "description" : "The GPS time series is generated from the published GPS-tagged images of {{group}} and stored in Vempain Admin.",
+      "title" : "GPS time series data set"
     }
   },
   "PublishMusicData" : {
     "actions" : {
-      "publish" : "Publish music data"
+      "publish" : "Publish music data",
+      "create" : "Create music data set",
+      "createAndPublish" : "Create and publish music data set"
     },
     "fields" : {
       "description" : "Description",
@@ -774,6 +787,10 @@
       "publishError" : "Failed to publish music data",
       "publishSuccess" : "Music data published successfully",
       "publishStarted" : "Music data publishing started, follow the progress in the lower right corner"
+    },
+    "modal" : {
+      "description" : "The music data set is generated from every music file and stored in Vempain Admin.",
+      "title" : "Music data set"
     }
   },
   "SearchFiles" : {
@@ -1028,7 +1045,8 @@
         "publishGpsTimeSeries" : "Publish GPS time series",
         "publishMusic" : "Publish music",
         "statistics" : "Statistics",
-        "title" : "Data Management"
+        "title" : "Data Management",
+        "dataSets" : "Data sets"
       },
       "fileManagement" : {
         "archive" : "Archive",
@@ -1048,7 +1066,8 @@
         "thumb" : "Thumb",
         "title" : "File Management",
         "vector" : "Vector",
-        "video" : "Video"
+        "video" : "Video",
+        "map" : "Map"
       },
       "profile" : {
         "account" : "Account",
@@ -1180,5 +1199,69 @@
     "remainingMinutes" : "about {{minutes}} min left",
     "remainingWholeHours" : "about {{hours}} h left",
     "remainingHours" : "about {{hours}} h {{minutes}} min left"
+  },
+  "PublishDataSet" : {
+    "modal" : {
+      "identifier" : "Data set identifier",
+      "status" : {
+        "published" : "Data set {{identifier}} exists in Vempain Admin; this run replaces its content"
+      }
+    }
+  },
+  "DataSets" : {
+    "columns" : {
+      "created" : "Created",
+      "description" : "Description",
+      "generated" : "Generated",
+      "identifier" : "Identifier",
+      "modified" : "Modified",
+      "published" : "Released",
+      "type" : "Type"
+    },
+    "filters" : {
+      "modifiedAfterPublish" : "Only modified after publish"
+    },
+    "header" : {
+      "description" : "The data sets created in Vempain Admin from the music files and the GPS-tagged images, and whether they were released to the website.",
+      "title" : "Data sets"
+    },
+    "values" : {
+      "notReleased" : "Not released"
+    }
+  },
+  "FileMap" : {
+    "header" : {
+      "title" : "Map of files",
+      "description" : "Every file with GPS coordinates you may read; the points are clustered by the backend, zoom in or hover a cluster to see the files."
+    }
+  },
+  "MapView" : {
+    "cluster" : {
+      "files" : "{{count}} files",
+      "loadError" : "Could not load the files of this cluster",
+      "loading" : "Loading the files",
+      "tooMany" : "Too many files to display, please zoom in to see the individual files",
+      "zoomIn" : "Zoom in"
+    },
+    "details" : {
+      "close" : "Close",
+      "title" : "Resource details"
+    },
+    "filters" : {
+      "allFileTypes" : "All file types",
+      "apply" : "Apply",
+      "dateRange" : "Taken between",
+      "fileType" : "File type",
+      "reset" : "Reset",
+      "search" : "File name contains",
+      "tags" : "Tags",
+      "tagsPlaceholder" : "Any of these tags"
+    },
+    "status" : {
+      "error" : "Could not load the map",
+      "loading" : "Loading the map",
+      "points" : "{{count}} resources in view",
+      "truncated" : "Only the largest clusters are shown, zoom in to see the rest"
+    }
   }
 }

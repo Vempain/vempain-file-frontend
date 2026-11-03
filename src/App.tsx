@@ -11,9 +11,11 @@ import {
     BinaryFiles,
     ChangePassword,
     DataFiles,
+    DataSets,
     DocumentFiles,
     ExecutableFiles,
     FileGroups,
+    FileMap,
     FilePermissions,
     FileTagEditor,
     FontFiles,
@@ -83,6 +85,7 @@ export default function App() {
                             <Route path={"/logout"} element={<Logout/>}/>
                             <Route path={"/data/music"} element={<PublishMusicData/>}/>
                             <Route path={"/data/gps-time-series"} element={<PublishGpsTimeSeries/>}/>
+                            <Route path={"/data/sets"} element={<DataSets/>}/>
                             <Route path={"/files/archives"} element={<ArchiveFiles/>}/>
                             <Route path={"/files/audios"} element={<AudioFiles/>}/>
                             <Route path={"/files/binaries"} element={<BinaryFiles/>}/>
@@ -101,6 +104,7 @@ export default function App() {
                             <Route path={"/files/thumbs"} element={<ThumbFiles/>}/>
                             <Route path={"/files/vectors"} element={<VectorFiles/>}/>
                             <Route path={"/files/videos"} element={<VideoFiles/>}/>
+                            <Route path={"/files/map"} element={<FileMap/>}/>
                             <Route path={"/management/permissions"} element={<FilePermissions/>}/>
                             <Route path={"/management/units"} element={<Units/>}/>
                             <Route path={"/management/units/:paramId/edit"} element={<UnitEdit/>}/>

@@ -15,7 +15,7 @@ describe("DataAPI", () => {
         expect(constructorSpy).toHaveBeenCalledWith(expect.anything(), "/data-publish");
     });
 
-    it("publishMusic POSTs /music with null body and returns the accepted task", async () => {
+    it("publishMusic POSTs /music with the publish flag and returns the accepted task", async () => {
         const responseData: TaskAcceptedResponse = {
             task_id: "music-task",
             type: "PUBLISH_MUSIC_DATA",
@@ -29,8 +29,38 @@ describe("DataAPI", () => {
 
         expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
         expect(axiosMock.defaults.headers.post["Content-Type"]).toBe("application/json;charset=utf-8");
-        expect(axiosMock.post).toHaveBeenCalledWith("/music", null);
+        // without the flag the data set is only created in the admin backend; without a grantee list the current grantees stay
+        expect(axiosMock.post).toHaveBeenCalledWith("/music", {publish_to_site: false, acls: null});
         expect(response).toEqual(responseData);
+
+        // "Create and publish" asks for the website publishing as well, and the dialog's rows travel as acls
+        const acls = [{user_id: 12, unit_id: null, read_privilege: true, create_privilege: false, modify_privilege: false, delete_privilege: false}];
+        axiosMock.post.mockResolvedValueOnce({data: responseData});
+        await dataAPI.publishMusic(true, acls);
+        expect(axiosMock.post).toHaveBeenLastCalledWith("/music", {publish_to_site: true, acls});
+    });
+
+    it("findPageableDataSets POSTs /paged with the paged request and returns the page", async () => {
+        const page = {content: [{identifier: "music_library"}], page: 0, size: 25, total_elements: 1, total_pages: 1, first: true, last: true, empty: false};
+        axiosMock.post.mockResolvedValueOnce({data: page});
+        const request = {page: 0, size: 25, sort_by: "identifier", direction: "ASC" as const, modified_after_publish: true};
+
+        const response = await dataAPI.findPageableDataSets(request);
+
+        expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
+        expect(axiosMock.post).toHaveBeenCalledWith("/paged", request);
+        expect(response).toEqual(page);
+    });
+
+    it("getDataSetStatus GETs /{identifier}/status", async () => {
+        const status = {identifier: "music_library", published: true, acls: []};
+        axiosMock.get.mockResolvedValueOnce({data: status});
+
+        const response = await dataAPI.getDataSetStatus("music_library");
+
+        expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
+        expect(axiosMock.get).toHaveBeenCalledWith("/music_library/status");
+        expect(response).toEqual(status);
     });
 
     it("publishGpsTimeSeries POSTs /gps-timeseries with filegroup ID and time series name and returns the accepted task", async () => {
@@ -50,8 +80,19 @@ describe("DataAPI", () => {
         expect(axiosMock.post).toHaveBeenCalledWith("/gps-timeseries", {
             file_group_id: 42,
             time_series_name: "holidays_2024",
+            publish_to_site: false,
+            acls: null,
         });
         expect(response).toEqual(responseData);
+
+        axiosMock.post.mockResolvedValueOnce({data: responseData});
+        await dataAPI.publishGpsTimeSeries(42, "holidays_2024", true, []);
+        expect(axiosMock.post).toHaveBeenLastCalledWith("/gps-timeseries", {
+            file_group_id: 42,
+            time_series_name: "holidays_2024",
+            publish_to_site: true,
+            acls: [],
+        });
     });
 });
 

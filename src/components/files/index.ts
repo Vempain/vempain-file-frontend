@@ -7,6 +7,7 @@ export {ExecutableFiles} from "./ExecutableFiles";
 export {FileDetails} from "./FileDetails";
 export {FileDisplay} from "./FileDisplay";
 export {FileGroups} from "./FileGroups";
+export {FileMap} from "./FileMap";
 export {FontFiles} from "./FontFiles";
 export {IconFiles} from "./IconFiles";
 export {ImageFiles} from "./ImageFiles";

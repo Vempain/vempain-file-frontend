@@ -14,6 +14,11 @@ jest.mock("react-i18next", () => ({
 
 jest.mock("@vempain/vempain-auth-frontend", () => ({
     AbstractAPI: class {
+    },
+    // The screen's table is the library's; here it is the stubbed Ant Design table below, which sorts and filters like the test expects
+    VempainTable: (props: Record<string, unknown>) => {
+        const {Table} = jest.requireMock("antd") as { Table: (tableProps: Record<string, unknown>) => React.ReactElement };
+        return <Table {...props}/>;
     }
 }), {virtual: true});
 

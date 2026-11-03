@@ -98,6 +98,9 @@
     "popconfirm" : {
       "no" : "Ei",
       "yes" : "Kyllä"
+    },
+    "splitButton" : {
+      "menu" : "Valitse toiminto"
     }
   },
   "common" : {
@@ -334,7 +337,9 @@
         "validation" : {
           "required" : "Polku on pakollinen"
         }
-      }
+      },
+      "createAndPublish" : "Luo ja julkaise",
+      "saveAndPublish" : "Tallenna ja julkaise"
     },
     "popconfirm" : {
       "delete" : {
@@ -735,7 +740,9 @@
   },
   "PublishGpsTimeSeries" : {
     "actions" : {
-      "publish" : "Julkaise GPS-aikasarja"
+      "publish" : "Julkaise GPS-aikasarja",
+      "create" : "Luo GPS-aikasarja",
+      "createAndPublish" : "Luo ja julkaise GPS-aikasarja"
     },
     "fields" : {
       "derivedIdentifier" : "Tietojoukon tunniste"
@@ -753,11 +760,17 @@
     "select" : {
       "label" : "Valitse kuvatiedostoryhmä",
       "placeholder" : "Valitse tiedostoryhmä"
+    },
+    "modal" : {
+      "description" : "GPS-aikasarja muodostetaan ryhmän {{group}} julkaistuista GPS-paikannetuista kuvista ja tallennetaan Vempain Adminiin.",
+      "title" : "GPS-aikasarja-aineisto"
     }
   },
   "PublishMusicData" : {
     "actions" : {
-      "publish" : "Julkaise musiikkidata"
+      "publish" : "Julkaise musiikkidata",
+      "create" : "Luo musiikkiaineisto",
+      "createAndPublish" : "Luo ja julkaise musiikkiaineisto"
     },
     "fields" : {
       "description" : "Kuvaus",
@@ -774,6 +787,10 @@
       "publishError" : "Musiikkidatan julkaisu epäonnistui",
       "publishSuccess" : "Musiikkidata julkaistu onnistuneesti",
       "publishStarted" : "Musiikkidatan julkaisu aloitettiin, seuraa edistymistä oikeasta alakulmasta"
+    },
+    "modal" : {
+      "description" : "Musiikkitietoaineisto muodostetaan kaikista musiikkitiedostoista ja tallennetaan Vempain Adminiin.",
+      "title" : "Musiikkitietoaineisto"
     }
   },
   "SearchFiles" : {
@@ -1028,7 +1045,8 @@
         "publishGpsTimeSeries" : "Julkaise GPS-aikasarja",
         "publishMusic" : "Julkaise musiikki",
         "statistics" : "Tilastot",
-        "title" : "Datahallinta"
+        "title" : "Datahallinta",
+        "dataSets" : "Tietoaineistot"
       },
       "fileManagement" : {
         "archive" : "Arkisto",
@@ -1048,7 +1066,8 @@
         "thumb" : "Pikkukuva",
         "title" : "Tiedostojen hallinta",
         "vector" : "Vektori",
-        "video" : "Video"
+        "video" : "Video",
+        "map" : "Kartta"
       },
       "profile" : {
         "account" : "Tili",
@@ -1180,5 +1199,69 @@
     "remainingMinutes" : "noin {{minutes}} min jäljellä",
     "remainingWholeHours" : "noin {{hours}} h jäljellä",
     "remainingHours" : "noin {{hours}} h {{minutes}} min jäljellä"
+  },
+  "PublishDataSet" : {
+    "modal" : {
+      "identifier" : "Tietoaineiston tunniste",
+      "status" : {
+        "published" : "Tietoaineisto {{identifier}} on jo Vempain Adminissa; tämä ajo korvaa sen sisällön"
+      }
+    }
+  },
+  "DataSets" : {
+    "columns" : {
+      "created" : "Luotu",
+      "description" : "Kuvaus",
+      "generated" : "Muodostettu",
+      "identifier" : "Tunniste",
+      "modified" : "Muokattu",
+      "published" : "Julkaistu",
+      "type" : "Tyyppi"
+    },
+    "filters" : {
+      "modifiedAfterPublish" : "Vain julkaisun jälkeen muokatut"
+    },
+    "header" : {
+      "description" : "Vempain Adminiin musiikkitiedostoista ja GPS-paikannetuista kuvista luodut tietoaineistot ja tieto siitä, onko ne julkaistu sivustolle.",
+      "title" : "Tietoaineistot"
+    },
+    "values" : {
+      "notReleased" : "Ei julkaistu"
+    }
+  },
+  "FileMap" : {
+    "header" : {
+      "title" : "Tiedostojen kartta",
+      "description" : "Kaikki GPS-paikannetut tiedostot, joihin sinulla on lukuoikeus; taustajärjestelmä ryhmittelee pisteet, lähennä tai vie hiiri ryhmän päälle nähdäksesi tiedostot."
+    }
+  },
+  "MapView" : {
+    "cluster" : {
+      "files" : "{{count}} tiedostoa",
+      "loadError" : "Ryhmän tiedostoja ei voitu ladata",
+      "loading" : "Ladataan tiedostoja",
+      "tooMany" : "Liian monta tiedostoa näytettäväksi, lähennä nähdäksesi yksittäiset tiedostot",
+      "zoomIn" : "Lähennä"
+    },
+    "details" : {
+      "close" : "Sulje",
+      "title" : "Resurssin tiedot"
+    },
+    "filters" : {
+      "allFileTypes" : "Kaikki tiedostotyypit",
+      "apply" : "Käytä",
+      "dateRange" : "Otettu välillä",
+      "fileType" : "Tiedostotyyppi",
+      "reset" : "Tyhjennä",
+      "search" : "Tiedostonimi sisältää",
+      "tags" : "Tunnisteet",
+      "tagsPlaceholder" : "Jokin näistä tunnisteista"
+    },
+    "status" : {
+      "error" : "Karttaa ei voitu ladata",
+      "loading" : "Ladataan karttaa",
+      "points" : "{{count}} resurssia näkymässä",
+      "truncated" : "Vain suurimmat ryhmät näytetään, lähennä nähdäksesi loput"
+    }
   }
 }

@@ -1,5 +1,6 @@
+import {VempainTable} from "@vempain/vempain-auth-frontend";
 import {useCallback, useEffect, useMemo, useState} from "react";
-import {Button, Col, Divider, Form, InputNumber, message, Modal, Popconfirm, Row, Select, Space, Table, Tag, Typography} from "antd";
+import {Button, Col, Divider, Form, InputNumber, message, Modal, Popconfirm, Row, Select, Space, Tag, Typography} from "antd";
 import type {ColumnsType} from "antd/es/table";
 import {locationAPI, LocationAPI} from "../../services";
 import type {GeoCoordinate, LocationGuardRequest, LocationGuardResponse} from "../../models";
@@ -262,13 +263,12 @@ export function LocationGuards() {
                     </Col>
                 </Row>
 
-                <Table<LocationGuardResponse>
+                <VempainTable<LocationGuardResponse>
                         sticky={stickyTableHeader}
                         columns={columns}
                         dataSource={guards.map((g) => ({...g, key: g.id}))}
                         loading={loading}
                         pagination={{pageSize: 10, showSizeChanger: true, pageSizeOptions: ["10", "20", "50"]}}
-                        scroll={{x: "max-content"}}
                         rowKey="id"
                 />
 

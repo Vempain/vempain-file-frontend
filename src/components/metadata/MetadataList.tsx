@@ -130,7 +130,7 @@ export function MetadataList() {
     ], [t]);
 
     return (
-            <Space vertical style={{width: "95%", margin: 30}} size="large">
+            <Space vertical style={{width: "calc(100% - 60px)", margin: 30}} size="large">
                 {paged.contextHolder}
                 <h2>{t("MetadataList.title", {defaultValue: "Metadata"})}</h2>
                 <Space wrap>
@@ -175,7 +175,6 @@ export function MetadataList() {
                             paged={paged}
                             columns={columns}
                             rowKey={metadataRowKey}
-                            scroll={{x: "max-content"}}
                             expandable={{
                                 expandedRowRender: (record: MetadataSummaryResponse) => <MetadataFiles summary={record} onOpenFile={openFile}/>
                             }}

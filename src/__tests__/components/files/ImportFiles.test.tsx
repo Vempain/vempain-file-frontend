@@ -23,6 +23,14 @@ jest.mock("../../../services", () => ({
     pathCompletionAPI: {completePath: jest.fn()}
 }));
 
+// The library is not installed for jest; the screen's shared tables are the stubbed Ant Design table below
+jest.mock("@vempain/vempain-auth-frontend", () => ({
+    VempainTable: (props: Record<string, unknown>) => {
+        const {Table} = jest.requireMock("antd") as { Table: (tableProps: Record<string, unknown>) => React.ReactElement };
+        return <Table {...props}/>;
+    }
+}), {virtual: true});
+
 /**
  * The antd Table is replaced by a stub that renders every column of every row and offers a sort button per sortable
  * column and a filter button per filterable column, so that the comparators, renderers and filters can be asserted.

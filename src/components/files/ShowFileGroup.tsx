@@ -1,5 +1,6 @@
+import {VempainTable} from "@vempain/vempain-auth-frontend";
 import {useEffect, useState} from "react";
-import {message, Modal, Space, Spin, Table, Typography} from "antd";
+import {message, Modal, Space, Spin, Typography} from "antd";
 import {useParams} from "react-router-dom";
 import {fileGroupAPI} from "../../services";
 import type {FileGroupResponse, FileResponse} from "../../models";
@@ -45,7 +46,7 @@ export function ShowFileGroup() {
     ];
 
     return (
-            <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
+            <Space vertical={true} style={{width: "calc(100% - 60px)", margin: 30}} size="large">
                 <Spin spinning={loading}>
                     {group && (
                             <>
@@ -58,7 +59,7 @@ export function ShowFileGroup() {
                                 <Typography.Paragraph>
                                     <strong>{t("FileGroups.columns.path.title")}:</strong> {group.path}
                                 </Typography.Paragraph>
-                                <Table<FileResponse>
+                                <VempainTable<FileResponse>
                                         sticky={stickyTableHeader}
                                         columns={columns}
                                         dataSource={(group.files ?? []).map(f => ({...f, key: f.id}))}
@@ -67,7 +68,6 @@ export function ShowFileGroup() {
                                             showSizeChanger: true,
                                             pageSizeOptions: ['10', '20', '50', '100'],
                                         }}
-                                        scroll={{x: 'max-content'}}
                                         rowKey="external_file_id"
                                 />
                             </>

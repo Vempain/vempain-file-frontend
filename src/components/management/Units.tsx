@@ -7,7 +7,7 @@ import {unitAPI} from "../../services";
 export function Units() {
     const navigate = useNavigate();
     return (
-            <Space vertical={true} style={{width: "95%", margin: 30}} size="large">
+            <Space vertical={true} style={{width: "calc(100% - 60px)", margin: 30}} size="large">
                 <UnitList unitAPI={unitAPI}
                           onEdit={id => navigate(`/management/units/${id}/edit`)}
                           onCreate={() => navigate("/management/units/0/edit")}/>
