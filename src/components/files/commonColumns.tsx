@@ -59,11 +59,11 @@ export function mimetypeColumn<T extends FileResponse>(t: TFunction): ColumnType
 export function thumbnailColumn<T extends FileResponse>(t: TFunction): ColumnType<T> {
     return {
         title: t("CommonColumns.columns.thumb.title"),
-        dataIndex: "thumbnail_id",
-        key: "thumbnail_id",
-        render: (_thumbnailId: number | null, record: T) => record.thumbnail_id != null
-                ? <ThumbnailPopup id={record.thumbnail_id}
-                                  maxSize={500}> <FileDisplay id={record.thumbnail_id} maxSize={150}/></ThumbnailPopup>
+        dataIndex: "thumbnail",
+        key: "thumbnail",
+        render: (_thumbnail: T["thumbnail"], record: T) => record.thumbnail != null
+                ? <ThumbnailPopup id={record.id}
+                                  maxSize={500}> <FileDisplay id={record.id} source="thumbnail" maxSize={150}/></ThumbnailPopup>
                 : t("CommonColumns.columns.thumb.no_thumb"),
     };
 }

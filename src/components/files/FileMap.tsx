@@ -18,8 +18,8 @@ const MAP_FILE_TYPES = [FileTypeEnum.IMAGE, FileTypeEnum.VIDEO, FileTypeEnum.AUD
 
 /**
  * The map of the original files with GPS coordinates (File management > Map): the shared map view of vempain-common-frontend over this
- * backend's /map endpoints. A clicked file opens the details of the typed file lists with its thumbnail (the thumb file through the content
- * endpoint, the file itself when it has none).
+ * backend's /map endpoints. A clicked file opens the details of the typed file lists with its thumbnail sub-resource through the parent file
+ * endpoint, or the file itself when no thumbnail exists.
  */
 export function FileMap() {
     const {t} = useTranslation();
@@ -40,7 +40,7 @@ export function FileMap() {
                         attribution={MAP_ATTRIBUTION}
                         searchTags={search => tagAPI.findPageable({page: 0, size: 20, search, sort_by: "tag_name", direction: "ASC"})
                                 .then(page => page.content.map(tag => tag.tag_name))}
-                        renderThumbnail={file => <FileDisplay id={file.thumbnail_id ?? file.id} maxSize={240}/>}
+                        renderThumbnail={file => <FileDisplay id={file.id} source="thumbnail" maxSize={240}/>}
                         renderFileDetails={file => <FileDetails file={toFileDetails(file)}/>}
                 />
             </div>

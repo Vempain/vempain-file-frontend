@@ -16,7 +16,6 @@ import {
     imageFileAPI,
     interactiveFileAPI,
     musicFileAPI,
-    thumbFileAPI,
     vectorFileAPI,
     videoFileAPI
 } from "../../services";
@@ -31,7 +30,7 @@ interface PageableFileAPI {
 const fileAPIs: Record<string, PageableFileAPI> = {
     archive: archiveFileAPI, audio: audioFileAPI, binary: binaryFileAPI, data: dataFileAPI,
     document: documentFileAPI, executable: executableFileAPI, font: fontFileAPI, icon: iconFileAPI,
-    image: imageFileAPI, interactive: interactiveFileAPI, music: musicFileAPI, thumb: thumbFileAPI,
+    image: imageFileAPI, interactive: interactiveFileAPI, music: musicFileAPI,
     vector: vectorFileAPI, video: videoFileAPI
 };
 

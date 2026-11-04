@@ -145,11 +145,6 @@ export function TopBar() {
                                 icon: <AudioOutlined/>
                             },
                             {
-                                label: (<NavLink to={"/files/thumbs"}>{t("TopBar.menu.fileManagement.thumb", {defaultValue: "Thumb"})}</NavLink>),
-                                key: "file-thumbFiles",
-                                icon: <FileImageOutlined/>
-                            },
-                            {
                                 label: (<NavLink to={"/files/vectors"}>{t("TopBar.menu.fileManagement.vector")}</NavLink>),
                                 key: "file-vectorFiles",
                                 icon: <ArrowsAltOutlined/>

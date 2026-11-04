@@ -379,7 +379,6 @@
     "interactive" : "Interactive",
     "music" : "Music",
     "other" : "Other",
-    "thumb" : "Thumb",
     "unknown" : "Unknown",
     "vector" : "Vector",
     "video" : "Video"
@@ -1063,7 +1062,6 @@
         "interactive" : "Interactive",
         "music" : "Music",
         "searchFiles" : "Search files",
-        "thumb" : "Thumb",
         "title" : "File Management",
         "vector" : "Vector",
         "video" : "Video",

@@ -24,7 +24,7 @@ jest.mock("../../../services", () => {
     return {
         archiveFileAPI: fileApi(), audioFileAPI: fileApi(), binaryFileAPI: fileApi(), dataFileAPI: fileApi(), documentFileAPI: fileApi(),
         executableFileAPI: fileApi(), fontFileAPI: fileApi(), iconFileAPI: fileApi(), imageFileAPI: fileApi(), interactiveFileAPI: fileApi(),
-        musicFileAPI: fileApi(), thumbFileAPI: fileApi(), vectorFileAPI: fileApi(), videoFileAPI: fileApi(),
+        musicFileAPI: fileApi(), vectorFileAPI: fileApi(), videoFileAPI: fileApi(),
         fileGroupAPI: {findPageable: jest.fn(), findById: jest.fn(), create: jest.fn(), update: jest.fn(), delete: jest.fn()},
         publishAPI: {publishFileGroup: jest.fn(), getPublishUsers: jest.fn(), getFileGroupStatus: jest.fn()}
     };

@@ -22,7 +22,7 @@ jest.mock("../../../components/files/FileDetails", () => ({
 }));
 
 jest.mock("../../../components/files/FileDisplay", () => ({
-    FileDisplay: ({id, maxSize}: { id: number; maxSize: number }) => <div data-testid="file-display" data-id={id} data-max-size={maxSize}/>
+    FileDisplay: ({id, maxSize, source}: { id: number; maxSize: number; source?: string }) => <div data-testid="file-display" data-id={id} data-max-size={maxSize} data-source={source}/>
 }));
 
 const findPageable = jest.mocked(tagAPI.findPageable);
@@ -56,7 +56,8 @@ describe("FileMap", () => {
         fireEvent.click(screen.getByText("stub: open file"));
 
         // the thumb file of the resource is displayed, the details carry the signed coordinates as hemisphere and value
-        expect(screen.getByTestId("file-display").dataset.id).toBe("77");
+        expect(screen.getByTestId("file-display").dataset.id).toBe("42");
+        expect(screen.getByTestId("file-display").dataset.source).toBe("thumbnail");
         expect(screen.getByTestId("file-display").dataset.maxSize).toBe("240");
         expect(screen.getByTestId("file-details").textContent).toBe("stub.jpg 60.17123N 24.94156W");
     });

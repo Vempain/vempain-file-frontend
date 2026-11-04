@@ -10,7 +10,6 @@ export const FileTypeEnum = {
     ICON: 'ICON',
     IMAGE: 'IMAGE',
     INTERACTIVE: 'INTERACTIVE',
-    THUMB: 'THUMB',
     UNKNOWN: 'UNKNOWN',
     VECTOR: 'VECTOR',
     VIDEO: 'VIDEO',

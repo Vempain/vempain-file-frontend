@@ -16,7 +16,6 @@ export {InteractiveFiles} from "./InteractiveFiles";
 export {MusicFiles} from "./MusicFiles";
 export {SearchFiles} from "./SearchFiles";
 export {ShowFileGroup} from "./ShowFileGroup";
-export {ThumbFiles} from "./ThumbFiles";
 export {ThumbnailPopup} from "./ThumbnailPopup";
 export {VectorFiles} from "./VectorFiles";
 export {VideoFiles} from "./VideoFiles";

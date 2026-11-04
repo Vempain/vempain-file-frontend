@@ -2,11 +2,12 @@ import type {AbstractResponse} from "@vempain/vempain-auth-frontend";
 import {Dayjs} from "dayjs";
 import type {FileTypeEnum} from "../FileTypeEnum.ts";
 import type {LocationResponse} from "./LocationsResponse.ts";
+import type {FileThumbnailResponse} from "./FileThumbnailResponse.ts";
 
 export interface FileResponse extends AbstractResponse {
     filename: string;
     file_path: string;
-    thumbnail_id: number | null;
+    thumbnail: FileThumbnailResponse | null;
     external_file_id: string;
     mimetype: string;
     filesize: number;
