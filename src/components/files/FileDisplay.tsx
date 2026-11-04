@@ -5,9 +5,10 @@ import {fileContentAPI} from "../../services";
 type FileDisplayProps = {
     id: number;
     maxSize: number;
+    source?: "content" | "thumbnail";
 };
 
-export function FileDisplay({id, maxSize}: FileDisplayProps) {
+export function FileDisplay({id, maxSize, source = "content"}: FileDisplayProps) {
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -18,7 +19,7 @@ export function FileDisplay({id, maxSize}: FileDisplayProps) {
         setLoading(true);
         setImageUrl(null);
 
-        fileContentAPI.getFileContent(id)
+        (source === "thumbnail" ? fileContentAPI.getThumbnail(id) : fileContentAPI.getFileContent(id))
                 .then(file => {
                     if (!active) return;
                     objectUrl = URL.createObjectURL(file);
@@ -37,7 +38,7 @@ export function FileDisplay({id, maxSize}: FileDisplayProps) {
             active = false;
             if (objectUrl) URL.revokeObjectURL(objectUrl);
         };
-    }, [id]);
+    }, [id, source]);
 
     return (
             <Spin spinning={loading}>

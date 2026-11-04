@@ -12,7 +12,6 @@ import {
     ImageFileAPI,
     InteractiveFileAPI,
     MusicFileAPI,
-    ThumbFileAPI,
     VectorFileAPI,
     VideoFileAPI
 } from "../../services";
@@ -28,7 +27,6 @@ import type {
     ImageFileResponse,
     InteractiveFileResponse,
     MusicFileResponse,
-    ThumbFileResponse,
     VectorFileResponse,
     VideoFileResponse,
 } from "../../models";
@@ -59,7 +57,6 @@ describe("file type API services", () => {
     let imageFileAPI: ImageFileAPI;
     let interactiveFileAPI: InteractiveFileAPI;
     let musicFileAPI: MusicFileAPI;
-    let thumbFileAPI: ThumbFileAPI;
     let vectorFileAPI: VectorFileAPI;
     let videoFileAPI: VideoFileAPI;
 
@@ -77,7 +74,6 @@ describe("file type API services", () => {
         imageFileAPI = new ImageFileAPI("http://localhost:8080/api", "/files/image");
         interactiveFileAPI = new InteractiveFileAPI("http://localhost:8080/api", "/files/interactive");
         musicFileAPI = new MusicFileAPI("http://localhost:8080/api", "/files/music");
-        thumbFileAPI = new ThumbFileAPI("http://localhost:8080/api", "/files/thumb");
         vectorFileAPI = new VectorFileAPI("http://localhost:8080/api", "/files/vector");
         videoFileAPI = new VideoFileAPI("http://localhost:8080/api", "/files/video");
     });
@@ -95,7 +91,6 @@ describe("file type API services", () => {
             [expect.anything(), "/files/image"],
             [expect.anything(), "/files/interactive"],
             [expect.anything(), "/files/music"],
-            [expect.anything(), "/files/thumb"],
             [expect.anything(), "/files/vector"],
             [expect.anything(), "/files/video"],
         ]));
@@ -222,16 +217,6 @@ describe("file type API services", () => {
         expect(response).toEqual(responseData);
     });
 
-    it("loads thumb files via findAllPageable with ThumbFileResponse", async () => {
-        const responseData = createPagedResponse({id: 14, filename: "preview.png"} as ThumbFileResponse);
-        axiosMock.post.mockResolvedValueOnce({data: responseData});
-
-        const response = await thumbFileAPI.findAllPageable(pagedRequest);
-
-        expect(setAuthorizationHeaderSpy).toHaveBeenCalledTimes(1);
-        expect(axiosMock.post).toHaveBeenCalledWith("paged", pagedRequest);
-        expect(response).toEqual(responseData);
-    });
 
     it("loads vector files via findAllPageable with VectorFileResponse", async () => {
         const responseData = createPagedResponse({id: 7, filename: "vector.ai"} as VectorFileResponse);

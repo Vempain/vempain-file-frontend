@@ -17,7 +17,6 @@ import {
     interactiveFileAPI,
     musicFileAPI,
     tagAPI,
-    thumbFileAPI,
     unitAPI,
     userAPI,
     vectorFileAPI,
@@ -559,7 +558,7 @@ describe("search and navigation components", () => {
             file_type: "image",
             created: "2024-01-01"
         };
-        const apis = [archiveFileAPI, audioFileAPI, binaryFileAPI, dataFileAPI, documentFileAPI, executableFileAPI, fontFileAPI, iconFileAPI, imageFileAPI, interactiveFileAPI, musicFileAPI, thumbFileAPI, vectorFileAPI, videoFileAPI];
+        const apis = [archiveFileAPI, audioFileAPI, binaryFileAPI, dataFileAPI, documentFileAPI, executableFileAPI, fontFileAPI, iconFileAPI, imageFileAPI, interactiveFileAPI, musicFileAPI, vectorFileAPI, videoFileAPI];
         apis.forEach(api => jest.spyOn(api, "findAllPageable").mockResolvedValue({content: [file]} as any));
         render(<SearchFiles/>);
         fireEvent.click(screen.getByText("Search"));

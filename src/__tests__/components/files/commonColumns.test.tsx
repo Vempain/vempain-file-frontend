@@ -36,9 +36,9 @@ describe("thumbnailColumn", () => {
     const column = thumbnailColumn(t);
 
     it("renders FileDisplay with a 150 pixel maximum for files with thumbnails", () => {
-        const record = {thumbnail_id: 42} as FileResponse;
+        const record = {id: 42, thumbnail: {id: 99}} as FileResponse;
 
-        const rendered = column.render?.(record.thumbnail_id, record, 0) as React.ReactElement;
+        const rendered = column.render?.(record.thumbnail, record, 0) as React.ReactElement;
         const popupProps = rendered.props as {
             children: ReactNode;
             id: number;
@@ -49,14 +49,14 @@ describe("thumbnailColumn", () => {
 
         expect(popupProps.id).toBe(42);
         expect(popupProps.maxSize).toBe(500);
-        expect(fileDisplay.props).toEqual({id: 42, maxSize: 150});
+        expect(fileDisplay.props).toEqual({id: 42, source: "thumbnail", maxSize: 150});
         expect(column.title).toBe("CommonColumns.columns.thumb.title");
     });
 
     it("renders the translated no-thumbnail text when the ID is absent", () => {
-        const record = {thumbnail_id: null} as FileResponse;
+        const record = {id: 42, thumbnail: null} as FileResponse;
 
-        const rendered = column.render?.(record.thumbnail_id, record, 0);
+        const rendered = column.render?.(record.thumbnail, record, 0);
 
         expect(rendered).toBe("CommonColumns.columns.thumb.no_thumb");
     });

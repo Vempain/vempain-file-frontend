@@ -61,9 +61,9 @@
   the editor stub of `src/testUtils/mockAclRowsEditor.tsx`).
 - `FileMap` (`src/components/files/FileMap.tsx`, route `/files/map`, menu File management > Map) is the map of the original files with GPS
   coordinates: the `MapView` of `@vempain/vempain-common-frontend` over `mapAPI` (`new MapAPI(apiUrl, '/map')`, the file backend's
-  `MapAPI` endpoints, which cluster the readable files on the backend), with the file types that can carry coordinates (`THUMB` left out),
-  the tile server of `src/tools/mapConfig.ts`, tag suggestions through `tagAPI.findPageable`, the thumbnail through `FileDisplay` (the thumb
-  file's `thumbnail_id`, else the file itself) and the details through `FileDetails` (`toFileDetails` turns the signed coordinates back
+  `MapAPI` endpoints, which cluster the readable files on the backend), with the file types that can carry coordinates, the tile server of
+  `src/tools/mapConfig.ts`, tag suggestions through `tagAPI.findPageable`, the thumbnail through `FileDisplay` (the map response's thumbnail
+  resource, else the file itself) and the details through `FileDetails` (`toFileDetails` turns the signed coordinates back
   into value + hemisphere). The `MapView`/`MapAPI` stubs live in `__mocks__/@vempain/vempain-common-frontend.tsx` (`MAP_STUB_FILE`). Tested
   in `src/__tests__/components/files/FileMap.test.tsx`.
 - `DataSets` (`src/components/data/DataSets.tsx`, route `/data/sets`, menu Data Management > Data sets) is the table of the data sets this

@@ -14,7 +14,6 @@ import {IconFiles} from "../../../components/files/IconFiles";
 import {ImageFiles} from "../../../components/files/ImageFiles";
 import {InteractiveFiles} from "../../../components/files/InteractiveFiles";
 import {MusicFiles} from "../../../components/files/MusicFiles";
-import {ThumbFiles} from "../../../components/files/ThumbFiles";
 import {VectorFiles} from "../../../components/files/VectorFiles";
 import {VideoFiles} from "../../../components/files/VideoFiles";
 
@@ -36,7 +35,6 @@ jest.mock("../../../services", () => {
         imageFileAPI: api(),
         interactiveFileAPI: api(),
         musicFileAPI: api(),
-        thumbFileAPI: api(),
         vectorFileAPI: api(),
         videoFileAPI: api()
     };
@@ -139,7 +137,7 @@ function baseRow(index: number) {
         file_path: `/files/${index}`,
         filesize: index * 2048,
         mimetype: index === 1 ? "application/zip" : "application/octet-stream",
-        thumbnail_id: null,
+        thumbnail: null,
         created: index === 1 ? "2024-02-01T00:00:00Z" : null
     };
 }
@@ -228,11 +226,6 @@ const cases: ListCase[] = [
             genre: "Rock"
         }],
         expectedTexts: ["240s", "Band", "Jazz"]
-    },
-    {
-        name: "ThumbFiles", Component: ThumbFiles, api: services.thumbFileAPI as unknown as MockApi,
-        extras: [{relation_type: "THUMBNAIL", target_file_id: 77}, {relation_type: "PREVIEW", target_file_id: 78}],
-        expectedTexts: ["THUMBNAIL", "77"]
     },
     {
         name: "VectorFiles", Component: VectorFiles, api: services.vectorFileAPI as unknown as MockApi,

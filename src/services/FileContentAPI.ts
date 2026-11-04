@@ -8,4 +8,12 @@ export class FileContentAPI extends AbstractAPI<never, Blob> {
         });
         return response.data;
     }
+
+    public async getThumbnail(id: number): Promise<Blob> {
+        this.setAuthorizationHeader();
+        const response = await this.axiosInstance.get<Blob>(`/${id}/thumbnail`, {
+            responseType: "blob",
+        });
+        return response.data;
+    }
 }

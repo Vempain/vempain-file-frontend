@@ -14,7 +14,6 @@ describe("FileTypeEnum", () => {
             "IMAGE",
             "INTERACTIVE",
             "MUSIC",
-            "THUMB",
             "UNKNOWN",
             "VECTOR",
             "VIDEO",

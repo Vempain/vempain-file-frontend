@@ -18,7 +18,6 @@ import {
     interactiveFileAPI,
     musicFileAPI,
     publishAPI,
-    thumbFileAPI,
     vectorFileAPI,
     videoFileAPI
 } from "../../services";
@@ -103,7 +102,6 @@ export function FileGroups() {
             [FileTypeEnum.IMAGE]: imageFileAPI,
             [FileTypeEnum.INTERACTIVE]: interactiveFileAPI,
             [FileTypeEnum.MUSIC]: musicFileAPI,
-            [FileTypeEnum.THUMB]: thumbFileAPI,
             [FileTypeEnum.VECTOR]: vectorFileAPI,
             [FileTypeEnum.VIDEO]: videoFileAPI,
         };
@@ -122,7 +120,6 @@ export function FileGroups() {
         FileTypeEnum.IMAGE,
         FileTypeEnum.INTERACTIVE,
         FileTypeEnum.MUSIC,
-        FileTypeEnum.THUMB,
         FileTypeEnum.VECTOR,
         FileTypeEnum.VIDEO,
     ].map(v => ({value: v, label: t(`FileTypeEnum.${v.toLowerCase()}`, {defaultValue: v})}));

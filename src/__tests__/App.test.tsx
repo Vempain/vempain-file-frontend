@@ -76,7 +76,6 @@ describe("App", () => {
         ["/files/interactives", "InteractiveFiles"],
         ["/files/music", "MusicFiles"],
         ["/files/search", "SearchFiles"],
-        ["/files/thumbs", "ThumbFiles"],
         ["/files/vectors", "VectorFiles"],
         ["/files/videos", "VideoFiles"],
         ["/files/map", "FileMap"],
