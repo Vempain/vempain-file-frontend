@@ -15,12 +15,11 @@ import {ImageFileAPI} from './ImageFileAPI';
 import {InteractiveFileAPI} from './InteractiveFileAPI';
 import {LocationAPI} from './LocationAPI';
 import {MetadataAPI} from './MetadataAPI';
-import {MapAPI} from '@vempain/vempain-common-frontend';
+import {MapAPI, TaskAPI} from '@vempain/vempain-common-frontend';
 import {MusicFileAPI} from './MusicFileAPI';
 import {PathCompletionAPI} from './PathCompletionAPI';
 import {PublishAPI} from './PublishAPI';
 import {TagAPI} from './TagAPI.ts';
-import {TaskAPI} from '@vempain/vempain-common-frontend';
 import {StatisticsAPI} from './StatisticsAPI';
 import {VectorFileAPI} from './VectorFileAPI';
 import {VideoFileAPI} from './VideoFileAPI';
@@ -63,6 +62,7 @@ export type {
 export {userAPI} from "./UserAPI";
 export {unitAPI} from "./UnitAPI";
 export {aclAPI} from "./AclAPI";
+export {apiTokenAPI} from "./ApiTokenAPI";
 
 export const apiUrl: string = resolveApiUrl();
 

@@ -6,6 +6,7 @@ import {Home} from "./main/Home.tsx";
 import {BottomFooter} from "./main/BottomFooter.tsx";
 import {
     Account,
+    ApiTokens,
     ArchiveFiles,
     AudioFiles,
     BinaryFiles,
@@ -104,6 +105,7 @@ export default function App() {
                             <Route path={"/files/videos"} element={<VideoFiles/>}/>
                             <Route path={"/files/map"} element={<FileMap/>}/>
                             <Route path={"/management/permissions"} element={<FilePermissions/>}/>
+                            <Route path={"/administration/api-tokens"} element={<ApiTokens/>}/>
                             <Route path={"/management/units"} element={<Units/>}/>
                             <Route path={"/management/units/:paramId/edit"} element={<UnitEdit/>}/>
                             <Route path={"/management/users"} element={<Users/>}/>

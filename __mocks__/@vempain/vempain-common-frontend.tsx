@@ -5,6 +5,7 @@
  * Tests that need to assert on task tracking spy on `trackTaskMock` or provide their own jest.mock factory.
  */
 import {type ReactNode, useState} from "react";
+import axios from "axios";
 
 export const TaskStatusEnum = {
     QUEUED: 'QUEUED' as const,
@@ -67,6 +68,56 @@ export class TaskAPI {
     getTask = jest.fn();
     cancelTask = jest.fn();
     dismissTask = jest.fn();
+}
+
+export const ApiTokenScope = {
+    FILE_SERVICE: "FILE_SERVICE",
+    MCP_READ: "MCP_READ"
+} as const;
+
+export const ApiTokenNetworkSource = {
+    CONFIGURED: "CONFIGURED",
+    PRIVATE_NETWORK: "PRIVATE_NETWORK",
+    NONE: "NONE"
+} as const;
+
+export class ApiTokenAPI {
+    readonly baseURL: string;
+    readonly member: string;
+    private readonly axiosInstance: ReturnType<typeof axios.create>;
+
+    constructor(baseURL: string, member: string) {
+        this.baseURL = baseURL;
+        this.member = member;
+        this.axiosInstance = axios.create({baseURL: `${baseURL}${member}`});
+    }
+
+    async list() {
+        return (await this.axiosInstance.get("", {params: undefined})).data;
+    }
+
+    async defaultNetwork() {
+        return (await this.axiosInstance.get("/default-network")).data;
+    }
+
+    async createToken(request: unknown) {
+        return (await this.axiosInstance.post("", request)).data;
+    }
+
+    async deleteToken(id: number) {
+        await this.axiosInstance.delete(`/${id}`);
+    }
+}
+
+export function isValidNetwork(value: string | undefined): boolean {
+    if (!value) return false;
+    const text = value.trim();
+    return /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}(\/([0-9]|[12]\d|3[0-2]))?$/.test(text)
+            || /^[0-9A-Fa-f:.]*:[0-9A-Fa-f:.]*(\/(\d|[1-9]\d|1[01]\d|12[0-8]))?$/.test(text);
+}
+
+export function ApiTokenManagement() {
+    return null;
 }
 
 export const trackTaskMock = jest.fn();

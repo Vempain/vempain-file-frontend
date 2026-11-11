@@ -1,4 +1,5 @@
 export * from './common';
+export * from './administration';
 export * from './data';
 export * from './files';
 export * from './management';

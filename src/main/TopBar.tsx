@@ -19,7 +19,7 @@ import {
     HeatMapOutlined,
     ImportOutlined,
     InfoCircleOutlined,
-    TableOutlined,
+    KeyOutlined,
     LockOutlined,
     LoginOutlined,
     LogoutOutlined,
@@ -27,6 +27,7 @@ import {
     SettingFilled,
     SnippetsOutlined,
     SwapOutlined,
+    TableOutlined,
     UploadOutlined,
     UserAddOutlined,
     UsergroupAddOutlined,
@@ -235,6 +236,12 @@ export function TopBar() {
                                         to={"/management/permissions"}>{t("TopBar.menu.userManagement.permissions", {defaultValue: "Permissions"})}</NavLink>),
                                 key: "user-permissions",
                                 icon: <LockOutlined/>
+                            },
+                            {
+                                label: (<NavLink
+                                        to={"/administration/api-tokens"}>{t("TopBar.menu.userManagement.apiTokens", {defaultValue: "API tokens"})}</NavLink>),
+                                key: "user-api-tokens",
+                                icon: <KeyOutlined/>
                             },
                         ],
                     },
