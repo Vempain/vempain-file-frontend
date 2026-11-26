@@ -3305,8 +3305,8 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^7.1.1"
     eslint-plugin-react-refresh: "npm:^0.5.8"
     globals: "npm:^17.14.0"
-    i18next: "npm:^27.2.2"
-    i18next-http-backend: "npm:^4.1.0"
+    i18next: "npm:^27.2.4"
+    i18next-http-backend: "npm:^4.1.1"
     jest: "npm:^30.5.2"
     jest-environment-jsdom: "npm:^30.5.2"
     leaflet: "npm:^1.9.4"
@@ -5160,14 +5160,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-http-backend@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "i18next-http-backend@npm:4.1.0"
-  checksum: 10c0/e21d8735b19d619783dd1cc62ecc258e727235941ffa7a7bd6c473fb022c7575ed0614fa4c9376d613e7052c409ac076c33400fb497e59c51f515803eca0ffa5
+"i18next-http-backend@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "i18next-http-backend@npm:4.1.1"
+  checksum: 10c0/0bd58156d1cb0eec28328eff4dc48310b4a20285206fd3e9242ee59a032cf53dafcb6d28cf1b73c1d8a1fc8ef21ff96a6cc5b6d2e06e3ef36e50a11a3ad20ea1
   languageName: node
   linkType: hard
 
-"i18next@npm:^27.1.1, i18next@npm:^27.2.2":
+"i18next@npm:^27.1.1":
   version: 27.2.2
   resolution: "i18next@npm:27.2.2"
   peerDependencies:
@@ -5176,6 +5176,18 @@ __metadata:
     typescript:
       optional: true
   checksum: 10c0/97cb1992b8cba47b428f7065c5bdde71a7bcf63667b648ff147ccac175b10a6860d4a3f2d3e605040e7c18432e9cf6867aaa649671c42526b6e7e2761acc6e75
+  languageName: node
+  linkType: hard
+
+"i18next@npm:^27.2.4":
+  version: 27.2.4
+  resolution: "i18next@npm:27.2.4"
+  peerDependencies:
+    typescript: ^5 || ^6 || ^7
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10c0/12189e0dbba2bab964ef6a2a475c85bbcf977139fa9cf1b6e2fb2dcc560b103d07e38da9920a25952972ce08c2645d3adb4ded1e82a23b523c279a078784641b
   languageName: node
   linkType: hard
 
